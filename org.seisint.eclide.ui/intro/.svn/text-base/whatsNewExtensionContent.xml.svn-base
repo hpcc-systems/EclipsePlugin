@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<introContent>
-  <!-- Extension to the SDK Overview Page. -->
-  <extensionContent style="css/intro.css" name="Octclipse News" path="news/@">
-  </extensionContent>
-</introContent>
