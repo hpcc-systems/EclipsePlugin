@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug.ui/src/org/seisint/eclide/internal/debug/ui/interpreters
+END
+OctaveInterpreterComboBlock.java
+K 25
+svn:wc:ra_dav:version-url
+V 154
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug.ui/src/org/seisint/eclide/internal/debug/ui/interpreters/OctaveInterpreterComboBlock.java
+END
+OctaveInterpreterPreferencePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 158
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug.ui/src/org/seisint/eclide/internal/debug/ui/interpreters/OctaveInterpreterPreferencePage.java
+END
+OctaveInterpretersBlock.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug.ui/src/org/seisint/eclide/internal/debug/ui/interpreters/OctaveInterpretersBlock.java
+END
+OctaveInterpreterLibraryBlock.java
+K 25
+svn:wc:ra_dav:version-url
+V 156
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug.ui/src/org/seisint/eclide/internal/debug/ui/interpreters/OctaveInterpreterLibraryBlock.java
+END
+OctaveInterpreterContainerWizardPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 163
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug.ui/src/org/seisint/eclide/internal/debug/ui/interpreters/OctaveInterpreterContainerWizardPage.java
+END
+OctaveInterpreterTab.java
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug.ui/src/org/seisint/eclide/internal/debug/ui/interpreters/OctaveInterpreterTab.java
+END
+AddOctaveInterpreterDialog.java
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug.ui/src/org/seisint/eclide/internal/debug/ui/interpreters/AddOctaveInterpreterDialog.java
+END

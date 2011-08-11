@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug
+END
+OctaveDebuggingEngineSelector.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug/OctaveDebuggingEngineSelector.java
+END
+OctaveEngineDebuggerRunner.java
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug/OctaveEngineDebuggerRunner.java
+END
+OctaveEngineDebuggerConstants.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug/OctaveEngineDebuggerConstants.java
+END
+OctaveEngineDebuggerRunnerFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug/OctaveEngineDebuggerRunnerFactory.java
+END

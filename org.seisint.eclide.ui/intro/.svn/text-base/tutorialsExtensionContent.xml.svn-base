@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<introContent>
+  <!-- Extension to the SDK Tutorials Page. -->
+  <extensionContent style="css/intro.css" name="Octclipse Tutorials" path="tutorials/@">
+  </extensionContent>
+</introContent>

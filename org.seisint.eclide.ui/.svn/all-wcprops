@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/ClientApps/!svn/ver/4561/trunk/eclipse/org.seisint.eclide.ui
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/.classpath
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/.project
+END
+plugin_customization.ini
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/plugin_customization.ini
+END
+splash.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/splash.bmp
+END
+octclipse.png
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/octclipse.png
+END
+plugin.properties
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/ClientApps/!svn/ver/4561/trunk/eclipse/org.seisint.eclide.ui/plugin.properties
+END
+splash.xcf
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/splash.xcf
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/build.properties
+END
+plugin.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/ClientApps/!svn/ver/4561/trunk/eclipse/org.seisint.eclide.ui/plugin.xml
+END
+about.html
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/about.html
+END

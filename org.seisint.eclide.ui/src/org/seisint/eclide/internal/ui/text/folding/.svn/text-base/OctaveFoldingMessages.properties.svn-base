@@ -1,0 +1,26 @@
+###############################################################################
+# Copyright (c) 2000, 2007 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
+#
+
+#     Sebastian Davids <sdavids@gmx.de> - Bug 114276
+###############################################################################
+
+OctaveFoldingPreferenceBlock_0=Add
+OctaveFoldingPreferenceBlock_2=You may use only english letters and _.
+OctaveFoldingPreferenceBlock_3=Add block
+OctaveFoldingPreferenceBlock_4=Enter name of block ("if" for example)
+OctaveFoldingPreferenceBlock_6=Remove
+OctaveFoldingPreferenceBlock_10=Block folding
+OctaveFoldingPreferenceBlock_11=Off
+OctaveFoldingPreferenceBlock_12=Fold all blocks except following:
+OctaveFoldingPreferenceBlock_13=Fold only following blocks:
+OctaveFoldingPreferenceBlock_14=Comments
+OctaveFoldingPreferenceBlock_15=Join comments divided by empty lines
+OctaveFoldingPreferenceBlock_16=Initially fold
+OctaveFoldingPreferenceBlock_17=Folding Block Provider
+DefaultFoldingPreferenceBlock_methods=&Blocks
+DefaultFoldingPreferenceBlock_comments=&Comments

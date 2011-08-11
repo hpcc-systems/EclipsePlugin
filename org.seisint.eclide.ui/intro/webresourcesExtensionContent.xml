@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<introContent>
+  <!-- Extension to the SDK Overview Page. -->
+  <extensionContent style="css/intro.css" name="Octclipse Web Resources" path="webresources/@">
+  		<group style-id="content-group" id="webresources-group">
+  			 <link label="Octclipse Website" url="http://org.eclipse.ui.intro/openURL?url=http://octclipse.sourceforge.net/" id="octclipse">
+	      		<text>Open the Octclipse website</text>
+	    	</link>
+	        <link label="GNU Octave Website" url="http://org.eclipse.ui.intro/openURL?url=http://www.gnu.org/software/octave/" id="octave">
+	      		<text>Open the GNU Octave website</text>
+	    	</link>  
+	        <link label="GNU Octave Online Docs" url="http://org.eclipse.ui.intro/openURL?url=http://www.gnu.org/software/octave/doc/interpreter/" id="octave">
+	      		<text>Open the online documentation for the GNU Octave</text>
+	    	</link> 
+    	</group>  
+   </extensionContent>
+</introContent>

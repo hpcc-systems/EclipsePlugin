@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug/preferences
+END
+OctaveEngineDebuggerPreferenceInitializer.java
+K 25
+svn:wc:ra_dav:version-url
+V 175
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug/preferences/OctaveEngineDebuggerPreferenceInitializer.java
+END
+PreferenceMessages.properties
+K 25
+svn:wc:ra_dav:version-url
+V 158
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug/preferences/PreferenceMessages.properties
+END
+PreferenceMessages.java
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug/preferences/PreferenceMessages.java
+END
+OctaveEngineDebuggerPreferencePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 168
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.launching/src/org/seisint/eclide/internal/launching/debug/preferences/OctaveEngineDebuggerPreferencePage.java
+END

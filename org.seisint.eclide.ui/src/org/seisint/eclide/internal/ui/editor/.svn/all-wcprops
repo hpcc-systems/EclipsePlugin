@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/editor
+END
+OctaveDocumentSetupParticipant.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/editor/OctaveDocumentSetupParticipant.java
+END
+OctaveEditorMessages.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/editor/OctaveEditorMessages.java
+END
+OctaveOutlineLabelDecorator.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/editor/OctaveOutlineLabelDecorator.java
+END
+OctaveEditor.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/editor/OctaveEditor.java
+END
+OctaveEditorMessages.properties
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/editor/OctaveEditorMessages.properties
+END
+OctaveOutlineElementImageDescriptor.java
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/editor/OctaveOutlineElementImageDescriptor.java
+END
+OctaveOutlinePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/editor/OctaveOutlinePage.java
+END

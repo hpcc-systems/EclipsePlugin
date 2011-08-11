@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.runtime.symbols/src/org/seisint/eclide/runtime/symbols
+END
+SymbolSerializer.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.runtime.symbols/src/org/seisint/eclide/runtime/symbols/SymbolSerializer.java
+END
+OctaveSymbolList.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.runtime.symbols/src/org/seisint/eclide/runtime/symbols/OctaveSymbolList.java
+END
+ISymbolListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.runtime.symbols/src/org/seisint/eclide/runtime/symbols/ISymbolListener.java
+END
+Symbol.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.runtime.symbols/src/org/seisint/eclide/runtime/symbols/Symbol.java
+END
+ISymbolList.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.runtime.symbols/src/org/seisint/eclide/runtime/symbols/ISymbolList.java
+END

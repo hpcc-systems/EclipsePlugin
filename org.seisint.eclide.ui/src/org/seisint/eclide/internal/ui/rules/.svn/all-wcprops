@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/rules
+END
+EclWordRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/rules/EclWordRule.java
+END
+OctaveFloatNumberRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/rules/OctaveFloatNumberRule.java
+END
+OctaveCommentRule.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/rules/OctaveCommentRule.java
+END

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion
+END
+OctaveScriptCompletionProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion/OctaveScriptCompletionProcessor.java
+END
+OctaveScriptCompletionProposal.java
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion/OctaveScriptCompletionProposal.java
+END
+OctaveCompletionProposalCollector.java
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion/OctaveCompletionProposalCollector.java
+END
+OctaveContentAssistPreference.java
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion/OctaveContentAssistPreference.java
+END
+OctaveSymbolTracker.java
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion/OctaveSymbolTracker.java
+END
+OctaveCompletionProposalLabelProvider.java
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion/OctaveCompletionProposalLabelProvider.java
+END
+OctaveCompletionProposalComputer.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion/OctaveCompletionProposalComputer.java
+END
+OctaveLazyCompletionProposal.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion/OctaveLazyCompletionProposal.java
+END
+OctaveOverrideCompletionProposal.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/text/completion/OctaveOverrideCompletionProposal.java
+END

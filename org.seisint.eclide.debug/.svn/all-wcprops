@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug/.classpath
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug/.project
+END
+plugin.properties
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug/plugin.properties
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug/build.properties
+END
+about.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug/about.html
+END
+plugin.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.debug/plugin.xml
+END

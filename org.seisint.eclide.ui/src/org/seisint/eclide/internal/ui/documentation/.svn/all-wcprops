@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/documentation
+END
+OctaveScriptDocumentationProvider.java
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/documentation/OctaveScriptDocumentationProvider.java
+END
+OctaveSymbolDocumentationProvider.java
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/documentation/OctaveSymbolDocumentationProvider.java
+END

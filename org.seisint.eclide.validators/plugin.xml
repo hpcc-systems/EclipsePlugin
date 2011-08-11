@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+<!--
+  <extension point="org.eclipse.core.resources.markers"
+    id="perlCompilerMarker"
+    name="%compilerProblem.name">    
+    <super type="org.eclipse.core.resources.problemmarker"/>
+    <super type="org.eclipse.core.resources.textmarker"/>
+    <persistent value="true"/>
+  </extension>
+
+  <extension point="org.eclipse.dltk.validators.core.validator">
+    <validatorType
+      class="org.perlipse.internal.validators.compiler.PerlCompilerFactory"
+      id="org.perlipse.validator.perlCompiler"
+      nature="org.perlipse.core.perlipseNature" />      
+  </extension>
+  
+  <extension point="org.eclipse.ui.ide.markerResolution">
+    <markerResolutionGenerator
+      class="org.perlipse.internal.validators.ui.compiler.PerlCompilerMarkerResolutionGenerator"
+      markerType="org.perlipse.validators.perlCompilerMarker" />
+  </extension>
+
+  <extension point="org.eclipse.dltk.ui.correctionProcessor">
+    <correctionProcessor
+      class="org.perlipse.internal.validators.ui.compiler.PerlCompilerCorrectionProcessor"
+      nature="org.perlipse.core.perlipseNature" />
+  </extension>
+
+  <extension
+    point="org.eclipse.ui.preferencePages">
+    <page
+      category="org.perlipse.ui.preferences.PerlipsePreferencePage"
+      class="org.perlipse.internal.validators.ui.PerlValidatorsPreferencePage"
+      id="org.perlipse.validators.ui.preferences.PerlValidatorPreferencePage"
+      name="%validatorPreferencePage.name" />
+   </extension>
+
+  <extension point="org.eclipse.ui.propertyPages">
+    <page
+      class="org.perlipse.internal.validators.ui.PerlValidatorsPreferencePage"
+      category="org.perlipse.ui.propertyPage.PerlipsePropertyPage"
+      id="org.perlipse.validators.ui.propertyPage.PerlValidatorsPreferencePage"
+      name="Validators">
+      <enabledWhen>
+        <adapt type="org.eclipse.core.resources.IProject">
+          <test
+            property="org.eclipse.core.resources.projectNature"
+            value="org.perlipse.core.perlipseNature" />
+        </adapt>
+      </enabledWhen>
+    </page>
+  </extension>
+-->
+
+</plugin>

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/core
+END
+OctaveSearchFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/core/OctaveSearchFactory.java
+END
+OctclipseCorePreferenceInitializer.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/core/OctclipseCorePreferenceInitializer.java
+END
+OctaveCallHierarchyFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/core/OctaveCallHierarchyFactory.java
+END
+OctaveCalleeProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/core/OctaveCalleeProcessor.java
+END

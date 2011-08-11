@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/ClientApps/!svn/ver/4558/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/wizards
+END
+OctaveNewFunctionWizard.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/ClientApps/!svn/ver/4558/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/wizards/OctaveNewFunctionWizard.java
+END
+OctaveNewProjectWizard.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/wizards/OctaveNewProjectWizard.java
+END
+OctaveWizardMessages.properties
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/wizards/OctaveWizardMessages.properties
+END
+OctaveNewFilePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/wizards/OctaveNewFilePage.java
+END
+OctaveWizardMessages.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/wizards/OctaveWizardMessages.java
+END
+OctaveNewFileWizard.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/wizards/OctaveNewFileWizard.java
+END

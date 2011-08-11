@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/search
+END
+OctaveMatchLocator.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/search/OctaveMatchLocator.java
+END
+OctaveSearchPatternProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/search/OctaveSearchPatternProcessor.java
+END
+OctaveLazySearchDocument.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/search/OctaveLazySearchDocument.java
+END
+OctaveSearchParticipant.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/search/OctaveSearchParticipant.java
+END
+OctaveCallProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/search/OctaveCallProcessor.java
+END

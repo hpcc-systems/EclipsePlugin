@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/codeassist
+END
+OctaveCompletionEngine.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/codeassist/OctaveCompletionEngine.java
+END
+OctaveAssistParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/codeassist/OctaveAssistParser.java
+END
+OctaveSelectionEngine.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.core/src/org/seisint/eclide/internal/codeassist/OctaveSelectionEngine.java
+END

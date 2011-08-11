@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/templates
+END
+OctaveTemplateAccess.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/templates/OctaveTemplateAccess.java
+END
+OctaveTemplateContext.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/templates/OctaveTemplateContext.java
+END
+TemplateMessages.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/templates/TemplateMessages.java
+END
+OctaveTemplateVariables.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/templates/OctaveTemplateVariables.java
+END
+OctaveTemplateCompletionProcessor.java
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/templates/OctaveTemplateCompletionProcessor.java
+END
+OctaveTemplatePreferencePage.java
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/templates/OctaveTemplatePreferencePage.java
+END
+OctaveUniversalTemplateContextType.java
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/templates/OctaveUniversalTemplateContextType.java
+END
+TemplateMessages.properties
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/ClientApps/!svn/ver/4536/trunk/eclipse/org.seisint.eclide.ui/src/org/seisint/eclide/internal/ui/templates/TemplateMessages.properties
+END
