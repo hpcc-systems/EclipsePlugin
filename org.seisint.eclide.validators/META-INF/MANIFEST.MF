@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Validators Plug-in
+Bundle-SymbolicName: org.seisint.eclide;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.perlipse.internal.validators.PerlValidatorsPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.debug.core,
+ org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.dltk.core,
+ org.eclipse.dltk.ui,
+ org.eclipse.dltk.debug.ui,
+ org.eclipse.dltk.launching,
+ org.eclipse.dltk.validators.core,
+ org.eclipse.dltk.validators.ui,
+ org.seisint.eclide.core,
+ org.seisint.eclide.ui,
+ org.seisint.eclide.launching
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
