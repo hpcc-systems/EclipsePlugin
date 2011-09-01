@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
+<<<<<<< HEAD
 <plugin>
    	 <extension
        	point="org.eclipse.ui.perspectives">
@@ -147,20 +148,177 @@
           	class="org.seisint.eclide.internal.ui.preferences.OctaveEditorPreferencesPage"
           	id="org.seisint.eclide.ui.preferences.editor"
           	name="%OctaveEditorPreferencePage.name"/>
+=======
+<plugin>
+   	 <extension
+       	point="org.eclipse.ui.perspectives">
+    	<perspective
+          	class="org.seisint.eclide.ui.OctavePerspective"
+          	icon="$nl$/icons/eview16/oct_persp.gif"
+          	id="org.seisint.eclide.ui.OctavePerspective"
+          	name="%OctavePerspective.name"/>
+ 	</extension>
+   	<extension
+    	point="org.eclipse.ui.perspectiveExtensions">
+      	<perspectiveExtension
+        	targetID="org.eclipse.ui.resourcePerspective">
+	        <view
+	            ratio="0.5"
+	            relative="org.eclipse.ui.views.TaskList"
+	            relationship="right"
+	            id="org.seisint.eclide.ui.views.SymbolsView">
+	        </view>
+      	</perspectiveExtension>
+   	</extension>
+	<extension
+      	id="org.seisint.eclide.ui.editor.DocumentSetupParticipant"
+      	name="%documentSetupParticipantName"
+      	point="org.eclipse.core.filebuffers.documentSetup">
+		<participant
+        	class="org.seisint.eclide.internal.ui.editor.OctaveDocumentSetupParticipant">
+   		</participant>
+	</extension>
+	<extension
+        point="org.eclipse.ui.perspectiveExtensions">
+    	<perspectiveExtension
+        	targetID="org.eclipse.ui.resourcePerspective">
+         	<perspectiveShortcut
+            	id="org.seisint.eclide.ui.OctavePerspective">
+         	</perspectiveShortcut>
+      	</perspectiveExtension>
+      	<perspectiveExtension
+        	targetID="org.seisint.eclide.ui.OctavePerspective">
+	    	<perspectiveShortcut
+	        	id="org.seisint.eclide.ui.OctavePerspective">
+	        </perspectiveShortcut>
+      	</perspectiveExtension>
+      	<perspectiveExtension
+           	targetID="org.seisint.eclide.ui.OctavePerspective">
+         	<perspectiveShortcut
+               	id="org.eclipse.debug.ui.DebugPerspective">
+         	</perspectiveShortcut>
+      	</perspectiveExtension>
+      	<perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         	<perspectiveShortcut
+               	id="org.seisint.eclide.ui.OctavePerspective">
+         	</perspectiveShortcut>
+      	</perspectiveExtension>
+      	<perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         	<actionSet
+               	id="org.eclipse.jdt.ui.DLTKActionSet">
+         	</actionSet>
+      	</perspectiveExtension>
+      	<perspectiveExtension
+            targetID="org.seisint.eclide.ui.OctavePerspective">
+         	<showInPart
+               	id="org.eclipse.dltk.ui.ScriptExplorer">
+         	</showInPart>
+      	</perspectiveExtension>
+      	<perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         	<showInPart
+               id="org.eclipse.dltk.ui.ScriptExplorer">
+         	</showInPart>
+      	</perspectiveExtension>  
+   	</extension>
+	<extension
+        point="org.eclipse.ui.newWizards">
+      	<category
+            id="org.seisint.eclide.ui"
+            name="%OctaveWizardsCategory.name">
+      	</category>
+      	<wizard
+            category="org.seisint.eclide.ui"
+            class="org.seisint.eclide.internal.ui.wizards.OctaveNewProjectWizard"
+            finalPerspective="org.seisint.eclide.ui.OctavePerspective"
+            icon="$nl$/icons/etool16/newprj_wiz.gif"
+            id="org.seisint.eclide.ui.wizards.OctaveNewProjectWizard"
+            name="%NewOctaveProjectWizard.label"
+            preferredPerspectives="org.seisint.eclide.ui.OctavePerspective"
+            project="true">
+         	<description>
+            	%NewOctaveProjectWizard.description
+         	</description>
+      	</wizard>
+      	<wizard
+            category="org.seisint.eclide.ui"
+            class="org.eclipse.dltk.ui.wizards.NewSourceFolderCreationWizard"
+            icon="$nl$/icons/etool16/newpackfolder_wiz.gif"
+            name="%NewSourceFolderCreationWizard.label"
+            id="org.seisint.eclide.ui.wizards.NewSourceFolderCreationWizard">
+         	<description>
+            	%NewSourceFolderCreationWizard.description
+         	</description>
+      	</wizard>
+       	<wizard
+        	category="org.seisint.eclide.ui"
+            class="org.seisint.eclide.internal.ui.wizards.OctaveNewFileWizard"
+            icon="$nl$/icons/etool16/newfile_wiz.gif"
+            id="org.seisint.eclide.ui.wizards.OctaveNewFileWizard"
+            name="%NewOctaveFile.label">
+          	<description>
+            	%NewOctaveFile.description
+         	</description>
+       	</wizard>
+    </extension>
+	<extension
+       	point="org.eclipse.dltk.ui.language">
+    	<language
+          	class="org.seisint.eclide.internal.ui.OctaveUILanguageToolkit"
+          	nature="org.seisint.eclide.core.nature"/>
+ 	</extension>
+ 	<extension
+        point="org.eclipse.ui.editors">
+      	<editor
+            class="org.seisint.eclide.internal.ui.editor.OctaveEditor"
+            contributorClass="org.eclipse.dltk.internal.ui.editor.SourceModuleEditorActionContributor"
+            default="true"
+            extensions="ecl"
+            filenames="octaverc,.octaverc,PKG_ADD"
+            icon="$nl$/icons/obj16/oct_obj.gif"
+            id="org.seisint.eclide.ui.editor.OctaveEditor"
+            name="%OctaveEditor.name">
+        	<contentTypeBinding
+        		contentTypeId="org.seisint.eclide.core.octaveContentType">
+        	</contentTypeBinding>
+      	</editor>
+	</extension>
+	<extension
+       	point="org.eclipse.ui.preferencePages">
+       	<page          
+          	class="org.seisint.eclide.internal.ui.preferences.OctaveGlobalPreferencesPage"
+          	id="org.seisint.eclide.ui.preferences"
+          	name="%OctavePreferencePage.name"/>
+    	<page
+          	category="org.seisint.eclide.ui.preferences"
+          	class="org.seisint.eclide.internal.ui.preferences.OctaveEditorPreferencesPage"
+          	id="org.seisint.eclide.ui.preferences.editor"
+          	name="%OctaveEditorPreferencePage.name"/>
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
     	<page
            	category="org.seisint.eclide.ui.preferences.editor"
            	class="org.seisint.eclide.internal.ui.templates.OctaveTemplatePreferencePage"
            	id="org.seisint.eclide.ui.preferences.editor.templates"
            	name="%OctaveCodeTemplatesPreferencePage.name"/>      
+<<<<<<< HEAD
     	<page
           	category="org.seisint.eclide.ui.preferences.editor"
           	class="org.seisint.eclide.internal.ui.preferences.OctaveEditorSyntaxColoringPreferencePage"
           	id="org.seisint.eclide.ui.preferences.editor.syntaxcoloring"
+=======
+    	<page
+          	category="org.seisint.eclide.ui.preferences.editor"
+          	class="org.seisint.eclide.internal.ui.preferences.OctaveEditorSyntaxColoringPreferencePage"
+          	id="org.seisint.eclide.ui.preferences.editor.syntaxcoloring"
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
           	name="%OctaveEditorSyntaxColoringPreferencePage.name"/>
         <page
             category="org.seisint.eclide.ui.preferences.editor"
             class="org.eclipse.dltk.ui.preferences.ScriptEditorHoverPreferencePage:org.seisint.eclide.core.nature"
             id="org.seisint.eclide.ui.preferences.editor.hovers"
+<<<<<<< HEAD
             name="%OctaveEditorHoversPreferencePage.name"/>            	
     	<page
           	category="org.seisint.eclide.ui.preferences.editor"
@@ -171,6 +329,18 @@
           	category="org.seisint.eclide.ui.preferences.editor"
           	class="org.seisint.eclide.internal.ui.preferences.OctaveFoldingPreferencePage"
           	id="org.seisint.eclide.ui.preferences.editor.folding"
+=======
+            name="%OctaveEditorHoversPreferencePage.name"/>            	
+    	<page
+          	category="org.seisint.eclide.ui.preferences.editor"
+          	class="org.seisint.eclide.internal.ui.preferences.OctaveSmartTypingPreferencePage"
+          	id="org.seisint.eclide.ui.preferences.editor.smarttyping"
+          	name="%OctaveEditorTypingPreferencePage.name"/>          
+    	<page
+          	category="org.seisint.eclide.ui.preferences.editor"
+          	class="org.seisint.eclide.internal.ui.preferences.OctaveFoldingPreferencePage"
+          	id="org.seisint.eclide.ui.preferences.editor.folding"
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
           	name="%OctaveEditorFoldingPreferencePage.name"/>
 		<page
 	      	category="org.seisint.eclide.ui.preferences"
@@ -186,9 +356,15 @@
   			category="org.seisint.eclide.ui.preferences.editor.folding"
   			class="org.seisint.eclide.internal.ui.preferences.OctaveFoldingProviderPreferencePage"
   			id="org.seisint.eclide.ui.preferences.editor.folding.codeblockprovider"
+<<<<<<< HEAD
   			name="%OctaveFoldingProvider.name"/> 	 	
     </extension>   
     <extension
+=======
+  			name="%OctaveFoldingProvider.name"/> 	 	
+    </extension>   
+    <extension
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
        	point="org.eclipse.ui.propertyPages">
        	<page
       		class="org.seisint.eclide.internal.ui.preferences.OctavePropertyPage"
@@ -199,21 +375,37 @@
           			<test property="org.eclipse.core.resources.projectNature" value="org.seisint.eclide.core.nature"/>
         		</adapt>         
       		</enabledWhen>
+<<<<<<< HEAD
     	</page>    
        	<page
        		category="org.seisint.eclide.ui.propertyPage"
           	class="org.seisint.eclide.internal.ui.preferences.OctaveBuildPathsPropertyPage"
           	id="org.seisint.eclide.ui.BuildpathProperties"
+=======
+    	</page>    
+       	<page
+       		category="org.seisint.eclide.ui.propertyPage"
+          	class="org.seisint.eclide.internal.ui.preferences.OctaveBuildPathsPropertyPage"
+          	id="org.seisint.eclide.ui.BuildpathProperties"
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
           	name="%OctaveBuildPathPropertyPage.name">
           	<enabledWhen>
 				<adapt type="org.eclipse.core.resources.IProject">
           			<test property="org.eclipse.core.resources.projectNature" value="org.seisint.eclide.core.nature"/>
         		</adapt>
+<<<<<<< HEAD
           	</enabledWhen>
        		<filter
              	name="nature"
              	value="org.seisint.eclide.core.nature"/>
        		<keywordReference id="org.eclipse.dltk.ui.buildpath" />
+=======
+          	</enabledWhen>
+       		<filter
+             	name="nature"
+             	value="org.seisint.eclide.core.nature"/>
+       		<keywordReference id="org.eclipse.dltk.ui.buildpath" />
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
     	</page>	
     	<page
           category="org.seisint.eclide.ui.propertyPage"
@@ -225,6 +417,7 @@
           			<test property="org.eclipse.core.resources.projectNature" value="org.seisint.eclide.core.nature"/>
 		        </adapt>         
       		</enabledWhen>
+<<<<<<< HEAD
     	</page>  
     </extension>
     <extension
@@ -264,6 +457,47 @@
             targetID="org.seisint.eclide.ui.CodingActionSet">
          <part id="org.seisint.eclide.ui.editor.OctaveEditor"/>
 	     <part id="org.eclipse.dltk.ui.ScriptExplorer"/>
+=======
+    	</page>  
+    </extension>
+    <extension
+        point="org.eclipse.ui.decorators">
+    	<decorator
+            adaptable="false"
+            location="TOP_RIGHT"
+            lightweight="true"
+            label="%OctaveProjectDecorator.name"
+            state="true"
+            class="org.seisint.eclide.internal.ui.OctaveProjectDecorator"
+            id="org.seisint.eclide.ui.decorators.projectdecorator">
+         	<enablement>
+	           	<or>
+	            	<objectClass name="org.eclipse.core.resources.IProject"/>
+	            	<objectClass name="org.eclipse.dltk.core.IScriptProject"/>
+	           	</or>
+         	</enablement>
+      	</decorator>
+   	</extension>
+   	<extension
+		point="org.eclipse.dltk.ui.scriptCompletionProposalComputer"
+		id="OctaveCompletionProposalComputer">
+		<scriptCompletionProposalComputer 
+			class="org.seisint.eclide.internal.ui.text.completion.OctaveCompletionProposalComputer"
+			categoryId="org.eclipse.dltk.ui.scriptTypeProposalCategory"
+			toolkitId="org.seisint.eclide.core.nature">
+			<partition type="__dftl_partition_content_type"/>
+		</scriptCompletionProposalComputer>	
+	</extension>
+	<extension point="org.eclipse.core.runtime.preferences">
+        <initializer class="org.seisint.eclide.internal.ui.OctaveUIPreferenceInitializer"/>
+    </extension>	
+    <extension
+        point="org.eclipse.ui.actionSetPartAssociations">
+        <actionSetPartAssociation
+            targetID="org.seisint.eclide.ui.CodingActionSet">
+         <part id="org.seisint.eclide.ui.editor.OctaveEditor"/>
+	     <part id="org.eclipse.dltk.ui.ScriptExplorer"/>
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
         </actionSetPartAssociation>
         <actionSetPartAssociation
             targetID="org.eclipse.ui.edit.text.actionSet.presentation">
@@ -304,6 +538,7 @@
                 menubarPath="org.eclipse.search.menu/dialogOctaveGroup"
                 id="org.seisint.eclide.ui.actions.OpenOctaveSearchPage">
             </action>
+<<<<<<< HEAD
         </actionSet>
        <actionSet
             label="%ScriptCodingActionSet.label"
@@ -397,6 +632,101 @@
                menubarPath="org.eclipse.dltk.ui.source.menu/commentGroup"
                id="org.eclipse.dltk.ui.actions.AddBlockComment">
          </action>
+=======
+        </actionSet>
+       <actionSet
+            label="%ScriptCodingActionSet.label"
+            description="%ScriptCodingActionSet.description"
+            visible="false"
+            id="org.seisint.eclide.ui.CodingActionSet">
+         <menu
+               label="%SourceMenu.label"
+               path="edit"
+               id="org.eclipse.dltk.ui.source.menu">
+		    <separator
+                  name="commentGroup">
+            </separator>
+            <separator
+                  name="editGroup">
+            </separator>
+            <separator
+                  name="importGroup">
+            </separator>
+            <separator
+                  name="generateGroup">
+            </separator>
+            <separator
+                  name="codeGroup">
+            </separator>
+            <separator
+                  name="externalizeGroup">
+            </separator>
+            <separator
+                  name="convertGroup">
+            </separator>
+         </menu>
+         <action
+               definitionId="org.eclipse.dltk.ui.edit.text.script.quick.format"
+               label="%FormatElementAction.label"
+               retarget="true"
+               menubarPath="org.eclipse.dltk.ui.source.menu/editGroup"
+               id="org.eclipse.dltk.ui.actions.FormatElement">
+         </action>
+         <action
+               definitionId="org.eclipse.dltk.ui.edit.text.script.format"
+               label="%FormatAction.label"
+               retarget="true"
+               menubarPath="org.eclipse.dltk.ui.source.menu/editGroup"
+               id="org.eclipse.dltk.ui.actions.Format">
+         </action>
+         <action
+               definitionId="org.eclipse.dltk.ui.edit.text.script.indent"
+               label="%IndentAction.label"
+               retarget="true"
+               menubarPath="org.eclipse.dltk.ui.source.menu/editGroup"
+               id="org.eclipse.dltk.ui.actions.Indent">
+         </action>
+         <action
+               definitionId="org.eclipse.ui.edit.text.shiftLeft"
+               label="%ShiftLeftAction.label"
+               retarget="true"
+               menubarPath="org.eclipse.dltk.ui.source.menu/editGroup"
+               id="org.eclipse.dltk.ui.actions.ShiftLeft">
+         </action>
+         <action
+               definitionId="org.eclipse.ui.edit.text.shiftRight"
+               label="%ShiftRightAction.label"
+               retarget="true"
+               menubarPath="org.eclipse.dltk.ui.source.menu/editGroup"
+               id="org.eclipse.dltk.ui.actions.ShiftRight">
+         </action>
+         <action
+               definitionId="org.eclipse.dltk.ui.edit.text.script.uncomment"
+               label="%UncommentAction.label"
+               retarget="true"
+               id="org.eclipse.dltk.ui.actions.Uncomment">
+         </action>
+         <action
+               definitionId="org.eclipse.dltk.ui.edit.text.script.comment"
+               label="%CommentAction.label"
+               retarget="true"
+               id="org.eclipse.dltk.ui.actions.Comment">
+         </action>
+		<action
+               definitionId="org.eclipse.dltk.ui.edit.text.script.remove.block.comment"
+               label="%RemoveBlockCommentAction.label"
+               retarget="true"
+               menubarPath="org.eclipse.dltk.ui.source.menu/commentGroup"
+               id="org.eclipse.dltk.ui.actions.RemoveBlockComment">
+         </action>
+         <action
+               definitionId="org.eclipse.dltk.ui.edit.text.script.add.block.comment"
+               label="%AddBlockCommentAction.label"
+               retarget="true"
+               menubarPath="org.eclipse.dltk.ui.source.menu/commentGroup"
+               id="org.eclipse.dltk.ui.actions.AddBlockComment">
+         </action>
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
       </actionSet>
     </extension> 
     <extension
@@ -573,5 +903,9 @@
                name="aboutText"
                value="%octclipseProductBlurb"/>
       </product>
+<<<<<<< HEAD
    </extension>
+=======
+   </extension>
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
 </plugin>

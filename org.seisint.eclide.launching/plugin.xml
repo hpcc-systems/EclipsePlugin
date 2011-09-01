@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
@@ -38,6 +39,48 @@
             class="org.seisint.eclide.internal.launching.OctaveInterpreterInstallType"
             id="org.seisint.eclide.launching.OctaveInterpreterInstallType">
       	</interpreterInstallType>   
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+         <launchConfigurationType
+               delegate="org.seisint.eclide.internal.launching.OctaveLaunchConfigurationDelegate"
+               id="org.seisint.eclide.launching.OctaveLaunchConfigurationType"
+               modes="run,debug"
+               name="%OctaveLaunchConfigurationType.name"
+               public="true"
+               sourceLocatorId="octaveSourceLocator"
+               sourcePathComputerId="octaveSourcePathComputer">
+		  </launchConfigurationType>      
+	</extension>
+  	<extension
+        point="org.eclipse.debug.core.sourcePathComputers">
+     	<sourcePathComputer
+           	class="org.eclipse.dltk.launching.sourcelookup.ScriptSourcePathComputer"
+           	id="octaveSourcePathComputer"/>
+  	</extension>
+  	<extension
+    	point="org.eclipse.debug.core.sourceLocators">
+     	<sourceLocator
+           	class="org.eclipse.dltk.launching.sourcelookup.ScriptSourceLookupDirector"
+           	id="octaveSourceLocator"
+           	name="%OctaveSourceLocator.name"/>
+  	</extension>
+   	<extension
+        point="org.eclipse.dltk.console.scriptInterpreter">
+      	<scriptInterpreter
+            class="org.seisint.eclide.console.OctaveInterpreter"
+            natureID="org.seisint.eclide.core.nature"/>
+   	</extension>
+   	<extension
+    	point="org.eclipse.dltk.launching.interpreterInstallTypes">
+        <interpreterInstallType
+            class="org.seisint.eclide.internal.launching.OctaveInterpreterInstallType"
+            id="org.seisint.eclide.launching.OctaveInterpreterInstallType">
+      	</interpreterInstallType>   
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
    	</extension>
    	<extension point="org.eclipse.dltk.launching.debuggingEngine">
 		<engineContribution
@@ -49,8 +92,13 @@
 	         	name="%OctclipseDebuggingEngine.name"
 	         	preferencePageId="org.seisint.eclide.launching.debug.preferences.octave.debugger"
         		propertyPageId="org.seisint.eclide.launching.debug.propertyPage.octave.debugger"
+<<<<<<< HEAD
           		priority="0" />
           	<selector
+=======
+          		priority="0" />
+          	<selector
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
         		class="org.seisint.eclide.internal.launching.debug.OctaveDebuggingEngineSelector" />
         </engineContribution>
 	</extension>
@@ -80,5 +128,9 @@
   	<extension point="org.eclipse.core.runtime.preferences">
     	<initializer 
       		class="org.seisint.eclide.internal.launching.debug.preferences.OctaveEngineDebuggerPreferenceInitializer"/>
+<<<<<<< HEAD
   	</extension>
+=======
+  	</extension>
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
 </plugin>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 a#octclipse img { background-image : url(graphics/obj_48/octdev_obj.gif); }
 a#octclipse:hover img { background-image : url(graphics/obj_48/octdevhov_obj.gif); }
 
@@ -10,3 +11,17 @@ a#hello-world-octclipse:hover img { background-image : url(graphics/obj_48/mapph
 body {
 	background-image : url(../../org.eclipse.platform/css/graphics/contentpage/overview_wtr.jpg);
 }
+=======
+a#octclipse img { background-image : url(graphics/obj_48/octdev_obj.gif); }
+a#octclipse:hover img { background-image : url(graphics/obj_48/octdevhov_obj.gif); }
+
+a#octave img { background-image : url(graphics/obj_48/octdev_obj.gif); }
+a#octave:hover img { background-image : url(graphics/obj_48/octdevhov_obj.gif); }
+
+a#hello-world-octclipse img { background-image : url(graphics/obj_48/mapp_obj.gif); }
+a#hello-world-octclipse:hover img { background-image : url(graphics/obj_48/mapphov_obj.gif); }
+
+body {
+	background-image : url(../../org.eclipse.platform/css/graphics/contentpage/overview_wtr.jpg);
+}
+>>>>>>> 491f10a275eb44f4aa5f7f631ff2004eba623b33
