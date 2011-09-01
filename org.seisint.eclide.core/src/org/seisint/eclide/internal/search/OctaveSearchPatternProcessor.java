@@ -60,4 +60,9 @@ public class OctaveSearchPatternProcessor implements ISearchPatternProcessor {
 		return DELIMITER;
 	}
 
+	public ITypePattern parseType(String patternString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

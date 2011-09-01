@@ -189,7 +189,7 @@ public class OctaveEditor extends ScriptEditor {
 		return OctaveLanguageToolkit.getDefault();
 	}
 
-	protected IPreferenceStore getScriptPreferenceStore() {
+	public IPreferenceStore getScriptPreferenceStore() {
 		return OctclipseUIPlugin.getDefault().getPreferenceStore();
 	}
 

@@ -49,8 +49,8 @@ public class OctaveTextTools extends ScriptTextTools {
 		return new SemanticHighlighting[0];
 	}
 
-	public ISemanticHighlighter getSemanticPositionUpdater() {
-		return null;
-	}
+//	public ISemanticHighlighter getSemanticPositionUpdater() {
+	//	return null;
+	//}
 
 }

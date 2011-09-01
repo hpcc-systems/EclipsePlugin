@@ -15,6 +15,6 @@ public final class OctaveConsoleConstants {
 	}
 	public static final String PREF_NEW_PROMPT = "octaveconsole.new_invitation";
 	public static final String PREF_CONTINUE_PROMPT = "octaveconsole.continue_invitation";
-	public static final String DEFAULT_NEW_PROMPT = "octave>";
+	public static final String DEFAULT_NEW_PROMPT = "ecl>";
 	public static final String DEFAULT_CONTINUE_PROMPT = ">";
 }
