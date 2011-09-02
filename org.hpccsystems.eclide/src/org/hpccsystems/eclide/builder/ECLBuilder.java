@@ -33,6 +33,8 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.hpccsystems.eclide.Activator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -144,7 +146,11 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
 			IFile file = (IFile) resource;
 			deleteMarkers(file);
-			ECLErrorHandler reporter = new ECLErrorHandler(file);
+//			ECLErrorHandler reporter = new ECLErrorHandler(file);
+			
+			ECLCompiler compiler = new ECLCompiler();
+			compiler.CheckSyntax(file);
+			
 			addMarker(file, "TODO:  This feature is under development.", 1, IMarker.SEVERITY_WARNING);
 			
 //			try {
