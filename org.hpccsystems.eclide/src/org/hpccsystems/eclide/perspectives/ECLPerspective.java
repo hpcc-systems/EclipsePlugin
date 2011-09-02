@@ -58,7 +58,7 @@ public class ECLPerspective implements IPerspectiveFactory {
 				IPageLayout.BOTTOM,
 				0.75f,
 				factory.getEditorArea());
-//		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
+		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
 		bottom.addView("org.eclipse.team.ui.GenericHistoryView"); //NON-NLS-1
 		bottom.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
 
