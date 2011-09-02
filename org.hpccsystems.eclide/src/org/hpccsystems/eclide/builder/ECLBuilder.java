@@ -2,9 +2,9 @@ package org.hpccsystems.eclide.builder;
 
 import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+//import javax.xml.parsers.ParserConfigurationException;
+//import javax.xml.parsers.SAXParser;
+//import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -56,11 +56,11 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	class XMLErrorHandler extends DefaultHandler {
+	class ECLErrorHandler extends DefaultHandler {
 		
 		private IFile file;
 
-		public XMLErrorHandler(IFile file) {
+		public ECLErrorHandler(IFile file) {
 			this.file = file;
 		}
 
@@ -86,7 +86,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 
 	private static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
 
-	private SAXParserFactory parserFactory;
+//	private SAXParserFactory parserFactory;
 
 	private void addMarker(IFile file, String message, int lineNumber,
 			int severity) {
@@ -127,11 +127,13 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
 			IFile file = (IFile) resource;
 			deleteMarkers(file);
-			XMLErrorHandler reporter = new XMLErrorHandler(file);
-			try {
-				getParser().parse(file.getContents(), reporter);
-			} catch (Exception e1) {
-			}
+			ECLErrorHandler reporter = new ECLErrorHandler(file);
+			addMarker(file, "TODO:  This feature is under development.", 1, IMarker.SEVERITY_WARNING);
+			
+//			try {
+//				getParser().parse(file.getContents(), reporter);
+//			} catch (Exception e1) {
+//			}
 		}
 	}
 
@@ -150,13 +152,13 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	private SAXParser getParser() throws ParserConfigurationException,
-			SAXException {
-		if (parserFactory == null) {
-			parserFactory = SAXParserFactory.newInstance();
-		}
-		return parserFactory.newSAXParser();
-	}
+//	private SAXParser getParser() throws ParserConfigurationException,
+//			SAXException {
+//		if (parserFactory == null) {
+//			parserFactory = SAXParserFactory.newInstance();
+//		}
+//		return parserFactory.newSAXParser();
+//	}
 
 	protected void incrementalBuild(IResourceDelta delta,
 			IProgressMonitor monitor) throws CoreException {
