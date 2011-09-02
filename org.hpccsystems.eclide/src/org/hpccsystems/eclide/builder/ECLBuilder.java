@@ -151,8 +151,6 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			ECLCompiler compiler = new ECLCompiler();
 			compiler.CheckSyntax(file);
 			
-			addMarker(file, "TODO:  This feature is under development.", 1, IMarker.SEVERITY_WARNING);
-			
 //			try {
 //				getParser().parse(file.getContents(), reporter);
 //			} catch (Exception e1) {
