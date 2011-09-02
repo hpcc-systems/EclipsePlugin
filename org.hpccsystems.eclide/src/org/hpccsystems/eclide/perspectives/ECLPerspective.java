@@ -68,6 +68,7 @@ public class ECLPerspective implements IPerspectiveFactory {
 				IPageLayout.LEFT,
 				0.25f,
 				factory.getEditorArea());
+		
 		topLeft.addView("org.hpccsystems.eclide.navigator");
 //		topLeft.addView("org.eclipse.jdt.junit.ResultView"); //NON-NLS-1
 		
@@ -109,7 +110,6 @@ public class ECLPerspective implements IPerspectiveFactory {
 		factory.addShowViewShortcut("org.eclipse.team.ui.GenericHistoryView"); //NON-NLS-1
 		factory.addShowViewShortcut(IConsoleConstants.ID_CONSOLE_VIEW);
 		factory.addShowViewShortcut(JavaUI.ID_PACKAGES);
-		factory.addShowViewShortcut("org.hpccsystems.eclide.navigator");
 		factory.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
 		factory.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 	}
