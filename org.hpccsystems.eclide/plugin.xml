@@ -89,11 +89,8 @@
          id="eclBuilder"
          name="ECL Project Builder"
          point="org.eclipse.core.resources.builders">
-      <builder
-            hasNature="true">
-         <run
-               class="org.hpccsystems.eclide.builder.ECLBuilder">
-         </run>
+      <builder hasNature="true">
+         <run class="org.hpccsystems.eclide.builder.ECLBuilder" />
       </builder>
    </extension>
    <extension
@@ -135,6 +132,38 @@
       <persistent
             value="true">
       </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.hpccsystems.eclide"
+            name="ECL">
+      </category>
+      	<wizard
+             category="org.hpccsystems.eclide"
+             class="org.hpccsystems.eclide.wizards.ECLNewProjectWizard"
+             finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
+             icon="icons/sample.gif"
+             id="org.hpccsystems.eclide.wizards.ECLNewProjectWizard"
+             name="ECL Project"
+             preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective"
+             project="true">
+         	<description>
+            	Create ECL Project for HPCC System
+         	</description>
+      	</wizard>
+      <wizard
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
+            finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
+            icon="icons/sample.gif"
+            id="org.hpccsystems.eclide.wizards.ECLNewWizard"
+            name="ECL Editor file"
+            preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective">
+         <description>
+            Create new ECL file.
+         </description>
+      </wizard>
    </extension>
 
 </plugin>

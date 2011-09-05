@@ -33,6 +33,8 @@ import org.eclipse.jdt.ui.JavaUI;
  */
 public class ECLPerspective implements IPerspectiveFactory {
 
+	public static final String PERSPECTIVE_ID = "org.hpccsystems.eclide.perspectives.ECLPerspective";
+
 	private IPageLayout factory;
 
 	public ECLPerspective() {
