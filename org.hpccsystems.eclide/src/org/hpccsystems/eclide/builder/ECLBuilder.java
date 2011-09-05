@@ -33,15 +33,13 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.hpccsystems.eclide.Activator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ECLBuilder extends IncrementalProjectBuilder {
 
-	class SampleDeltaVisitor implements IResourceDeltaVisitor {
+	class ECLDeltaVisitor implements IResourceDeltaVisitor {
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -52,14 +50,14 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			switch (delta.getKind()) {
 			case IResourceDelta.ADDED:
 				// handle added resource
-				checkXML(resource);
+				checkItem(resource);
 				break;
 			case IResourceDelta.REMOVED:
 				// handle removed resource
 				break;
 			case IResourceDelta.CHANGED:
 				// handle changed resource
-				checkXML(resource);
+				checkItem(resource);
 				break;
 			}
 			//return true to continue visiting children.
@@ -67,9 +65,9 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	class SampleResourceVisitor implements IResourceVisitor {
+	class ECLResourceVisitor implements IResourceVisitor {
 		public boolean visit(IResource resource) {
-			checkXML(resource);
+			checkItem(resource);
 			//return true to continue visiting children.
 			return true;
 		}
@@ -142,13 +140,12 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		return null;
 	}
 
-	void checkXML(IResource resource) {
+	void checkItem(IResource resource) {
 		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
 			IFile file = (IFile) resource;
-			deleteMarkers(file);
 //			ECLErrorHandler reporter = new ECLErrorHandler(file);
 			
-			ECLCompiler compiler = new ECLCompiler();
+			ECLCompiler compiler = new ECLCompiler(getProject());
 			compiler.CheckSyntax(file);
 			
 //			try {
@@ -158,32 +155,17 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	private void deleteMarkers(IFile file) {
-		try {
-			file.deleteMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
-		} catch (CoreException ce) {
-		}
-	}
-
 	protected void fullBuild(final IProgressMonitor monitor)
 			throws CoreException {
 		try {
-			getProject().accept(new SampleResourceVisitor());
+			getProject().accept(new ECLResourceVisitor());
 		} catch (CoreException e) {
 		}
 	}
 
-//	private SAXParser getParser() throws ParserConfigurationException,
-//			SAXException {
-//		if (parserFactory == null) {
-//			parserFactory = SAXParserFactory.newInstance();
-//		}
-//		return parserFactory.newSAXParser();
-//	}
-
 	protected void incrementalBuild(IResourceDelta delta,
 			IProgressMonitor monitor) throws CoreException {
 		// the visitor does the work.
-		delta.accept(new SampleDeltaVisitor());
+		delta.accept(new ECLDeltaVisitor());
 	}
 }
