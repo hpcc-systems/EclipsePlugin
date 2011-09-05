@@ -9,6 +9,8 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.PreferenceConstants;
@@ -22,7 +24,7 @@ public class ECLCompiler {
 	String libraryPath;
 	String projectPath;
 
-	ECLCompiler(IProject project) {
+	public ECLCompiler(IProject project) {
 		this.project = project;
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		compilerPath = store.getString(PreferenceConstants.P_COMPILERPATH);
@@ -30,7 +32,7 @@ public class ECLCompiler {
 		projectPath = project.getLocation().toOSString();
 	}
 
-	void CheckSyntax(IFile file) {
+	public void CheckSyntax(IFile file) {
 		deleteMarkers(file);
 		
 		String command = compilerPath;
@@ -60,6 +62,58 @@ public class ECLCompiler {
 				ProcessErrline(err);
 			}
 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
+
+	public void BuildAndRun(IFile file) {
+		deleteMarkers(file);
+		
+		IPath exePath = file.getLocation().removeFileExtension();
+		exePath = exePath.addFileExtension("exe");
+		String command = compilerPath;
+		//command += " -o\"" + exePath.toOSString() + "\"";
+		command += " -L\"" + libraryPath + "\"";
+		command += " -I\"" + projectPath + "\"";
+		command += " \"" + file.getLocation().toOSString() + "\"";
+		System.out.println(command);
+
+		try {
+			Process p = Runtime.getRuntime().exec(command);
+
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(
+					p.getErrorStream()));
+
+			// read the output from the command
+			String out = null;
+			while ((out = stdInput.readLine()) != null) {
+				ProcessOutline(out);
+			}
+
+			// read any errors from the attempted command
+			String err = null;
+			while ((err = stdError.readLine()) != null) {
+				ProcessErrline(err);
+			}
+
+			p = Runtime.getRuntime().exec("a.out.exe");
+			stdInput = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			stdError = new BufferedReader(new InputStreamReader(
+					p.getErrorStream()));
+
+			// read the output from the command
+			while ((out = stdInput.readLine()) != null) {
+				ProcessOutline(out);
+			}
+
+			// read any errors from the attempted command
+			while ((err = stdError.readLine()) != null) {
+				ProcessErrline(err);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	

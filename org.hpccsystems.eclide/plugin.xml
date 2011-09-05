@@ -194,5 +194,21 @@
             type="org.hpccsystems.eclide.launching.ECLConfigurationType">
       </launchConfigurationTabGroup>
    </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.hpccsystems.eclide.launchers.ECLShortcut"
+            id="org.hpccsystems.eclide.launchers.ECLShortcut"
+            label="ECL Builder"
+            modes="run">
+         <contextualLaunch>
+		 <enablement>
+           <with variable="selection">
+             <count value="1"/>
+             </with>
+             </enablement>
+         </contextualLaunch>
+      </shortcut>
+   </extension>
 
 </plugin>
