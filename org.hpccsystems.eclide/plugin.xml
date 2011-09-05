@@ -13,9 +13,15 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.hpccsystems.eclide.preferences.ECLPreferencePage"
+            class="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
+            id="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
+            name="ECL">
+      </page>
+      <page
+            category="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
+            class="org.hpccsystems.eclide.preferences.ECLCompilerPreferencePage"
             id="org.hpccsystems.eclide.preferences.ECLPreferencePage"
-            name="ECL Preferences">
+            name="Compiler">
       </page>
    </extension>
    <extension
@@ -26,7 +32,12 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
+      <category
+            id="org.hpccsystems.eclide"
+            name="ECL">
+      </category>
       <view
+            category="org.hpccsystems.eclide"
             class="org.eclipse.ui.navigator.CommonNavigator"
             icon="icons/sample.gif"
             id="org.hpccsystems.eclide.navigator"
@@ -157,13 +168,31 @@
             class="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
             finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
             icon="icons/sample.gif"
-            id="org.hpccsystems.eclide.wizards.ECLNewWizard"
+            id="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
             name="ECL Editor file"
             preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective">
          <description>
             Create new ECL file.
          </description>
       </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.hpccsystems.eclide.launchers.LaunchDelegate"
+            id="org.hpccsystems.eclide.launching.ECLConfigurationType"
+            modes="run"
+            name="ECL Launch"
+            public="true">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.hpccsystems.eclide.launchers.ECLConfigurationTabGroup"
+            id="org.hpccsystems.eclide.launching.ECLConfigurationType"
+            type="org.hpccsystems.eclide.launching.ECLConfigurationType">
+      </launchConfigurationTabGroup>
    </extension>
 
 </plugin>

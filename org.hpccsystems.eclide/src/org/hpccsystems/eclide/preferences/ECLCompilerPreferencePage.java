@@ -37,14 +37,14 @@ import org.hpccsystems.eclide.Activator;
  * be accessed directly via the preference store.
  */
 
-public class ECLPreferencePage
+public class ECLCompilerPreferencePage
 	extends FieldEditorPreferencePage
 	implements IWorkbenchPreferencePage {
 
-	public ECLPreferencePage() {
+	public ECLCompilerPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("ECL Releated preferences.");
+		setDescription("Compiler preferences.");
 	}
 	
 	/**
