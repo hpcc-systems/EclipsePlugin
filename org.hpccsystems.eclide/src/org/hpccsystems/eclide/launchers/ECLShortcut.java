@@ -1,36 +1,69 @@
 package org.hpccsystems.eclide.launchers;
 
+import java.awt.Component;
 import java.io.File;
+import java.util.HashSet;
+
+import javax.swing.ProgressMonitor;
 
 import org.eclipse.core.internal.resources.Project;
 import org.eclipse.core.internal.resources.Workspace;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.ui.ILaunchShortcut;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.FileEditorInput;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 
 public class ECLShortcut implements ILaunchShortcut {
 
-	@Override
+
+	protected IResource[] getScopedDirtyResources(IProject[] projects) {
+		HashSet dirtyres = new HashSet();
+		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+		for (int l = 0; l < windows.length; l++) {
+			IWorkbenchPage[] pages = windows[l].getPages();
+			for (int i = 0; i < pages.length; i++) {
+				IEditorPart[] eparts = pages[i].getDirtyEditors();
+				for (int j = 0; j < eparts.length; j++) {
+					IResource resource = (IResource) eparts[j].getEditorInput().getAdapter(IResource.class);
+					if (resource != null) {
+						for (int k = 0; k < projects.length; k++) {
+							if (projects[k].equals(resource.getProject())) {
+								dirtyres.add(resource);
+							}
+						}
+					}
+				}
+			}
+		}
+		return (IResource[]) dirtyres.toArray(new IResource[dirtyres.size()]);
+	}
+	
+	void doSaveDirty(IProject project)
+	{
+		IProject[] projects = new IProject[1];
+		projects[0] = project;
+		IResource[] resources = getScopedDirtyResources(projects);
+		IDE.saveAllEditors(resources, false);			
+	}
+
 	public void launch(ISelection selection, String mode) {
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSel = (TreeSelection) selection;
-			TreePath[] paths = treeSel.getPaths();
-			IProject project = null;
-			if (paths.length >= 1) {
-				for (int i = 0; i < paths[0].getSegmentCount(); ++i) {
-					project = (IProject)paths[0].getSegment(i);
-					if (project != null)
-						break;
-				}
-			}
-			if (project == null)
-				return;
-		
 			IFile file = null;
 			if (treeSel.size() >= 1) {
 				file = (IFile) treeSel.getFirstElement();
@@ -38,19 +71,24 @@ public class ECLShortcut implements ILaunchShortcut {
 			
 			if (file == null)
 				return;
-			
-			ECLCompiler compiler = new ECLCompiler(project);
+
+			doSaveDirty(file.getProject());
+			ECLCompiler compiler = new ECLCompiler(file.getProject());
 			compiler.BuildAndRun(file);
 		}
-			
-		//ECLCompiler compiler(selection)
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void launch(IEditorPart editor, String mode) {
-		// TODO Auto-generated method stub
-
+		//ProgressMonitor monitor = new ProgressMonitor((Component) editor, "Save All", "", 0, 0);
+		//editor.doSave(null);
+		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
+		if (input != null) {
+			IFile file = input.getFile();
+			doSaveDirty(file.getProject());
+			ECLCompiler compiler = new ECLCompiler(file.getProject());
+			compiler.BuildAndRun(file);
+		}
+		assert(input != null);
 	}
 }

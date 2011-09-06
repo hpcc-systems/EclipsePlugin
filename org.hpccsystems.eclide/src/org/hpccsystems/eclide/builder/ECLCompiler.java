@@ -32,6 +32,7 @@ public class ECLCompiler {
 	String compilerPath;
 	String libraryPath;
 	String projectPath;
+	boolean hasError;
 
 	MessageConsole console;
 	MessageConsoleStream consoleOut;
@@ -40,13 +41,17 @@ public class ECLCompiler {
 		CmdProcess() {
 		}
 		
-		void exec(Map<String, String> args, String target) {
-			String command = compilerPath;
-			
+		void exec(String command) {
+			Map<String, String> args = new TreeMap<String, String>();
+			exec(command, args, "");
+		}
+		
+		void exec(String command, Map<String, String> args, String target) {
 			for(Map.Entry<String, String> entry : args.entrySet()) {
 				command += " \"-" + entry.getKey() + entry.getValue() + "\"";
 			}
-			command += " \"" + target + "\"";
+			if (!target.isEmpty())
+				command += " \"" + target + "\"";
 			consoleOut.println(command);
 
 			try {
@@ -131,7 +136,7 @@ public class ECLCompiler {
 		args.put("I", projectPath);
 		
 		CmdProcess process = new CmdProcess();
-		process.exec(args, file.getLocation().toOSString());
+		process.exec(compilerPath, args, file.getLocation().toOSString());
 	}
 
 	public void BuildAndRun(IFile file) {
@@ -144,8 +149,11 @@ public class ECLCompiler {
 		args.put("L", libraryPath);
 		args.put("I", projectPath);
 		
+		hasError = false;
 		CmdProcess process = new CmdProcess();
-		process.exec(args, file.getLocation().toOSString());
+		process.exec(compilerPath, args, file.getLocation().toOSString());
+		if (!hasError)
+			process.exec("a.out.exe");
 	}
 
 	void ProcessOutline(String outLine)
@@ -186,8 +194,10 @@ public class ECLCompiler {
 				lineNumber = 1;
 			}
 			int severity = IMarker.SEVERITY_INFO;
-			if (code.startsWith("error"))
+			if (code.startsWith("error")) {
+				hasError = true;
 				severity = IMarker.SEVERITY_ERROR;
+			}
 			else if (code.startsWith("warning"))
 				severity = IMarker.SEVERITY_WARNING;
 
