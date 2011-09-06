@@ -40,35 +40,48 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ECLBuilder extends IncrementalProjectBuilder {
 
 	class ECLDeltaVisitor implements IResourceDeltaVisitor {
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.eclipse.core.resources.IResourceDeltaVisitor#visit(org.eclipse.core.resources.IResourceDelta)
-		 */
-		public boolean visit(IResourceDelta delta) throws CoreException {
+		private IProgressMonitor monitor;
+		
+		ECLDeltaVisitor(IProgressMonitor monitor) {
+			this.monitor = monitor;
+		}
+		
+		public /*synchronized */ boolean visit(IResourceDelta delta) throws CoreException {
+			if (monitor.isCanceled()) {
+				return false;
+			}
+			
 			IResource resource = delta.getResource();
 			switch (delta.getKind()) {
 			case IResourceDelta.ADDED:
 				// handle added resource
-				checkItem(resource);
+				checkItem(resource, monitor);
 				break;
 			case IResourceDelta.REMOVED:
 				// handle removed resource
 				break;
 			case IResourceDelta.CHANGED:
 				// handle changed resource
-				checkItem(resource);
+				checkItem(resource, monitor);
 				break;
 			}
-			//return true to continue visiting children.
 			return true;
 		}
 	}
 
 	class ECLResourceVisitor implements IResourceVisitor {
+		private IProgressMonitor monitor;
+
+		ECLResourceVisitor(IProgressMonitor monitor) {
+			this.monitor = monitor;
+		}
+
 		public boolean visit(IResource resource) {
-			checkItem(resource);
-			//return true to continue visiting children.
+			if (monitor.isCanceled()) {
+				return false;
+			}
+
+			checkItem(resource, monitor);
 			return true;
 		}
 	}
@@ -140,32 +153,24 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		return null;
 	}
 
-	void checkItem(IResource resource) {
+	void checkItem(IResource resource, IProgressMonitor monitor) {
 		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
 			IFile file = (IFile) resource;
-//			ECLErrorHandler reporter = new ECLErrorHandler(file);
-			
+			monitor.subTask(file.getName());
 			ECLCompiler compiler = new ECLCompiler(getProject());
 			compiler.CheckSyntax(file);
-			
-//			try {
-//				getParser().parse(file.getContents(), reporter);
-//			} catch (Exception e1) {
-//			}
 		}
 	}
 
-	protected void fullBuild(final IProgressMonitor monitor)
-			throws CoreException {
+	protected void fullBuild(final IProgressMonitor monitor) throws CoreException {
 		try {
-			getProject().accept(new ECLResourceVisitor());
+			getProject().accept(new ECLResourceVisitor(monitor));
 		} catch (CoreException e) {
 		}
 	}
 
-	protected void incrementalBuild(IResourceDelta delta,
-			IProgressMonitor monitor) throws CoreException {
+	protected void incrementalBuild(IResourceDelta delta, IProgressMonitor monitor) throws CoreException {
 		// the visitor does the work.
-		delta.accept(new ECLDeltaVisitor());
+		delta.accept(new ECLDeltaVisitor(monitor));
 	}
 }
