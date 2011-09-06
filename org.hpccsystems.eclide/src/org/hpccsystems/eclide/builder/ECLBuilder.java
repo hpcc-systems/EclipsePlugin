@@ -46,7 +46,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			this.monitor = monitor;
 		}
 		
-		public /*synchronized */ boolean visit(IResourceDelta delta) throws CoreException {
+		public boolean visit(IResourceDelta delta) throws CoreException {
 			if (monitor.isCanceled()) {
 				return false;
 			}
@@ -71,9 +71,11 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 
 	class ECLResourceVisitor implements IResourceVisitor {
 		private IProgressMonitor monitor;
+		private boolean cleanOnly;
 
 		ECLResourceVisitor(IProgressMonitor monitor) {
 			this.monitor = monitor;
+			this.cleanOnly = cleanOnly;
 		}
 
 		public boolean visit(IResource resource) {
@@ -132,14 +134,8 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.core.internal.events.InternalBuilder#build(int,
-	 *      java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
-	 */
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
-			throws CoreException {
+	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
+		monitor.setTaskName("Checking Syntax");
 		if (kind == FULL_BUILD) {
 			fullBuild(monitor);
 		} else {
@@ -163,14 +159,10 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	}
 
 	protected void fullBuild(final IProgressMonitor monitor) throws CoreException {
-		try {
-			getProject().accept(new ECLResourceVisitor(monitor));
-		} catch (CoreException e) {
-		}
+		getProject().accept(new ECLResourceVisitor(monitor));
 	}
 
 	protected void incrementalBuild(IResourceDelta delta, IProgressMonitor monitor) throws CoreException {
-		// the visitor does the work.
 		delta.accept(new ECLDeltaVisitor(monitor));
 	}
 }

@@ -1,8 +1,14 @@
 package org.hpccsystems.eclide.builder;
 
+import java.awt.image.DataBuffer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -29,6 +35,65 @@ public class ECLCompiler {
 
 	MessageConsole console;
 	MessageConsoleStream consoleOut;
+	
+	class CmdProcess {
+		CmdProcess() {
+		}
+		
+		void exec(Map<String, String> args, String target) {
+			String command = compilerPath;
+			
+			for(Map.Entry<String, String> entry : args.entrySet()) {
+				command += " \"-" + entry.getKey() + entry.getValue() + "\"";
+			}
+			command += " \"" + target + "\"";
+			consoleOut.println(command);
+
+			try {
+				Process p = Runtime.getRuntime().exec(command);
+
+				final BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+				final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+				
+				Runnable readStdIn = new Runnable() {
+					public void run() {
+						String stdIn = null;
+						try {
+							while ((stdIn = stdInput.readLine()) != null) {
+								ProcessOutline(stdIn);
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				Thread threadStdIn = new Thread(readStdIn, "read stdin");
+				threadStdIn.start();
+
+				Runnable readStdErr = new Runnable() {
+					public void run() {
+						String stdErr = null;
+						try {
+							while ((stdErr = stdError.readLine()) != null) {
+								ProcessErrline(stdErr);
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				Thread threadStdErr = new Thread(readStdErr, "read stderr");
+				threadStdErr.start();
+
+				threadStdIn.join();
+				threadStdErr.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+		}
+	};
 	
 	public ECLCompiler(IProject project) {
 		this.project = project;
@@ -57,59 +122,16 @@ public class ECLCompiler {
 	public void CheckSyntax(IFile file) {
 		deleteMarkers(file);
 
-		String command = compilerPath;
-		command += " -f\"syntaxcheck=1\"";
-		command += " -L\"" + libraryPath + "\"";
-		command += " -I\"" + projectPath + "\"";
-		command += " \"" + file.getLocation().toOSString() + "\"";
-
-		consoleOut.println(command);
-
-		try {
-			Process p = Runtime.getRuntime().exec(command);
-
-			final BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-			Runnable readStdIn = new Runnable() {
-				public void run() {
-					String out = null;
-					try {
-						while ((out = stdInput.readLine()) != null) {
-							ProcessOutline(out);
-						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			};
-			Thread threadStdIn = new Thread(readStdIn, "read stdin");
-			threadStdIn.start();
-
-			Runnable readStdErr = new Runnable() {
-				public void run() {
-					String err = null;
-					try {
-						while ((err = stdError.readLine()) != null) {
-							ProcessErrline(err);
-						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			};
-			Thread threadStdErr = new Thread(readStdErr, "read stderr");
-			threadStdErr.start();
-
-			threadStdIn.join();
-			threadStdErr.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+		IPath exePath = file.getLocation().removeFileExtension();
+		exePath = exePath.addFileExtension("exe");
+		
+		Map<String, String> args = new TreeMap<String, String>();
+		args.put("f", "syntaxcheck=1");
+		args.put("L", libraryPath);
+		args.put("I", projectPath);
+		
+		CmdProcess process = new CmdProcess();
+		process.exec(args, file.getLocation().toOSString());
 	}
 
 	public void BuildAndRun(IFile file) {
@@ -117,50 +139,13 @@ public class ECLCompiler {
 
 		IPath exePath = file.getLocation().removeFileExtension();
 		exePath = exePath.addFileExtension("exe");
-		String command = compilerPath;
-		//command += " -o\"" + exePath.toOSString() + "\"";
-		command += " -L\"" + libraryPath + "\"";
-		command += " -I\"" + projectPath + "\"";
-		command += " \"" + file.getLocation().toOSString() + "\"";
-
-		try {
-			Process p = Runtime.getRuntime().exec(command);
-
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(
-					p.getInputStream()));
-			BufferedReader stdError = new BufferedReader(new InputStreamReader(
-					p.getErrorStream()));
-
-			// read the output from the command
-			String out = null;
-			while ((out = stdInput.readLine()) != null) {
-				ProcessOutline(out);
-			}
-
-			// read any errors from the attempted command
-			String err = null;
-			while ((err = stdError.readLine()) != null) {
-				ProcessErrline(err);
-			}
-
-			p = Runtime.getRuntime().exec("a.out.exe");
-			stdInput = new BufferedReader(new InputStreamReader(
-					p.getInputStream()));
-			stdError = new BufferedReader(new InputStreamReader(
-					p.getErrorStream()));
-
-			// read the output from the command
-			while ((out = stdInput.readLine()) != null) {
-				ProcessOutline(out);
-			}
-
-			// read any errors from the attempted command
-			while ((err = stdError.readLine()) != null) {
-				ProcessErrline(err);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+		
+		Map<String, String> args = new TreeMap<String, String>();
+		args.put("L", libraryPath);
+		args.put("I", projectPath);
+		
+		CmdProcess process = new CmdProcess();
+		process.exec(args, file.getLocation().toOSString());
 	}
 
 	void ProcessOutline(String outLine)

@@ -38,7 +38,7 @@
       </category>
       <view
             category="org.hpccsystems.eclide"
-            class="org.eclipse.ui.navigator.CommonNavigator"
+            class="org.hpccsystems.ui.navigator.CommonNavigator"
             icon="icons/sample.gif"
             id="org.hpccsystems.eclide.navigator"
             name="ECL Explorer">
@@ -70,6 +70,10 @@
                   pattern="org.eclipse.ui.navigator.resources.workingSets">
             </contentExtension>
 			<contentExtension pattern="org.eclipse.jdt.java.ui.javaContent" />
+   <contentExtension
+         isRoot="true"
+         pattern="org.hpccsystems.eclide.navigatorContent.eclLibrary">
+   </contentExtension>
          </includes>
       </viewerContentBinding>
    </extension>
@@ -101,7 +105,9 @@
          name="ECL Project Builder"
          point="org.eclipse.core.resources.builders">
       <builder hasNature="true">
-         <run class="org.hpccsystems.eclide.builder.ECLBuilder" />
+         <run
+               class="org.hpccsystems.eclide.builder.ECLBuilder">
+         </run>
       </builder>
    </extension>
    <extension
