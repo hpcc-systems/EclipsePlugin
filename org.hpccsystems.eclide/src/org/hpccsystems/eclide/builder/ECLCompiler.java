@@ -1,14 +1,27 @@
+/*##############################################################################
+
+    Copyright (C) 2011 HPCC Systems.
+
+    All rights reserved. This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+############################################################################## */
 package org.hpccsystems.eclide.builder;
 
-import java.awt.image.DataBuffer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -32,6 +45,8 @@ public class ECLCompiler {
 	String compilerPath;
 	String libraryPath;
 	String projectPath;
+	IPath workingPath;
+	IPath rootFolder;	
 	boolean hasError;
 
 	MessageConsole console;
@@ -106,6 +121,8 @@ public class ECLCompiler {
 		compilerPath = store.getString(PreferenceConstants.P_COMPILERPATH);
 		libraryPath = store.getString(PreferenceConstants.P_LIBRARYPATH);
 		projectPath = project.getLocation().toOSString();
+		workingPath = project.getWorkingLocation("eclide");
+		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		
 		console = findConsole("eclcc");
 		consoleOut = console.newMessageStream();
@@ -177,8 +194,16 @@ public class ECLCompiler {
 				String line = fileParts[1];
 				String col = fileParts[2];
 
-				int lineNumber = Integer.parseInt(line);
-				int colNumber = Integer.parseInt(col);
+				int lineNumber = 0;
+				try {
+					lineNumber = Integer.parseInt(line);
+				} catch (NumberFormatException e) {
+				}
+				int colNumber = 0;
+				try {
+					colNumber = Integer.parseInt(col);
+				} catch (NumberFormatException e) {
+				}
 
 				AddMarker(filePath, code, message, lineNumber, colNumber);
 			}
