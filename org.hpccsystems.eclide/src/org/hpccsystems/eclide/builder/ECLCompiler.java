@@ -48,7 +48,6 @@ public class ECLCompiler {
 	String projectPath;
 	IPath workingPath;
 	IPath rootFolder;	
-	boolean hasError;
 	
 	boolean executeRemotely;
 	String serverIP;
@@ -59,8 +58,19 @@ public class ECLCompiler {
 	
 	HtmlViewer htmlViewer;
 	
+	public String wuid;
+	boolean hasError;
+
+	interface IProcessOutput {
+		void ProcessOutline(String outLine);
+		void ProcessErrline(String errLine);
+	}
+
 	class CmdProcess {
-		CmdProcess() {
+		private IProcessOutput handler;
+		
+		CmdProcess(IProcessOutput handler) {
+			this.handler = handler;
 		}
 		
 		void exec(String command) {
@@ -90,7 +100,7 @@ public class ECLCompiler {
 						String stdIn = null;
 						try {
 							while ((stdIn = stdInput.readLine()) != null) {
-								ProcessOutline(stdIn);
+								handler.ProcessOutline(stdIn);
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -105,7 +115,7 @@ public class ECLCompiler {
 						String stdErr = null;
 						try {
 							while ((stdErr = stdError.readLine()) != null) {
-								ProcessErrline(stdErr);
+								handler.ProcessErrline(stdErr);
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -125,6 +135,60 @@ public class ECLCompiler {
 		}
 	};
 	
+	class SyntaxHandler implements IProcessOutput {
+
+		public SyntaxHandler() {
+		}
+
+		@Override
+		public void ProcessOutline(String outLine) {
+			consoleOut.print("Out: ");
+			consoleOut.println(outLine);
+		}
+
+		@Override
+		public void ProcessErrline(String errLine) {
+			consoleOut.print("Err: ");
+			consoleOut.println(errLine);
+			String[] parts = errLine.split(":\\p{Blank}");
+			if (parts.length >= 3) {
+				String filePathAndLoc = parts[0];
+				String code = parts[1];
+				String message = parts[2];
+				String[] fileParts = filePathAndLoc.split("[\\(,\\)]");
+				if (fileParts.length >= 3) {
+					String filePath = fileParts[0];
+					String line = fileParts[1];
+					String col = fileParts[2];
+
+					int lineNumber = 0;
+					try {
+						lineNumber = Integer.parseInt(line);
+					} catch (NumberFormatException e) {
+					}
+					int colNumber = 0;
+					try {
+						colNumber = Integer.parseInt(col);
+					} catch (NumberFormatException e) {
+					}
+
+					AddMarker(filePath, code, message, lineNumber, colNumber);
+				}
+			}
+		}
+	}
+	
+	class DfuPlusHandler extends SyntaxHandler {
+		@Override
+		public void ProcessOutline(String outLine) {
+			consoleOut.print("Out: ");
+			consoleOut.println(outLine);
+			int lastSpace = outLine.lastIndexOf(' ');
+			if (lastSpace != -1)
+				wuid = outLine.substring(lastSpace + 1, outLine.length());
+		}
+	}
+
 	public ECLCompiler(IProject project) {
 		this.project = project;
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
@@ -172,7 +236,7 @@ public class ECLCompiler {
 		args.put("L", libraryPath);
 		args.put("I", projectPath);
 		
-		CmdProcess process = new CmdProcess();
+		CmdProcess process = new CmdProcess(new SyntaxHandler());
 		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
 	}
 
@@ -196,7 +260,7 @@ public class ECLCompiler {
 		args.put("o", xmlPath.toOSString());
 		
 		hasError = false;
-		CmdProcess process = new CmdProcess();
+		CmdProcess process = new CmdProcess(new DfuPlusHandler());
 		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
 		if (!hasError) {
 			args.clear();
@@ -206,6 +270,8 @@ public class ECLCompiler {
 			args.put("cluster", serverCluster);
 			args.put("timeout", "0");
 			process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
+			if (!wuid.isEmpty())
+				htmlViewer.showWuid(wuid);
 		}
 	}
 	protected void BuildAndRunLocal(IFile file) {
@@ -219,47 +285,10 @@ public class ECLCompiler {
 		args.put("I", projectPath);
 		
 		hasError = false;
-		CmdProcess process = new CmdProcess();
+		CmdProcess process = new CmdProcess(new SyntaxHandler());
 		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
 		if (!hasError)
 			process.exec("a.out.exe");
-	}
-
-	void ProcessOutline(String outLine)
-	{
-		consoleOut.print("Out: ");
-		consoleOut.println(outLine);
-	}
-
-	void ProcessErrline(String errLine)
-	{
-		consoleOut.print("Err: ");
-		consoleOut.println(errLine);
-		String[] parts = errLine.split(":\\p{Blank}");
-		if (parts.length >= 3) {
-			String filePathAndLoc = parts[0];
-			String code = parts[1];
-			String message = parts[2];
-			String[] fileParts = filePathAndLoc.split("[\\(,\\)]");
-			if (fileParts.length >= 3) {
-				String filePath = fileParts[0];
-				String line = fileParts[1];
-				String col = fileParts[2];
-
-				int lineNumber = 0;
-				try {
-					lineNumber = Integer.parseInt(line);
-				} catch (NumberFormatException e) {
-				}
-				int colNumber = 0;
-				try {
-					colNumber = Integer.parseInt(col);
-				} catch (NumberFormatException e) {
-				}
-
-				AddMarker(filePath, code, message, lineNumber, colNumber);
-			}
-		}
 	}
 
 	void AddMarker(String filePath, String code, String message, int lineNumber, int colNumber)
