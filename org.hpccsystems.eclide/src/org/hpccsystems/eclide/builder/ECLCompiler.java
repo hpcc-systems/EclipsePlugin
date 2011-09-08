@@ -36,6 +36,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.PreferenceConstants;
+import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 
 public class ECLCompiler {
 
@@ -48,9 +49,15 @@ public class ECLCompiler {
 	IPath workingPath;
 	IPath rootFolder;	
 	boolean hasError;
+	
+	boolean executeRemotely;
+	String serverIP;
+	String serverCluster;
 
 	MessageConsole console;
 	MessageConsoleStream consoleOut;
+	
+	HtmlViewer htmlViewer;
 	
 	class CmdProcess {
 		CmdProcess() {
@@ -58,12 +65,15 @@ public class ECLCompiler {
 		
 		void exec(String command) {
 			Map<String, String> args = new TreeMap<String, String>();
-			exec(command, args, "");
+			exec(command, args, "", false);
 		}
 		
-		void exec(String command, Map<String, String> args, String target) {
+		void exec(String command, Map<String, String> args, String target, boolean dfuArgs) {
 			for(Map.Entry<String, String> entry : args.entrySet()) {
-				command += " \"-" + entry.getKey() + entry.getValue() + "\"";
+				if (dfuArgs)
+					command += " " + entry.getKey() + "=" + entry.getValue();
+				else
+					command += " \"-" + entry.getKey() + entry.getValue() + "\"";
 			}
 			if (!target.isEmpty())
 				command += " \"" + target + "\"";
@@ -118,15 +128,21 @@ public class ECLCompiler {
 	public ECLCompiler(IProject project) {
 		this.project = project;
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		compilerPath = store.getString(PreferenceConstants.P_COMPILERPATH);
-		libraryPath = store.getString(PreferenceConstants.P_LIBRARYPATH);
+		compilerPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "eclcc.exe";
+		libraryPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "plugins";
 		projectPath = project.getLocation().toOSString();
 		workingPath = project.getWorkingLocation("eclide");
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		
+		executeRemotely = store.getBoolean(PreferenceConstants.P_REMOTEEXECUTE);
+		serverIP = store.getString(PreferenceConstants.P_SERVERIP);
+		serverCluster = store.getString(PreferenceConstants.P_SERVERCLUSTER);
+		
 		console = findConsole("eclcc");
 		consoleOut = console.newMessageStream();
-	}
+
+		htmlViewer = findHtmlViewer();
+}
 
 	private MessageConsole findConsole(String name) {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
@@ -141,6 +157,10 @@ public class ECLCompiler {
 		return myConsole;
 	}
 
+	private HtmlViewer findHtmlViewer() {
+		return HtmlViewer.getDefault();
+	}
+	
 	public void CheckSyntax(IFile file) {
 		deleteMarkers(file);
 
@@ -153,10 +173,42 @@ public class ECLCompiler {
 		args.put("I", projectPath);
 		
 		CmdProcess process = new CmdProcess();
-		process.exec(compilerPath, args, file.getLocation().toOSString());
+		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
 	}
 
 	public void BuildAndRun(IFile file) {
+		if (executeRemotely)
+			BuildAndRunRemote(file);
+		else
+			BuildAndRunLocal(file);
+	}
+
+	protected void BuildAndRunRemote(IFile file) {
+		deleteMarkers(file);
+
+		IPath xmlPath = file.getLocation().removeFileExtension();
+		xmlPath = xmlPath.addFileExtension("xml");
+		
+		Map<String, String> args = new TreeMap<String, String>();
+		args.put("L", libraryPath);
+		args.put("I", projectPath);
+		args.put("E", "");
+		args.put("o", xmlPath.toOSString());
+		
+		hasError = false;
+		CmdProcess process = new CmdProcess();
+		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
+		if (!hasError) {
+			args.clear();
+			//eclplus action=query server=192.168.241.131 cluster=thor @test.xml			
+			args.put("action", "query");
+			args.put("server", serverIP);
+			args.put("cluster", serverCluster);
+			args.put("timeout", "0");
+			process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
+		}
+	}
+	protected void BuildAndRunLocal(IFile file) {
 		deleteMarkers(file);
 
 		IPath exePath = file.getLocation().removeFileExtension();
@@ -168,7 +220,7 @@ public class ECLCompiler {
 		
 		hasError = false;
 		CmdProcess process = new CmdProcess();
-		process.exec(compilerPath, args, file.getLocation().toOSString());
+		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
 		if (!hasError)
 			process.exec("a.out.exe");
 	}

@@ -23,13 +23,9 @@ package org.hpccsystems.eclide.preferences;
  */
 public class PreferenceConstants {
 
-	public static final String P_COMPILERPATH = "compilerPathPreference";
-	public static final String P_LIBRARYPATH = "libraryPathPreference";
+	public static final String P_TOOLSPATH = "toolsPathPreference";
+	public static final String P_REMOTEEXECUTE = "remoteExecutePreference";
+	public static final String P_SERVERIP = "serverIPPreference";
+	public static final String P_SERVERCLUSTER = "serverClusterPreference";
 
-//	public static final String P_BOOLEAN = "booleanPreference";
-//
-//	public static final String P_CHOICE = "choicePreference";
-//
-//	public static final String P_STRING = "stringPreference";
-	
 }

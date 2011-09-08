@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ECL IDE
+Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.hpccsystems.eclide;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.hpccsystems.eclide.Activator

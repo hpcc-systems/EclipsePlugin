@@ -1,4 +1,4 @@
-package org.hpccsystems.ui.navigator;
+package org.hpccsystems.eclide.ui.navigator;
 
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;

@@ -38,17 +38,14 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		
 		try{
 			String hpccBinFolder = System.getenv("HPCCBIN");
-			store.setDefault(PreferenceConstants.P_COMPILERPATH, hpccBinFolder + "eclcc.exe");
-			store.setDefault(PreferenceConstants.P_LIBRARYPATH, hpccBinFolder + "ecllibrary");
+			store.setDefault(PreferenceConstants.P_TOOLSPATH, hpccBinFolder);
 		}catch (Exception e){
-			store.setDefault(PreferenceConstants.P_COMPILERPATH, "");
-			store.setDefault(PreferenceConstants.P_LIBRARYPATH, "");
+			store.setDefault(PreferenceConstants.P_TOOLSPATH, "");
 		}
 		
-//		store.setDefault(PreferenceConstants.P_BOOLEAN, true);
-//		store.setDefault(PreferenceConstants.P_CHOICE, "choice2");
-//		store.setDefault(PreferenceConstants.P_STRING,
-//				"Default value");
+		store.setDefault(PreferenceConstants.P_REMOTEEXECUTE, false);
+		store.setDefault(PreferenceConstants.P_SERVERIP, "192.168.241.131");
+		store.setDefault(PreferenceConstants.P_SERVERCLUSTER, "thor");
 	}
 
 }

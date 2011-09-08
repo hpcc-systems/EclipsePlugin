@@ -54,8 +54,10 @@ public class ECLCompilerPreferencePage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new FileFieldEditor(PreferenceConstants.P_COMPILERPATH, "&Compiler:", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_LIBRARYPATH, "&Library:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_TOOLSPATH, "&HPCC Client Tools:", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_REMOTEEXECUTE, "&Execute On Server:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_SERVERIP, "&Server IP:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_SERVERCLUSTER, "&Server Cluster:", getFieldEditorParent()));
 //		addField(
 //			new BooleanFieldEditor(
 //				PreferenceConstants.P_BOOLEAN,
