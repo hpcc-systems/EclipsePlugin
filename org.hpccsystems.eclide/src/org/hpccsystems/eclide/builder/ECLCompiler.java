@@ -66,7 +66,7 @@ public class ECLCompiler {
 
 	interface IProcessOutput {
 		void ProcessOut(BufferedReader outReader);
-		void ProcessErr(BufferedReader errReader);
+		void ProcessErr(IFile file, BufferedReader errReader);
 	}
 
 	class CmdProcess {
@@ -78,10 +78,10 @@ public class ECLCompiler {
 		
 		void exec(String command) {
 			Map<String, String> args = new TreeMap<String, String>();
-			exec(command, args, "", false);
+			exec(command, args, null, false);
 		}
 		
-		void exec(String command, Map<String, String> args, String target, boolean eclplusArgs) {
+		void exec(String command, Map<String, String> args, final IFile target, boolean eclplusArgs) {
 			List<String> argList = new Vector<String>();
 			consoleOut.print(command);
 			argList.add(command);
@@ -94,9 +94,9 @@ public class ECLCompiler {
 				consoleOut.print(" " + arg);
 				argList.add(arg);
 			}
-			if (!target.isEmpty()) {
-				consoleOut.print(" " + target);
-				argList.add(target);
+			if (target != null) {
+				consoleOut.print(" " + "..\\" + target.getProjectRelativePath().toOSString());
+				argList.add("..\\" + target.getProjectRelativePath().toOSString());
 			}
 			consoleOut.println();
 
@@ -106,7 +106,7 @@ public class ECLCompiler {
 				//env.put("VAR1", "myValue");
 				//env.remove("OTHERVAR");
 				//env.put("VAR2", env.get("VAR1") + "suffix");
-				pb.directory(projectPath.toFile());
+				pb.directory(workingPath.toFile());
 				Process p = pb.start();
 				//Process p = Runtime.getRuntime().exec(command);
 
@@ -123,7 +123,7 @@ public class ECLCompiler {
 
 				Runnable readStdErr = new Runnable() {
 					public void run() {
-						handler.ProcessErr(stdError);
+						handler.ProcessErr(target, stdError);
 					}
 				};
 				Thread threadStdErr = new Thread(readStdErr, "read stderr");
@@ -160,7 +160,7 @@ public class ECLCompiler {
 		}
 
 		@Override
-		public void ProcessErr(BufferedReader errReader) {
+		public void ProcessErr(IFile file, BufferedReader errReader) {
 			String stdErr = null;
 			try {
 				while ((stdErr = errReader.readLine()) != null) {
@@ -173,7 +173,7 @@ public class ECLCompiler {
 						String message = parts[2];
 						String[] fileParts = filePathAndLoc.split("[\\(,\\)]");
 						if (fileParts.length >= 3) {
-							String filePath = fileParts[0];
+							String errorPath = fileParts[0];
 							String line = fileParts[1];
 							String col = fileParts[2];
 
@@ -188,7 +188,12 @@ public class ECLCompiler {
 							} catch (NumberFormatException e) {
 							}
 
-							AddMarker(filePath, code, message, lineNumber, colNumber);
+							IResource resolvedFile = null;
+							if (file != null && file.getName().equalsIgnoreCase(errorPath))	//  Error is in the actual file being syntax checked.
+								resolvedFile = file;//project.findMember(file.getLocation());
+							else
+								resolvedFile = project.findMember(errorPath);
+							AddMarker(resolvedFile, code, message, lineNumber, colNumber);
 							/*
 							IMarker marker = AddMarker(filePath, code, message, lineNumber, colNumber);
 							try {
@@ -234,7 +239,10 @@ public class ECLCompiler {
 		compilerPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "eclcc.exe";
 		libraryPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "plugins";
 		projectPath = project.getLocation();
-		workingPath = projectPath;//.append("tmp");
+		workingPath = projectPath.append("tmp");
+		if (!workingPath.toFile().exists())
+			workingPath.toFile().mkdir();
+		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		
 		executeRemotely = store.getBoolean(PreferenceConstants.P_REMOTEEXECUTE);
@@ -270,11 +278,11 @@ public class ECLCompiler {
 		Map<String, String> args = new TreeMap<String, String>();
 		args.put("f", "syntaxcheck=1");
 		//args.put("L", libraryPath);
-		args.put("P", workingPath.toOSString());
+		//args.put("P", workingPath.toOSString());
 		//args.put("E", "");
 		
 		CmdProcess process = new CmdProcess(new SyntaxHandler(file));
-		process.exec(compilerPath, args, file.getProjectRelativePath().toOSString(), false);
+		process.exec(compilerPath, args, file, false);
 	}
 
 	public void BuildAndRun(IFile file) {
@@ -298,7 +306,7 @@ public class ECLCompiler {
 		
 		hasError = false;
 		CmdProcess process = new CmdProcess(new EclPlusHandler(file));
-		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
+		process.exec(compilerPath, args, file, false);
 		if (!hasError) {
 			args.clear();
 			//eclplus action=query server=192.168.241.131 cluster=thor @test.xml			
@@ -306,7 +314,7 @@ public class ECLCompiler {
 			args.put("server", serverIP);
 			args.put("cluster", serverCluster);
 			args.put("timeout", "0");
-			process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
+			//TODO process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
 			if (!wuid.isEmpty())
 				htmlViewer.showWuid(wuid);
 		}
@@ -320,22 +328,17 @@ public class ECLCompiler {
 		Map<String, String> args = new TreeMap<String, String>();
 		//args.put("L", libraryPath);
 		//args.put("I", projectPath);
-		args.put("P", workingPath.toOSString());
+		//args.put("P", workingPath.toOSString());
 		
 		hasError = false;
 		CmdProcess process = new CmdProcess(new SyntaxHandler(file));
-		process.exec(compilerPath, args, file.getLocation().toOSString()/*getProjectRelativePath().toOSString()*/, false);
+		process.exec(compilerPath, args, file, false);
 		if (!hasError)
 			process.exec(exePath.toOSString());
 	}
 
-	IMarker AddMarker(String filePath, String code, String message, int lineNumber, int colNumber)
+	IMarker AddMarker(IResource resolvedFile, String code, String message, int lineNumber, int colNumber)
 	{
-		IResource resolvedFile = project.findMember(filePath);
-		//if (resolvedResource != null) {
-		//}
-		//IResource resolvedFile = project.getFile(filePath);
-		
 		if (resolvedFile != null)
 		{
 			if (lineNumber <= 0) {
