@@ -20,8 +20,11 @@ package org.hpccsystems.eclide.builder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -45,7 +48,7 @@ public class ECLCompiler {
 	IProject project;
 	String compilerPath;
 	String libraryPath;
-	String projectPath;
+	IPath projectPath;
 	IPath workingPath;
 	IPath rootFolder;	
 	
@@ -62,8 +65,8 @@ public class ECLCompiler {
 	boolean hasError;
 
 	interface IProcessOutput {
-		void ProcessOutline(String outLine);
-		void ProcessErrline(String errLine);
+		void ProcessOut(BufferedReader outReader);
+		void ProcessErr(BufferedReader errReader);
 	}
 
 	class CmdProcess {
@@ -78,33 +81,41 @@ public class ECLCompiler {
 			exec(command, args, "", false);
 		}
 		
-		void exec(String command, Map<String, String> args, String target, boolean dfuArgs) {
+		void exec(String command, Map<String, String> args, String target, boolean eclplusArgs) {
+			List<String> argList = new Vector<String>();
+			consoleOut.print(command);
+			argList.add(command);
 			for(Map.Entry<String, String> entry : args.entrySet()) {
-				if (dfuArgs)
-					command += " " + entry.getKey() + "=" + entry.getValue();
-				else
-					command += " \"-" + entry.getKey() + entry.getValue() + "\"";
+				String arg;
+				if (eclplusArgs)
+					arg = entry.getKey() + "=" + entry.getValue();
+				else 
+					arg = "-" + entry.getKey() + entry.getValue();
+				consoleOut.print(" " + arg);
+				argList.add(arg);
 			}
-			if (!target.isEmpty())
-				command += " \"" + target + "\"";
-			consoleOut.println(command);
+			if (!target.isEmpty()) {
+				consoleOut.print(" " + target);
+				argList.add(target);
+			}
+			consoleOut.println();
 
 			try {
-				Process p = Runtime.getRuntime().exec(command);
+				ProcessBuilder pb = new ProcessBuilder(argList);
+				Map<String, String> env = pb.environment();
+				//env.put("VAR1", "myValue");
+				//env.remove("OTHERVAR");
+				//env.put("VAR2", env.get("VAR1") + "suffix");
+				pb.directory(projectPath.toFile());
+				Process p = pb.start();
+				//Process p = Runtime.getRuntime().exec(command);
 
 				final BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 				final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 				
 				Runnable readStdIn = new Runnable() {
 					public void run() {
-						String stdIn = null;
-						try {
-							while ((stdIn = stdInput.readLine()) != null) {
-								handler.ProcessOutline(stdIn);
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						handler.ProcessOut(stdInput);
 					}
 				};
 				Thread threadStdIn = new Thread(readStdIn, "read stdin");
@@ -112,14 +123,7 @@ public class ECLCompiler {
 
 				Runnable readStdErr = new Runnable() {
 					public void run() {
-						String stdErr = null;
-						try {
-							while ((stdErr = stdError.readLine()) != null) {
-								handler.ProcessErrline(stdErr);
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						handler.ProcessErr(stdError);
 					}
 				};
 				Thread threadStdErr = new Thread(readStdErr, "read stderr");
@@ -136,56 +140,91 @@ public class ECLCompiler {
 	};
 	
 	class SyntaxHandler implements IProcessOutput {
+		IFile file;
 
-		public SyntaxHandler() {
+		public SyntaxHandler(IFile file) {
+			this.file = file;
 		}
 
 		@Override
-		public void ProcessOutline(String outLine) {
-			consoleOut.print("Out: ");
-			consoleOut.println(outLine);
-		}
-
-		@Override
-		public void ProcessErrline(String errLine) {
-			consoleOut.print("Err: ");
-			consoleOut.println(errLine);
-			String[] parts = errLine.split(":\\p{Blank}");
-			if (parts.length >= 3) {
-				String filePathAndLoc = parts[0];
-				String code = parts[1];
-				String message = parts[2];
-				String[] fileParts = filePathAndLoc.split("[\\(,\\)]");
-				if (fileParts.length >= 3) {
-					String filePath = fileParts[0];
-					String line = fileParts[1];
-					String col = fileParts[2];
-
-					int lineNumber = 0;
-					try {
-						lineNumber = Integer.parseInt(line);
-					} catch (NumberFormatException e) {
-					}
-					int colNumber = 0;
-					try {
-						colNumber = Integer.parseInt(col);
-					} catch (NumberFormatException e) {
-					}
-
-					AddMarker(filePath, code, message, lineNumber, colNumber);
+		public void ProcessOut(BufferedReader reader) {
+			String stdIn = null;
+			try {
+				while ((stdIn = reader.readLine()) != null) {
+					consoleOut.print("Out: ");
+					consoleOut.println(stdIn);
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void ProcessErr(BufferedReader errReader) {
+			String stdErr = null;
+			try {
+				while ((stdErr = errReader.readLine()) != null) {
+					consoleOut.print("Err: ");
+					consoleOut.println(stdErr);
+					String[] parts = stdErr.split(":\\p{Blank}");
+					if (parts.length >= 3) {
+						String filePathAndLoc = parts[0];
+						String code = parts[1];
+						String message = parts[2];
+						String[] fileParts = filePathAndLoc.split("[\\(,\\)]");
+						if (fileParts.length >= 3) {
+							String filePath = fileParts[0];
+							String line = fileParts[1];
+							String col = fileParts[2];
+
+							int lineNumber = 0;
+							try {
+								lineNumber = Integer.parseInt(line);
+							} catch (NumberFormatException e) {
+							}
+							int colNumber = 0;
+							try {
+								colNumber = Integer.parseInt(col);
+							} catch (NumberFormatException e) {
+							}
+
+							AddMarker(filePath, code, message, lineNumber, colNumber);
+							/*
+							IMarker marker = AddMarker(filePath, code, message, lineNumber, colNumber);
+							try {
+								marker.getAttribute("Dependents");
+							} catch (CoreException e) {
+								e.printStackTrace();
+							}
+							*/
+						}
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
 	
-	class DfuPlusHandler extends SyntaxHandler {
+	class EclPlusHandler extends SyntaxHandler {
+		EclPlusHandler(IFile file) {
+			super(file);
+		}
+		
 		@Override
-		public void ProcessOutline(String outLine) {
-			consoleOut.print("Out: ");
-			consoleOut.println(outLine);
-			int lastSpace = outLine.lastIndexOf(' ');
-			if (lastSpace != -1)
-				wuid = outLine.substring(lastSpace + 1, outLine.length());
+		public void ProcessOut(BufferedReader reader) {
+			String stdIn = null;
+			try {
+				while ((stdIn = reader.readLine()) != null) {
+					consoleOut.print("Out: ");
+					consoleOut.println(stdIn);
+					int lastSpace = stdIn.lastIndexOf(' ');
+					if (lastSpace != -1)
+						wuid = stdIn.substring(lastSpace + 1, stdIn.length());
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -194,8 +233,8 @@ public class ECLCompiler {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		compilerPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "eclcc.exe";
 		libraryPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "plugins";
-		projectPath = project.getLocation().toOSString();
-		workingPath = project.getWorkingLocation("eclide");
+		projectPath = project.getLocation();
+		workingPath = projectPath;//.append("tmp");
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		
 		executeRemotely = store.getBoolean(PreferenceConstants.P_REMOTEEXECUTE);
@@ -227,17 +266,15 @@ public class ECLCompiler {
 	
 	public void CheckSyntax(IFile file) {
 		deleteMarkers(file);
-
-		IPath exePath = file.getLocation().removeFileExtension();
-		exePath = exePath.addFileExtension("exe");
 		
 		Map<String, String> args = new TreeMap<String, String>();
 		args.put("f", "syntaxcheck=1");
-		args.put("L", libraryPath);
-		args.put("I", projectPath);
+		//args.put("L", libraryPath);
+		args.put("P", workingPath.toOSString());
+		//args.put("E", "");
 		
-		CmdProcess process = new CmdProcess(new SyntaxHandler());
-		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
+		CmdProcess process = new CmdProcess(new SyntaxHandler(file));
+		process.exec(compilerPath, args, file.getProjectRelativePath().toOSString(), false);
 	}
 
 	public void BuildAndRun(IFile file) {
@@ -254,13 +291,13 @@ public class ECLCompiler {
 		xmlPath = xmlPath.addFileExtension("xml");
 		
 		Map<String, String> args = new TreeMap<String, String>();
-		args.put("L", libraryPath);
-		args.put("I", projectPath);
+		//args.put("L", libraryPath);
+		//args.put("I", projectPath);
 		args.put("E", "");
 		args.put("o", xmlPath.toOSString());
 		
 		hasError = false;
-		CmdProcess process = new CmdProcess(new DfuPlusHandler());
+		CmdProcess process = new CmdProcess(new EclPlusHandler(file));
 		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
 		if (!hasError) {
 			args.clear();
@@ -274,30 +311,38 @@ public class ECLCompiler {
 				htmlViewer.showWuid(wuid);
 		}
 	}
+	
 	protected void BuildAndRunLocal(IFile file) {
 		deleteMarkers(file);
 
-		IPath exePath = file.getLocation().removeFileExtension();
-		exePath = exePath.addFileExtension("exe");
+		IPath exePath = workingPath.append("a.out.exe");
 		
 		Map<String, String> args = new TreeMap<String, String>();
-		args.put("L", libraryPath);
-		args.put("I", projectPath);
+		//args.put("L", libraryPath);
+		//args.put("I", projectPath);
+		args.put("P", workingPath.toOSString());
 		
 		hasError = false;
-		CmdProcess process = new CmdProcess(new SyntaxHandler());
-		process.exec(compilerPath, args, file.getLocation().toOSString(), false);
+		CmdProcess process = new CmdProcess(new SyntaxHandler(file));
+		process.exec(compilerPath, args, file.getLocation().toOSString()/*getProjectRelativePath().toOSString()*/, false);
 		if (!hasError)
-			process.exec("a.out.exe");
+			process.exec(exePath.toOSString());
 	}
 
-	void AddMarker(String filePath, String code, String message, int lineNumber, int colNumber)
+	IMarker AddMarker(String filePath, String code, String message, int lineNumber, int colNumber)
 	{
-		IFile resolvedFile = project.getFile(filePath);
+		IResource resolvedFile = project.findMember(filePath);
+		//if (resolvedResource != null) {
+		//}
+		//IResource resolvedFile = project.getFile(filePath);
+		
 		if (resolvedFile != null)
 		{
 			if (lineNumber <= 0) {
 				lineNumber = 1;
+			}
+			if (colNumber <= 0) {
+				colNumber = 1;
 			}
 			int severity = IMarker.SEVERITY_INFO;
 			if (code.startsWith("error")) {
@@ -307,27 +352,33 @@ public class ECLCompiler {
 			else if (code.startsWith("warning"))
 				severity = IMarker.SEVERITY_WARNING;
 
-			try {
-				if (resolvedFile.exists()) {
-					IMarker[] markers = resolvedFile.findMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
+			if (resolvedFile.exists()) {
+				IMarker[] markers = null;
+				try {
+					markers = resolvedFile.findMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
 					for (int i = 0; i < markers.length; ++i) {
 						if (markers[i].getAttribute(IMarker.SEVERITY).equals(severity) && 
 								markers[i].getAttribute(IMarker.MESSAGE).equals(message) && 
 								markers[i].getAttribute(IMarker.LINE_NUMBER).equals(lineNumber)) {
-							return;
+							return markers[i];
 						}
 					}
-
+		
 					IMarker marker = resolvedFile.createMarker(MARKER_TYPE);
 					marker.setAttribute(IMarker.SEVERITY, severity);
 					marker.setAttribute(IMarker.MESSAGE, message);
 					marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
+					//marker.setAttribute(IMarker.CHAR_START, colNumber);
+					//marker.setAttribute(IMarker.CHAR_END, colNumber);
+					return marker;
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (CoreException e) {
-				e.printStackTrace();
 			}
 		}
-	}	
+		return null;
+	}
 
 	private void deleteMarkers(IFile file) {
 		try {
