@@ -37,14 +37,14 @@ import org.hpccsystems.eclide.Activator;
  * be accessed directly via the preference store.
  */
 
-public class ECLPreferencePage
+public class ECLCompilerPreferencePage
 	extends FieldEditorPreferencePage
 	implements IWorkbenchPreferencePage {
 
-	public ECLPreferencePage() {
+	public ECLCompilerPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("ECL Releated preferences.");
+		setDescription("Compiler preferences.");
 	}
 	
 	/**
@@ -54,8 +54,10 @@ public class ECLPreferencePage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new FileFieldEditor(PreferenceConstants.P_COMPILERPATH, "&Compiler:", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_LIBRARYPATH, "&Library:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_TOOLSPATH, "&HPCC Client Tools:", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_REMOTEEXECUTE, "&Execute On Server:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_SERVERIP, "&Server IP:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_SERVERCLUSTER, "&Server Cluster:", getFieldEditorParent()));
 //		addField(
 //			new BooleanFieldEditor(
 //				PreferenceConstants.P_BOOLEAN,

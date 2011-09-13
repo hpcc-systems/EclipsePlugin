@@ -7,15 +7,21 @@
             class="org.hpccsystems.eclide.perspectives.ECLPerspective"
             icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.perspectives.ECLPerspective"
-            name="ECL Development">
+            name="%perspective.name.0">
       </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.hpccsystems.eclide.preferences.ECLPreferencePage"
+            class="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
+            id="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
+            name="%page.name.1">
+      </page>
+      <page
+            category="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
+            class="org.hpccsystems.eclide.preferences.ECLCompilerPreferencePage"
             id="org.hpccsystems.eclide.preferences.ECLPreferencePage"
-            name="ECL Preferences">
+            name="%page.name.2">
       </page>
    </extension>
    <extension
@@ -26,11 +32,22 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
+      <category
+            id="org.hpccsystems.eclide"
+            name="%category.name.1">
+      </category>
       <view
-            class="org.eclipse.ui.navigator.CommonNavigator"
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.ui.navigator.CommonNavigator"
             icon="icons/sample.gif"
             id="org.hpccsystems.eclide.navigator"
-            name="ECL Explorer">
+            name="%view.name.0">
+      </view>
+      <view
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.ui.viewer.HtmlViewer"
+            id="org.hpccsystems.eclide.html"
+            name="ECL Watch">
       </view>
    </extension>
    <extension
@@ -58,6 +75,11 @@
             <contentExtension
                   pattern="org.eclipse.ui.navigator.resources.workingSets">
             </contentExtension>
+			<contentExtension pattern="org.eclipse.jdt.java.ui.javaContent" />
+   <contentExtension
+         isRoot="true"
+         pattern="org.hpccsystems.eclide.navigatorContent.eclLibrary">
+   </contentExtension>
          </includes>
       </viewerContentBinding>
    </extension>
@@ -81,8 +103,124 @@
             extensions="ecl"
             icon="icons/sample.gif"
             id="org.hpccsystems.eclide.editors.ECLEditor"
-            name="ECL Editor">
+            name="%editor.name.0">
       </editor>
+   </extension>
+   <extension
+         id="eclBuilder"
+         name="%extension.name.2"
+         point="org.eclipse.core.resources.builders">
+      <builder hasNature="true">
+         <run
+               class="org.hpccsystems.eclide.builder.ECLBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="eclNature"
+         name="%extension.name.3"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.hpccsystems.eclide.builder.ECLNature">
+         </run>
+      </runtime>
+      <builder
+            id="org.hpccsystems.eclide.eclBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.hpccsystems.eclide.contribution1"
+            nameFilter="*"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="org.hpccsystems.eclide.builder.ToggleNatureAction"
+               enablesFor="+"
+               id="org.hpccsystems.eclide.addRemoveNatureAction"
+               label="%action.label.0"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         id="eclProblem"
+         name="%extension.name.4"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.hpccsystems.eclide"
+            name="%category.name.2">
+      </category>
+      	<wizard
+             category="org.hpccsystems.eclide"
+             class="org.hpccsystems.eclide.wizards.ECLNewProjectWizard"
+             finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
+             icon="icons/sample.gif"
+             id="org.hpccsystems.eclide.wizards.ECLNewProjectWizard"
+             name="%wizard.name.1"
+             preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective"
+             project="true">
+         	<description>
+            	%wizard.description.1
+         	</description>
+      	</wizard>
+      <wizard
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
+            finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
+            icon="icons/sample.gif"
+            id="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
+            name="%wizard.name.2"
+            preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective">
+         <description>
+            %wizard.description.2
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.hpccsystems.eclide.launchers.LaunchDelegate"
+            id="org.hpccsystems.eclide.launching.ECLConfigurationType"
+            modes="run"
+            name="%launchConfigurationType.name.0"
+            public="true">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="org.hpccsystems.eclide.launchers.ECLConfigurationTabGroup"
+            id="org.hpccsystems.eclide.launching.ECLConfigurationType"
+            type="org.hpccsystems.eclide.launching.ECLConfigurationType">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.hpccsystems.eclide.launchers.ECLShortcut"
+            id="org.hpccsystems.eclide.launchers.ECLShortcut"
+            label="%shortcut.label.0"
+            modes="run">
+         <contextualLaunch>
+		 <enablement>
+           <with variable="selection">
+             <count value="1"/>
+             </with>
+             </enablement>
+         </contextualLaunch>
+      </shortcut>
    </extension>
 
 </plugin>

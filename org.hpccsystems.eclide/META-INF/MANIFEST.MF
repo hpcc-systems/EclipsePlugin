@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ECL IDE
+Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.hpccsystems.eclide;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.hpccsystems.eclide.Activator
@@ -12,6 +12,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.navigator,
  org.eclipse.ui.navigator.resources,
  org.eclipse.jface.text,
- org.eclipse.ui.editors
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
+ org.eclipse.debug.core,
+ org.eclipse.debug.ui
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.jdt.core,
+ org.eclipse.jdt.debug.ui.launchConfigurations,
+ org.eclipse.jdt.launching
