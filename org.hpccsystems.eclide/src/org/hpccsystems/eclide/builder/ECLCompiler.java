@@ -62,6 +62,7 @@ public class ECLCompiler {
 	HtmlViewer htmlViewer;
 	
 	public String wuid;
+	public List<IFile> dependants;
 	boolean hasError;
 
 	interface IProcessOutput {
@@ -149,13 +150,19 @@ public class ECLCompiler {
 		@Override
 		public void ProcessOut(BufferedReader reader) {
 			String stdIn = null;
-			try {
-				while ((stdIn = reader.readLine()) != null) {
-					consoleOut.print("Out: ");
-					consoleOut.println(stdIn);
+			if (true) {
+				ECLArchiveParser parser = new ECLArchiveParser(project, reader);
+				assert(parser != null);
+				dependants = parser.dependants;
+			} else {
+				try {
+					while ((stdIn = reader.readLine()) != null) {
+						consoleOut.print("Out: ");
+						consoleOut.println(stdIn);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 

@@ -20,8 +20,6 @@ package org.hpccsystems.eclide.builder;
 import java.util.Map;
 
 //import javax.xml.parsers.ParserConfigurationException;
-//import javax.xml.parsers.SAXParser;
-//import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -33,12 +31,9 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
 
 public class ECLBuilder extends IncrementalProjectBuilder {
-
+	static final String Dependee = "org.hpccsystems.eclide.builder.dependee";
 	class ECLDeltaVisitor implements IResourceDeltaVisitor {
 		private IProgressMonitor monitor;
 		
@@ -88,37 +83,9 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	class ECLErrorHandler extends DefaultHandler {
-		
-		private IFile file;
-
-		public ECLErrorHandler(IFile file) {
-			this.file = file;
-		}
-
-		private void addMarker(SAXParseException e, int severity) {
-			ECLBuilder.this.addMarker(file, e.getMessage(), e
-					.getLineNumber(), severity);
-		}
-
-		public void error(SAXParseException exception) throws SAXException {
-			addMarker(exception, IMarker.SEVERITY_ERROR);
-		}
-
-		public void fatalError(SAXParseException exception) throws SAXException {
-			addMarker(exception, IMarker.SEVERITY_ERROR);
-		}
-
-		public void warning(SAXParseException exception) throws SAXException {
-			addMarker(exception, IMarker.SEVERITY_WARNING);
-		}
-	}
-
 	public static final String BUILDER_ID = "org.hpccsystems.eclide.eclBuilder";
 
 	private static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
-
-//	private SAXParserFactory parserFactory;
 
 	private void addMarker(IFile file, String message, int lineNumber,
 			int severity) {
@@ -154,7 +121,9 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			IFile file = (IFile) resource;
 			monitor.subTask(file.getName());
 			ECLCompiler compiler = new ECLCompiler(getProject());
+			RelationshipHelper rhelper = new RelationshipHelper(file);
 			compiler.CheckSyntax(file);
+			rhelper.SetDepandants(compiler.dependants);
 		}
 	}
 
