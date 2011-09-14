@@ -25,15 +25,18 @@ import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.source.DefaultAnnotationHover;
+import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.hpccsystems.eclide.text.ECLPartitionScanner;
 import org.hpccsystems.eclide.text.ECLScanner;
 import org.hpccsystems.eclide.text.ECLTagScanner;
 import org.hpccsystems.eclide.text.IECLColorConstants;
 import org.hpccsystems.eclide.text.NonRuleBasedDamagerRepairer;
 
-public class ECLConfiguration extends SourceViewerConfiguration {
+public class ECLConfiguration extends TextSourceViewerConfiguration {
 	private ECLDoubleClickStrategy doubleClickStrategy;
 	private ECLTagScanner tagScanner;
 	private ECLScanner scanner;
@@ -42,6 +45,8 @@ public class ECLConfiguration extends SourceViewerConfiguration {
 	public ECLConfiguration(ColorManager colorManager) {
 		this.colorManager = colorManager;
 	}
+
+	@Override
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return new String[] {
 			IDocument.DEFAULT_CONTENT_TYPE,
@@ -49,14 +54,20 @@ public class ECLConfiguration extends SourceViewerConfiguration {
 			ECLPartitionScanner.ECL_COMMENT,
 			ECLPartitionScanner.ECL_BODY };
 	}
-	public ITextDoubleClickStrategy getDoubleClickStrategy(
-		ISourceViewer sourceViewer,
-		String contentType) {
-		if (doubleClickStrategy == null)
-			doubleClickStrategy = new ECLDoubleClickStrategy();
-		return doubleClickStrategy;
-	}
+	
+//	public ITextDoubleClickStrategy getDoubleClickStrategy(
+//		ISourceViewer sourceViewer,
+//		String contentType) {
+//		if (doubleClickStrategy == null)
+//			doubleClickStrategy = new ECLDoubleClickStrategy();
+//		return doubleClickStrategy;
+//	}
 
+//	@Override
+//	public IAnnotationHover getAnnotationHover(ISourceViewer sourceViewer) {
+//		return new DefaultAnnotationHover();//sourceViewer);
+//	}
+	
 	protected ECLScanner getECLScanner() {
 		if (scanner == null) {
 			scanner = new ECLScanner(colorManager);
@@ -67,6 +78,7 @@ public class ECLConfiguration extends SourceViewerConfiguration {
 		}
 		return scanner;
 	}
+	
 	protected ECLTagScanner getECLTagScanner() {
 		if (tagScanner == null) {
 			tagScanner = new ECLTagScanner(colorManager);
@@ -78,6 +90,7 @@ public class ECLConfiguration extends SourceViewerConfiguration {
 		return tagScanner;
 	}
 
+	@Override
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
 

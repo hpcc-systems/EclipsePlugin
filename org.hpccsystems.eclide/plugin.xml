@@ -225,7 +225,7 @@
    <extension
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
-            markerType="org.eclipse.core.internal.resources.Marker"
+            markerType="org.hpccsystems.eclide.eclProblem"
             class="org.hpccsystems.eclide.problem.QuickFixer">
       </markerResolutionGenerator>
    </extension>

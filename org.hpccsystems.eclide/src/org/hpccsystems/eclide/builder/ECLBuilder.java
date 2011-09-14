@@ -86,21 +86,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	}
 
 	public static final String BUILDER_ID = "org.hpccsystems.eclide.eclBuilder";
-	private static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
 	Set<IFile> checkedFiles;
-
-	private void addMarker(IFile file, String message, int lineNumber, int severity) {
-		try {
-			IMarker marker = file.createMarker(MARKER_TYPE);
-			marker.setAttribute(IMarker.MESSAGE, message);
-			marker.setAttribute(IMarker.SEVERITY, severity);
-			if (lineNumber == -1) {
-				lineNumber = 1;
-			}
-			marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-		} catch (CoreException e) {
-		}
-	}
 
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		monitor.setTaskName("Checking Syntax");

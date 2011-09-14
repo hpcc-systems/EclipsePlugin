@@ -131,7 +131,7 @@ public class RelationshipHelper{
 		}
 	}
 
-	final public Set<IFile> getDescendants() {
+	public Set<IFile> getDescendants() {
 		return descendants.files;
 	}
 }
