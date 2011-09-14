@@ -17,7 +17,10 @@
 ############################################################################## */
 package org.hpccsystems.eclide.builder;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 //import javax.xml.parsers.ParserConfigurationException;
 
@@ -33,7 +36,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ECLBuilder extends IncrementalProjectBuilder {
-	static final String Dependee = "org.hpccsystems.eclide.builder.dependee";
 	class ECLDeltaVisitor implements IResourceDeltaVisitor {
 		private IProgressMonitor monitor;
 		
@@ -84,11 +86,10 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	}
 
 	public static final String BUILDER_ID = "org.hpccsystems.eclide.eclBuilder";
-
 	private static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
+	Set<IFile> checkedFiles;
 
-	private void addMarker(IFile file, String message, int lineNumber,
-			int severity) {
+	private void addMarker(IFile file, String message, int lineNumber, int severity) {
 		try {
 			IMarker marker = file.createMarker(MARKER_TYPE);
 			marker.setAttribute(IMarker.MESSAGE, message);
@@ -103,6 +104,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		monitor.setTaskName("Checking Syntax");
+		checkedFiles = new HashSet<IFile>();
 		if (kind == FULL_BUILD) {
 			fullBuild(monitor);
 		} else {
@@ -119,11 +121,26 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	void checkItem(IResource resource, IProgressMonitor monitor) {
 		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
 			IFile file = (IFile) resource;
+			if (checkedFiles.contains(file))
+				return;
+			
+			checkedFiles.add(file);
 			monitor.subTask(file.getName());
 			ECLCompiler compiler = new ECLCompiler(getProject());
 			RelationshipHelper rhelper = new RelationshipHelper(file);
-			compiler.CheckSyntax(file);
-			rhelper.SetDepandants(compiler.dependants);
+			try {
+				compiler.checkSyntax(file);
+				if (!compiler.hasError) {
+					rhelper.setAncestors(compiler.ancestors);
+				}
+				Set<IFile> descendants = new HashSet<IFile>(rhelper.getDescendants());
+				Iterator<IFile> itr = descendants.iterator(); 
+				while (itr.hasNext()) {
+					checkItem(itr.next(), monitor);
+				}
+			} finally {
+				rhelper.close();
+			}
 		}
 	}
 

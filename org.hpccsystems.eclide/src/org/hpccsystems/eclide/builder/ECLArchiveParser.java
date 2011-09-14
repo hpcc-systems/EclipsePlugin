@@ -1,8 +1,10 @@
 package org.hpccsystems.eclide.builder;
 
-import java.io.BufferedReader;
+import java.io.BufferedReader; 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -12,6 +14,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -20,25 +24,26 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ECLArchiveParser {
 
 	private SAXParserFactory parserFactory;
-	List<IFile> dependants;
-	
+	Set<IFile> ancestors;
+
 	class Element {
 		public String tag;
 		public Attributes attributes;
 		public StringBuilder content;
-		
+
 		Element(String tag, Attributes attributes) {
 			this.tag = tag;
 			this.attributes = attributes;
 		}
-		
-		void AppendContent(char[] ch, int start, int length) {
+
+		void appendContent(char[] ch, int start, int length) {
 			//content.append(new String(ch, start, length));		
 			//System.out.println(content);
 		}
 	}
-		class StackHandler extends DefaultHandler {
-		
+	
+	class StackHandler extends DefaultHandler {
+
 		protected Stack<Element> elementStack;
 
 		public StackHandler() {
@@ -48,7 +53,7 @@ public class ECLArchiveParser {
 		@Override
 		public void characters(char[] ch, int start, int length) throws SAXException {
 			assert(!elementStack.empty());
-			elementStack.peek().AppendContent(ch, start, length);
+			elementStack.peek().appendContent(ch, start, length);
 			super.characters(ch, start, length);
 		}
 
@@ -76,22 +81,29 @@ public class ECLArchiveParser {
 	}
 
 	class ECLArchiveHandler extends StackHandler {
-		IProject project;
+		IFile file;
 
-		ECLArchiveHandler(IProject project) {
+		ECLArchiveHandler(IFile file) {
 			super();
-			this.project = project;
-			dependants = new Vector<IFile>();
+			this.file = file;
+			ancestors = new HashSet<IFile>();
 		}
-		
+
 		@Override
 		public void endElement(String uri, String localName, String qName)	throws SAXException {
 			assert(!elementStack.empty());
 			switch(elementStack.size()) {
 			case 3:
 				Element e = elementStack.peek();
-				String path = e.attributes.getValue("sourcePath");
-				dependants.add(project.getFile(path));
+				IPath fileFolder = file.getProjectRelativePath().removeLastSegments(1);
+				String sourcePath = e.attributes.getValue("sourcePath");
+				if (sourcePath != null) {
+					IPath path = fileFolder.append(sourcePath);	//  Paths are relative to item being checked.
+					IResource resource = file.getProject().findMember(path);
+					if (resource instanceof IFile && !resource.equals(file) && resource.getName().endsWith(".ecl")) 
+						ancestors.add((IFile) resource);
+				}
+				
 				break;
 			default:
 				break;
@@ -99,31 +111,29 @@ public class ECLArchiveParser {
 			super.endElement(uri, localName, qName);
 		}
 	}
-	
-	ECLArchiveParser(IProject project, BufferedReader reader) {
+
+	ECLArchiveParser(IFile file, BufferedReader reader) {
 		parserFactory = SAXParserFactory.newInstance();
 
 		SAXParser parser = null;
-//		spf.setNamespaceAware(true);
 		parserFactory.setValidating(false);
 
 		try {
 			parser = parserFactory.newSAXParser();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		ECLArchiveHandler handler = new ECLArchiveHandler(project); 
+		ECLArchiveHandler handler = new ECLArchiveHandler(file); 
 		try {
 			parser.parse(new InputSource(reader), handler);
 		} catch (SAXException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}		

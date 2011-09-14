@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -62,7 +63,7 @@ public class ECLCompiler {
 	HtmlViewer htmlViewer;
 	
 	public String wuid;
-	public List<IFile> dependants;
+	public Set<IFile> ancestors;
 	boolean hasError;
 
 	interface IProcessOutput {
@@ -151,9 +152,9 @@ public class ECLCompiler {
 		public void ProcessOut(BufferedReader reader) {
 			String stdIn = null;
 			if (true) {
-				ECLArchiveParser parser = new ECLArchiveParser(project, reader);
+				ECLArchiveParser parser = new ECLArchiveParser(file, reader);
 				assert(parser != null);
-				dependants = parser.dependants;
+				ancestors = parser.ancestors;
 			} else {
 				try {
 					while ((stdIn = reader.readLine()) != null) {
@@ -196,19 +197,12 @@ public class ECLCompiler {
 							}
 
 							IResource resolvedFile = null;
-							if (file != null && file.getName().equalsIgnoreCase(errorPath))	//  Error is in the actual file being syntax checked.
-								resolvedFile = file;//project.findMember(file.getLocation());
-							else
+							if (file != null && file.getName().equalsIgnoreCase(errorPath)) {	//  Error is in the actual file being syntax checked.
+								resolvedFile = file;
+							} else { 
 								resolvedFile = project.findMember(errorPath);
-							AddMarker(resolvedFile, code, message, lineNumber, colNumber);
-							/*
-							IMarker marker = AddMarker(filePath, code, message, lineNumber, colNumber);
-							try {
-								marker.getAttribute("Dependents");
-							} catch (CoreException e) {
-								e.printStackTrace();
 							}
-							*/
+							addMarker(resolvedFile, code, message, lineNumber, colNumber, true);
 						}
 					}
 				}
@@ -216,6 +210,53 @@ public class ECLCompiler {
 				e.printStackTrace();
 			}
 		}
+		
+		void addMarker(IResource resolvedFile, String code, String message, int lineNumber, int colNumber, boolean oneErrorOnly)
+		{
+			if (resolvedFile != null)
+			{
+				if (lineNumber <= 0) {
+					lineNumber = 1;
+				}
+				if (colNumber <= 0) {
+					colNumber = 1;
+				}
+				int severity = IMarker.SEVERITY_INFO;
+				if (code.startsWith("error")) {
+					hasError = true;
+					severity = IMarker.SEVERITY_ERROR;
+				}
+				else if (code.startsWith("warning"))
+					severity = IMarker.SEVERITY_WARNING;
+
+				if (resolvedFile.exists()) {
+					try {
+						IMarker[] markers = resolvedFile.findMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
+						for (int i = 0; i < markers.length; ++i) {
+							if (oneErrorOnly && markers[i].getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR))
+								return;
+							
+							if (markers[i].getAttribute(IMarker.SEVERITY).equals(severity) && 
+									markers[i].getAttribute(IMarker.MESSAGE).equals(message) && 
+									markers[i].getAttribute(IMarker.LINE_NUMBER).equals(lineNumber)) {
+								return;
+							}
+						}
+			
+						IMarker marker = resolvedFile.createMarker(MARKER_TYPE);
+						marker.setAttribute(IMarker.SEVERITY, severity);
+						marker.setAttribute(IMarker.MESSAGE, message);
+						marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
+						//marker.setAttribute(IMarker.CHAR_START, colNumber);
+						//marker.setAttribute(IMarker.CHAR_END, colNumber);
+
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	
 	}
 	
 	class EclPlusHandler extends SyntaxHandler {
@@ -279,27 +320,27 @@ public class ECLCompiler {
 		return HtmlViewer.getDefault();
 	}
 	
-	public void CheckSyntax(IFile file) {
+	public void checkSyntax(IFile file) {
 		deleteMarkers(file);
 		
 		Map<String, String> args = new TreeMap<String, String>();
 		args.put("f", "syntaxcheck=1");
 		//args.put("L", libraryPath);
 		//args.put("P", workingPath.toOSString());
-		//args.put("E", "");
+		args.put("E", "");
 		
 		CmdProcess process = new CmdProcess(new SyntaxHandler(file));
 		process.exec(compilerPath, args, file, false);
 	}
 
-	public void BuildAndRun(IFile file) {
+	public void buildAndRun(IFile file) {
 		if (executeRemotely)
-			BuildAndRunRemote(file);
+			buildAndRunRemote(file);
 		else
-			BuildAndRunLocal(file);
+			buildAndRunLocal(file);
 	}
 
-	protected void BuildAndRunRemote(IFile file) {
+	protected void buildAndRunRemote(IFile file) {
 		deleteMarkers(file);
 
 		IPath xmlPath = file.getLocation().removeFileExtension();
@@ -327,7 +368,7 @@ public class ECLCompiler {
 		}
 	}
 	
-	protected void BuildAndRunLocal(IFile file) {
+	protected void buildAndRunLocal(IFile file) {
 		deleteMarkers(file);
 
 		IPath exePath = workingPath.append("a.out.exe");
@@ -342,52 +383,6 @@ public class ECLCompiler {
 		process.exec(compilerPath, args, file, false);
 		if (!hasError)
 			process.exec(exePath.toOSString());
-	}
-
-	IMarker AddMarker(IResource resolvedFile, String code, String message, int lineNumber, int colNumber)
-	{
-		if (resolvedFile != null)
-		{
-			if (lineNumber <= 0) {
-				lineNumber = 1;
-			}
-			if (colNumber <= 0) {
-				colNumber = 1;
-			}
-			int severity = IMarker.SEVERITY_INFO;
-			if (code.startsWith("error")) {
-				hasError = true;
-				severity = IMarker.SEVERITY_ERROR;
-			}
-			else if (code.startsWith("warning"))
-				severity = IMarker.SEVERITY_WARNING;
-
-			if (resolvedFile.exists()) {
-				IMarker[] markers = null;
-				try {
-					markers = resolvedFile.findMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
-					for (int i = 0; i < markers.length; ++i) {
-						if (markers[i].getAttribute(IMarker.SEVERITY).equals(severity) && 
-								markers[i].getAttribute(IMarker.MESSAGE).equals(message) && 
-								markers[i].getAttribute(IMarker.LINE_NUMBER).equals(lineNumber)) {
-							return markers[i];
-						}
-					}
-		
-					IMarker marker = resolvedFile.createMarker(MARKER_TYPE);
-					marker.setAttribute(IMarker.SEVERITY, severity);
-					marker.setAttribute(IMarker.MESSAGE, message);
-					marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-					//marker.setAttribute(IMarker.CHAR_START, colNumber);
-					//marker.setAttribute(IMarker.CHAR_END, colNumber);
-					return marker;
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		return null;
 	}
 
 	private void deleteMarkers(IFile file) {

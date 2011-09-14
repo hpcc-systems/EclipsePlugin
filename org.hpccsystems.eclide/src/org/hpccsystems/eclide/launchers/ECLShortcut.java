@@ -62,7 +62,7 @@ public class ECLShortcut implements ILaunchShortcut {
 
 			doSaveDirty(file.getProject());
 			ECLCompiler compiler = new ECLCompiler(file.getProject());
-			compiler.BuildAndRun(file);
+			compiler.buildAndRun(file);
 		}
 	}
 
@@ -75,7 +75,7 @@ public class ECLShortcut implements ILaunchShortcut {
 			IFile file = input.getFile();
 			doSaveDirty(file.getProject());
 			ECLCompiler compiler = new ECLCompiler(file.getProject());
-			compiler.BuildAndRun(file);
+			compiler.buildAndRun(file);
 		}
 		assert(input != null);
 	}

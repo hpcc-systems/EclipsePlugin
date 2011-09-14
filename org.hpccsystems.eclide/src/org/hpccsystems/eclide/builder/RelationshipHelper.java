@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
 public class RelationshipHelper{
 	static final public String ID = new String("org.hpccsystems.eclide.builderRelationshipHelper");
-	static final public QualifiedName DEPENDEE_PROP = new QualifiedName(ID, "dependees");
-	static final public QualifiedName  DEPENDENT_PROP = new QualifiedName(ID, "org.hpccsystems.eclide.builderRelationshipHelper.dependent");
+	static final public QualifiedName ANCESTOR_PROP = new QualifiedName(ID, "ancestors");
+	static final public QualifiedName  DESCENDANT_PROP = new QualifiedName(ID, "descendants");
 
 	class FileBucket {
 		IProject project;
@@ -23,19 +24,22 @@ public class RelationshipHelper{
 			this.files = new HashSet<IFile>();
 		}
 		
-		void Load(String files) {
+		void load(String files) {
 			if (files == null)
 				return;
 			
 			String[] partialPaths = files.split(";");
 			for(int i = 0; i < partialPaths.length; ++i) {
-				IFile file = (IFile)project.findMember(partialPaths[i]);
-				if (file != null) 
-					this.files.add(file);
+				IResource resource = project.findMember(partialPaths[i]);
+				if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
+					IFile file = (IFile) resource;
+					if (file != null) 
+						this.files.add(file);
+				}
 			}
 		}
 		
-		String Save() {
+		String save() {
 			StringBuilder retVal = new StringBuilder();
 			for(Iterator<IFile> itr = files.iterator(); itr.hasNext();) {
 				IFile file = itr.next();
@@ -48,38 +52,86 @@ public class RelationshipHelper{
 	}
 	
 	protected IFile file;
-	public FileBucket dependees;
-	public FileBucket dependents;
-	
+	protected FileBucket ancestors;
+	protected FileBucket descendants;
+	private boolean closeCalled = false;
 	
 	RelationshipHelper(IFile file) {
+		assert(file.exists());
 		this.file = file;
-		dependees = new FileBucket(file.getProject());
-		dependents = new FileBucket(file.getProject());
-		
-		if (file == null)
-			return;
-		
+		ancestors = new FileBucket(file.getProject());
+		descendants = new FileBucket(file.getProject());
 		try {
-			dependees.Load(file.getPersistentProperty(DEPENDEE_PROP));
+			ancestors.load(file.getPersistentProperty(ANCESTOR_PROP));
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
-			dependents.Load(file.getPersistentProperty(DEPENDENT_PROP));
+			descendants.load(file.getPersistentProperty(DESCENDANT_PROP));
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	void ClearDependants() {
-		for(Iterator<IFile> itr = dependents.files.iterator(); itr.hasNext();) {
-			IFile file = itr.next();
+	@Override
+	protected void finalize() throws Throwable {
+		assert(closeCalled  == true);
+		super.finalize();
+	}
+
+	void close() {
+		closeCalled = true;
+		try {
+			file.setPersistentProperty(ANCESTOR_PROP, ancestors.save());
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		try {
+			file.setPersistentProperty(DESCENDANT_PROP, descendants.save());
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	void SetDepandants(List<IFile> dependants) {
+	boolean addDescendantNoPropigate(IFile decendant) {
+		return descendants.files.add(decendant);
+	}
+	
+	boolean removeDescendantNoPropigate(IFile decendant) {
+		return descendants.files.remove(decendant);
+	}
+
+	void clearAncestors() {
+		Iterator<IFile> itr = ancestors.files.iterator(); 
+		while (itr.hasNext()) {
+			IFile ancestor = itr.next();
+			RelationshipHelper rhelper = new RelationshipHelper(ancestor);
+			try {
+				rhelper.removeDescendantNoPropigate(file);
+			} finally {
+				rhelper.close();
+			}
+		}
+	}
+	
+	void setAncestors(Set<IFile> ancestors2) {
+		clearAncestors();
+		Iterator<IFile> itr = ancestors2.iterator(); 
+		while (itr.hasNext()) {
+			IFile ancestor = itr.next();
+			if (!ancestor.equals(file)) {
+				RelationshipHelper rhelper = new RelationshipHelper(ancestor);
+				try {
+					rhelper.addDescendantNoPropigate(file);
+				} finally {
+					rhelper.close();
+				}
+				ancestors.files.add(ancestor);
+			}
+		}
+	}
+
+	final public Set<IFile> getDescendants() {
+		return descendants.files;
 	}
 }
