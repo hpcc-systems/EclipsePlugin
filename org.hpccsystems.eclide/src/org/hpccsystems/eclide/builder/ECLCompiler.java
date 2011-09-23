@@ -71,75 +71,6 @@ public class ECLCompiler {
 		void ProcessErr(IFile file, BufferedReader errReader);
 	}
 
-	class CmdProcess {
-		private IProcessOutput handler;
-		
-		CmdProcess(IProcessOutput handler) {
-			this.handler = handler;
-		}
-		
-		void exec(String command) {
-			Map<String, String> args = new TreeMap<String, String>();
-			exec(command, args, null, false);
-		}
-		
-		void exec(String command, Map<String, String> args, final IFile target, boolean eclplusArgs) {
-			List<String> argList = new Vector<String>();
-			consoleOut.print(command);
-			argList.add(command);
-			for(Map.Entry<String, String> entry : args.entrySet()) {
-				String arg;
-				if (eclplusArgs)
-					arg = entry.getKey() + "=" + entry.getValue();
-				else 
-					arg = "-" + entry.getKey() + entry.getValue();
-				consoleOut.print(" " + arg);
-				argList.add(arg);
-			}
-			if (target != null) {
-				consoleOut.print(" " + "..\\" + target.getProjectRelativePath().toOSString());
-				argList.add("..\\" + target.getProjectRelativePath().toOSString());
-			}
-			consoleOut.println();
-
-			try {
-				ProcessBuilder pb = new ProcessBuilder(argList);
-				Map<String, String> env = pb.environment();
-				//env.put("VAR1", "myValue");
-				//env.remove("OTHERVAR");
-				//env.put("VAR2", env.get("VAR1") + "suffix");
-				pb.directory(workingPath.toFile());
-				Process p = pb.start();
-				//Process p = Runtime.getRuntime().exec(command);
-
-				final BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-				final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-				
-				Runnable readStdIn = new Runnable() {
-					public void run() {
-						handler.ProcessOut(stdInput);
-					}
-				};
-				Thread threadStdIn = new Thread(readStdIn, "read stdin");
-				threadStdIn.start();
-
-				Runnable readStdErr = new Runnable() {
-					public void run() {
-						handler.ProcessErr(target, stdError);
-					}
-				};
-				Thread threadStdErr = new Thread(readStdErr, "read stderr");
-				threadStdErr.start();
-
-				threadStdIn.join();
-				threadStdErr.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}	
-		}
-	};
 	
 	class SyntaxHandler implements IProcessOutput {
 		IFile file;
@@ -329,7 +260,7 @@ public class ECLCompiler {
 		//args.put("P", workingPath.toOSString());
 		args.put("E", "");
 		
-		CmdProcess process = new CmdProcess(new SyntaxHandler(file));
+		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), consoleOut);
 		process.exec(compilerPath, args, file, false);
 	}
 
@@ -353,7 +284,7 @@ public class ECLCompiler {
 		args.put("o", xmlPath.toOSString());
 		
 		hasError = false;
-		CmdProcess process = new CmdProcess(new EclPlusHandler(file));
+		CmdProcess process = new CmdProcess(workingPath, new EclPlusHandler(file), consoleOut);
 		process.exec(compilerPath, args, file, false);
 		if (!hasError) {
 			args.clear();
@@ -379,7 +310,7 @@ public class ECLCompiler {
 		//args.put("P", workingPath.toOSString());
 		
 		hasError = false;
-		CmdProcess process = new CmdProcess(new SyntaxHandler(file));
+		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), consoleOut);
 		process.exec(compilerPath, args, file, false);
 		if (!hasError)
 			process.exec(exePath.toOSString());
