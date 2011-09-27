@@ -19,13 +19,9 @@ package org.hpccsystems.eclide.builder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -41,6 +37,8 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.PreferenceConstants;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
+import org.hpccsystems.eclide.utils.CmdProcess; 
+import org.hpccsystems.eclide.utils.CmdProcess.IProcessOutput;
 
 public class ECLCompiler {
 
@@ -66,12 +64,6 @@ public class ECLCompiler {
 	public Set<IFile> ancestors;
 	boolean hasError;
 
-	interface IProcessOutput {
-		void ProcessOut(BufferedReader outReader);
-		void ProcessErr(IFile file, BufferedReader errReader);
-	}
-
-	
 	class SyntaxHandler implements IProcessOutput {
 		IFile file;
 

@@ -20,7 +20,7 @@ public class ECLShortcut implements ILaunchShortcut {
 
 
 	protected IResource[] getScopedDirtyResources(IProject[] projects) {
-		HashSet dirtyres = new HashSet();
+		HashSet<IResource> dirtyres = new HashSet<IResource>();
 		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
 		for (int l = 0; l < windows.length; l++) {
 			IWorkbenchPage[] pages = windows[l].getPages();

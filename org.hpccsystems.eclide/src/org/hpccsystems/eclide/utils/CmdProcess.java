@@ -1,4 +1,4 @@
-package org.hpccsystems.eclide.builder;
+package org.hpccsystems.eclide.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,21 +15,26 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
-import org.hpccsystems.eclide.builder.ECLCompiler.IProcessOutput;
 
-class CmdProcess {
+public class CmdProcess {
+	public interface IProcessOutput {
+		void ProcessOut(BufferedReader outReader);
+		void ProcessErr(IFile file, BufferedReader errReader);
+	}
+
 	IPath workingPath;
 	private IProcessOutput handler;
 
 	MessageConsoleStream consoleOut;	
 	
-	CmdProcess(IPath workingPath, IProcessOutput handler, MessageConsoleStream consoleOut) {
+	public CmdProcess(IPath workingPath, IProcessOutput handler, MessageConsoleStream consoleOut) {
 		this.workingPath = workingPath;
 		this.handler = handler;
 		this.consoleOut = consoleOut;
 	}
 	
-	private MessageConsole findConsole(String name) {
+	@SuppressWarnings("unused")
+	private MessageConsole FindConsole(final String name) {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();
 		IConsole[] existing = conMan.getConsoles();
@@ -42,12 +47,12 @@ class CmdProcess {
 		return myConsole;
 	}
 	
-	void exec(String command) {
+	public void exec(String command) {
 		Map<String, String> args = new TreeMap<String, String>();
 		exec(command, args, null, false);
 	}
 	
-	void exec(String command, Map<String, String> args, final IFile target, boolean eclplusArgs) {
+	public void exec(String command, Map<String, String> args, final IFile target, boolean eclplusArgs) {
 		List<String> argList = new Vector<String>();
 		consoleOut.print(command);
 		argList.add(command);
@@ -68,7 +73,7 @@ class CmdProcess {
 
 		try {
 			ProcessBuilder pb = new ProcessBuilder(argList);
-			Map<String, String> env = pb.environment();
+			//Map<String, String> env = pb.environment();
 			//env.put("VAR1", "myValue");
 			//env.remove("OTHERVAR");
 			//env.put("VAR2", env.get("VAR1") + "suffix");

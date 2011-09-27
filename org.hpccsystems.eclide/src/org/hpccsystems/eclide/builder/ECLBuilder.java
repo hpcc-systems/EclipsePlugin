@@ -25,7 +25,6 @@ import java.util.Set;
 //import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -68,11 +67,9 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 
 	class ECLResourceVisitor implements IResourceVisitor {
 		private IProgressMonitor monitor;
-		private boolean cleanOnly;
 
 		ECLResourceVisitor(IProgressMonitor monitor) {
 			this.monitor = monitor;
-			this.cleanOnly = cleanOnly;
 		}
 
 		public boolean visit(IResource resource) {
