@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -12,69 +11,14 @@ import javax.xml.parsers.SAXParserFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
-import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import org.hpccsystems.util.StackHandler;
 
 public class ECLArchiveParser {
 
 	private SAXParserFactory parserFactory;
 	Set<IFile> ancestors;
-
-	class Element {
-		public String tag;
-		public Attributes attributes;
-		public StringBuilder content;
-
-		Element(String tag, Attributes attributes) {
-			this.tag = tag;
-			this.attributes = attributes;
-		}
-
-		void appendContent(char[] ch, int start, int length) {
-			//content.append(new String(ch, start, length));		
-			//System.out.println(content);
-		}
-	}
-	
-	class StackHandler extends DefaultHandler {
-
-		protected Stack<Element> elementStack;
-
-		public StackHandler() {
-			elementStack = new Stack<Element>();
-		}
-
-		@Override
-		public void characters(char[] ch, int start, int length) throws SAXException {
-			assert(!elementStack.empty());
-			elementStack.peek().appendContent(ch, start, length);
-			super.characters(ch, start, length);
-		}
-
-		@Override
-		public void startDocument() throws SAXException {
-			super.startDocument();
-		}
-
-		@Override
-		public void endDocument() throws SAXException {
-			super.endDocument();
-		}
-
-		@Override
-		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-			super.startElement(uri, localName, qName, attributes);
-			elementStack.push(new Element(qName, attributes));
-		}
-
-		@Override
-		public void endElement(String uri, String localName, String qName)	throws SAXException {
-			elementStack.pop();
-			super.endElement(uri, localName, qName);
-		}
-	}
 
 	class ECLArchiveHandler extends StackHandler {
 		IFile file;

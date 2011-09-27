@@ -40,8 +40,8 @@ public class ToggleNatureAction implements IObjectActionDelegate {
 	 */
 	public void run(IAction action) {
 		if (selection instanceof IStructuredSelection) {
-			for (Iterator<IStructuredSelection> it = ((IStructuredSelection) selection).iterator(); it
-					.hasNext();) {
+			for (Iterator it = ((IStructuredSelection) selection).iterator(); 
+					it.hasNext();) {
 				Object element = it.next();
 				IProject project = null;
 				if (element instanceof IProject) {

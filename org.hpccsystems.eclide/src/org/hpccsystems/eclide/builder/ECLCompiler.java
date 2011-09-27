@@ -37,8 +37,8 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.PreferenceConstants;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
-import org.hpccsystems.eclide.utils.CmdProcess; 
-import org.hpccsystems.eclide.utils.CmdProcess.IProcessOutput;
+import org.hpccsystems.util.CmdProcess;
+import org.hpccsystems.util.CmdProcess.IProcessOutput;
 
 public class ECLCompiler {
 

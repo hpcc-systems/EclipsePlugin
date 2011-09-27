@@ -85,7 +85,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	public static final String BUILDER_ID = "org.hpccsystems.eclide.eclBuilder";
 	Set<IFile> checkedFiles;
 
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
+	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException {
 		monitor.setTaskName("Checking Syntax");
 		checkedFiles = new HashSet<IFile>();
 		if (kind == FULL_BUILD) {

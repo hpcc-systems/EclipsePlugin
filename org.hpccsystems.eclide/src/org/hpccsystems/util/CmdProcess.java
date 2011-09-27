@@ -1,4 +1,4 @@
-package org.hpccsystems.eclide.utils;
+package org.hpccsystems.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
