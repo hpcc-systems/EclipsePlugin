@@ -1,4 +1,4 @@
-package org.hpccsystems.util;
+package org.hpccsystems.internal;
 
 import java.util.Stack;
 

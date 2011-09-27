@@ -1,4 +1,4 @@
-package org.hpccsystems.util;
+package org.hpccsystems.internal;
 
 import java.io.BufferedReader;
 import java.io.IOException;

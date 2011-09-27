@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -29,16 +30,15 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
+
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.PreferenceConstants;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
-import org.hpccsystems.util.CmdProcess;
-import org.hpccsystems.util.CmdProcess.IProcessOutput;
+import org.hpccsystems.internal.CmdProcess;
+import org.hpccsystems.internal.Workspace;
+import org.hpccsystems.internal.CmdProcess.IProcessOutput;
 
 public class ECLCompiler {
 
@@ -220,29 +220,12 @@ public class ECLCompiler {
 		serverIP = store.getString(PreferenceConstants.P_SERVERIP);
 		serverCluster = store.getString(PreferenceConstants.P_SERVERCLUSTER);
 		
-		console = findConsole("eclcc");
+		console = Workspace.FindConsole("eclcc");
 		consoleOut = console.newMessageStream();
 
-		htmlViewer = findHtmlViewer();
+		htmlViewer = Workspace.FindHtmlViewer();
 }
 
-	private MessageConsole findConsole(String name) {
-		ConsolePlugin plugin = ConsolePlugin.getDefault();
-		IConsoleManager conMan = plugin.getConsoleManager();
-		IConsole[] existing = conMan.getConsoles();
-		for (int i = 0; i < existing.length; i++)
-			if (name.equals(existing[i].getName()))
-				return (MessageConsole) existing[i];
-		//no console found, so create a new one
-		MessageConsole myConsole = new MessageConsole(name, null);
-		conMan.addConsoles(new IConsole[]{myConsole});
-		return myConsole;
-	}
-
-	private HtmlViewer findHtmlViewer() {
-		return HtmlViewer.getDefault();
-	}
-	
 	public void checkSyntax(IFile file) {
 		deleteMarkers(file);
 		

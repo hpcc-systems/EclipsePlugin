@@ -21,3 +21,16 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.jdt.core,
  org.eclipse.jdt.debug.ui.launchConfigurations,
  org.eclipse.jdt.launching
+Export-Package: org.hpccsystems.eclide,
+ org.hpccsystems.eclide.builder,
+ org.hpccsystems.eclide.editors,
+ org.hpccsystems.eclide.launchers,
+ org.hpccsystems.eclide.perspectives,
+ org.hpccsystems.eclide.preferences,
+ org.hpccsystems.eclide.problem,
+ org.hpccsystems.eclide.project,
+ org.hpccsystems.eclide.text,
+ org.hpccsystems.eclide.ui.navigator,
+ org.hpccsystems.eclide.ui.viewer,
+ org.hpccsystems.eclide.wizards,
+ org.hpccsystems.internal;x-internal:=true

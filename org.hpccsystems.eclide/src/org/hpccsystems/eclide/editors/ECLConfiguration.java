@@ -33,7 +33,7 @@ import org.hpccsystems.eclide.text.IECLColorConstants;
 import org.hpccsystems.eclide.text.NonRuleBasedDamagerRepairer;
 
 public class ECLConfiguration extends TextSourceViewerConfiguration {
-	private ECLDoubleClickStrategy doubleClickStrategy;
+	//private ECLDoubleClickStrategy doubleClickStrategy;
 	private ECLTagScanner tagScanner;
 	private ECLScanner scanner;
 	private ColorManager colorManager;

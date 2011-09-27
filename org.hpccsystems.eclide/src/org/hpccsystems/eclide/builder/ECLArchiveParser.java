@@ -13,7 +13,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.hpccsystems.util.StackHandler;
+import org.hpccsystems.internal.StackHandler;
 
 public class ECLArchiveParser {
 
