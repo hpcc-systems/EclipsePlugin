@@ -24,10 +24,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.console.MessageConsole;
@@ -37,12 +35,11 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.PreferenceConstants;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.internal.CmdProcess;
+import org.hpccsystems.internal.EclCCParser;
 import org.hpccsystems.internal.Workspace;
 import org.hpccsystems.internal.CmdProcess.IProcessOutput;
 
 public class ECLCompiler {
-
-	private static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
 
 	IProject project;
 	String compilerPath;
@@ -50,16 +47,16 @@ public class ECLCompiler {
 	IPath projectPath;
 	IPath workingPath;
 	IPath rootFolder;	
-	
+
 	boolean executeRemotely;
 	String serverIP;
 	String serverCluster;
 
 	MessageConsole console;
 	MessageConsoleStream consoleOut;
-	
+
 	HtmlViewer htmlViewer;
-	
+
 	public String wuid;
 	public Set<IFile> ancestors;
 	boolean hasError;
@@ -97,96 +94,32 @@ public class ECLCompiler {
 				while ((stdErr = errReader.readLine()) != null) {
 					consoleOut.print("Err: ");
 					consoleOut.println(stdErr);
-					String[] parts = stdErr.split(":\\p{Blank}");
-					if (parts.length >= 3) {
-						String filePathAndLoc = parts[0];
-						String code = parts[1];
-						String message = parts[2];
-						String[] fileParts = filePathAndLoc.split("[\\(,\\)]");
-						if (fileParts.length >= 3) {
-							String errorPath = fileParts[0];
-							String line = fileParts[1];
-							String col = fileParts[2];
-
-							int lineNumber = 0;
-							try {
-								lineNumber = Integer.parseInt(line);
-							} catch (NumberFormatException e) {
-							}
-							int colNumber = 0;
-							try {
-								colNumber = Integer.parseInt(col);
-							} catch (NumberFormatException e) {
-							}
-
-							IResource resolvedFile = null;
-							if (file != null && file.getName().equalsIgnoreCase(errorPath)) {	//  Error is in the actual file being syntax checked.
-								resolvedFile = file;
-							} else { 
-								resolvedFile = project.findMember(errorPath);
-							}
-							addMarker(resolvedFile, code, message, lineNumber, colNumber, true);
+					EclCCParser parser = new EclCCParser();
+					if (parser.ParseError(stdErr)) {
+						IResource resolvedFile = null;
+						if (file != null && file.getName().equalsIgnoreCase(parser.errorPath)) {	//  Error is in the actual file being syntax checked.
+							resolvedFile = file;
+						} else { 
+							resolvedFile = project.findMember(parser.errorPath);
 						}
+
+						Workspace.addMarker(resolvedFile, parser.severity, parser.code, parser.message, parser.lineNumber, parser.colNumber, true);
 					}
+					hasError = parser.hasError;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		void addMarker(IResource resolvedFile, String code, String message, int lineNumber, int colNumber, boolean oneErrorOnly)
-		{
-			if (resolvedFile != null)
-			{
-				if (lineNumber <= 0) {
-					lineNumber = 1;
-				}
-				if (colNumber <= 0) {
-					colNumber = 1;
-				}
-				int severity = IMarker.SEVERITY_INFO;
-				if (code.startsWith("error")) {
-					hasError = true;
-					severity = IMarker.SEVERITY_ERROR;
-				}
-				else if (code.startsWith("warning"))
-					severity = IMarker.SEVERITY_WARNING;
 
-				if (resolvedFile.exists()) {
-					try {
-						IMarker[] markers = resolvedFile.findMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
-						for (int i = 0; i < markers.length; ++i) {
-							if (oneErrorOnly && markers[i].getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR))
-								return;
-							
-							if (markers[i].getAttribute(IMarker.SEVERITY).equals(severity) && 
-									markers[i].getAttribute(IMarker.MESSAGE).equals(message) && 
-									markers[i].getAttribute(IMarker.LINE_NUMBER).equals(lineNumber)) {
-								return;
-							}
-						}
-			
-						IMarker marker = resolvedFile.createMarker(MARKER_TYPE);
-						marker.setAttribute(IMarker.SEVERITY, severity);
-						marker.setAttribute(IMarker.MESSAGE, message);
-						marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-						//marker.setAttribute(IMarker.CHAR_START, colNumber);
-						//marker.setAttribute(IMarker.CHAR_END, colNumber);
 
-					} catch (CoreException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-	
 	}
-	
+
 	class EclPlusHandler extends SyntaxHandler {
 		EclPlusHandler(IFile file) {
 			super(file);
 		}
-		
+
 		@Override
 		public void ProcessOut(BufferedReader reader) {
 			String stdIn = null;
@@ -215,26 +148,26 @@ public class ECLCompiler {
 			workingPath.toFile().mkdir();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
-		
+
 		executeRemotely = store.getBoolean(PreferenceConstants.P_REMOTEEXECUTE);
 		serverIP = store.getString(PreferenceConstants.P_SERVERIP);
 		serverCluster = store.getString(PreferenceConstants.P_SERVERCLUSTER);
-		
+
 		console = Workspace.FindConsole("eclcc");
 		consoleOut = console.newMessageStream();
 
 		htmlViewer = Workspace.FindHtmlViewer();
-}
+	}
 
 	public void checkSyntax(IFile file) {
-		deleteMarkers(file);
-		
+		Workspace.deleteMarkers(file);
+
 		Map<String, String> args = new TreeMap<String, String>();
 		args.put("f", "syntaxcheck=1");
 		//args.put("L", libraryPath);
 		//args.put("P", workingPath.toOSString());
 		args.put("E", "");
-		
+
 		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), consoleOut);
 		process.exec(compilerPath, args, file, false);
 	}
@@ -247,17 +180,17 @@ public class ECLCompiler {
 	}
 
 	protected void buildAndRunRemote(IFile file) {
-		deleteMarkers(file);
+		Workspace.deleteMarkers(file);
 
 		IPath xmlPath = file.getLocation().removeFileExtension();
 		xmlPath = xmlPath.addFileExtension("xml");
-		
+
 		Map<String, String> args = new TreeMap<String, String>();
 		//args.put("L", libraryPath);
 		//args.put("I", projectPath);
 		args.put("E", "");
 		args.put("o", xmlPath.toOSString());
-		
+
 		hasError = false;
 		CmdProcess process = new CmdProcess(workingPath, new EclPlusHandler(file), consoleOut);
 		process.exec(compilerPath, args, file, false);
@@ -273,28 +206,21 @@ public class ECLCompiler {
 				htmlViewer.showWuid(wuid);
 		}
 	}
-	
+
 	protected void buildAndRunLocal(IFile file) {
-		deleteMarkers(file);
+		Workspace.deleteMarkers(file);
 
 		IPath exePath = workingPath.append("a.out.exe");
-		
+
 		Map<String, String> args = new TreeMap<String, String>();
 		//args.put("L", libraryPath);
 		//args.put("I", projectPath);
 		//args.put("P", workingPath.toOSString());
-		
+
 		hasError = false;
 		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), consoleOut);
 		process.exec(compilerPath, args, file, false);
 		if (!hasError)
 			process.exec(exePath.toOSString());
-	}
-
-	private void deleteMarkers(IFile file) {
-		try {
-			file.deleteMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
-		} catch (CoreException ce) {
-		}
 	}
 }
