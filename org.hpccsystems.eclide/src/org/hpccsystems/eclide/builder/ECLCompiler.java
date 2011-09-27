@@ -111,8 +111,25 @@ public class ECLCompiler {
 				e.printStackTrace();
 			}
 		}
+	}
 
+	class LocalRunHandler extends SyntaxHandler {
+		LocalRunHandler(IFile file) {
+			super(file);
+		}
 
+		@Override
+		public void ProcessOut(BufferedReader reader) {
+			String stdIn = null;
+			try {
+				while ((stdIn = reader.readLine()) != null) {
+					consoleOut.print("Out: ");
+					consoleOut.println(stdIn);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	class EclPlusHandler extends SyntaxHandler {
@@ -218,7 +235,7 @@ public class ECLCompiler {
 		//args.put("P", workingPath.toOSString());
 
 		hasError = false;
-		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), consoleOut);
+		CmdProcess process = new CmdProcess(workingPath, new LocalRunHandler(file), consoleOut);
 		process.exec(compilerPath, args, file, false);
 		if (!hasError)
 			process.exec(exePath.toOSString());
