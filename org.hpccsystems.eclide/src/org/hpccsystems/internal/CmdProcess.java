@@ -47,16 +47,20 @@ public class CmdProcess {
 		return myConsole;
 	}
 	
-	public void exec(String command) {
-		Map<String, String> args = new TreeMap<String, String>();
-		exec(command, args, null, false);
+	public void exec(String command, String args) {
+		Map<String, String> additionalArgs = new TreeMap<String, String>();
+		exec(command, args, additionalArgs, null, false);
 	}
 	
-	public void exec(String command, Map<String, String> args, final IFile target, boolean eclplusArgs) {
+	public void exec(String command, String args, Map<String, String> additionalArgs, final IFile target, boolean eclplusArgs) {
 		List<String> argList = new Vector<String>();
 		consoleOut.print(command);
 		argList.add(command);
-		for(Map.Entry<String, String> entry : args.entrySet()) {
+		if (!args.isEmpty()) {
+			consoleOut.print(" " + args);
+			argList.add(args);
+		}
+		for(Map.Entry<String, String> entry : additionalArgs.entrySet()) {
 			String arg;
 			if (eclplusArgs)
 				arg = entry.getKey() + "=" + entry.getValue();

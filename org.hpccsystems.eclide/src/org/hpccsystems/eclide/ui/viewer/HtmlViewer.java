@@ -15,16 +15,16 @@ public class HtmlViewer extends ViewPart {
 	
 	private Browser browser;
 	private IPreferenceStore store;
-	private boolean executeRemotely;
+	private boolean executeRemotely = false;
 	private String serverIP;
 
 	IPropertyChangeListener listener = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(ECLPreferenceConstants.P_REMOTEEXECUTE)) {
-				executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
-				display();
-			}
+//			if (event.getProperty().equals(ECLPreferenceConstants.P_REMOTEEXECUTE)) {
+//				executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
+//				display();
+//			}
 		}
 	};	
 	
@@ -45,8 +45,10 @@ public class HtmlViewer extends ViewPart {
 	public void createPartControl(Composite parent) {
 		browser = new Browser(parent, SWT.NULL);
 		store = Activator.getDefault().getPreferenceStore();
-		executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
-		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
+
+//		executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
+//		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
+
 		store.addPropertyChangeListener(listener);
 		display();
 	}

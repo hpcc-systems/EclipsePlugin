@@ -19,6 +19,7 @@ package org.hpccsystems.eclide.builder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -48,7 +49,15 @@ public class ECLCompiler {
 	IPath workingPath;
 	IPath rootFolder;	
 
-	boolean executeRemotely;
+	String argsCommon;
+	String argsSyntaxCheck;
+	String argsCompile;
+	String argsCompileRemote;
+
+	boolean monitorDependees = false;
+	boolean supressSubsequentErrors = false;
+	
+	boolean executeRemotely = false;
 	String serverIP;
 	String serverCluster;
 
@@ -70,20 +79,11 @@ public class ECLCompiler {
 
 		@Override
 		public void ProcessOut(BufferedReader reader) {
-			String stdIn = null;
-			if (true) {
+			ancestors = new HashSet<IFile>();
+			if (monitorDependees) {
 				ECLArchiveParser parser = new ECLArchiveParser(file, reader);
 				assert(parser != null);
 				ancestors = parser.ancestors;
-			} else {
-				try {
-					while ((stdIn = reader.readLine()) != null) {
-						consoleOut.print("Out: ");
-						consoleOut.println(stdIn);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 			}
 		}
 
@@ -103,7 +103,7 @@ public class ECLCompiler {
 							resolvedFile = project.findMember(parser.errorPath);
 						}
 
-						Workspace.addMarker(resolvedFile, parser.severity, parser.code, parser.message, parser.lineNumber, parser.colNumber, true);
+						Workspace.addMarker(resolvedFile, parser.severity, parser.code, parser.message, parser.lineNumber, parser.colNumber, supressSubsequentErrors);
 					}
 					hasError = parser.hasError;
 				}
@@ -166,9 +166,17 @@ public class ECLCompiler {
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 
-		executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
-		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
-		serverCluster = store.getString(ECLPreferenceConstants.P_SERVERCLUSTER);
+		argsCommon = store.getString(ECLPreferenceConstants.P_ARGSCOMMON);
+		argsSyntaxCheck = store.getString(ECLPreferenceConstants.P_ARGSSYNTAX);
+		argsCompile = store.getString(ECLPreferenceConstants.P_ARGSCOMPILE);
+		argsCompileRemote = store.getString(ECLPreferenceConstants.P_ARGSCOMPILEREMOTE);
+
+		monitorDependees = store.getBoolean(ECLPreferenceConstants.P_MONITORDEPENDEES);
+		supressSubsequentErrors = store.getBoolean(ECLPreferenceConstants.P_SUPRESSSECONDERROR);
+		
+//		executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
+//		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
+//		serverCluster = store.getString(ECLPreferenceConstants.P_SERVERCLUSTER);
 
 		console = Workspace.FindConsole("eclcc");
 		consoleOut = console.newMessageStream();
@@ -180,13 +188,11 @@ public class ECLCompiler {
 		Workspace.deleteMarkers(file);
 
 		Map<String, String> args = new TreeMap<String, String>();
-		args.put("f", "syntaxcheck=1");
-		//args.put("L", libraryPath);
-		//args.put("P", workingPath.toOSString());
-		args.put("E", "");
+		if (monitorDependees)
+			args.put("E", "");
 
 		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), consoleOut);
-		process.exec(compilerPath, args, file, false);
+		process.exec(compilerPath, argsSyntaxCheck, args, file, false);
 	}
 
 	public void buildAndRun(IFile file) {
@@ -203,14 +209,11 @@ public class ECLCompiler {
 		xmlPath = xmlPath.addFileExtension("xml");
 
 		Map<String, String> args = new TreeMap<String, String>();
-		//args.put("L", libraryPath);
-		//args.put("I", projectPath);
-		args.put("E", "");
 		args.put("o", xmlPath.toOSString());
 
 		hasError = false;
 		CmdProcess process = new CmdProcess(workingPath, new EclPlusHandler(file), consoleOut);
-		process.exec(compilerPath, args, file, false);
+		process.exec(compilerPath, argsCompileRemote, args, file, false);
 		if (!hasError) {
 			args.clear();
 			//eclplus action=query server=192.168.241.131 cluster=thor @test.xml			
@@ -230,14 +233,11 @@ public class ECLCompiler {
 		IPath exePath = workingPath.append("a.out");
 
 		Map<String, String> args = new TreeMap<String, String>();
-		//args.put("L", libraryPath);
-		//args.put("I", projectPath);
-		//args.put("P", workingPath.toOSString());
 
 		hasError = false;
 		CmdProcess process = new CmdProcess(workingPath, new LocalRunHandler(file), consoleOut);
-		process.exec(compilerPath, args, file, false);
+		process.exec(compilerPath, argsCompile, args, file, false);
 		if (!hasError)
-			process.exec(exePath.toOSString());
+			process.exec(exePath.toOSString(), "");
 	}
 }

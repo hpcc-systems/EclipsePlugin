@@ -70,7 +70,7 @@ public class ECLArchiveParser {
 		try {
 			parser.parse(new InputSource(reader), handler);
 		} catch (SAXException e) {
-			e.printStackTrace();
+			//  If there is an error we may end up here. 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {

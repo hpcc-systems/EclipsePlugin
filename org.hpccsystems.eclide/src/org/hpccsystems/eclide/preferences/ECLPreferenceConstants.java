@@ -24,8 +24,19 @@ package org.hpccsystems.eclide.preferences;
 public class ECLPreferenceConstants {
 
 	public static final String P_TOOLSPATH = "toolsPathPreference";
-	public static final String P_REMOTEEXECUTE = "remoteExecutePreference";
-	public static final String P_SERVERIP = "serverIPPreference";
-	public static final String P_SERVERCLUSTER = "serverClusterPreference";
+
+	//  eclcc command line options  ---
+	public static final String P_ARGSCOMMON = "argsCommonPreference";
+	public static final String P_ARGSSYNTAX = "argsSyntaxPreference";
+	public static final String P_ARGSCOMPILE = "argsCompilePreference";
+	public static final String P_ARGSCOMPILEREMOTE = "argsCompileRemotePreference";
+	
+	public static final String P_MONITORDEPENDEES = "monitorDependees";
+	public static final String P_SUPRESSSECONDERROR = "supressSecondError";
+	
+	//  Should not be global  ---
+	//public static final String P_REMOTEEXECUTE = "remoteExecutePreference";
+	//public static final String P_SERVERIP = "serverIPPreference";
+	//public static final String P_SERVERCLUSTER = "serverClusterPreference";
 
 }
