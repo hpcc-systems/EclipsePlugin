@@ -21,7 +21,7 @@ package org.hpccsystems.eclide.preferences;
 /**
  * Constant definitions for plug-in preferences
  */
-public class PreferenceConstants {
+public class ECLPreferenceConstants {
 
 	public static final String P_TOOLSPATH = "toolsPathPreference";
 	public static final String P_REMOTEEXECUTE = "remoteExecutePreference";

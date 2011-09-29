@@ -26,7 +26,7 @@ import org.hpccsystems.eclide.Activator;
 /**
  * Class used to initialize default preference values.
  */
-public class PreferenceInitializer extends AbstractPreferenceInitializer {
+public class ECLPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	/*
 	 * (non-Javadoc)
@@ -38,14 +38,14 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		
 		try{
 			String hpccBinFolder = System.getenv("HPCCBIN");
-			store.setDefault(PreferenceConstants.P_TOOLSPATH, hpccBinFolder);
+			store.setDefault(ECLPreferenceConstants.P_TOOLSPATH, hpccBinFolder);
 		}catch (Exception e){
-			store.setDefault(PreferenceConstants.P_TOOLSPATH, "");
+			store.setDefault(ECLPreferenceConstants.P_TOOLSPATH, "");
 		}
 		
-		store.setDefault(PreferenceConstants.P_REMOTEEXECUTE, false);
-		store.setDefault(PreferenceConstants.P_SERVERIP, "192.168.241.131");
-		store.setDefault(PreferenceConstants.P_SERVERCLUSTER, "thor");
+		store.setDefault(ECLPreferenceConstants.P_REMOTEEXECUTE, false);
+		store.setDefault(ECLPreferenceConstants.P_SERVERIP, "192.168.241.131");
+		store.setDefault(ECLPreferenceConstants.P_SERVERCLUSTER, "thor");
 	}
 
 }

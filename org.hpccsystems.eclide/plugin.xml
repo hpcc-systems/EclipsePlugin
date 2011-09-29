@@ -27,7 +27,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.hpccsystems.eclide.preferences.PreferenceInitializer">
+            class="org.hpccsystems.eclide.preferences.ECLPreferenceInitializer">
       </initializer>
    </extension>
    <extension

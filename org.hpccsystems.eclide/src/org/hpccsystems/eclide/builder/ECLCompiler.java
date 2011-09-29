@@ -32,7 +32,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.eclide.preferences.PreferenceConstants;
+import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.internal.CmdProcess;
 import org.hpccsystems.internal.EclCCParser;
@@ -157,8 +157,8 @@ public class ECLCompiler {
 	public ECLCompiler(IProject project) {
 		this.project = project;
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		compilerPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "eclcc";
-		libraryPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "plugins";
+		compilerPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "eclcc";
+		libraryPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "plugins";
 		projectPath = project.getLocation();
 		workingPath = projectPath.append("tmp");
 		if (!workingPath.toFile().exists())
@@ -166,9 +166,9 @@ public class ECLCompiler {
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 
-		executeRemotely = store.getBoolean(PreferenceConstants.P_REMOTEEXECUTE);
-		serverIP = store.getString(PreferenceConstants.P_SERVERIP);
-		serverCluster = store.getString(PreferenceConstants.P_SERVERCLUSTER);
+		executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
+		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
+		serverCluster = store.getString(ECLPreferenceConstants.P_SERVERCLUSTER);
 
 		console = Workspace.FindConsole("eclcc");
 		consoleOut = console.newMessageStream();

@@ -8,7 +8,7 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.eclide.preferences.PreferenceConstants;
+import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
 
 public class HtmlViewer extends ViewPart {
 	private static HtmlViewer htmlViewer = null;
@@ -21,8 +21,8 @@ public class HtmlViewer extends ViewPart {
 	IPropertyChangeListener listener = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			if (event.getProperty().equals(PreferenceConstants.P_REMOTEEXECUTE)) {
-				executeRemotely = store.getBoolean(PreferenceConstants.P_REMOTEEXECUTE);
+			if (event.getProperty().equals(ECLPreferenceConstants.P_REMOTEEXECUTE)) {
+				executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
 				display();
 			}
 		}
@@ -45,8 +45,8 @@ public class HtmlViewer extends ViewPart {
 	public void createPartControl(Composite parent) {
 		browser = new Browser(parent, SWT.NULL);
 		store = Activator.getDefault().getPreferenceStore();
-		executeRemotely = store.getBoolean(PreferenceConstants.P_REMOTEEXECUTE);
-		serverIP = store.getString(PreferenceConstants.P_SERVERIP);
+		executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
+		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
 		store.addPropertyChangeListener(listener);
 		display();
 	}
