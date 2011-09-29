@@ -66,8 +66,8 @@ public class CmdProcess {
 			argList.add(arg);
 		}
 		if (target != null) {
-			consoleOut.print(" " + "..\\" + target.getProjectRelativePath().toOSString());
-			argList.add("..\\" + target.getProjectRelativePath().toOSString());
+			consoleOut.print(" " + "../" + target.getProjectRelativePath().toOSString());
+			argList.add("../" + target.getProjectRelativePath().toOSString());
 		}
 		consoleOut.println();
 

@@ -157,7 +157,7 @@ public class ECLCompiler {
 	public ECLCompiler(IProject project) {
 		this.project = project;
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		compilerPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "eclcc.exe";
+		compilerPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "eclcc";
 		libraryPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "plugins";
 		projectPath = project.getLocation();
 		workingPath = projectPath.append("tmp");
@@ -227,7 +227,7 @@ public class ECLCompiler {
 	protected void buildAndRunLocal(IFile file) {
 		Workspace.deleteMarkers(file);
 
-		IPath exePath = workingPath.append("a.out.exe");
+		IPath exePath = workingPath.append("a.out");
 
 		Map<String, String> args = new TreeMap<String, String>();
 		//args.put("L", libraryPath);

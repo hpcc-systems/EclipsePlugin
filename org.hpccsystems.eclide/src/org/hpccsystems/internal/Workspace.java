@@ -60,8 +60,8 @@ public class Workspace {
 					marker.setAttribute(IMarker.SEVERITY, severity);
 					marker.setAttribute(IMarker.MESSAGE, message);
 					marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-					//marker.setAttribute(IMarker.CHAR_START, colNumber);
-					//marker.setAttribute(IMarker.CHAR_END, colNumber);
+					//marker.setAttribute(IMarker.CHAR_START, 1);
+					//marker.setAttribute(IMarker.CHAR_END, 3);
 
 				} catch (CoreException e) {
 					e.printStackTrace();

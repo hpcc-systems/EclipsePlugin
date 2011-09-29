@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import org.eclipse.jface.text.rules.*;
 import org.eclipse.jface.text.*;
 import org.eclipse.swt.SWT;
-import org.hpccsystems.eclide.editors.ColorManager;
+import org.hpccsystems.eclide.editors.ECLColorManager;
 
 public class ECLScanner extends RuleBasedScanner {
 	
@@ -35,7 +35,7 @@ public class ECLScanner extends RuleBasedScanner {
 	IToken[] keyword;
 	IToken mcomment;
 
-	public ECLScanner(ColorManager colorManager) {
+	public ECLScanner(ECLColorManager colorManager) {
 		
 //		variable = getToken(ECLColorConstants.ECL_VARIABLE);
 //		constant = getToken(ECLColorConstants.ECL_CONSTANT);

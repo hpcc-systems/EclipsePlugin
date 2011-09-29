@@ -36,9 +36,9 @@ public class ECLConfiguration extends TextSourceViewerConfiguration {
 	//private ECLDoubleClickStrategy doubleClickStrategy;
 	private ECLTagScanner tagScanner;
 	private ECLScanner scanner;
-	private ColorManager colorManager;
+	private ECLColorManager colorManager;
 
-	public ECLConfiguration(ColorManager colorManager) {
+	public ECLConfiguration(ECLColorManager colorManager) {
 		this.colorManager = colorManager;
 	}
 

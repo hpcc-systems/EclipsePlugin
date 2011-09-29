@@ -22,11 +22,11 @@ import org.eclipse.ui.editors.text.TextEditor;
 
 public class ECLEditor extends TextEditor {
 
-	private ColorManager colorManager;
+	private ECLColorManager colorManager;
 
 	public ECLEditor() {
 		super();
-		colorManager = new ColorManager();
+		colorManager = new ECLColorManager();
 		setSourceViewerConfiguration(new ECLConfiguration(colorManager));
 		setDocumentProvider(new ECLDocumentProvider());
 	}

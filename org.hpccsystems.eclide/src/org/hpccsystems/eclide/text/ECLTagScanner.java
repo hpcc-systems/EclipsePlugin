@@ -22,11 +22,11 @@ import java.util.ArrayList;
 
 import org.eclipse.jface.text.*;
 import org.eclipse.jface.text.rules.*;
-import org.hpccsystems.eclide.editors.ColorManager;
+import org.hpccsystems.eclide.editors.ECLColorManager;
 
 public class ECLTagScanner extends RuleBasedScanner {
 
-	public ECLTagScanner(ColorManager manager) {
+	public ECLTagScanner(ECLColorManager manager) {
 		IToken string =
 			new Token(
 				new TextAttribute(manager.getColor(IECLColorConstants.ECL_STRING)));

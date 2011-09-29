@@ -26,7 +26,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-public class ColorManager {
+public class ECLColorManager {
 
 	protected Map<RGB, Color> fColorTable = new HashMap<RGB, Color>(10);
 
