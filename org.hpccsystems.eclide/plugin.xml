@@ -99,7 +99,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="org.hpccsystems.eclide.editors.ECLEditor"
-            contributorClass="ECLEditorActionContributor"
+            contributorClass="org.hpccsystems.eclide.editors.ECLEditorActionContributor"
             extensions="ecl"
             icon="icons/sample.gif"
             id="org.hpccsystems.eclide.editors.ECLEditor"
