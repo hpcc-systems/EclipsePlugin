@@ -191,7 +191,7 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="org.hpccsystems.eclide.launchers.LaunchDelegate"
+            delegate="org.hpccsystems.eclide.launchers.ECLLaunchDelegate"
             id="org.hpccsystems.eclide.launching.ECLConfigurationType"
             modes="run"
             name="%launchConfigurationType.name"
@@ -201,7 +201,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="org.hpccsystems.eclide.launchers.ECLConfigurationTabGroup"
+            class="org.hpccsystems.eclide.launchers.ECLLaunchConfigurationTabGroup"
             id="org.hpccsystems.eclide.launching.ECLConfigurationType"
             type="org.hpccsystems.eclide.launching.ECLConfigurationType">
       </launchConfigurationTabGroup>
@@ -209,7 +209,7 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="org.hpccsystems.eclide.launchers.ECLShortcut"
+            class="org.hpccsystems.eclide.launchers.ECLLaunchShortcut"
             icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.launchers.ECLShortcut"
             label="%shortcut.label"

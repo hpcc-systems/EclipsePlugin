@@ -1,5 +1,6 @@
 package org.hpccsystems.eclide.launchers;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.internal.ui.SWTFactory;
@@ -19,7 +20,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.Activator;
 
-public class ECLMainLaunchConfigurationTab extends AbstractLaunchConfigurationTab {
+public class ECLLaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 
     Image image;
 
@@ -31,8 +32,8 @@ public class ECLMainLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 	//bug 29565 fix
 	private Button localButton = null;
 	private Button remoteButton = null;
-	private Text fOtherWorkingText = null;
-	private Text fWorkingDirText;
+	private Text cluster = null;
+	private Text ip;
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
 		public void modifyText(ModifyEvent e) {
@@ -68,21 +69,21 @@ public class ECLMainLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 
 	public final void createControl(Composite parent) {
 		Font font = parent.getFont();	
-		Group group = SWTFactory.createGroup(parent, "Target", 2, 1, GridData.FILL_HORIZONTAL);
+
+		SWTFactory.createHorizontalSpacer(parent, 1);
+
+		Group group = SWTFactory.createGroup(parent, "Location", 2, 1, GridData.FILL_HORIZONTAL);
 		setControl(group);
 		
-		//default choice
-		Composite comp = SWTFactory.createComposite(group, font, 2, 2, GridData.FILL_BOTH, 0, 0);
-		localButton = SWTFactory.createRadioButton(comp, "Local");
-		localButton.addSelectionListener(fListener);
-//		fWorkingDirText = SWTFactory.createSingleText(comp, 1); 
-//		fWorkingDirText.addModifyListener(fListener);
-//		fWorkingDirText.setEnabled(false);
-		//user enter choice
-		remoteButton = SWTFactory.createRadioButton(comp, "Remote");
-		remoteButton.addSelectionListener(fListener);
-//		fOtherWorkingText = SWTFactory.createSingleText(comp, 1);
-//		fOtherWorkingText.addModifyListener(fListener);
+		SWTFactory.createLabel(group, "IP Address:  ", 1);
+		ip = SWTFactory.createSingleText(group, 1); 
+		ip.addModifyListener(fListener);
+
+		SWTFactory.createLabel(group, "Cluster:  ", 1);
+		cluster = SWTFactory.createSingleText(group, 1);
+		cluster.addModifyListener(fListener);
+
+		
 //		//buttons
 //		Composite buttonComp = SWTFactory.createComposite(comp, font, 3, 2, GridData.HORIZONTAL_ALIGN_END); 
 //		GridLayout ld = (GridLayout)buttonComp.getLayout();
@@ -98,33 +99,36 @@ public class ECLMainLaunchConfigurationTab extends AbstractLaunchConfigurationTa
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		// TODO Auto-generated method stub
-		
+		ip.setText("localhost");
+		cluster.setText("hthor");
 	}
 
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
-		// TODO Auto-generated method stub
-		
+		try {
+			ip.setText(configuration.getAttribute(ECLLaunchConstants.P_IP, "localhost"));
+			cluster.setText(configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, "hthor"));
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		// TODO Auto-generated method stub
-		
+		configuration.setAttribute(ECLLaunchConstants.P_IP, ip.getText());
+		configuration.setAttribute(ECLLaunchConstants.P_CLUSTER, cluster.getText());
+	}
+
+    @Override
+	public String getName() {
+		return "Remote Target";
 	}
 
     public Image getImage() {
         if (image == null) {
         	image = Activator.getImage("icons/releng_gears.gif"); //$NON-NLS-1$
         }
-
         return image;
     }
-
-    @Override
-	public String getName() {
-		return "Target";
-	}
-
 }

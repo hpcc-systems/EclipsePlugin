@@ -23,7 +23,7 @@ import org.eclipse.debug.ui.EnvironmentTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 
-public class ECLConfigurationTabGroup extends AbstractLaunchConfigurationTabGroup {
+public class ECLLaunchConfigurationTabGroup extends AbstractLaunchConfigurationTabGroup {
 
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 //		ECLMainLaunchConfigurationTab main = new ECLMainLaunchConfigurationTab(mode);
@@ -31,7 +31,7 @@ public class ECLConfigurationTabGroup extends AbstractLaunchConfigurationTabGrou
 //				main,
 				//new OctaveInterpreterTab(main),
 				//new ScriptArgumentsTab(),
-				new ECLMainLaunchConfigurationTab()
+				new ECLLaunchConfigurationTab()
 				//new EnvironmentTab()
 				//new ScriptCommonTab()
 		};

@@ -16,7 +16,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 
-public class ECLShortcut implements ILaunchShortcut {
+public class ECLLaunchShortcut implements ILaunchShortcut {
 
 
 	protected IResource[] getScopedDirtyResources(IProject[] projects) {

@@ -28,7 +28,7 @@ import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 
-public class LaunchDelegate extends LaunchConfigurationDelegate {//implements ILaunchConfigurationDelegate {
+public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements ILaunchConfigurationDelegate {
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
