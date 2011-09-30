@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Test Install/Update Site" url="http://gordon.homeserver.com/eclipse">
+      My home server so be gentle!
+   </description>
+   <feature url="features/ECL_Language_1.0.0.201109301021.jar" id="ECL_Language" version="1.0.0.201109301021">
+      <category name="HPCC_Systems"/>
+   </feature>
+   <category-def name="HPCC_Systems" label="HPCC Systems">
+      <description>
+         HPCC (High Performance Computing Cluster) is a massive parallel-processing computing platform that solves Big Data problems.
+      </description>
+   </category-def>
+</site>

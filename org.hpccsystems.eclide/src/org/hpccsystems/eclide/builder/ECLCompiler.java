@@ -61,8 +61,11 @@ public class ECLCompiler {
 	String serverIP;
 	String serverCluster;
 
-	MessageConsole console;
-	MessageConsoleStream consoleOut;
+	MessageConsole eclccConsole;
+	MessageConsoleStream eclccConsoleWriter;
+
+	MessageConsole resultsConsole;
+	MessageConsoleStream resultsConsoleWriter;
 
 	HtmlViewer htmlViewer;
 
@@ -92,8 +95,8 @@ public class ECLCompiler {
 			String stdErr = null;
 			try {
 				while ((stdErr = errReader.readLine()) != null) {
-					consoleOut.print("Err: ");
-					consoleOut.println(stdErr);
+					eclccConsoleWriter.print("Err: ");
+					eclccConsoleWriter.println(stdErr);
 					EclCCParser parser = new EclCCParser();
 					if (parser.ParseError(stdErr)) {
 						IResource resolvedFile = null;
@@ -123,8 +126,8 @@ public class ECLCompiler {
 			String stdIn = null;
 			try {
 				while ((stdIn = reader.readLine()) != null) {
-					consoleOut.print("Out: ");
-					consoleOut.println(stdIn);
+					eclccConsoleWriter.print("Out: ");
+					eclccConsoleWriter.println(stdIn);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -142,8 +145,8 @@ public class ECLCompiler {
 			String stdIn = null;
 			try {
 				while ((stdIn = reader.readLine()) != null) {
-					consoleOut.print("Out: ");
-					consoleOut.println(stdIn);
+					eclccConsoleWriter.print("Out: ");
+					eclccConsoleWriter.println(stdIn);
 					int lastSpace = stdIn.lastIndexOf(' ');
 					if (lastSpace != -1)
 						wuid = stdIn.substring(lastSpace + 1, stdIn.length());
@@ -178,8 +181,11 @@ public class ECLCompiler {
 //		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
 //		serverCluster = store.getString(ECLPreferenceConstants.P_SERVERCLUSTER);
 
-		console = Workspace.FindConsole("eclcc");
-		consoleOut = console.newMessageStream();
+		eclccConsole = Workspace.FindConsole("eclcc");
+		eclccConsoleWriter = eclccConsole.newMessageStream();
+		
+		resultsConsole = Workspace.FindConsole("Results");		
+		resultsConsoleWriter = resultsConsole.newMessageStream();
 
 		htmlViewer = Workspace.FindHtmlViewer();
 	}
@@ -191,7 +197,7 @@ public class ECLCompiler {
 		if (monitorDependees)
 			args.put("E", "");
 
-		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), consoleOut);
+		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), eclccConsoleWriter);
 		process.exec(compilerPath, argsSyntaxCheck, args, file, false);
 	}
 
@@ -212,7 +218,7 @@ public class ECLCompiler {
 		args.put("o", xmlPath.toOSString());
 
 		hasError = false;
-		CmdProcess process = new CmdProcess(workingPath, new EclPlusHandler(file), consoleOut);
+		CmdProcess process = new CmdProcess(workingPath, new EclPlusHandler(file), eclccConsoleWriter);
 		process.exec(compilerPath, argsCompileRemote, args, file, false);
 		if (!hasError) {
 			args.clear();
@@ -235,7 +241,7 @@ public class ECLCompiler {
 		Map<String, String> args = new TreeMap<String, String>();
 
 		hasError = false;
-		CmdProcess process = new CmdProcess(workingPath, new LocalRunHandler(file), consoleOut);
+		CmdProcess process = new CmdProcess(workingPath, new LocalRunHandler(file), eclccConsoleWriter);
 		process.exec(compilerPath, argsCompile, args, file, false);
 		if (!hasError)
 			process.exec(exePath.toOSString(), "");
