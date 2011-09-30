@@ -54,6 +54,8 @@ public class ECLCompiler {
 	String argsCompile;
 	String argsCompileRemote;
 
+	String argsWULocal;
+
 	boolean monitorDependees = false;
 	boolean supressSubsequentErrors = false;
 	
@@ -126,8 +128,7 @@ public class ECLCompiler {
 			String stdIn = null;
 			try {
 				while ((stdIn = reader.readLine()) != null) {
-					eclccConsoleWriter.print("Out: ");
-					eclccConsoleWriter.println(stdIn);
+					resultsConsoleWriter.println(stdIn);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -174,6 +175,8 @@ public class ECLCompiler {
 		argsCompile = store.getString(ECLPreferenceConstants.P_ARGSCOMPILE);
 		argsCompileRemote = store.getString(ECLPreferenceConstants.P_ARGSCOMPILEREMOTE);
 
+		argsWULocal = store.getString(ECLPreferenceConstants.P_ARGSWULOCAL);
+
 		monitorDependees = store.getBoolean(ECLPreferenceConstants.P_MONITORDEPENDEES);
 		supressSubsequentErrors = store.getBoolean(ECLPreferenceConstants.P_SUPRESSSECONDERROR);
 		
@@ -181,15 +184,17 @@ public class ECLCompiler {
 //		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
 //		serverCluster = store.getString(ECLPreferenceConstants.P_SERVERCLUSTER);
 
+		resultsConsole = Workspace.FindConsole("Results");
+		resultsConsoleWriter = resultsConsole.newMessageStream();
+		resultsConsoleWriter.setActivateOnWrite(true);
+
 		eclccConsole = Workspace.FindConsole("eclcc");
 		eclccConsoleWriter = eclccConsole.newMessageStream();
+		eclccConsoleWriter.setActivateOnWrite(true);
 		
-		resultsConsole = Workspace.FindConsole("Results");		
-		resultsConsoleWriter = resultsConsole.newMessageStream();
-
 		htmlViewer = Workspace.FindHtmlViewer();
 	}
-
+	
 	public void checkSyntax(IFile file) {
 		Workspace.deleteMarkers(file);
 
@@ -243,7 +248,9 @@ public class ECLCompiler {
 		hasError = false;
 		CmdProcess process = new CmdProcess(workingPath, new LocalRunHandler(file), eclccConsoleWriter);
 		process.exec(compilerPath, argsCompile, args, file, false);
-		if (!hasError)
-			process.exec(exePath.toOSString(), "");
+		if (!hasError) {
+			resultsConsole.clearConsole();
+			process.exec(exePath.toOSString(), argsWULocal);
+		}
 	}
 }

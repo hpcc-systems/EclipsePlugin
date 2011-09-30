@@ -29,9 +29,10 @@ public class ECLConfigurationTabGroup extends AbstractLaunchConfigurationTabGrou
 //		ECLMainLaunchConfigurationTab main = new ECLMainLaunchConfigurationTab(mode);
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
 //				main,
-				//new ScriptArgumentsTab(),
 				//new OctaveInterpreterTab(main),
-				new EnvironmentTab()
+				//new ScriptArgumentsTab(),
+				new ECLMainLaunchConfigurationTab()
+				//new EnvironmentTab()
 				//new ScriptCommonTab()
 		};
 		setTabs(tabs);

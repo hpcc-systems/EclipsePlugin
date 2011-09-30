@@ -18,18 +18,44 @@
 
 package org.hpccsystems.eclide.launchers;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.hpccsystems.eclide.builder.ECLCompiler;
 
 public class LaunchDelegate extends LaunchConfigurationDelegate {//implements ILaunchConfigurationDelegate {
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		
+
 //		ISourceLocator sourceLocator = launch.getSourceLocator();
+//		sourceLocator.
+//		
+//		if (selection instanceof TreeSelection) {
+//			TreeSelection treeSel = (TreeSelection) selection;
+//			IFile file = null;
+//			if (treeSel.size() >= 1) {
+//				file = (IFile) treeSel.getFirstElement();
+//			}
+//			
+//			if (file == null)
+//				return;
+//
+//			doSaveDirty(file.getProject());
+//			ECLCompiler compiler = new ECLCompiler(file.getProject());
+//			compiler.buildAndRun(file);
+//		}
+//
+//		
+//		
+//		ECLCompiler compiler = new ECLCompiler(file.getProject());
+//		compiler.buildAndRun(file);
+		
 //		IWorkbench workbench = PlatformUI.getWorkbench().getWorkbenchWindows();
 //		workbench.getSelection();
 //		workbench.

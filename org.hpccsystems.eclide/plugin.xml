@@ -39,7 +39,7 @@
       <view
             category="org.hpccsystems.eclide"
             class="org.hpccsystems.eclide.ui.navigator.CommonNavigator"
-            icon="icons/sample.gif"
+            icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.navigator"
             name="%view.name.0">
       </view>
@@ -101,7 +101,7 @@
             class="org.hpccsystems.eclide.editors.ECLEditor"
             contributorClass="org.hpccsystems.eclide.editors.ECLEditorActionContributor"
             extensions="ecl"
-            icon="icons/sample.gif"
+            icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.editors.ECLEditor"
             name="%editor.name.0">
       </editor>
@@ -166,7 +166,7 @@
              category="org.hpccsystems.eclide"
              class="org.hpccsystems.eclide.wizards.ECLNewProjectWizard"
              finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
-             icon="icons/sample.gif"
+             icon="icons/releng_gears.gif"
              id="org.hpccsystems.eclide.wizards.ECLNewProjectWizard"
              name="%wizard.name.1"
              preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective"
@@ -179,7 +179,7 @@
             category="org.hpccsystems.eclide"
             class="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
             finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
-            icon="icons/sample.gif"
+            icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
             name="%wizard.name.2"
             preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective">
@@ -194,7 +194,7 @@
             delegate="org.hpccsystems.eclide.launchers.LaunchDelegate"
             id="org.hpccsystems.eclide.launching.ECLConfigurationType"
             modes="run"
-            name="%launchConfigurationType.name.0"
+            name="%launchConfigurationType.name"
             public="true">
       </launchConfigurationType>
    </extension>
@@ -210,8 +210,9 @@
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             class="org.hpccsystems.eclide.launchers.ECLShortcut"
+            icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.launchers.ECLShortcut"
-            label="%shortcut.label.0"
+            label="%shortcut.label"
             modes="run">
          <contextualLaunch>
 		 <enablement>
@@ -228,6 +229,15 @@
             markerType="org.hpccsystems.eclide.eclProblem"
             class="org.hpccsystems.eclide.problem.QuickFixer">
       </markerResolutionGenerator>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <tab
+            class="org.hpccsystems.eclide.LaunchConfigurationTab1"
+            group="org.hpccsystems.eclide.tab1"
+            id="org.hpccsystems.eclide.tab1"
+            name="org.hpccsystems.eclide.tab1">
+      </tab>
    </extension>
 
 </plugin>

@@ -31,8 +31,11 @@ public class ECLPreferenceConstants {
 	public static final String P_ARGSCOMPILE = "argsCompilePreference";
 	public static final String P_ARGSCOMPILEREMOTE = "argsCompileRemotePreference";
 	
-	public static final String P_MONITORDEPENDEES = "monitorDependees";
-	public static final String P_SUPRESSSECONDERROR = "supressSecondError";
+	//  Local command line options
+	public static final String P_ARGSWULOCAL = "argsWorkunitLocalPreference";
+
+	public static final String P_MONITORDEPENDEES = "monitorDependeesPreference";
+	public static final String P_SUPRESSSECONDERROR = "supressSecondErrorPreference";
 	
 	//  Should not be global  ---
 	//public static final String P_REMOTEEXECUTE = "remoteExecutePreference";

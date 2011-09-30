@@ -42,13 +42,13 @@ import org.hpccsystems.eclide.Activator;
 
 public class ECLCompilerPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	 public class SpacerFieldEditor extends LabelFieldEditor {
-	 	// Implemented as an empty label field editor.
-	 	public SpacerFieldEditor(Composite parent) {
-	 		super("", parent);
-	 	}
-	 }
-	 
+	class SpacerFieldEditor extends LabelFieldEditor {
+		// Implemented as an empty label field editor.
+		public SpacerFieldEditor(Composite parent) {
+			super("", parent);
+		}
+	}
+ 
 	class LabelFieldEditor extends FieldEditor {
 
 		private Label label;
@@ -117,6 +117,10 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSCOMPILE, "&Local Compile:", getFieldEditorParent()));
 		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSCOMPILEREMOTE, "&Remote Compile:", getFieldEditorParent()));
 		
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Workunit Arguements:", getFieldEditorParent()));
+		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSWULOCAL, "&Local:", getFieldEditorParent()));
+
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Miscellaneous:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_MONITORDEPENDEES, "&Monitor Dependees (requires manual \"Project/Clean...\")", getFieldEditorParent()));

@@ -48,6 +48,8 @@ public class ECLPreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(ECLPreferenceConstants.P_ARGSCOMPILE, "");
 		store.setDefault(ECLPreferenceConstants.P_ARGSCOMPILEREMOTE, "-E");
 
+		store.setDefault(ECLPreferenceConstants.P_ARGSWULOCAL, "");
+
 		store.setDefault(ECLPreferenceConstants.P_MONITORDEPENDEES, true);
 		store.setDefault(ECLPreferenceConstants.P_SUPRESSSECONDERROR, false);
 
