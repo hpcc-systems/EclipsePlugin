@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
@@ -21,7 +18,7 @@ public class CmdProcess {
 		void ProcessOut(BufferedReader outReader);
 		void ProcessErr(IFile file, BufferedReader errReader);
 	}
-
+	
 	IPath workingPath;
 	private IProcessOutput handler;
 
@@ -48,27 +45,14 @@ public class CmdProcess {
 	}
 	
 	public void exec(String command, String args) {
-		Map<String, String> additionalArgs = new TreeMap<String, String>();
-		exec(command, args, additionalArgs, null, false);
+		CmdArgs cmdArgs = new CmdArgs(command, args);
+		exec(cmdArgs, null, false);
 	}
 	
-	public void exec(String command, String args, Map<String, String> additionalArgs, final IFile target, boolean eclplusArgs) {
-		List<String> argList = new Vector<String>();
-		consoleOut.print(command);
-		argList.add(command);
-		if (!args.isEmpty()) {
-			consoleOut.print(" " + args);
-			argList.add(args);
-		}
-		for(Map.Entry<String, String> entry : additionalArgs.entrySet()) {
-			String arg;
-			if (eclplusArgs)
-				arg = entry.getKey() + "=" + entry.getValue();
-			else 
-				arg = "-" + entry.getKey() + entry.getValue();
-			consoleOut.print(" " + arg);
-			argList.add(arg);
-		}
+	public void exec(CmdArgs args, final IFile target, boolean eclplusArgs) {
+		args.Print(consoleOut, eclplusArgs);
+		List<String> argList = args.Get(eclplusArgs);
+
 		if (target != null) {
 			consoleOut.print(" " + "../" + target.getProjectRelativePath().toOSString());
 			argList.add("../" + target.getProjectRelativePath().toOSString());
@@ -77,13 +61,8 @@ public class CmdProcess {
 
 		try {
 			ProcessBuilder pb = new ProcessBuilder(argList);
-			//Map<String, String> env = pb.environment();
-			//env.put("VAR1", "myValue");
-			//env.remove("OTHERVAR");
-			//env.put("VAR2", env.get("VAR1") + "suffix");
 			pb.directory(workingPath.toFile());
 			Process p = pb.start();
-			//Process p = Runtime.getRuntime().exec(command);
 
 			final BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));

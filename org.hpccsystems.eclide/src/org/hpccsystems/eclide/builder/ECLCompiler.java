@@ -23,10 +23,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.console.MessageConsole;
@@ -35,6 +37,7 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
+import org.hpccsystems.internal.CmdArgs;
 import org.hpccsystems.internal.CmdProcess;
 import org.hpccsystems.internal.EclCCParser;
 import org.hpccsystems.internal.Workspace;
@@ -43,6 +46,8 @@ import org.hpccsystems.internal.CmdProcess.IProcessOutput;
 public class ECLCompiler {
 
 	IProject project;
+	IProject[] referencedProjects;
+	
 	String compilerPath;
 	String libraryPath;
 	IPath projectPath;
@@ -160,6 +165,13 @@ public class ECLCompiler {
 
 	public ECLCompiler(IProject project) {
 		this.project = project;
+		try {
+			referencedProjects = project.getReferencedProjects();
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		compilerPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "eclcc";
 		libraryPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "plugins";
@@ -169,7 +181,7 @@ public class ECLCompiler {
 			workingPath.toFile().mkdir();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
-
+		
 		argsCommon = store.getString(ECLPreferenceConstants.P_ARGSCOMMON);
 		argsSyntaxCheck = store.getString(ECLPreferenceConstants.P_ARGSSYNTAX);
 		argsCompile = store.getString(ECLPreferenceConstants.P_ARGSCOMPILE);
@@ -195,15 +207,23 @@ public class ECLCompiler {
 		htmlViewer = Workspace.FindHtmlViewer();
 	}
 	
+	void GetIncludeArgs(CmdArgs cmdArgs) {
+		for (int i = 0; i < referencedProjects.length; ++i) {
+			cmdArgs.Append("I",  referencedProjects[i].getLocation().toOSString());
+		}
+	}
+	
 	public void checkSyntax(IFile file) {
 		Workspace.deleteMarkers(file);
 
-		Map<String, String> args = new TreeMap<String, String>();
+		CmdArgs cmdArgs = new CmdArgs(compilerPath, argsSyntaxCheck);
+		GetIncludeArgs(cmdArgs);
+
 		if (monitorDependees)
-			args.put("E", "");
+			cmdArgs.Append("E");
 
 		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), eclccConsoleWriter);
-		process.exec(compilerPath, argsSyntaxCheck, args, file, false);
+		process.exec(cmdArgs, file, false);
 	}
 
 	public void buildAndRun(IFile file) {
@@ -215,41 +235,42 @@ public class ECLCompiler {
 
 	protected void buildAndRunRemote(IFile file) {
 		Workspace.deleteMarkers(file);
+		
+		CmdArgs cmdArgs = new CmdArgs(compilerPath, argsCompileRemote);
+		GetIncludeArgs(cmdArgs);
 
 		IPath xmlPath = file.getLocation().removeFileExtension();
 		xmlPath = xmlPath.addFileExtension("xml");
-
-		Map<String, String> args = new TreeMap<String, String>();
-		args.put("o", xmlPath.toOSString());
+		cmdArgs.Append("o", xmlPath.toOSString());
 
 		hasError = false;
 		CmdProcess process = new CmdProcess(workingPath, new EclPlusHandler(file), eclccConsoleWriter);
-		process.exec(compilerPath, argsCompileRemote, args, file, false);
+		process.exec(cmdArgs, file, false);
 		if (!hasError) {
-			args.clear();
+//			args.clear();
 			//eclplus action=query server=192.168.241.131 cluster=thor @test.xml			
-			args.put("action", "query");
-			args.put("server", serverIP);
-			args.put("cluster", serverCluster);
-			args.put("timeout", "0");
+//			args.put("action", "query");
+//			args.put("server", serverIP);
+//			args.put("cluster", serverCluster);
+//			args.put("timeout", "0");
 			//TODO process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
-			if (!wuid.isEmpty())
-				htmlViewer.showWuid(wuid);
+//			if (!wuid.isEmpty())
+//				htmlViewer.showWuid(wuid);
 		}
 	}
 
 	protected void buildAndRunLocal(IFile file) {
 		Workspace.deleteMarkers(file);
 
-		IPath exePath = workingPath.append("a.out");
-
-		Map<String, String> args = new TreeMap<String, String>();
+		CmdArgs cmdArgs = new CmdArgs(compilerPath, argsCompile);
+		GetIncludeArgs(cmdArgs);
 
 		hasError = false;
 		CmdProcess process = new CmdProcess(workingPath, new LocalRunHandler(file), eclccConsoleWriter);
-		process.exec(compilerPath, argsCompile, args, file, false);
+		process.exec(cmdArgs, file, false);
 		if (!hasError) {
 			resultsConsole.clearConsole();
+			IPath exePath = workingPath.append("a.out");
 			process.exec(exePath.toOSString(), argsWULocal);
 		}
 	}
