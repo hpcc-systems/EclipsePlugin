@@ -19,20 +19,25 @@
 package org.hpccsystems.eclide.launchers;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.hpccsystems.eclide.builder.ECLCompiler;
+import org.hpccsystems.internal.Workspace;
 
 public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements ILaunchConfigurationDelegate {
-
+	
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
+		IProject targetProject = Workspace.findProject(configuration.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
+		IFile targetFile = Workspace.findFile(targetProject, configuration.getAttribute(ECLLaunchConstants.P_FILE, ""));
 
+		Workspace.doSaveDirty(targetProject);
+		ECLCompiler compiler = new ECLCompiler(targetProject);
+		compiler.buildAndRunRemote(targetFile, configuration.getAttribute(ECLLaunchConstants.P_IP, "unknown"), configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, "unknown"));
 //		ISourceLocator sourceLocator = launch.getSourceLocator();
 //		sourceLocator.
 //		

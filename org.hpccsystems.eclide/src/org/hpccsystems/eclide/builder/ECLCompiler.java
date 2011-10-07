@@ -18,6 +18,7 @@
 package org.hpccsystems.eclide.builder;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -30,6 +31,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
@@ -45,10 +47,13 @@ import org.hpccsystems.internal.CmdProcess.IProcessOutput;
 
 public class ECLCompiler {
 
+	final static String noCompiler = "Error:  Unable to locate eclcc.";
 	IProject project;
 	IProject[] referencedProjects;
 	
-	String compilerPath;
+	IPath binPath;
+	File eclccFile;
+	File eclplusFile;
 	String libraryPath;
 	IPath projectPath;
 	IPath workingPath;
@@ -173,7 +178,10 @@ public class ECLCompiler {
 		}
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		compilerPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "eclcc";
+		binPath = new Path(store.getString(ECLPreferenceConstants.P_TOOLSPATH));
+		eclccFile = binPath.append("eclcc").toFile();
+		eclplusFile = binPath.append("eclplus").toFile();
+		
 		libraryPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "plugins";
 		projectPath = project.getLocation();
 		workingPath = projectPath.append("tmp");
@@ -196,15 +204,19 @@ public class ECLCompiler {
 //		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
 //		serverCluster = store.getString(ECLPreferenceConstants.P_SERVERCLUSTER);
 
-		resultsConsole = Workspace.FindConsole("Results");
+		resultsConsole = Workspace.findConsole("Results");
 		resultsConsoleWriter = resultsConsole.newMessageStream();
 		resultsConsoleWriter.setActivateOnWrite(true);
 
-		eclccConsole = Workspace.FindConsole("eclcc");
+		eclccConsole = Workspace.findConsole("eclcc");
 		eclccConsoleWriter = eclccConsole.newMessageStream();
 		eclccConsoleWriter.setActivateOnWrite(true);
 		
-		htmlViewer = Workspace.FindHtmlViewer();
+		htmlViewer = Workspace.findHtmlViewer();
+	}
+	
+	boolean HasCompiler() {
+		return true;  //TODO:  compilerFile.canExecute();
 	}
 	
 	void GetIncludeArgs(CmdArgs cmdArgs) {
@@ -215,8 +227,13 @@ public class ECLCompiler {
 	
 	public void checkSyntax(IFile file) {
 		Workspace.deleteMarkers(file);
+		
+		if (!HasCompiler()) {
+			eclccConsoleWriter.println(noCompiler);
+			return;
+		}
 
-		CmdArgs cmdArgs = new CmdArgs(compilerPath, argsSyntaxCheck);
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsSyntaxCheck);
 		GetIncludeArgs(cmdArgs);
 
 		if (monitorDependees)
@@ -226,17 +243,22 @@ public class ECLCompiler {
 		process.exec(cmdArgs, file, false);
 	}
 
-	public void buildAndRun(IFile file) {
-		if (executeRemotely)
-			buildAndRunRemote(file);
-		else
-			buildAndRunLocal(file);
-	}
-
-	protected void buildAndRunRemote(IFile file) {
+//	public void buildAndRun(IFile file) {
+//		if (executeRemotely)
+//			buildAndRunRemote(file);
+//		else
+//			buildAndRunLocal(file);
+//	}
+//
+	public void buildAndRunRemote(IFile file, String ip, String cluster) {
 		Workspace.deleteMarkers(file);
 		
-		CmdArgs cmdArgs = new CmdArgs(compilerPath, argsCompileRemote);
+		if (!HasCompiler()) {
+			eclccConsoleWriter.println(noCompiler);
+			return;
+		}
+
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompileRemote);
 		GetIncludeArgs(cmdArgs);
 
 		IPath xmlPath = file.getLocation().removeFileExtension();
@@ -247,22 +269,36 @@ public class ECLCompiler {
 		CmdProcess process = new CmdProcess(workingPath, new EclPlusHandler(file), eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 		if (!hasError) {
+			CmdArgs remoteArgs = new CmdArgs(eclplusFile.getPath(), "");
+			GetIncludeArgs(cmdArgs);
 //			args.clear();
 			//eclplus action=query server=192.168.241.131 cluster=thor @test.xml			
+			remoteArgs.Append("action", "query");
+			remoteArgs.Append("server", ip);
+			remoteArgs.Append("cluster", cluster);
+			remoteArgs.Append("timeout", "0");
+			remoteArgs.Append("@" + xmlPath.toOSString());
+			wuid = "";
+			process.exec(remoteArgs, null, true);
 //			args.put("action", "query");
 //			args.put("server", serverIP);
 //			args.put("cluster", serverCluster);
 //			args.put("timeout", "0");
 			//TODO process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
-//			if (!wuid.isEmpty())
-//				htmlViewer.showWuid(wuid);
+			if (!wuid.isEmpty())
+				htmlViewer.showWuid(ip, wuid);
 		}
 	}
 
-	protected void buildAndRunLocal(IFile file) {
+	public void buildAndRunLocal(IFile file) {
 		Workspace.deleteMarkers(file);
 
-		CmdArgs cmdArgs = new CmdArgs(compilerPath, argsCompile);
+		if (!HasCompiler()) {
+			eclccConsoleWriter.println(noCompiler);
+			return;
+		}
+
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompile);
 		GetIncludeArgs(cmdArgs);
 
 		hasError = false;

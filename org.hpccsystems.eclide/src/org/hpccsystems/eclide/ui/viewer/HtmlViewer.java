@@ -6,6 +6,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
@@ -14,20 +15,9 @@ public class HtmlViewer extends ViewPart {
 	private static HtmlViewer htmlViewer = null;
 	
 	private Browser browser;
-	private IPreferenceStore store;
-	private boolean executeRemotely = false;
-	private String serverIP;
+	private String ip;
+	private String wuid;
 
-	IPropertyChangeListener listener = new IPropertyChangeListener() {
-		@Override
-		public void propertyChange(PropertyChangeEvent event) {
-//			if (event.getProperty().equals(ECLPreferenceConstants.P_REMOTEEXECUTE)) {
-//				executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
-//				display();
-//			}
-		}
-	};	
-	
 	public static HtmlViewer getDefault() {
 		return htmlViewer;
 	}
@@ -36,42 +26,38 @@ public class HtmlViewer extends ViewPart {
 		htmlViewer = this;
 	}
 	
-	public void dispose() {
-		store.removePropertyChangeListener(listener);
-		super.dispose();
-	}
-
 	@Override
 	public void createPartControl(Composite parent) {
 		browser = new Browser(parent, SWT.NULL);
-		store = Activator.getDefault().getPreferenceStore();
-
-//		executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
-//		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
-
-		store.addPropertyChangeListener(listener);
 		display();
 	}
 	
 	void display()
 	{
-		if (executeRemotely) {
-			browser.setUrl(getUrl());
-		} else {
-			browser.setUrl("about:blank");
-		}
+		browser.setUrl("about:blank");
 	}
 	
-	String getUrl() {
-		return "http://" + serverIP + ":8010/";
+	String getUrl(String ip) {
+		return "http://" + ip + ":8010/";
 	}
 	
-	String getWuidUrl(String wuid) {
-		return getUrl() + "WsWorkunits/WUInfo?Wuid=" + wuid;
+	String getWuidUrl(String ip, String wuid) {
+		return getUrl(ip) + "WsWorkunits/WUInfo?Wuid=" + wuid;
 	}
 	
-	public void showWuid(String wuid) {
-		browser.setUrl(getWuidUrl(wuid));
+	public void showWuid(final String ip, final String wuid) {
+//		notifyIP = ip;
+//		notifyWUID = wuid;
+//		Post
+//		Invalidate()
+//		browser.no
+		this.ip = ip;
+		this.wuid = wuid;
+		Display.getDefault().asyncExec(new Runnable() {   
+			public void run() {   
+			browser.setUrl(getWuidUrl(ip, wuid));
+			}   
+		});
 	}
 
 	@Override

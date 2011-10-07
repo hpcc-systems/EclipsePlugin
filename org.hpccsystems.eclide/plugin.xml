@@ -199,9 +199,17 @@
       </launchConfigurationType>
    </extension>
    <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.hpccsystems.eclide.launching.ECLConfigurationType"
+            icon="icons/releng_gears.gif"
+            id="org.hpccsystems.eclide.launchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="org.hpccsystems.eclide.launchers.ECLLaunchConfigurationTabGroup"
+            class="org.hpccsystems.eclide.launchers.ECLLaunchTabGroup"
             id="org.hpccsystems.eclide.launching.ECLConfigurationType"
             type="org.hpccsystems.eclide.launching.ECLConfigurationType">
       </launchConfigurationTabGroup>
@@ -209,7 +217,7 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="org.hpccsystems.eclide.launchers.ECLLaunchShortcut"
+            class="org.hpccsystems.eclide.launchers.ECLLaunchShortcutLocal"
             icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.launchers.ECLShortcut"
             label="%shortcut.label"
@@ -229,15 +237,6 @@
             markerType="org.hpccsystems.eclide.eclProblem"
             class="org.hpccsystems.eclide.problem.QuickFixer">
       </markerResolutionGenerator>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabs">
-      <tab
-            class="org.hpccsystems.eclide.LaunchConfigurationTab1"
-            group="org.hpccsystems.eclide.tab1"
-            id="org.hpccsystems.eclide.tab1"
-            name="org.hpccsystems.eclide.tab1">
-      </tab>
    </extension>
 
 </plugin>

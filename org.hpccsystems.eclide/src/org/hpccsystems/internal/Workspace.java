@@ -1,20 +1,51 @@
 package org.hpccsystems.internal;
 
+import java.util.HashSet;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
+import org.eclipse.ui.ide.IDE;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 
 public class Workspace {
 	
 	public static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
 	
-	static public MessageConsole FindConsole(String name) {
+	static public IWorkspaceRoot getWorkspaceRoot() {
+		return ResourcesPlugin.getWorkspace().getRoot();
+	}
+	
+	static public IProject findProject(String name) {
+		return getWorkspaceRoot().getProject(name);
+	}
+
+	static public IFile findFile(IProject project, String name) {
+		return project.getFile(name);
+	}
+	
+	static public IFile findFile(String name) {
+        IProject[] projects = getWorkspaceRoot().getProjects();
+        for (int i = 0; i < projects.length; i++) {
+        	IFile retVal = findFile(projects[i], name);
+        	if (retVal != null)
+        		return retVal;
+        }
+        return null;
+	}
+
+	static public MessageConsole findConsole(String name) {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();
 		IConsole[] existing = conMan.getConsoles();
@@ -27,7 +58,7 @@ public class Workspace {
 		return myConsole;
 	}
 
-	static public HtmlViewer FindHtmlViewer() {
+	static public HtmlViewer findHtmlViewer() {
 		return HtmlViewer.getDefault();
 	}
 	
@@ -77,6 +108,33 @@ public class Workspace {
 		}
 	}
 
+	static protected IResource[] getScopedDirtyResources(IProject[] projects) {
+		HashSet<IResource> dirtyres = new HashSet<IResource>();
+		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+		for (int l = 0; l < windows.length; l++) {
+			IWorkbenchPage[] pages = windows[l].getPages();
+			for (int i = 0; i < pages.length; i++) {
+				IEditorPart[] eparts = pages[i].getDirtyEditors();
+				for (int j = 0; j < eparts.length; j++) {
+					IResource resource = (IResource) eparts[j].getEditorInput().getAdapter(IResource.class);
+					if (resource != null) {
+						for (int k = 0; k < projects.length; k++) {
+							if (projects[k].equals(resource.getProject())) {
+								dirtyres.add(resource);
+							}
+						}
+					}
+				}
+			}
+		}
+		return (IResource[]) dirtyres.toArray(new IResource[dirtyres.size()]);
+	}
 	
-
+	public static void doSaveDirty(IProject project)
+	{
+		IProject[] projects = new IProject[1];
+		projects[0] = project;
+		IResource[] resources = getScopedDirtyResources(projects);
+		IDE.saveAllEditors(resources, false);			
+	}
 }

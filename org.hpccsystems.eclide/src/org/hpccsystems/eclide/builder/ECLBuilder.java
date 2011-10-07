@@ -113,7 +113,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			RelationshipHelper rhelper = new RelationshipHelper(file);
 			try {
 				compiler.checkSyntax(file);
-				if (!compiler.hasError) {
+				if (!compiler.hasError && compiler.ancestors != null) {
 					rhelper.setAncestors(compiler.ancestors);
 				}
 				Set<IFile> descendants = new HashSet<IFile>(rhelper.getDescendants());

@@ -20,6 +20,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.jdt.core,
  org.eclipse.jdt.debug.ui.launchConfigurations,
+ org.eclipse.jdt.internal.debug.ui.launcher,
  org.eclipse.jdt.launching
 Export-Package: org.hpccsystems.eclide,
  org.hpccsystems.eclide.builder,
