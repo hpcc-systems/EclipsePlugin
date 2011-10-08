@@ -13,9 +13,16 @@ import org.eclipse.ui.console.MessageConsoleStream;
 public class CmdArgs {
 	String cmd;
 	String baseArgs;
+	String QUOTE="";
 	protected Map<String, Set<String> > args;
 	
 	public CmdArgs(String cmd, String baseArgs) {
+		System.out.print(System.getProperty("os.name"));
+		if (System.getProperty("os.name").equalsIgnoreCase("Windows")) {
+			QUOTE = "\"";
+		}
+		
+
 		this.cmd = cmd;
 		this.baseArgs = baseArgs;
 		args = new TreeMap<String, Set<String>>();
@@ -44,7 +51,7 @@ public class CmdArgs {
 			else {
 				Iterator<String> iter = values.iterator();
 			    while (iter.hasNext()) {
-			    	String value = "\"" + iter.next() + "\"";
+			    	String value = QUOTE + iter.next() + QUOTE;
 					retVal.add(eclplusArgs ? entry.getKey() + "=" + value : "-" + entry.getKey() + value);
 				}
 			}

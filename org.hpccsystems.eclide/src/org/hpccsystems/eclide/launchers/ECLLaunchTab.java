@@ -23,7 +23,7 @@ public class ECLLaunchTab extends AbstractLaunchConfigurationTab {
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
 		public void modifyText(ModifyEvent e) {
-			scheduleUpdateJob();
+			//scheduleUpdateJob();
 		}
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
