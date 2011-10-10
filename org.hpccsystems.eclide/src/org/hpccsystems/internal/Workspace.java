@@ -22,7 +22,8 @@ import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 public class Workspace {
 	
 	public static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
-	
+
+	//  Navigator Helpers  ---
 	static public IWorkspaceRoot getWorkspaceRoot() {
 		return ResourcesPlugin.getWorkspace().getRoot();
 	}
@@ -45,6 +46,7 @@ public class Workspace {
         return null;
 	}
 
+	//  Viewer Helpers  ---
 	static public MessageConsole findConsole(String name) {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();
@@ -62,6 +64,7 @@ public class Workspace {
 		return HtmlViewer.getDefault();
 	}
 	
+	//  Marker Helpers  ---
 	static public void addMarker(IResource resolvedFile, int severity, String code, String message, int lineNumber, int colNumber, boolean oneErrorOnly)
 	{
 		if (resolvedFile != null)
@@ -108,6 +111,7 @@ public class Workspace {
 		}
 	}
 
+	//  Dirty Helpers  ---
 	static protected IResource[] getScopedDirtyResources(IProject[] projects) {
 		HashSet<IResource> dirtyres = new HashSet<IResource>();
 		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();

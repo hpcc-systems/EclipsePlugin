@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.internal.ui.*;
 
 /**
  * This class represents a preference page that
@@ -41,57 +42,6 @@ import org.hpccsystems.eclide.Activator;
  */
 
 public class ECLCompilerPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
-
-	class SpacerFieldEditor extends LabelFieldEditor {
-		// Implemented as an empty label field editor.
-		public SpacerFieldEditor(Composite parent) {
-			super("", parent);
-		}
-	}
- 
-	class LabelFieldEditor extends FieldEditor {
-
-		private Label label;
-
-		// All labels can use the same preference name since they don't
-		// store any preference.
-		public LabelFieldEditor(String value, Composite parent) {
-			super("label", value, parent);
-		}
-
-		// Adjusts the field editor to be displayed correctly
-		// for the given number of columns.
-		protected void adjustForNumColumns(int numColumns) {
-			((GridData) label.getLayoutData()).horizontalSpan = numColumns;
-		}
-
-		// Fills the field editor's controls into the given parent.
-		protected void doFillIntoGrid(Composite parent, int numColumns) {
-			label = getLabelControl(parent);
-			
-			GridData gridData = new GridData();
-			gridData.horizontalSpan = numColumns;
-			gridData.horizontalAlignment = GridData.FILL;
-			gridData.grabExcessHorizontalSpace = false;
-			gridData.verticalAlignment = GridData.CENTER;
-			gridData.grabExcessVerticalSpace = false;
-			
-			label.setLayoutData(gridData);
-		}
-
-		// Returns the number of controls in the field editor.
-		public int getNumberOfControls() {
-			return 1;
-		}
-
-		// Labels do not persist any preferences, so these methods are empty.
-		protected void doLoad() {
-		}
-		protected void doLoadDefault() {
-		}
-		protected void doStore() {
-		}
-	}
 
 	public ECLCompilerPreferencePage() {
 		super(GRID);
@@ -111,14 +61,14 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 		addField(new DirectoryFieldEditor(ECLPreferenceConstants.P_TOOLSPATH, "&HPCC Client Tools:", getFieldEditorParent()));
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Compiler Arguements:", getFieldEditorParent()));
+		addField(new LabelFieldEditor("Compiler Arguments:", getFieldEditorParent()));
 		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSCOMMON, "&Common:", getFieldEditorParent()));
 		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSSYNTAX, "&Syntax Check:", getFieldEditorParent()));
 		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSCOMPILE, "&Local Compile:", getFieldEditorParent()));
 		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSCOMPILEREMOTE, "&Remote Compile:", getFieldEditorParent()));
 		
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Workunit Arguements:", getFieldEditorParent()));
+		addField(new LabelFieldEditor("Workunit Arguments:", getFieldEditorParent()));
 		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSWULOCAL, "&Local:", getFieldEditorParent()));
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));

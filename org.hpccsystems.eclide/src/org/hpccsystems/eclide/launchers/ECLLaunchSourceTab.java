@@ -19,11 +19,12 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 
-public class ECLLaunchTab extends AbstractLaunchConfigurationTab {
+public class ECLLaunchSourceTab extends AbstractLaunchConfigurationTab {
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
 		public void modifyText(ModifyEvent e) {
-			//scheduleUpdateJob();
+			//setDirty(true);
+			scheduleUpdateJob();
 		}
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
@@ -58,33 +59,11 @@ public class ECLLaunchTab extends AbstractLaunchConfigurationTab {
 	
     Image image;
 
-//    // Local directory
-//	private Button fWorkspaceButton;
-//	private Button fFileSystemButton;
-//	private Button fVariablesButton;
-//	
-//	//bug 29565 fix
-//	private Button localButton = null;
-//	private Button remoteButton = null;
-	protected Text fIPText;
-	protected Text fClusterText;
-
 	protected Text fProjText;
 	private Button fProjButton;
 	
 	protected Text fMainText;
 	private Button fSearchButton;
-	
-	protected void createServerEditor(Composite parent) {
-		Group group = SWTFactory.createGroup(parent, "Server:", 2, 1, GridData.FILL_HORIZONTAL);
-		SWTFactory.createLabel(group, "IP Address:  ", 1);
-		fIPText = SWTFactory.createSingleText(group, 1);
-		fIPText.addModifyListener(fListener);
-
-		SWTFactory.createLabel(group, "Cluster:  ", 1);
-		fClusterText = SWTFactory.createSingleText(group, 1);
-		fClusterText.addModifyListener(fListener);
-	}
 	
 	protected void createProjectEditor(Composite parent) {
 		Group group = SWTFactory.createGroup(parent, "Project:", 2, 1, GridData.FILL_HORIZONTAL);
@@ -100,10 +79,7 @@ public class ECLLaunchTab extends AbstractLaunchConfigurationTab {
 			}
 		});
 		fProjButton.setEnabled(false);
-	}
-	
-	protected void createMainTypeEditor(Composite parent, String text) {
-		Group group = SWTFactory.createGroup(parent, text, 2, 1, GridData.FILL_HORIZONTAL); 
+		
 		fMainText = SWTFactory.createSingleText(group, 1);
 		fMainText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -120,19 +96,16 @@ public class ECLLaunchTab extends AbstractLaunchConfigurationTab {
 			}
 		});
 		fSearchButton.setEnabled(false);
+		
 	}
 	
 	public final void createControl(Composite parent) {
 		Composite projComp = SWTFactory.createComposite(parent, parent.getFont(), 1, 1, GridData.FILL_BOTH); 
 		((GridLayout)projComp.getLayout()).verticalSpacing = 0;
 		
-		createServerEditor(projComp);
 		createVerticalSpacer(projComp, 1);
 		createProjectEditor(projComp);
 		createVerticalSpacer(projComp, 1);
-		createMainTypeEditor(projComp, "ECL to Launch:");
-		createVerticalSpacer(projComp, 1);
-
 		setControl(projComp);
 		
 //		Font font = parent.getFont();	
@@ -197,8 +170,6 @@ public class ECLLaunchTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			fIPText.setText(configuration.getAttribute(ECLLaunchConstants.P_IP, "localhost"));
-			fClusterText.setText(configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, "hthor"));
 			fProjText.setText(configuration.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
 			fMainText.setText(configuration.getAttribute(ECLLaunchConstants.P_FILE, ""));
 		} catch (CoreException e) {
@@ -209,8 +180,6 @@ public class ECLLaunchTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(ECLLaunchConstants.P_IP, fIPText.getText());
-		configuration.setAttribute(ECLLaunchConstants.P_CLUSTER, fClusterText.getText());
 		configuration.setAttribute(ECLLaunchConstants.P_PROJECT, fProjText.getText());
 		configuration.setAttribute(ECLLaunchConstants.P_FILE, fMainText.getText());
 	}

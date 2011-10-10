@@ -5,11 +5,14 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.ProgressAdapter;
+import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
+import org.hpccsystems.internal.Workspace;
 
 public class HtmlViewer extends ViewPart {
 	private static HtmlViewer htmlViewer = null;
@@ -46,16 +49,17 @@ public class HtmlViewer extends ViewPart {
 	}
 	
 	public void showWuid(final String ip, final String wuid) {
-//		notifyIP = ip;
-//		notifyWUID = wuid;
-//		Post
-//		Invalidate()
-//		browser.no
 		this.ip = ip;
 		this.wuid = wuid;
 		Display.getDefault().asyncExec(new Runnable() {   
-			public void run() {   
-			browser.setUrl(getWuidUrl(ip, wuid));
+			public void run() {
+				browser.addProgressListener(new ProgressAdapter() {
+					public void completed(ProgressEvent event) {
+						browser.removeProgressListener(this);
+						browser.setUrl(getWuidUrl(ip, wuid));
+					}
+				});
+				browser.setText("<html><body><h3>Loading (" + getWuidUrl(ip, wuid) + ")...</h3></body></html>");
 			}   
 		});
 	}

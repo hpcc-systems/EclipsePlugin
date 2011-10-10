@@ -13,15 +13,11 @@ import org.eclipse.ui.console.MessageConsoleStream;
 public class CmdArgs {
 	String cmd;
 	String baseArgs;
-	String QUOTE="";
+	String QUOTE = "";
 	protected Map<String, Set<String> > args;
 	
 	public CmdArgs(String cmd, String baseArgs) {
-		System.out.print(System.getProperty("os.name"));
-		if (System.getProperty("os.name").equalsIgnoreCase("Windows")) {
-			QUOTE = "\"";
-		}
-		
+		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 
 		this.cmd = cmd;
 		this.baseArgs = baseArgs;

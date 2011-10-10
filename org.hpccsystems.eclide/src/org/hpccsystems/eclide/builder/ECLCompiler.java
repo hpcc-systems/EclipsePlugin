@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
@@ -210,7 +211,7 @@ public class ECLCompiler {
 
 		eclccConsole = Workspace.findConsole("eclcc");
 		eclccConsoleWriter = eclccConsole.newMessageStream();
-		eclccConsoleWriter.setActivateOnWrite(true);
+		//eclccConsoleWriter.setActivateOnWrite(true);
 		
 		htmlViewer = Workspace.findHtmlViewer();
 	}
@@ -285,8 +286,14 @@ public class ECLCompiler {
 //			args.put("cluster", serverCluster);
 //			args.put("timeout", "0");
 			//TODO process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
-			if (!wuid.isEmpty())
+			if (!wuid.isEmpty()) {
 				htmlViewer.showWuid(ip, wuid);
+				Display.getDefault().asyncExec(new Runnable() {   
+					public void run() {
+						htmlViewer.getSite().getPage().activate(htmlViewer);
+					}
+				});
+			}
 		}
 	}
 
