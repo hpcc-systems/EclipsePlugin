@@ -1,5 +1,7 @@
 package org.hpccsystems.eclide.launchers;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -19,12 +21,40 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.internal.ECLLaunchConfigurationTab;
+import org.hpccsystems.internal.Workspace;
 
-public class ECLLaunchSourceTab extends AbstractLaunchConfigurationTab {
+public class ECLLaunchSourceTab extends ECLLaunchConfigurationTab {
+
+	@Override
+	public String getErrorMessage() {
+		IProject targetProject = Workspace.findProject(fProjText.getText());
+		if (targetProject == null || !targetProject.exists())
+			return "Project does not exist";
+		IFile targetFile = Workspace.findFile(targetProject, fMainText.getText());
+		if (targetFile == null || !targetFile.exists())
+			return "File does not exist";
+		return super.getErrorMessage();
+	}
+
+	@Override
+	public boolean isValid(ILaunchConfiguration launchConfig) {
+		try {
+			IProject targetProject = Workspace.findProject(launchConfig.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
+			if (targetProject == null || !targetProject.exists())
+				return false;
+			IFile targetFile = Workspace.findFile(targetProject, launchConfig.getAttribute(ECLLaunchConstants.P_FILE, ""));
+			if (targetFile == null || !targetFile.exists())
+				return false;
+		} catch (CoreException e) {
+			return false;
+		}
+		
+		return super.isValid(launchConfig);
+	}
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
 		public void modifyText(ModifyEvent e) {
-			//setDirty(true);
 			scheduleUpdateJob();
 		}
 		public void widgetSelected(SelectionEvent e) {
@@ -66,10 +96,6 @@ public class ECLLaunchSourceTab extends AbstractLaunchConfigurationTab {
 	protected Text fMainText;
 	private Button fSearchButton;
 	
-	protected void scheduleUpdateJob() {
-		setDirty(true);
-	}
-	
 	protected void createProjectEditor(Composite parent) {
 		Group group = SWTFactory.createGroup(parent, "Project:", 3, 1, GridData.FILL_HORIZONTAL);
 		SWTFactory.createLabel(group, "Project:  ", 1);
@@ -88,11 +114,7 @@ public class ECLLaunchSourceTab extends AbstractLaunchConfigurationTab {
 		
 		SWTFactory.createLabel(group, "File:  ", 1);
 		fMainText = SWTFactory.createSingleText(group, 1);
-		fMainText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				//TODO:  updateLaunchConfigurationDialog();
-			}
-		});
+		fMainText.addModifyListener(fListener);
 //		ControlAccessibleListener.addListener(fMainText, group.getText());
 		fSearchButton = createPushButton(group, "Search", null); 
 		fSearchButton.addSelectionListener(new SelectionListener() {

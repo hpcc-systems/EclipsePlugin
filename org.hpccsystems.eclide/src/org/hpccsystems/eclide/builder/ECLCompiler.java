@@ -43,6 +43,7 @@ import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.internal.CmdArgs;
 import org.hpccsystems.internal.CmdProcess;
 import org.hpccsystems.internal.EclCCParser;
+import org.hpccsystems.internal.OS;
 import org.hpccsystems.internal.Workspace;
 import org.hpccsystems.internal.CmdProcess.IProcessOutput;
 
@@ -86,10 +87,13 @@ public class ECLCompiler {
 	public Set<IFile> ancestors;
 	boolean hasError;
 
+	String QUOTE = "";
+
 	class SyntaxHandler implements IProcessOutput {
 		IFile file;
 
 		public SyntaxHandler(IFile file) {
+			QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 			this.file = file;
 		}
 
@@ -264,7 +268,7 @@ public class ECLCompiler {
 
 		IPath xmlPath = file.getLocation().removeFileExtension();
 		xmlPath = xmlPath.addFileExtension("xml");
-		cmdArgs.Append("o", xmlPath.toOSString());
+		cmdArgs.Append("o", QUOTE + xmlPath.toOSString() + QUOTE);
 
 		hasError = false;
 		CmdProcess process = new CmdProcess(workingPath, new EclPlusHandler(file), eclccConsoleWriter);
@@ -278,7 +282,7 @@ public class ECLCompiler {
 			remoteArgs.Append("server", ip);
 			remoteArgs.Append("cluster", cluster);
 			remoteArgs.Append("timeout", "0");
-			remoteArgs.Append("@" + xmlPath.toOSString());
+			remoteArgs.Append(QUOTE + "@" + xmlPath.toOSString() + QUOTE);
 			wuid = "";
 			process.exec(remoteArgs, null, true);
 //			args.put("action", "query");

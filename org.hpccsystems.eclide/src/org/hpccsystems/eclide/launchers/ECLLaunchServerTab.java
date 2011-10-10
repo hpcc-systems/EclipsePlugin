@@ -27,8 +27,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.progress.WorkbenchJob;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 
-public class ECLLaunchServerTab extends AbstractLaunchConfigurationTab {
+public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
 		public void modifyText(ModifyEvent e) {
@@ -289,39 +290,4 @@ public class ECLLaunchServerTab extends AbstractLaunchConfigurationTab {
         }
         return image;
     }
-    
-    //  3.7 backported  ---
-	private Job fRereshJob;	
-
-	private Job getUpdateJob() {
-		if (fRereshJob == null) {
-			fRereshJob = createUpdateJob();
-			fRereshJob.setSystem(true);
-		}
-		return fRereshJob;
-	}
-	
-	protected void scheduleUpdateJob() {
-		Job job = getUpdateJob();
-		job.cancel(); // cancel existing job
-		job.schedule(getUpdateJobDelay());
-	}
-	
-	protected Job createUpdateJob() {
-		return  new WorkbenchJob(getControl().getDisplay(), "Update LCD") { //$NON-NLS-1$
-			public IStatus runInUIThread(IProgressMonitor monitor) {
-				if (!getControl().isDisposed()) {
-					updateLaunchConfigurationDialog();
-				}
-				return Status.OK_STATUS;
-			}
-			public boolean shouldRun() {
-				return !getControl().isDisposed();
-			}
-		};
-	}
-	
-	protected long getUpdateJobDelay() {
-		return 200;
-	}	
 }
