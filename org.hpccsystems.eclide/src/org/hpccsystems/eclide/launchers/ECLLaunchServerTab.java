@@ -1,6 +1,9 @@
 package org.hpccsystems.eclide.launchers;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -22,6 +25,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.progress.WorkbenchJob;
 import org.hpccsystems.eclide.Activator;
 
 public class ECLLaunchServerTab extends AbstractLaunchConfigurationTab {
@@ -285,4 +289,39 @@ public class ECLLaunchServerTab extends AbstractLaunchConfigurationTab {
         }
         return image;
     }
+    
+    //  3.7 backported  ---
+	private Job fRereshJob;	
+
+	private Job getUpdateJob() {
+		if (fRereshJob == null) {
+			fRereshJob = createUpdateJob();
+			fRereshJob.setSystem(true);
+		}
+		return fRereshJob;
+	}
+	
+	protected void scheduleUpdateJob() {
+		Job job = getUpdateJob();
+		job.cancel(); // cancel existing job
+		job.schedule(getUpdateJobDelay());
+	}
+	
+	protected Job createUpdateJob() {
+		return  new WorkbenchJob(getControl().getDisplay(), "Update LCD") { //$NON-NLS-1$
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				if (!getControl().isDisposed()) {
+					updateLaunchConfigurationDialog();
+				}
+				return Status.OK_STATUS;
+			}
+			public boolean shouldRun() {
+				return !getControl().isDisposed();
+			}
+		};
+	}
+	
+	protected long getUpdateJobDelay() {
+		return 200;
+	}	
 }

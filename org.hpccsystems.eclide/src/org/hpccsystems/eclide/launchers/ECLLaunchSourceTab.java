@@ -1,6 +1,7 @@
 package org.hpccsystems.eclide.launchers;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.internal.ui.SWTFactory;
@@ -65,8 +66,13 @@ public class ECLLaunchSourceTab extends AbstractLaunchConfigurationTab {
 	protected Text fMainText;
 	private Button fSearchButton;
 	
+	protected void scheduleUpdateJob() {
+		setDirty(true);
+	}
+	
 	protected void createProjectEditor(Composite parent) {
-		Group group = SWTFactory.createGroup(parent, "Project:", 2, 1, GridData.FILL_HORIZONTAL);
+		Group group = SWTFactory.createGroup(parent, "Project:", 3, 1, GridData.FILL_HORIZONTAL);
+		SWTFactory.createLabel(group, "Project:  ", 1);
 		fProjText = SWTFactory.createSingleText(group, 1);
 		fProjText.addModifyListener(fListener);
 		//ControlAccessibleListener.addListener(fProjText, group.getText());
@@ -80,6 +86,7 @@ public class ECLLaunchSourceTab extends AbstractLaunchConfigurationTab {
 		});
 		fProjButton.setEnabled(false);
 		
+		SWTFactory.createLabel(group, "File:  ", 1);
 		fMainText = SWTFactory.createSingleText(group, 1);
 		fMainText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
