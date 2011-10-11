@@ -29,15 +29,24 @@ public class Workspace {
 	}
 	
 	static public IProject findProject(String name) {
+		if (name.isEmpty())
+			return null;
+
 		return getWorkspaceRoot().getProject(name);
 	}
 
 	static public IFile findFile(IProject project, String name) {
+		if (name.isEmpty())
+			return null;
+
 		return project.getFile(name);
 	}
 	
 	static public IFile findFile(String name) {
-        IProject[] projects = getWorkspaceRoot().getProjects();
+		if (name.isEmpty())
+			return null;
+
+		IProject[] projects = getWorkspaceRoot().getProjects();
         for (int i = 0; i < projects.length; i++) {
         	IFile retVal = findFile(projects[i], name);
         	if (retVal != null)
