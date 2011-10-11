@@ -27,25 +27,19 @@ import org.hpccsystems.internal.Workspace;
 public class ECLLaunchSourceTab extends ECLLaunchConfigurationTab {
 
 	@Override
-	public String getErrorMessage() {
-		IProject targetProject = Workspace.findProject(fProjText.getText());
-		if (targetProject == null || !targetProject.exists())
-			return "Project does not exist";
-		IFile targetFile = Workspace.findFile(targetProject, fMainText.getText());
-		if (targetFile == null || !targetFile.exists())
-			return "File does not exist";
-		return super.getErrorMessage();
-	}
-
-	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
+		setErrorMessage("");
 		try {
 			IProject targetProject = Workspace.findProject(launchConfig.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
-			if (targetProject == null || !targetProject.exists())
+			if (targetProject == null || !targetProject.exists()) {
+				setErrorMessage("Project does not exist");
 				return false;
+			}
 			IFile targetFile = Workspace.findFile(targetProject, launchConfig.getAttribute(ECLLaunchConstants.P_FILE, ""));
-			if (targetFile == null || !targetFile.exists())
+			if (targetFile == null || !targetFile.exists()) {
+				setErrorMessage("File does not exist");
 				return false;
+			}
 		} catch (CoreException e) {
 			return false;
 		}

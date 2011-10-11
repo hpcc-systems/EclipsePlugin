@@ -218,6 +218,7 @@ public class ECLCompiler {
 		//eclccConsoleWriter.setActivateOnWrite(true);
 		
 		htmlViewer = Workspace.findHtmlViewer();
+		assert(htmlViewer != null);
 	}
 	
 	boolean HasCompiler() {
@@ -291,6 +292,7 @@ public class ECLCompiler {
 //			args.put("timeout", "0");
 			//TODO process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
 			if (!wuid.isEmpty()) {
+				
 				htmlViewer.showWuid(ip, wuid);
 				Display.getDefault().asyncExec(new Runnable() {   
 					public void run() {

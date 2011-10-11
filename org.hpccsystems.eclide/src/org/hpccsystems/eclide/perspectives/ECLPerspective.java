@@ -64,7 +64,7 @@ public class ECLPerspective implements IPerspectiveFactory {
 		//bottom.addView("org.eclipse.team.ui.GenericHistoryView"); //NON-NLS-1
 		//bottom.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
 		bottom.addView(IConsoleConstants.ID_CONSOLE_VIEW);
-		bottom.addView("org.hpccsystems.eclide.html");
+		bottom.addView("org.hpccsystems.eclide.htmlView");
 
 		IFolderLayout topLeft =
 			factory.createFolder(

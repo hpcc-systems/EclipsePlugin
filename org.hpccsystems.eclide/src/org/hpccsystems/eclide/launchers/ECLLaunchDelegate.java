@@ -37,7 +37,7 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 
 		Workspace.doSaveDirty(targetProject);
 		ECLCompiler compiler = new ECLCompiler(targetProject);
-		compiler.buildAndRunRemote(targetFile, configuration.getAttribute(ECLLaunchConstants.P_IP, "unknown"), configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, "unknown"));
+		compiler.buildAndRunRemote(targetFile, configuration.getAttribute(ECLLaunchConstants.P_IP, ""), configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, ""));
 //		ISourceLocator sourceLocator = launch.getSourceLocator();
 //		sourceLocator.
 //		

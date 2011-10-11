@@ -46,7 +46,7 @@
       <view
             category="org.hpccsystems.eclide"
             class="org.hpccsystems.eclide.ui.viewer.HtmlViewer"
-            id="org.hpccsystems.eclide.html"
+            id="org.hpccsystems.eclide.htmlView"
             name="%view.name.1">
       </view>
    </extension>

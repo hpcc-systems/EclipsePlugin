@@ -8,9 +8,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
@@ -70,7 +72,27 @@ public class Workspace {
 	}
 
 	static public HtmlViewer findHtmlViewer() {
-		return HtmlViewer.getDefault();
+		HtmlViewer retVal = HtmlViewer.getDefault();
+		if (retVal == null) {
+			IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+			for (int i = 0; i < windows.length; ++i) {
+				final IWorkbenchPage window = windows[i].getActivePage();
+				if (window != null) {
+					Display.getDefault().syncExec(new Runnable() {   
+						public void run() {
+							try {
+								window.showView(HtmlViewer.PI_UI_HTMLVIEW);
+							} catch (PartInitException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
+					break;
+				}
+			}
+		}
+		return retVal;
 	}
 	
 	//  Marker Helpers  ---

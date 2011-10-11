@@ -1,8 +1,5 @@
 package org.hpccsystems.eclide.ui.viewer;
 
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.ProgressAdapter;
@@ -10,16 +7,13 @@ import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
-import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
-import org.hpccsystems.internal.Workspace;
 
 public class HtmlViewer extends ViewPart {
+	public static final String PI_UI_HTMLVIEW = "org.hpccsystems.eclide.htmlView";
+	
 	private static HtmlViewer htmlViewer = null;
 	
 	private Browser browser;
-	private String ip;
-	private String wuid;
 
 	public static HtmlViewer getDefault() {
 		return htmlViewer;
@@ -49,8 +43,6 @@ public class HtmlViewer extends ViewPart {
 	}
 	
 	public void showWuid(final String ip, final String wuid) {
-		this.ip = ip;
-		this.wuid = wuid;
 		Display.getDefault().asyncExec(new Runnable() {   
 			public void run() {
 				browser.addProgressListener(new ProgressAdapter() {
