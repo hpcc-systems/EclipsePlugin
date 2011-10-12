@@ -15,9 +15,7 @@ public class HtmlViewer extends ViewPart {
 	
 	private static HtmlViewer htmlViewer = null;
 	
-	private Browser browser;
-	private String user;
-	private String password;
+	private BrowserEx browser;
 
 	public static HtmlViewer getDefault() {
 		return htmlViewer;
@@ -29,19 +27,7 @@ public class HtmlViewer extends ViewPart {
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		browser = new Browser(parent, SWT.NULL);
-		browser.addAuthenticationListener(new AuthenticationListener() {
-			public void authenticate(AuthenticationEvent event) {
-				event.user = user;
-				event.password = password;
-			}
-		});
-		display();
-	}
-	
-	void display()
-	{
-		browser.setUrl("about:blank");
+		browser = new BrowserEx(parent);
 	}
 	
 	String getUrl(String ip) {
@@ -52,18 +38,11 @@ public class HtmlViewer extends ViewPart {
 		return getUrl(ip) + "WsWorkunits/WUInfo?Wuid=" + wuid;
 	}
 	
-	public void showWuid(final String ip, final String wuid, String user, String password) {
-		this.user = user;
-		this.password = password;
+	public void showWuid(final String ip, final String wuid, final String user, final String password) {
+
 		Display.getDefault().asyncExec(new Runnable() {   
 			public void run() {
-				browser.addProgressListener(new ProgressAdapter() {
-					public void completed(ProgressEvent event) {
-						browser.removeProgressListener(this);
-						browser.setUrl(getWuidUrl(ip, wuid));
-					}
-				});
-				browser.setText("<html><body><h3>Loading (" + getWuidUrl(ip, wuid) + ")...</h3></body></html>");
+				browser.navigateTo(getWuidUrl(ip, wuid), user, password);
 			}   
 		});
 	}
