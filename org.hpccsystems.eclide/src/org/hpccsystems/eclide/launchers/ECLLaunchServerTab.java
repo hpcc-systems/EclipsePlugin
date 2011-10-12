@@ -1,15 +1,12 @@
 package org.hpccsystems.eclide.launchers;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.internal.ui.SWTFactory;
-import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.AuthenticationEvent;
+import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.ProgressAdapter;
 import org.eclipse.swt.browser.ProgressEvent;
@@ -17,15 +14,12 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.progress.WorkbenchJob;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 
@@ -33,13 +27,13 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
 		public void modifyText(ModifyEvent e) {
+			scheduleUpdateJob();
 			Object source= e.getSource();
 			if (source == fIPText) {
 				refreshAddress();
 			} if (source == fAddressText) {
 				refreshBrowser();
 			}
-			scheduleUpdateJob();
 		}
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
@@ -83,8 +77,12 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 //	private Button localButton = null;
 //	private Button remoteButton = null;
 	protected Text fIPText;
-	protected Text fAddressText;
 	protected Text fClusterText;
+
+	protected Text fUserText;
+	protected Text fPasswordText;
+
+	protected Text fAddressText;
 	private Browser browser;
 
 	protected void createServerEditor(Composite parent) {
@@ -98,7 +96,18 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		fClusterText.addModifyListener(fListener);
 	}
 	
-	public class Ch12WebBrowserComposite extends Composite {
+	protected void createCredentialsEditor(Composite parent) {
+		Group group = SWTFactory.createGroup(parent, "Credentials:", 2, 1, GridData.FILL_HORIZONTAL);
+		SWTFactory.createLabel(group, "User:  ", 1);
+		fUserText = SWTFactory.createSingleText(group, 1);
+		fUserText.addModifyListener(fListener);
+
+		SWTFactory.createLabel(group, "Password:  ", 1);
+		fPasswordText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD, 1);
+		fPasswordText.addModifyListener(fListener);
+	}
+	
+/*	public class Ch12WebBrowserComposite extends Composite {
 		private Browser browser;
 
 		public Ch12WebBrowserComposite(Composite parent) {
@@ -152,6 +161,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			});
 		}
 	}
+*/
 
 	protected void createBrowser(Composite parent) {
 		Group group = SWTFactory.createGroup(parent, "ECL Watch:", 2, 1, GridData.FILL_BOTH);
@@ -164,6 +174,15 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
     	GridData gd = new GridData(GridData.FILL_BOTH);
     	gd.horizontalSpan = 2;
     	browser.setLayoutData(gd);
+    	browser.addAuthenticationListener(new AuthenticationListener() {
+			
+			@Override
+			public void authenticate(AuthenticationEvent event) {
+				// TODO Auto-generated method stub
+				event.user = fUserText.getText();
+				event.password = fPasswordText.getText();
+			}
+		});
 	}
 
 	public final void createControl(Composite parent) {
@@ -172,6 +191,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		
 		createVerticalSpacer(projComp, 1);
 		createServerEditor(projComp);
+		createCredentialsEditor(projComp);		
 		createVerticalSpacer(projComp, 1);
 		createBrowser(projComp);
 		setControl(projComp);
@@ -240,6 +260,9 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		try {
 			fIPText.setText(configuration.getAttribute(ECLLaunchConstants.P_IP, "localhost"));
 			fClusterText.setText(configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, "hthor"));
+
+			fUserText.setText(configuration.getAttribute(ECLLaunchConstants.P_USER, ""));
+			fPasswordText.setText(configuration.getAttribute(ECLLaunchConstants.P_PASSWORD, ""));
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -250,6 +273,9 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(ECLLaunchConstants.P_IP, fIPText.getText());
 		configuration.setAttribute(ECLLaunchConstants.P_CLUSTER, fClusterText.getText());
+
+		configuration.setAttribute(ECLLaunchConstants.P_USER, fUserText.getText());
+		configuration.setAttribute(ECLLaunchConstants.P_PASSWORD, fPasswordText.getText());
 	}
 
 	protected void handleProjectButtonSelected() {

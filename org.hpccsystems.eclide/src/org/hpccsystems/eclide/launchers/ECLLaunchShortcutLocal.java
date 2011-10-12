@@ -7,7 +7,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.hpccsystems.eclide.builder.ECLCompiler;
-import org.hpccsystems.internal.Workspace;
+import org.hpccsystems.internal.Eclipse;
 
 public class ECLLaunchShortcutLocal implements ILaunchShortcut {
 	
@@ -22,7 +22,7 @@ public class ECLLaunchShortcutLocal implements ILaunchShortcut {
 			if (file == null)
 				return;
 
-			Workspace.doSaveDirty(file.getProject());
+			Eclipse.doSaveDirty(file.getProject());
 			ECLCompiler compiler = new ECLCompiler(file.getProject());
 			compiler.buildAndRunLocal(file);
 		}
@@ -35,7 +35,7 @@ public class ECLLaunchShortcutLocal implements ILaunchShortcut {
 		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
 		if (input != null) {
 			IFile file = input.getFile();
-			Workspace.doSaveDirty(file.getProject());
+			Eclipse.doSaveDirty(file.getProject());
 			ECLCompiler compiler = new ECLCompiler(file.getProject());
 			compiler.buildAndRunLocal(file);
 		}

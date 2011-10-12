@@ -21,7 +21,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.ide.IDE;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 
-public class Workspace {
+public class Eclipse {
 	
 	public static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
 
@@ -71,27 +71,30 @@ public class Workspace {
 		return myConsole;
 	}
 
+	static public void showHtmlViewer() {
+		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+		for (int i = 0; i < windows.length; ++i) {
+			final IWorkbenchPage window = windows[i].getActivePage();
+			if (window != null) {
+				Display.getDefault().syncExec(new Runnable() {   
+					public void run() {
+						try {
+							window.showView(HtmlViewer.PI_UI_HTMLVIEW);
+						} catch (PartInitException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}
+	}
+
 	static public HtmlViewer findHtmlViewer() {
 		HtmlViewer retVal = HtmlViewer.getDefault();
 		if (retVal == null) {
-			IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
-			for (int i = 0; i < windows.length; ++i) {
-				final IWorkbenchPage window = windows[i].getActivePage();
-				if (window != null) {
-					Display.getDefault().syncExec(new Runnable() {   
-						public void run() {
-							try {
-								window.showView(HtmlViewer.PI_UI_HTMLVIEW);
-							} catch (PartInitException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					});
-					break;
-				}
-			}
+			showHtmlViewer();
 		}
+		retVal = HtmlViewer.getDefault();
 		return retVal;
 	}
 	

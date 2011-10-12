@@ -26,48 +26,22 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
 import org.hpccsystems.eclide.builder.ECLCompiler;
-import org.hpccsystems.internal.Workspace;
+import org.hpccsystems.internal.Eclipse;
 
 public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements ILaunchConfigurationDelegate {
 	
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		IProject targetProject = Workspace.findProject(configuration.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
-		IFile targetFile = Workspace.findFile(targetProject, configuration.getAttribute(ECLLaunchConstants.P_FILE, ""));
+		IProject targetProject = Eclipse.findProject(configuration.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
+		IFile targetFile = Eclipse.findFile(targetProject, configuration.getAttribute(ECLLaunchConstants.P_FILE, ""));
 
-		Workspace.doSaveDirty(targetProject);
+		Eclipse.doSaveDirty(targetProject);
 		ECLCompiler compiler = new ECLCompiler(targetProject);
-		compiler.buildAndRunRemote(targetFile, configuration.getAttribute(ECLLaunchConstants.P_IP, ""), configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, ""));
-//		ISourceLocator sourceLocator = launch.getSourceLocator();
-//		sourceLocator.
-//		
-//		if (selection instanceof TreeSelection) {
-//			TreeSelection treeSel = (TreeSelection) selection;
-//			IFile file = null;
-//			if (treeSel.size() >= 1) {
-//				file = (IFile) treeSel.getFirstElement();
-//			}
-//			
-//			if (file == null)
-//				return;
-//
-//			doSaveDirty(file.getProject());
-//			ECLCompiler compiler = new ECLCompiler(file.getProject());
-//			compiler.buildAndRun(file);
-//		}
-//
-//		
-//		
-//		ECLCompiler compiler = new ECLCompiler(file.getProject());
-//		compiler.buildAndRun(file);
-		
-//		IWorkbench workbench = PlatformUI.getWorkbench().getWorkbenchWindows();
-//		workbench.getSelection();
-//		workbench.
-		//workbench.get
-
-		//ECLCompiler compiler = new ECLCompiler(configuration.getProject());
-		//compiler.CheckSyntax(file);
+		compiler.buildAndRunRemote(targetFile, 
+				configuration.getAttribute(ECLLaunchConstants.P_IP, ""), 
+				configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, ""), 
+				configuration.getAttribute(ECLLaunchConstants.P_USER, ""), 
+				configuration.getAttribute(ECLLaunchConstants.P_PASSWORD, ""));
 	}
 
 }

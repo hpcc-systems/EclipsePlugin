@@ -44,7 +44,7 @@ import org.hpccsystems.internal.CmdArgs;
 import org.hpccsystems.internal.CmdProcess;
 import org.hpccsystems.internal.EclCCParser;
 import org.hpccsystems.internal.OS;
-import org.hpccsystems.internal.Workspace;
+import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.CmdProcess.IProcessOutput;
 
 public class ECLCompiler {
@@ -123,7 +123,7 @@ public class ECLCompiler {
 							resolvedFile = project.findMember(parser.errorPath);
 						}
 
-						Workspace.addMarker(resolvedFile, parser.severity, parser.code, parser.message, parser.lineNumber, parser.colNumber, supressSubsequentErrors);
+						Eclipse.addMarker(resolvedFile, parser.severity, parser.code, parser.message, parser.lineNumber, parser.colNumber, supressSubsequentErrors);
 					}
 					hasError = parser.hasError;
 				}
@@ -209,15 +209,15 @@ public class ECLCompiler {
 //		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
 //		serverCluster = store.getString(ECLPreferenceConstants.P_SERVERCLUSTER);
 
-		resultsConsole = Workspace.findConsole("Results");
+		resultsConsole = Eclipse.findConsole("Results");
 		resultsConsoleWriter = resultsConsole.newMessageStream();
 		resultsConsoleWriter.setActivateOnWrite(true);
 
-		eclccConsole = Workspace.findConsole("eclcc");
+		eclccConsole = Eclipse.findConsole("eclcc");
 		eclccConsoleWriter = eclccConsole.newMessageStream();
 		//eclccConsoleWriter.setActivateOnWrite(true);
 		
-		htmlViewer = Workspace.findHtmlViewer();
+		htmlViewer = Eclipse.findHtmlViewer();
 		assert(htmlViewer != null);
 	}
 	
@@ -232,7 +232,7 @@ public class ECLCompiler {
 	}
 	
 	public void checkSyntax(IFile file) {
-		Workspace.deleteMarkers(file);
+		Eclipse.deleteMarkers(file);
 		
 		if (!HasCompiler()) {
 			eclccConsoleWriter.println(noCompiler);
@@ -256,8 +256,8 @@ public class ECLCompiler {
 //			buildAndRunLocal(file);
 //	}
 //
-	public void buildAndRunRemote(IFile file, String ip, String cluster) {
-		Workspace.deleteMarkers(file);
+	public void buildAndRunRemote(IFile file, String ip, String cluster, String user, String password) {
+		Eclipse.deleteMarkers(file);
 		
 		if (!HasCompiler()) {
 			eclccConsoleWriter.println(noCompiler);
@@ -282,6 +282,10 @@ public class ECLCompiler {
 			remoteArgs.Append("action", "query");
 			remoteArgs.Append("server", ip);
 			remoteArgs.Append("cluster", cluster);
+			if (!user.isEmpty())
+				remoteArgs.Append("owner", user);
+			if (!password.isEmpty())
+				remoteArgs.Append("password", password);
 			remoteArgs.Append("timeout", "0");
 			remoteArgs.Append(QUOTE + "@" + xmlPath.toOSString() + QUOTE);
 			wuid = "";
@@ -293,7 +297,7 @@ public class ECLCompiler {
 			//TODO process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
 			if (!wuid.isEmpty()) {
 				
-				htmlViewer.showWuid(ip, wuid);
+				htmlViewer.showWuid(ip, wuid, user, password);
 				Display.getDefault().asyncExec(new Runnable() {   
 					public void run() {
 						htmlViewer.getSite().getPage().activate(htmlViewer);
@@ -304,7 +308,7 @@ public class ECLCompiler {
 	}
 
 	public void buildAndRunLocal(IFile file) {
-		Workspace.deleteMarkers(file);
+		Eclipse.deleteMarkers(file);
 
 		if (!HasCompiler()) {
 			eclccConsoleWriter.println(noCompiler);

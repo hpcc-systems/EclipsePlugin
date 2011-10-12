@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
-import org.hpccsystems.internal.Workspace;
+import org.hpccsystems.internal.Eclipse;
 
 public class ECLLaunchSourceTab extends ECLLaunchConfigurationTab {
 
@@ -30,12 +30,12 @@ public class ECLLaunchSourceTab extends ECLLaunchConfigurationTab {
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		setErrorMessage("");
 		try {
-			IProject targetProject = Workspace.findProject(launchConfig.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
+			IProject targetProject = Eclipse.findProject(launchConfig.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
 			if (targetProject == null || !targetProject.exists()) {
 				setErrorMessage("Project does not exist");
 				return false;
 			}
-			IFile targetFile = Workspace.findFile(targetProject, launchConfig.getAttribute(ECLLaunchConstants.P_FILE, ""));
+			IFile targetFile = Eclipse.findFile(targetProject, launchConfig.getAttribute(ECLLaunchConstants.P_FILE, ""));
 			if (targetFile == null || !targetFile.exists()) {
 				setErrorMessage("File does not exist");
 				return false;
