@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -23,11 +22,14 @@ public class CmdProcess {
 	private IProcessOutput handler;
 
 	MessageConsoleStream consoleOut;	
+
+	String QUOTE = "";
 	
 	public CmdProcess(IPath workingPath, IProcessOutput handler, MessageConsoleStream consoleOut) {
 		this.workingPath = workingPath;
 		this.handler = handler;
 		this.consoleOut = consoleOut;
+		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 	}
 	
 	@SuppressWarnings("unused")
@@ -54,8 +56,8 @@ public class CmdProcess {
 		List<String> argList = args.Get(eclplusArgs);
 
 		if (target != null) {
-			consoleOut.print(" " + "../" + target.getProjectRelativePath().toOSString());
-			argList.add("../" + target.getProjectRelativePath().toOSString());
+			consoleOut.print(" " + QUOTE + target.getLocation().toOSString() + QUOTE);
+			argList.add(QUOTE + target.getLocation().toOSString() + QUOTE);
 		}
 		consoleOut.println();
 

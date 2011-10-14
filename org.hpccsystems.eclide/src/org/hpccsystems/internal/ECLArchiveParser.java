@@ -1,4 +1,4 @@
-package org.hpccsystems.eclide.builder;
+package org.hpccsystems.internal;
 
 import java.io.BufferedReader; 
 import java.io.IOException;
@@ -13,12 +13,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.hpccsystems.internal.StackHandler;
 
 public class ECLArchiveParser {
 
 	private SAXParserFactory parserFactory;
-	Set<IFile> ancestors;
+	public Set<IFile> ancestors;
 
 	class ECLArchiveHandler extends StackHandler {
 		IFile file;
@@ -52,7 +51,7 @@ public class ECLArchiveParser {
 		}
 	}
 
-	ECLArchiveParser(IFile file, BufferedReader reader) {
+	public ECLArchiveParser(IFile file, BufferedReader reader) {
 		parserFactory = SAXParserFactory.newInstance();
 
 		SAXParser parser = null;

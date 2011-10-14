@@ -38,7 +38,7 @@
       </category>
       <view
             category="org.hpccsystems.eclide"
-            class="org.hpccsystems.eclide.ui.navigator.CommonNavigator"
+            class="org.hpccsystems.eclide.ui.navigator.ECLNavigator"
             icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.navigator"
             name="%view.name.0">

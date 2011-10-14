@@ -40,7 +40,6 @@ public class ECLLaunchTabGroup extends AbstractLaunchConfigurationTabGroup {
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
 //				main,
 				//new OctaveInterpreterTab(main),
-				new ECLLaunchSourceTab(),
 				new ECLLaunchServerTab(),
 //				new AppletMainTab()
 //				new AppletParametersTab(),

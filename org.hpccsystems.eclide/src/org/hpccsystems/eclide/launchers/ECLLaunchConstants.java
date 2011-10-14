@@ -28,7 +28,4 @@ public class ECLLaunchConstants {
 
 	public static final String P_USER = "userLaunchConfig";
 	public static final String P_PASSWORD = "passwordLaunchConfig";
-
-	public static final String P_PROJECT = "projectLaunchConfig";
-	public static final String P_FILE = "fileLaunchConfig";
 	}

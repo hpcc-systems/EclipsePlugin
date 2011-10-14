@@ -1,5 +1,7 @@
 package org.hpccsystems.eclide.launchers;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -22,6 +24,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
+import org.hpccsystems.internal.Eclipse;
 
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
@@ -84,6 +87,29 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	protected Text fAddressText;
 	private Browser browser;
+
+	@Override
+	public boolean isValid(ILaunchConfiguration launchConfig) {
+		/*
+		setErrorMessage("");
+		try {
+			IProject targetProject = Eclipse.findProject(launchConfig.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
+			if (targetProject == null || !targetProject.exists()) {
+				setErrorMessage("Project does not exist");
+				return false;
+			}
+			IFile targetFile = Eclipse.findFile(targetProject, launchConfig.getAttribute(ECLLaunchConstants.P_FILE, ""));
+			if (targetFile == null || !targetFile.exists()) {
+				setErrorMessage("File does not exist");
+				return false;
+			}
+		} catch (CoreException e) {
+			return false;
+		}
+		 */
+
+		return super.isValid(launchConfig);
+	}
 
 	protected void createServerEditor(Composite parent) {
 		Group group = SWTFactory.createGroup(parent, "Server:", 2, 1, GridData.FILL_HORIZONTAL);

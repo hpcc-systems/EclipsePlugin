@@ -4,9 +4,9 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
-public class CommonNavigator extends org.eclipse.ui.navigator.CommonNavigator {
+public class ECLNavigator extends org.eclipse.ui.navigator.CommonNavigator {
 
-	public CommonNavigator() {
+	public ECLNavigator() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

@@ -36,12 +36,14 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.internal.CmdArgs;
 import org.hpccsystems.internal.CmdProcess;
+import org.hpccsystems.internal.ECLArchiveParser;
 import org.hpccsystems.internal.EclCCParser;
 import org.hpccsystems.internal.OS;
 import org.hpccsystems.internal.Eclipse;
@@ -189,9 +191,10 @@ public class ECLCompiler {
 		
 		libraryPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "plugins";
 		projectPath = project.getLocation();
-		workingPath = projectPath.append("tmp");
-		if (!workingPath.toFile().exists())
-			workingPath.toFile().mkdir();
+		workingPath = project.getWorkingLocation(Activator.PLUGIN_ID);
+		//workingPath = projectPath.append("tmp");
+		//if (!workingPath.toFile().exists())
+		//	workingPath.toFile().mkdir();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		
@@ -325,6 +328,15 @@ public class ECLCompiler {
 			resultsConsole.clearConsole();
 			IPath exePath = workingPath.append("a.out");
 			process.exec(exePath.toOSString(), argsWULocal);
+		}
+	}
+
+	public void buildAndRun(IFile file, String ip, String cluster, String user, String password) {
+		if (ip.isEmpty()) {
+			buildAndRunLocal(file);
+		}
+		else {
+			buildAndRunRemote(file, ip, cluster, user, password);
 		}
 	}
 }

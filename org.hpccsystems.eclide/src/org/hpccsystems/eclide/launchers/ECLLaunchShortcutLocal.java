@@ -11,7 +11,8 @@ import org.hpccsystems.internal.Eclipse;
 
 public class ECLLaunchShortcutLocal implements ILaunchShortcut {
 	
-	public void launch(ISelection selection, String mode) {
+	
+	public void launch(ISelection selection, String mode, String ip, String cluster, String user, String password) {
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSel = (TreeSelection) selection;
 			IFile file = null;
@@ -24,12 +25,11 @@ public class ECLLaunchShortcutLocal implements ILaunchShortcut {
 
 			Eclipse.doSaveDirty(file.getProject());
 			ECLCompiler compiler = new ECLCompiler(file.getProject());
-			compiler.buildAndRunLocal(file);
+			compiler.buildAndRun(file, ip, cluster, user, password);
 		}
 	}
-
-	@Override
-	public void launch(IEditorPart editor, String mode) {
+	
+	public void launch(IEditorPart editor, String mode, String ip, String cluster, String user, String password) {
 		//ProgressMonitor monitor = new ProgressMonitor((Component) editor, "Save All", "", 0, 0);
 		//editor.doSave(null);
 		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
@@ -37,8 +37,18 @@ public class ECLLaunchShortcutLocal implements ILaunchShortcut {
 			IFile file = input.getFile();
 			Eclipse.doSaveDirty(file.getProject());
 			ECLCompiler compiler = new ECLCompiler(file.getProject());
-			compiler.buildAndRunLocal(file);
+			compiler.buildAndRun(file, ip, cluster, user, password);
 		}
 		assert(input != null);
+	}
+
+	@Override
+	public void launch(ISelection selection, String mode) {
+		launch(selection, mode, "", "", "", "");
+	}
+
+	@Override
+	public void launch(IEditorPart editor, String mode) {
+		launch(editor, mode, "", "", "", "");
 	}
 }
