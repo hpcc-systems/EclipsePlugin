@@ -26,7 +26,6 @@ public class BrowserEx extends Composite {
 	
 	private Browser browser;
 	private boolean loading = false;
-	
 
 	public BrowserEx(Composite parent) {
 		super(parent, SWT.NONE);
@@ -63,6 +62,10 @@ public class BrowserEx extends Composite {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if (browser.getUrl().equalsIgnoreCase(comboUrl.getItem(comboUrl.getSelectionIndex())))
+					return ;
+				
+				System.out.println(comboUrl.getItem(comboUrl.getSelectionIndex()));
 				browser.setUrl(comboUrl.getItem(comboUrl.getSelectionIndex()));
 			}
 		});	
