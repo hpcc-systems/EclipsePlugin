@@ -9,7 +9,7 @@
    </description>
 
    <license url="">
-/*##############################################################################
+      /*##############################################################################
 
     Copyright (C) 2011 HPCC Systems.
 
@@ -27,6 +27,10 @@
     along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
 ############################################################################## */
    </license>
+
+   <url>
+      <update url="https://gordon.homeserver.com/eclipse"/>
+   </url>
 
    <plugin
          id="org.hpccsystems.eclide"
