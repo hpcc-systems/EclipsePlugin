@@ -3,7 +3,7 @@
    <description name="Test Install/Update Site" url="https://gordon.homeserver.com/eclipse">
       Temporary update site for Eclipse ECL Plugin.
    </description>
-   <feature url="features/ECL_Language_1.0.0.201110121707.jar" id="ECL_Language" version="1.0.0.201110121707">
+   <feature url="features/ECL_Language_1.0.0.201110171700.jar" id="ECL_Language" version="1.0.0.201110171700">
       <category name="HPCC_Systems"/>
    </feature>
    <category-def name="HPCC_Systems" label="HPCC Systems">
