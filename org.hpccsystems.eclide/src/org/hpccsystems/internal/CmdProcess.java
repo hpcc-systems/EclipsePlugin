@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -19,14 +21,16 @@ public class CmdProcess {
 	}
 	
 	IPath workingPath;
+	IPath additionalPath;
 	private IProcessOutput handler;
 
 	MessageConsoleStream consoleOut;	
 
 	String QUOTE = "";
 	
-	public CmdProcess(IPath workingPath, IProcessOutput handler, MessageConsoleStream consoleOut) {
+	public CmdProcess(IPath workingPath, IPath additionalPath, IProcessOutput handler, MessageConsoleStream consoleOut) {
 		this.workingPath = workingPath;
+		this.additionalPath = additionalPath;
 		this.handler = handler;
 		this.consoleOut = consoleOut;
 		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
@@ -63,6 +67,10 @@ public class CmdProcess {
 
 		try {
 			ProcessBuilder pb = new ProcessBuilder(argList);
+			Map<String, String> env = pb.environment();
+			if (!additionalPath.isEmpty() && env.containsKey("Path")) {
+				env.put("Path", additionalPath.toOSString() + ";" + env.get("Path"));
+			}
 			pb.directory(workingPath.toFile());
 			Process p = pb.start();
 

@@ -1,5 +1,11 @@
 package org.hpccsystems.eclide.launchers;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.rmi.RemoteException;
+
+import javax.xml.rpc.ServiceException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -26,6 +32,13 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 import org.hpccsystems.internal.Eclipse;
 
+import wsworkunits.ws.hpccsystems.ArrayOfEspException;
+import wsworkunits.ws.hpccsystems.ECLWorkunit;
+import wsworkunits.ws.hpccsystems.WUQuery;
+import wsworkunits.ws.hpccsystems.WUQueryResponse;
+import wsworkunits.ws.hpccsystems.WsWorkunitsLocator;
+import wsworkunits.ws.hpccsystems.WsWorkunitsServiceSoap;
+
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
@@ -35,7 +48,6 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			if (source == fIPText) {
 				refreshAddress();
 			} if (source == fAddressText) {
-				refreshBrowser();
 			}
 		}
 		public void widgetSelected(SelectionEvent e) {
@@ -247,6 +259,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 		configuration.setAttribute(ECLLaunchConstants.P_USER, fUserText.getText());
 		configuration.setAttribute(ECLLaunchConstants.P_PASSWORD, fPasswordText.getText());
+		refreshBrowser();
 	}
 
 	protected void handleProjectButtonSelected() {

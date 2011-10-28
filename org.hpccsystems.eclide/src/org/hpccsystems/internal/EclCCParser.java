@@ -1,13 +1,15 @@
 package org.hpccsystems.internal;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 public class EclCCParser {
 
 	public int severity = IMarker.SEVERITY_INFO;
 	public String code;
 	public String message;
-	public String errorPath;
+	public IPath errorPath;
 	public int lineNumber = 0;
 	public int colNumber = 0;
 	public boolean hasError = false;
@@ -20,7 +22,7 @@ public class EclCCParser {
 			message = parts[2];
 			String[] fileParts = filePathAndLoc.split("[\\(,\\)]");
 			if (fileParts.length >= 3) {
-				errorPath = fileParts[0];
+				errorPath = new Path(fileParts[0]);
 				String line = fileParts[1];
 				String col = fileParts[2];
 

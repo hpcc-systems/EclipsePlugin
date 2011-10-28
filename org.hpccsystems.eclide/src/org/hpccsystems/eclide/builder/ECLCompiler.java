@@ -119,12 +119,14 @@ public class ECLCompiler {
 					EclCCParser parser = new EclCCParser();
 					if (parser.ParseError(stdErr)) {
 						IResource resolvedFile = null;
-						if (file != null && file.getName().equalsIgnoreCase(parser.errorPath)) {	//  Error is in the actual file being syntax checked.
+						//parser.errorPath
+						resolvedFile = Eclipse.getWorkspaceRoot().getFileForLocation(parser.errorPath);
+/*						if (file != null && parser.errorPath.equals(file.getFullPath())) {	//  Error is in the actual file being syntax checked.
 							resolvedFile = file;
 						} else { 
 							resolvedFile = project.findMember(parser.errorPath);
 						}
-
+*/
 						Eclipse.addMarker(resolvedFile, parser.severity, parser.code, parser.message, parser.lineNumber, parser.colNumber, supressSubsequentErrors);
 					}
 					hasError = parser.hasError;
@@ -248,7 +250,7 @@ public class ECLCompiler {
 		if (monitorDependees)
 			cmdArgs.Append("E");
 
-		CmdProcess process = new CmdProcess(workingPath, new SyntaxHandler(file), eclccConsoleWriter);
+		CmdProcess process = new CmdProcess(workingPath, binPath, new SyntaxHandler(file), eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 	}
 
@@ -275,7 +277,7 @@ public class ECLCompiler {
 		cmdArgs.Append("o", QUOTE + xmlPath.toOSString() + QUOTE);
 
 		hasError = false;
-		CmdProcess process = new CmdProcess(workingPath, new EclPlusHandler(file), eclccConsoleWriter);
+		CmdProcess process = new CmdProcess(workingPath, binPath, new EclPlusHandler(file), eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 		if (!hasError) {
 			CmdArgs remoteArgs = new CmdArgs(eclplusFile.getPath(), "");
@@ -322,7 +324,7 @@ public class ECLCompiler {
 		GetIncludeArgs(cmdArgs);
 
 		hasError = false;
-		CmdProcess process = new CmdProcess(workingPath, new LocalRunHandler(file), eclccConsoleWriter);
+		CmdProcess process = new CmdProcess(workingPath, binPath, new LocalRunHandler(file), eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 		if (!hasError) {
 			resultsConsole.clearConsole();

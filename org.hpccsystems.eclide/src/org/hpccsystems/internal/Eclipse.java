@@ -8,6 +8,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -30,6 +32,15 @@ public class Eclipse {
 		return ResourcesPlugin.getWorkspace().getRoot();
 	}
 	
+	static public IResource findResource(String absolutePath) {
+		if (absolutePath.isEmpty()) {
+			return null;
+		}
+
+		IPath path = new Path(absolutePath);
+		return getWorkspaceRoot().getFileForLocation(path);
+	}
+
 	static public IProject findProject(String name) {
 		if (name.isEmpty())
 			return null;

@@ -34,13 +34,9 @@ public class ECLArchiveParser {
 			switch(elementStack.size()) {
 			case 3:
 				Element e = elementStack.peek();
-				IPath fileFolder = file.getProjectRelativePath().removeLastSegments(1);
-				String sourcePath = e.attributes.getValue("sourcePath");
-				if (sourcePath != null) {
-					IPath path = fileFolder.append(sourcePath);	//  Paths are relative to item being checked.
-					IResource resource = file.getProject().findMember(path);
-					if (resource instanceof IFile && !resource.equals(file) && resource.getName().endsWith(".ecl")) 
-						ancestors.add((IFile) resource);
+				IResource resource = Eclipse.findResource(e.attributes.getValue("sourcePath"));
+				if (resource != null && resource instanceof IFile && !resource.equals(file) && resource.getName().endsWith(".ecl")) { 
+					ancestors.add((IFile) resource);
 				}
 				
 				break;
