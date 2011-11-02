@@ -79,7 +79,7 @@ Export-Package: org.hpccsystems.eclide;
  org.hpccsystems.internal;x-internal:=true,
  org.hpccsystems.internal.autoc;x-internal:=true,
  org.hpccsystems.internal.ui;x-internal:=true,
- wsworkunits.ws.hpccsystems;
+ org.hpccsystems.ws.wsworkunits;
   uses:="org.apache.axis.client,
    org.apache.axis,
    org.apache.axis.description,

@@ -49,6 +49,15 @@
             id="org.hpccsystems.eclide.htmlView"
             name="%view.name.1">
       </view>
+      <view
+            allowMultiple="false"
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.ui.viewer.PlatformViewer"
+            icon="icons/releng_gears.gif"
+            id="org.hpccsystems.eclide.viewPlatforms"
+            name="Clusters"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">
