@@ -31,14 +31,15 @@ import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 import org.hpccsystems.internal.Eclipse;
+import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
+import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
+import org.hpccsystems.ws.wsworkunits.WUQuery;
+import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
+import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
+import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
-import wsworkunits.ws.hpccsystems.ArrayOfEspException;
-import wsworkunits.ws.hpccsystems.ECLWorkunit;
-import wsworkunits.ws.hpccsystems.WUQuery;
-import wsworkunits.ws.hpccsystems.WUQueryResponse;
-import wsworkunits.ws.hpccsystems.WsWorkunitsLocator;
-import wsworkunits.ws.hpccsystems.WsWorkunitsServiceSoap;
 
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
@@ -243,7 +244,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
 			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
-			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor"));
+			fClusterText.setText(configuration.getAttribute(Cluster.P_CLUSTER, "hthor"));
 
 			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
 			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
@@ -256,7 +257,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(Platform.P_IP, fIPText.getText());
-		configuration.setAttribute(Platform.P_CLUSTER, fClusterText.getText());
+		configuration.setAttribute(Cluster.P_CLUSTER, fClusterText.getText());
 
 		configuration.setAttribute(Platform.P_USER, fUserText.getText());
 		configuration.setAttribute(Platform.P_PASSWORD, fPasswordText.getText());

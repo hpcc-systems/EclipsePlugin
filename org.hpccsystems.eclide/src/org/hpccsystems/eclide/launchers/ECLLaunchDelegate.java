@@ -39,6 +39,7 @@ import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.eclide.editors.ECLEditor;
 import org.hpccsystems.internal.Eclipse;
+import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
@@ -54,14 +55,7 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 	
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		Platform platform = Data.getDefault().GetPlatform(configuration);
-		Collection<Workunit> wus = platform.GetWorkunits();
-		
-		final String fMode = mode;
-		final String ip = configuration.getAttribute(Platform.P_IP, ""); 
-		final String cluster = configuration.getAttribute(Platform.P_CLUSTER, ""); 
-		final String user = configuration.getAttribute(Platform.P_USER, ""); 
-		final String password = configuration.getAttribute(Platform.P_PASSWORD, "");
+		final String cluster = configuration.getAttribute(Cluster.P_CLUSTER, ""); 
 		
 		IFile file = null;
 		IStructuredSelection ss = SelectedResourceManager.getDefault().getCurrentSelection();
@@ -85,7 +79,8 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 			//fShortcut.launch(ss, fMode, ip, cluster, user, password);
 		}
 		if (file != null) {
-			Workunit wu = platform.Submit(file);
+			Platform platform = Data.getDefault().GetPlatform(configuration);
+			Workunit wu = platform.Submit(file, cluster);
 			wu.Refresh();
 			String wuid = wu.info.getWuid();
 		}

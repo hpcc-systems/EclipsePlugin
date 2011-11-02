@@ -74,6 +74,7 @@ public class ECLPerspective implements IPerspectiveFactory {
 				factory.getEditorArea());
 		
 		topLeft.addView("org.hpccsystems.eclide.navigator");
+		topLeft.addView("org.hpccsystems.eclide.viewPlatforms");
 //		topLeft.addView("org.eclipse.jdt.junit.ResultView"); //NON-NLS-1
 		
 //		factory.addFastView("org.eclipse.team.ccvs.ui.RepositoriesView",0.50f); //NON-NLS-1

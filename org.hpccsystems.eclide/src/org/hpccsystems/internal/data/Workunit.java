@@ -2,11 +2,12 @@ package org.hpccsystems.internal.data;
 
 import java.rmi.RemoteException;
 
-import wsworkunits.ws.hpccsystems.ArrayOfEspException;
-import wsworkunits.ws.hpccsystems.ECLWorkunit;
-import wsworkunits.ws.hpccsystems.WUInfo;
-import wsworkunits.ws.hpccsystems.WUInfoResponse;
-import wsworkunits.ws.hpccsystems.WsWorkunitsServiceSoap;
+import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
+import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
+import org.hpccsystems.ws.wsworkunits.WUInfo;
+import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
+import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
+
 
 public class Workunit {
 	Data data;
@@ -21,7 +22,7 @@ public class Workunit {
 	}
 	
 	public void Refresh() {
-		WsWorkunitsServiceSoap service = platform.GetService();
+		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
 		if (service != null) {
 			WUInfo request = new WUInfo();
 			request.setWuid(info.getWuid());
