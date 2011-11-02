@@ -261,12 +261,12 @@ public class ECLCompiler {
 //			buildAndRunLocal(file);
 //	}
 //
-	public void buildAndRunRemote(IFile file, String ip, String cluster, String user, String password) {
+	public String buildAndRunRemote(IFile file, String ip, String cluster, String user, String password) {
 		Eclipse.deleteMarkers(file);
 		
 		if (!HasCompiler()) {
 			eclccConsoleWriter.println(noCompiler);
-			return;
+			return "";
 		}
 
 		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompileRemote);
@@ -309,15 +309,17 @@ public class ECLCompiler {
 					}
 				});
 			}
+			return wuid;
 		}
+		return "";
 	}
 
-	public void buildAndRunLocal(IFile file) {
+	public String buildAndRunLocal(IFile file) {
 		Eclipse.deleteMarkers(file);
 
 		if (!HasCompiler()) {
 			eclccConsoleWriter.println(noCompiler);
-			return;
+			return "";
 		}
 
 		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompile);
@@ -331,14 +333,15 @@ public class ECLCompiler {
 			IPath exePath = workingPath.append("a.out");
 			process.exec(exePath.toOSString(), argsWULocal);
 		}
+		return "";
 	}
 
-	public void buildAndRun(IFile file, String ip, String cluster, String user, String password) {
+	public String buildAndRun(IFile file, String ip, String cluster, String user, String password) {
 		if (ip.isEmpty()) {
-			buildAndRunLocal(file);
+			return buildAndRunLocal(file);
 		}
 		else {
-			buildAndRunRemote(file, ip, cluster, user, password);
+			return buildAndRunRemote(file, ip, cluster, user, password);
 		}
 	}
 }

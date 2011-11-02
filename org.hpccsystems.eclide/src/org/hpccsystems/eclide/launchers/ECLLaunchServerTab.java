@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 import org.hpccsystems.internal.Eclipse;
+import org.hpccsystems.internal.data.Platform;
 
 import wsworkunits.ws.hpccsystems.ArrayOfEspException;
 import wsworkunits.ws.hpccsystems.ECLWorkunit;
@@ -241,11 +242,11 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			fIPText.setText(configuration.getAttribute(ECLLaunchConstants.P_IP, "localhost"));
-			fClusterText.setText(configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, "hthor"));
+			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
+			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor"));
 
-			fUserText.setText(configuration.getAttribute(ECLLaunchConstants.P_USER, ""));
-			fPasswordText.setText(configuration.getAttribute(ECLLaunchConstants.P_PASSWORD, ""));
+			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
+			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -254,11 +255,11 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(ECLLaunchConstants.P_IP, fIPText.getText());
-		configuration.setAttribute(ECLLaunchConstants.P_CLUSTER, fClusterText.getText());
+		configuration.setAttribute(Platform.P_IP, fIPText.getText());
+		configuration.setAttribute(Platform.P_CLUSTER, fClusterText.getText());
 
-		configuration.setAttribute(ECLLaunchConstants.P_USER, fUserText.getText());
-		configuration.setAttribute(ECLLaunchConstants.P_PASSWORD, fPasswordText.getText());
+		configuration.setAttribute(Platform.P_USER, fUserText.getText());
+		configuration.setAttribute(Platform.P_PASSWORD, fPasswordText.getText());
 		refreshBrowser();
 	}
 
@@ -279,14 +280,14 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	}
 	
 	void refreshBrowser() {
-		browser.addProgressListener(new ProgressAdapter() {
-			public void completed(ProgressEvent event) {
-				browser.removeProgressListener(this);
-				System.out.println(fAddressText.getText());
-				browser.setUrl(fAddressText.getText());
-			}
-		});
-		browser.setText("<html><body><h3>Loading (" + fAddressText.getText() + ")...</h3></body></html>");
+//		browser.addProgressListener(new ProgressAdapter() {
+//			public void completed(ProgressEvent event) {
+//				browser.removeProgressListener(this);
+//				System.out.println(fAddressText.getText());
+//				browser.setUrl(fAddressText.getText());
+//			}
+//		});
+//		browser.setText("<html><body><h3>Loading (" + fAddressText.getText() + ")...</h3></body></html>");
 	}
 
 	@Override

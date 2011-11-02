@@ -22,10 +22,4 @@ package org.hpccsystems.eclide.launchers;
  * Constant definitions for plug-in preferences
  */
 public class ECLLaunchConstants {
-
-	public static final String P_IP = "ipLaunchConfig";
-	public static final String P_CLUSTER = "clusterLaunchConfig";
-
-	public static final String P_USER = "userLaunchConfig";
-	public static final String P_PASSWORD = "passwordLaunchConfig";
 	}

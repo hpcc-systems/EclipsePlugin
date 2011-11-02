@@ -18,6 +18,8 @@
 
 package org.hpccsystems.eclide.launchers;
 
+import java.util.Collection;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -37,6 +39,9 @@ import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.eclide.editors.ECLEditor;
 import org.hpccsystems.internal.Eclipse;
+import org.hpccsystems.internal.data.Data;
+import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.Workunit;
 
 public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements ILaunchConfigurationDelegate {
 	@Override
@@ -49,20 +54,40 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 	
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		final String fMode = mode;
-		final String ip = configuration.getAttribute(ECLLaunchConstants.P_IP, ""); 
-		final String cluster = configuration.getAttribute(ECLLaunchConstants.P_CLUSTER, ""); 
-		final String user = configuration.getAttribute(ECLLaunchConstants.P_USER, ""); 
-		final String password = configuration.getAttribute(ECLLaunchConstants.P_PASSWORD, "");
+		Platform platform = Data.getDefault().GetPlatform(configuration);
+		Collection<Workunit> wus = platform.GetWorkunits();
 		
+		final String fMode = mode;
+		final String ip = configuration.getAttribute(Platform.P_IP, ""); 
+		final String cluster = configuration.getAttribute(Platform.P_CLUSTER, ""); 
+		final String user = configuration.getAttribute(Platform.P_USER, ""); 
+		final String password = configuration.getAttribute(Platform.P_PASSWORD, "");
+		
+		IFile file = null;
 		IStructuredSelection ss = SelectedResourceManager.getDefault().getCurrentSelection();
 		Object o = ss.getFirstElement();
 		if(o instanceof IEditorPart) {
-			fShortcut.launch((IEditorPart) o, fMode, ip, cluster, user, password);
+			IEditorPart editorPart = (IEditorPart)o;
+			IFileEditorInput input = (IFileEditorInput)editorPart.getEditorInput();
+			if (input != null) {
+				file = input.getFile();
+			}
+		
+//			fShortcut.launch((IEditorPart) o, fMode, ip, cluster, user, password);
 		}
 		else {
-			fShortcut.launch(ss, fMode, ip, cluster, user, password);
+			if (ss instanceof TreeSelection) {
+				TreeSelection treeSel = (TreeSelection) ss;
+				if (treeSel.size() >= 1) {
+					file = (IFile) treeSel.getFirstElement();
+				}
+			}
+			//fShortcut.launch(ss, fMode, ip, cluster, user, password);
+		}
+		if (file != null) {
+			Workunit wu = platform.Submit(file);
+			wu.Refresh();
+			String wuid = wu.info.getWuid();
 		}
 	}
-
 }
