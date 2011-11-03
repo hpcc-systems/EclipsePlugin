@@ -55,7 +55,7 @@ public class BrowserEx extends Composite {
 			}
 		});
 
-		final Combo comboUrl = new Combo(this, SWT.SINGLE | SWT.READ_ONLY | SWT.BORDER);
+		final Combo comboUrl = new Combo(this, SWT.SINGLE | SWT.BORDER);
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		comboUrl.setLayoutData(layoutData);
 		comboUrl.addModifyListener(new ModifyListener() {
@@ -115,21 +115,14 @@ public class BrowserEx extends Composite {
 		});
 	}
 
-	void navigateTo(final String url) {
+	void navigateTo(String url) {
 		navigateTo(url, "", "");
 	}	
 
-	void navigateTo(final String url, final String user, final String password) {
+	void navigateTo(String url, String user, String password) {
 		this.url = url;
 		this.user = user;
 		this.password = password;
-		
-		browser.addProgressListener(new ProgressAdapter() {
-			public void completed(ProgressEvent event) {
-				browser.removeProgressListener(this);
-				browser.setUrl(url);
-			}
-		});
-		browser.setText("<html><body><h3>Loading (" + this.url + ")...</h3></body></html>");
+		browser.setUrl(url);
 	}	
 }

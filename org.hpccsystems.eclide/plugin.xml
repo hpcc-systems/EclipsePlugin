@@ -52,10 +52,10 @@
       <view
             allowMultiple="false"
             category="org.hpccsystems.eclide"
-            class="org.hpccsystems.eclide.ui.viewer.PlatformViewer"
+            class="org.hpccsystems.eclide.ui.viewer.platform.PlatformViewer"
             icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.viewPlatforms"
-            name="Clusters"
+            name="Servers"
             restorable="true">
       </view>
    </extension>

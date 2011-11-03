@@ -1,4 +1,4 @@
-package org.hpccsystems.eclide.ui.viewer;
+package org.hpccsystems.eclide.ui.viewer.platform;
 
 import java.awt.List;
 import java.util.ArrayList;
@@ -31,6 +31,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
+import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
+import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.FileSprayWorkunit;
@@ -41,158 +43,10 @@ import org.hpccsystems.internal.data.Workunit;
 public class PlatformViewer extends ViewPart {
 
 	TreeViewer viewer;
+	Action showWebItemAction;
 	Action refreshItemAction;
 	Action reloadAction;
 	
-	class Folder {
-		String GetLabel() {
-			return "TODO";
-		}
-		
-		void refresh() {
-		}
-		
-		boolean hasChildren() {
-			 // Get the children
-		    Object[] obj = getChildren();
-
-		    // Return whether the parent has children
-		    return obj == null ? false : obj.length > 0;
-		}
-		
-		Object[] getChildren() {
-			return null;
-		}
-	}
-	
-	class PlatformFolder extends Folder {
-		Platform platform;
-		
-		PlatformFolder(Platform platform) {
-			this.platform = platform;
-		}
-
-		String GetLabel() {
-			return platform.GetIP();
-		}
-		
-		boolean hasChildren() {
-			return true;
-		}
-
-		public Object[] getChildren() {
-			Vector<Folder> retVal = new Vector<Folder>();
-			retVal.add(new ClusterFolder(platform));
-			retVal.add(new WorkunitFolder(platform));
-			retVal.add(new LogicalFileFolder(platform));
-			return retVal.toArray();
-		}
-	}
-
-	class ClusterFolder extends Folder {
-		Platform platform;
-		
-		ClusterFolder(Platform platform) {
-			this.platform = platform;
-		}
-		
-		String GetLabel() {
-			return "Clusters";
-		}
-
-		public Object[] getChildren() {
-			ArrayList<Object> retVal = new ArrayList<Object>();
-			for(Cluster c : platform.GetClusters())
-				retVal.add(new ClusterItemFolder(platform, c));
-			return retVal.toArray();
-		}
-	}
-
-	class ClusterItemFolder extends Folder {
-		Platform platform;
-		Cluster cluster;
-		
-		ClusterItemFolder(Platform platform, Cluster cluster) {
-			this.platform = platform;
-			this.cluster = cluster; 
-		}
-		
-		String GetLabel() {
-			return cluster.info.getName();
-		}
-
-		public Object[] getChildren() {
-			Vector<Folder> retVal = new Vector<Folder>();
-			retVal.add(new WorkunitFolder(platform, cluster.info.getName()));
-			return retVal.toArray();
-		}
-	}
-
-	class WorkunitFolder extends Folder {
-		Platform platform;
-		String cluster;
-		
-		class WorkunitComparator implements Comparator<Object> {
-
-			@Override
-			public int compare(Object left, Object right) {
-				String l = "";
-				String r = "";
-				if (left instanceof Workunit)
-					l = ((Workunit)left).info.getWuid();
-				else if(left instanceof FileSprayWorkunit)
-					l = ((FileSprayWorkunit)left).info.getID();
-				if (right instanceof Workunit)
-					r = ((Workunit)right).info.getWuid();
-				else if(right instanceof FileSprayWorkunit)
-					r = ((FileSprayWorkunit)right).info.getID();
-				
-				l = l.substring(1);
-				r = r.substring(1);
-				return r.compareTo(l);
-			}
-		}
-		
-		WorkunitFolder(Platform platform) {
-			this.platform = platform;
-			this.cluster = "";
-		}
-		
-		WorkunitFolder(Platform platform, String cluster) {
-			this.platform = platform;
-			this.cluster = cluster;
-		}
-		
-		String GetLabel() {
-			return "Workunits";
-		}
-
-		public Object[] getChildren() {
-			ArrayList<Object> retVal = new ArrayList<Object>();
-			retVal.addAll(platform.GetWorkunits(cluster));
-			if (cluster.isEmpty())
-				retVal.addAll(platform.GetFileSprayWorkunits());
-			Collections.sort(retVal, new WorkunitComparator());
-			return retVal.toArray();
-		}
-	}
-
-	class LogicalFileFolder extends Folder {
-		Platform platform;
-
-		LogicalFileFolder(Platform platform) {
-			this.platform = platform;
-		}
-
-		String GetLabel() {
-			return "Files";
-		}
-
-		public Object[] getChildren() {
-			return platform.GetLogicalFiles().toArray();
-		}
-	}
-
 	class FileTreeContentProvider implements ITreeContentProvider {
 		Data data;
 		
@@ -211,10 +65,10 @@ public class PlatformViewer extends ViewPart {
 
 		@Override
 		public Object[] getElements(Object inputElement) {
-			Vector<Folder> retVal = new Vector<Folder>();
+			Vector<TreeItem> retVal = new Vector<TreeItem>();
 			if (inputElement == data) {
 				for (Platform p : data.GetPlatforms()) {
-					retVal.add(new PlatformFolder(p));
+					retVal.add(new PlatformTreeItem(null, p));
 				}
 			}
 			return retVal.toArray();
@@ -222,27 +76,26 @@ public class PlatformViewer extends ViewPart {
 
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof Folder) {
-				return ((Folder)parentElement).getChildren();
+			if (parentElement instanceof TreeItem) {
+				return ((TreeItem)parentElement).getChildren();
 			}
 			return null;
 		}
 
 		@Override
 		public Object getParent(Object element) {
-			if (element == data) {
-				return null;
+			if (element instanceof TreeItem) {
+				return ((TreeItem)element).getParent();
 			}
 			return null;
 		}
 
 		@Override
 		public boolean hasChildren(Object element) {
-			 // Get the children
-		    Object[] obj = getChildren(element);
-
-		    // Return whether the parent has children
-		    return obj == null ? false : obj.length > 0;
+			if (element instanceof TreeItem) {
+				return ((TreeItem)element).hasChildren();
+			}
+		    return false;
 		}
 	}
 	
@@ -273,27 +126,19 @@ public class PlatformViewer extends ViewPart {
 
 		@Override
 		public Image getImage(Object element) {
-			// TODO Auto-generated method stub
+			if (element instanceof TreeItem) {
+				return ((TreeItem)element).getImage();
+			}
 			return null;
 		}
 
 		@Override
 		public String getText(Object element) {
-			if (element instanceof Folder) {
-				return ((Folder)element).GetLabel();
-			} else if (element instanceof Platform) {
-				return ((Platform)element).GetIP();
-			} else if (element instanceof Cluster) {
-				return ((Cluster)element).info.getName();
-			} else if (element instanceof Workunit) {
-				return ((Workunit)element).info.getWuid();
-			} else if (element instanceof FileSprayWorkunit) {
-				return ((FileSprayWorkunit)element).info.getID();
-			} else if (element instanceof LogicalFile) {
-				return ((LogicalFile)element).info.getName();
+			if (element instanceof TreeItem) {
+				return ((TreeItem)element).getText();
 			}
 			// TODO Auto-generated method stub
-			return null;
+			return "TODO";
 		}
 	}	
 	
@@ -327,6 +172,21 @@ public class PlatformViewer extends ViewPart {
 	}
 
 	public void createActions() {
+		showWebItemAction = new Action("Show ECL Watch") {
+			public void run() { 
+				IStructuredSelection sel = (IStructuredSelection)viewer.getSelection();
+				Iterator iter = sel.iterator();
+				while (iter.hasNext()) {
+					Object o = iter.next();
+					if (o instanceof TreeItem) {
+						((TreeItem)o).showWebPage();
+					}
+					//viewer.refresh(iter.next());
+					break;
+				}
+			}
+		};
+		
 		refreshItemAction = new Action("Refresh") {
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)viewer.getSelection();
@@ -347,7 +207,15 @@ public class PlatformViewer extends ViewPart {
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				//updateActionEnablement();
+				IStructuredSelection sel = (IStructuredSelection)viewer.getSelection();
+				Iterator iter = sel.iterator();
+				while (iter.hasNext()) {
+					Object o = iter.next();
+					if (o instanceof TreeItem) {
+						((TreeItem)o).showWebPage();
+					}
+					break;
+				}
 			}
 		});
    }
@@ -379,6 +247,7 @@ public class PlatformViewer extends ViewPart {
 	}	
 	
 	private void fillContextMenu(IMenuManager mgr) {
+		mgr.add(showWebItemAction);
 		mgr.add(refreshItemAction);
 		mgr.add(reloadAction);
 	}	

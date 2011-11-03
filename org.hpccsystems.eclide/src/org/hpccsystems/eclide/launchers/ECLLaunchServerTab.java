@@ -25,6 +25,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
@@ -52,11 +53,12 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			} if (source == fAddressText) {
 			}
 		}
+		
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
-//			if (source == fProjButton) {
-//				handleProjectButtonSelected();
-//			}
+			if (source == testButton) {
+				refreshBrowser();
+			}
 //			if (source == fWorkspaceButton) {
 ////				handleWorkspaceDirBrowseButtonSelected();
 //			}
@@ -100,6 +102,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	protected Text fPasswordText;
 
 	protected Text fAddressText;
+	private Button testButton;
 	private Browser browser;
 
 	@Override
@@ -146,18 +149,19 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		fPasswordText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD, 1);
 		fPasswordText.addModifyListener(fListener);
 	}
-	
 
 	protected void createBrowser(Composite parent) {
-		Group group = SWTFactory.createGroup(parent, "ECL Watch:", 2, 1, GridData.FILL_BOTH);
+		Group group = SWTFactory.createGroup(parent, "ECL Watch:", 3, 1, GridData.FILL_BOTH);
 		SWTFactory.createLabel(group, "Address:  ", 1);
 		fAddressText = SWTFactory.createSingleText(group, 1);
 		fAddressText.addModifyListener(fListener);
+		testButton = SWTFactory.createPushButton(group, "Test", null);
+		testButton.addSelectionListener(fListener);
 
 		browser = new Browser(group, SWT.BORDER);
 		browser.setUrl("about:blank");
     	GridData gd = new GridData(GridData.FILL_BOTH);
-    	gd.horizontalSpan = 2;
+    	gd.horizontalSpan = 3;
     	browser.setLayoutData(gd);
     	browser.addAuthenticationListener(new AuthenticationListener() {
 			
@@ -261,7 +265,6 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 		configuration.setAttribute(Platform.P_USER, fUserText.getText());
 		configuration.setAttribute(Platform.P_PASSWORD, fPasswordText.getText());
-		refreshBrowser();
 	}
 
 	protected void handleProjectButtonSelected() {
@@ -281,14 +284,14 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	}
 	
 	void refreshBrowser() {
-//		browser.addProgressListener(new ProgressAdapter() {
-//			public void completed(ProgressEvent event) {
-//				browser.removeProgressListener(this);
-//				System.out.println(fAddressText.getText());
-//				browser.setUrl(fAddressText.getText());
-//			}
-//		});
-//		browser.setText("<html><body><h3>Loading (" + fAddressText.getText() + ")...</h3></body></html>");
+		browser.addProgressListener(new ProgressAdapter() {
+			public void completed(ProgressEvent event) {
+				browser.removeProgressListener(this);
+				System.out.println(fAddressText.getText());
+				browser.setUrl(fAddressText.getText());
+			}
+		});
+		browser.setText("<html><body><h3>Loading (" + fAddressText.getText() + ")...</h3></body></html>");
 	}
 
 	@Override

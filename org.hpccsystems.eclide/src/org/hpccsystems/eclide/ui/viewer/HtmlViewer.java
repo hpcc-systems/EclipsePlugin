@@ -1,5 +1,7 @@
 package org.hpccsystems.eclide.ui.viewer;
 
+import java.net.URL;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.AuthenticationEvent;
 import org.eclipse.swt.browser.AuthenticationListener;
@@ -39,14 +41,16 @@ public class HtmlViewer extends ViewPart {
 	}
 	
 	public void showWuid(final String ip, final String wuid, final String user, final String password) {
+		showURL(getWuidUrl(ip, wuid), user, password);
+	}
 
+	public void showURL(final String url, final String user, final String password) {
 		Display.getDefault().asyncExec(new Runnable() {   
 			public void run() {
-				browser.navigateTo(getWuidUrl(ip, wuid), user, password);
+				browser.navigateTo(url, user, password);
 			}   
 		});
 	}
-
 	@Override
 	public void setFocus() {
 		browser.setFocus();

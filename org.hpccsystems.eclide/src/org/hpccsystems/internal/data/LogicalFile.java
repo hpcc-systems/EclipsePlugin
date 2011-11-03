@@ -8,9 +8,13 @@ import org.hpccsystems.ws.wsdfu.DFUInfoResponse;
 import org.hpccsystems.ws.wsdfu.DFULogicalFile;
 import org.hpccsystems.ws.wsdfu.WsDfuServiceSoap;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
+import org.hpccsystems.ws.wsworkunits.ECLResult;
+import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
 import org.hpccsystems.ws.wsworkunits.WUInfo;
 import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
+import org.hpccsystems.ws.wsworkunits.WUResult;
+import org.hpccsystems.ws.wsworkunits.WUResultResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 
@@ -19,6 +23,7 @@ public class LogicalFile {
 	Platform platform;
 	public DFULogicalFile info;
 	public DFUFileDetail info2;
+	public ECLSourceFile info3;
 	
 	LogicalFile(Data data, Platform platform, String name) {
 		this.data = data;
@@ -27,24 +32,26 @@ public class LogicalFile {
 		info.setName(name);
 		info2 = new DFUFileDetail();
 		info2.setName(name);
+		info3 = new ECLSourceFile();
+		info3.setName(name);
 	}
 	
 	public void Refresh() {
-		WsDfuServiceSoap service = platform.GetWsDfuService();
-		if (service != null) {
-			DFUInfoRequest request = new DFUInfoRequest();
-			request.setName(info.getName());
-			try {
-				DFUInfoResponse respsone = service.DFUInfo(request);
-				Update(respsone.getFileDetail());		
-			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			WsDfuServiceSoap service = platform.GetWsDfuService();
+			if (service != null) {
+				DFUInfoRequest request = new DFUInfoRequest();
+				request.setName(info.getName());
+				try {
+					DFUInfoResponse respsone = service.DFUInfo(request);
+					Update(respsone.getFileDetail());		
+				} catch (ArrayOfEspException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		}
 	}
 	
 	void Update(DFULogicalFile lf) {
@@ -55,6 +62,11 @@ public class LogicalFile {
 	void Update(DFUFileDetail fd) {
 		if (info2.getName().equals(fd.getName()))
 			info2 = fd;
+	}
+	
+	void Update(ECLSourceFile sf) {
+		if (info3.getName().equals(sf.getName()))
+			info3 = sf;
 	}
 
 	@Override 

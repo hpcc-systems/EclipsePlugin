@@ -34,6 +34,7 @@ import org.hpccsystems.ws.wstopology.TpTargetClusterQueryResponse;
 import org.hpccsystems.ws.wstopology.WsTopologyLocator;
 import org.hpccsystems.ws.wstopology.WsTopologyServiceSoap;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
+import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
 import org.hpccsystems.ws.wsworkunits.WUQuery;
 import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
@@ -93,6 +94,8 @@ public class Platform {
 
 	//  Workunit  ---
 	public synchronized Workunit GetWorkunit(String wuid) {
+		if (wuid == null || wuid.isEmpty())
+			return null;
 		Workunit workunit = new Workunit(data, this, wuid);
 		if (Workunits.containsKey(workunit.hashCode())) {
 			return Workunits.get(workunit.hashCode());
@@ -131,6 +134,10 @@ public class Platform {
 		return retVal;
 	}
 
+	public synchronized Collection<Workunit> GetWorkunits() {
+		return GetWorkunits("");
+	}
+
 	//  FileSPrayWorkunit  ---
 	public synchronized FileSprayWorkunit GetFileSprayWorkunit(String id) {
 		FileSprayWorkunit workunit = new FileSprayWorkunit(data, this, id);
@@ -149,10 +156,11 @@ public class Platform {
 		return workunit;
 	}
 
-	public synchronized Collection<FileSprayWorkunit> GetFileSprayWorkunits() {
+	public synchronized Collection<FileSprayWorkunit> GetFileSprayWorkunits(String cluster) {
 		Collection<FileSprayWorkunit> retVal = new ArrayList<FileSprayWorkunit>();
 		FileSprayServiceSoap service = GetFileSprayService();
 		GetDFUWorkunits request = new GetDFUWorkunits();
+		request.setCluster(cluster);
 		try {
 			GetDFUWorkunitsResponse response = service.getDFUWorkunits(request);
 			if (response.getResults() != null) {
@@ -168,6 +176,10 @@ public class Platform {
 			e.printStackTrace();
 		}
 		return retVal;
+	}
+
+	public synchronized Collection<FileSprayWorkunit> GetFileSprayWorkunits() {
+		return GetFileSprayWorkunits("");
 	}
 
 	//  LogicalFile  ---
@@ -188,10 +200,17 @@ public class Platform {
 		return logicalFile;
 	}
 
-	public synchronized Collection<LogicalFile> GetLogicalFiles() {
+	public synchronized LogicalFile GetLogicalFile(ECLSourceFile sf) {
+		LogicalFile logicalFile = GetLogicalFile(sf.getName());
+		logicalFile.Update(sf);
+		return logicalFile;
+	}
+
+	public synchronized Collection<LogicalFile> GetLogicalFiles(String cluster) {
 		Collection<LogicalFile> retVal = new ArrayList<LogicalFile>();
 		WsDfuServiceSoap service = GetWsDfuService();
 		DFUQueryRequest request = new DFUQueryRequest();
+		request.setClusterName(cluster);
 		try {
 			DFUQueryResponse response = service.DFUQuery(request);
 			if (response.getDFULogicalFiles() != null) {
@@ -207,6 +226,10 @@ public class Platform {
 			e.printStackTrace();
 		}
 		return retVal;
+	}
+
+	public synchronized Collection<LogicalFile> GetLogicalFiles() {
+		return GetLogicalFiles("");
 	}
 
 	//  Cluster  ---
@@ -248,8 +271,20 @@ public class Platform {
 		return retVal;
 	}
 
-	URL GetURL(String name) throws MalformedURLException {
-		return new URL("http", ip, 8010, "/" + name);
+	public URL GetURL() throws MalformedURLException {
+		return GetURL("");
+	}
+
+	public URL GetURL(String service) throws MalformedURLException {
+		return new URL("http", ip, 8010, "/" + service);
+	}
+
+	public URL GetURL(String service, String method) throws MalformedURLException {
+		return GetURL(service + "/" + method);
+	}
+
+	public URL GetURL(String service, String method, String params) throws MalformedURLException {
+		return GetURL(service + "/" + method + "?" + params);
 	}
 
 	public WsWorkunitsServiceSoap GetWsWorkunitsService() {
