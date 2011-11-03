@@ -5,10 +5,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.internal.Eclipse;
@@ -46,10 +49,12 @@ class WorkunitComparator implements Comparator<Object> {
 }
 
 class TreeItem {
+	protected TreeViewer treeViewer;
 	protected TreeItem parent;
 	private HtmlViewer htmlViewer;
 
-	TreeItem(TreeItem parent) {
+	TreeItem(TreeViewer treeViewer, TreeItem parent) {
+		this.treeViewer = treeViewer;
 		this.parent = parent;
 		this.htmlViewer = null;
 	}
@@ -113,8 +118,8 @@ class TreeItem {
 class PlatformBaseTreeItem extends TreeItem {
 	Platform platform;
 	
-	PlatformBaseTreeItem(TreeItem parent, Platform platform) {
-		super(parent);
+	PlatformBaseTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform) {
+		super(treeViewer, parent);
 		this.platform = platform;
 	}
 
@@ -130,16 +135,16 @@ class PlatformBaseTreeItem extends TreeItem {
 class ClusterPlatformBaseTreeItem extends PlatformBaseTreeItem {
 	Cluster cluster;
 	
-	ClusterPlatformBaseTreeItem(TreeItem parent, Platform platform, Cluster cluster) {
-		super(parent, platform);
+	ClusterPlatformBaseTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Cluster cluster) {
+		super(treeViewer, parent, platform);
 		this.cluster = cluster;
 	}
 }
 
 class PlatformTreeItem extends PlatformBaseTreeItem {
 
-	PlatformTreeItem(TreeItem parent, Platform platform) {
-		super(parent, platform);
+	PlatformTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform) {
+		super(treeViewer, parent, platform);
 	}
 
 	String getText() {
@@ -168,18 +173,18 @@ class PlatformTreeItem extends PlatformBaseTreeItem {
 
 	public Object[] getChildren() {
 		Vector<TreeItem> retVal = new Vector<TreeItem>();
-		retVal.add(new ClusterFolderTreeItem(this, platform));
-		retVal.add(new WorkunitFolderTreeItem(this, platform));
-		retVal.add(new FileSprayWorkunitFolderTreeItem(this, platform));
-		retVal.add(new LogicalFileFolderTreeItem(this, platform));
+		retVal.add(new ClusterFolderTreeItem(treeViewer, this, platform));
+		retVal.add(new WorkunitFolderTreeItem(treeViewer, this, platform));
+		retVal.add(new FileSprayWorkunitFolderTreeItem(treeViewer, this, platform));
+		retVal.add(new LogicalFileFolderTreeItem(treeViewer, this, platform));
 		return retVal.toArray();
 	}
 }
 
 class ClusterFolderTreeItem extends PlatformBaseTreeItem {
 
-	ClusterFolderTreeItem(TreeItem parent, Platform platform) {
-		super(parent, platform);
+	ClusterFolderTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform) {
+		super(treeViewer, parent, platform);
 	}
 	
 	String getText() {
@@ -197,15 +202,15 @@ class ClusterFolderTreeItem extends PlatformBaseTreeItem {
 	public Object[] getChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Cluster c : platform.GetClusters())
-			retVal.add(new ClusterTreeItem(this, platform, c));
+			retVal.add(new ClusterTreeItem(treeViewer, this, platform, c));
 		return retVal.toArray();
 	}
 }
 
 class WorkunitFolderTreeItem extends PlatformBaseTreeItem {
 	
-	WorkunitFolderTreeItem(TreeItem parent, Platform platform) {
-		super(parent, platform);
+	WorkunitFolderTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform) {
+		super(treeViewer, parent, platform);
 	}
 	
 	String getText() {
@@ -223,7 +228,7 @@ class WorkunitFolderTreeItem extends PlatformBaseTreeItem {
 	public Object[] getChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (Workunit wu : platform.GetWorkunits()) {
-			retVal.add(new WorkunitTreeItem(this, platform, wu));				
+			retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
 		}
 		Collections.sort(retVal, new WorkunitComparator());
 		return retVal.toArray();
@@ -232,8 +237,8 @@ class WorkunitFolderTreeItem extends PlatformBaseTreeItem {
 
 class ClusterWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem {
 
-	ClusterWorkunitFolderTreeItem(TreeItem parent, Platform platform, Cluster cluster) {
-		super(parent, platform, cluster);
+	ClusterWorkunitFolderTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Cluster cluster) {
+		super(treeViewer, parent, platform, cluster);
 	}
 	
 	String getText() {
@@ -251,35 +256,73 @@ class ClusterWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem {
 	public Object[] getChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (Workunit wu : platform.GetWorkunits(cluster.info.getName())) {
-			retVal.add(new WorkunitTreeItem(this, platform, wu));				
+			retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
 		}
 		Collections.sort(retVal, new WorkunitComparator());
 		return retVal.toArray();
 	}
 }
 
-class WorkunitTreeItem extends PlatformBaseTreeItem {
+class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 	Workunit workunit;
 	
-	WorkunitTreeItem(TreeItem parent, Platform platform, Workunit wu) {
-		super(parent, platform);
+	WorkunitTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Workunit wu) {
+		super(treeViewer, parent, platform);
 		this.workunit = wu;
+		wu.addObserver(this);
 	}
 	
 	String getText() {
-		return workunit.info.getWuid();
+		return workunit.info.getWuid() + " (" + workunit.info.getState() + ")";
 	}
 	
 	Image getImage() {
+		/*enum WUState 
+		{
+			WUStateUnknown = 0,
+			WUStateCompiled,
+			WUStateRunning,
+			WUStateCompleted,
+			WUStateFailed,
+			WUStateArchived,
+			WUStateAborting,
+			WUStateAborted,
+			WUStateBlocked,
+			WUStateSubmitted,
+			WUStateScheduled,
+			WUStateCompiling,
+			WUStateWait,
+			WUStateWaitingForUpload,
+			WUStateDebugPaused,
+			WUStateDebugRunning,
+			WUStateSize	//Don't forget to update the string table below..
+		};*/
+		
 		switch(workunit.info.getStateID()) {
+		case 1:
+	        return Activator.getImage("icons/workunit_submitted.png"); 
+		case 2:
+	        return Activator.getImage("icons/workunit_running.png"); 
 		case 3:
 	        return Activator.getImage("icons/workunit_completed.png"); 
 		case 4:
 	        return Activator.getImage("icons/workunit_failed.png"); 
+		case 5:
+	        return Activator.getImage("icons/workunit_warning.png"); 
+		case 6:
+	        return Activator.getImage("icons/workunit_aborting.png"); 
+		case 7:
+	        return Activator.getImage("icons/workunit_failed.png"); 
+		case 8:
+	        return Activator.getImage("icons/workunit_warning.png"); 
+		case 9:
+	        return Activator.getImage("icons/workunit_submitted.png"); 
+		case 10:
+	        return Activator.getImage("icons/workunit_warning.png"); 
 		default:
 			break;
 		}
-        return Activator.getImage("icons/workunit.png"); 
+        return Activator.getImage("icons/workunit_warning.png"); 
 	}
 
 	URL getWebPageURL() throws MalformedURLException {
@@ -292,23 +335,32 @@ class WorkunitTreeItem extends PlatformBaseTreeItem {
 		while (parent != null) {
 			if (parent instanceof WorkunitTreeItem)
 				if (workunit == ((WorkunitTreeItem)parent).workunit) {
-					retVal.add(new RecursiveTreeItem(this));				
+					retVal.add(new RecursiveTreeItem(treeViewer, this));				
 					break;
 				}
 			parent = parent.getParent();
 		}
 		if (retVal.isEmpty()) {
-			retVal.add(new ResultFolderTreeItem(this, platform, workunit));
-			retVal.add(new WorkunitLogicalFileFolderTreeItem(this, platform, workunit));
+			retVal.add(new ResultFolderTreeItem(treeViewer, this, platform, workunit));
+			retVal.add(new WorkunitLogicalFileFolderTreeItem(treeViewer, this, platform, workunit));
 		}
 		return retVal.toArray();
+	}
+
+	public void update(Observable arg0, Object arg1) {
+		final WorkunitTreeItem self = this;			
+		Display.getDefault().asyncExec(new Runnable() {   
+			public void run() {
+				treeViewer.update(self, null);
+			}
+		});
 	}
 }
 
 class FileSprayWorkunitFolderTreeItem extends PlatformBaseTreeItem {
 	
-	FileSprayWorkunitFolderTreeItem(TreeItem parent, Platform platform) {
-		super(parent, platform);
+	FileSprayWorkunitFolderTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform) {
+		super(treeViewer, parent, platform);
 	}
 	
 	String getText() {
@@ -326,7 +378,7 @@ class FileSprayWorkunitFolderTreeItem extends PlatformBaseTreeItem {
 	public Object[] getChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (FileSprayWorkunit wu : platform.GetFileSprayWorkunits()) {
-			retVal.add(new FileSprayWorkunitTreeItem(this, platform, wu));				
+			retVal.add(new FileSprayWorkunitTreeItem(treeViewer, this, platform, wu));				
 		}
 		Collections.sort(retVal, new WorkunitComparator());
 		return retVal.toArray();
@@ -335,8 +387,8 @@ class FileSprayWorkunitFolderTreeItem extends PlatformBaseTreeItem {
 
 class ClusterFileSprayWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem {
 	
-	ClusterFileSprayWorkunitFolderTreeItem(TreeItem parent, Platform platform, Cluster cluster) {
-		super(parent, platform, cluster);
+	ClusterFileSprayWorkunitFolderTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Cluster cluster) {
+		super(treeViewer, parent, platform, cluster);
 	}
 	
 	String getText() {
@@ -355,7 +407,7 @@ class ClusterFileSprayWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem
 	public Object[] getChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (FileSprayWorkunit wu : platform.GetFileSprayWorkunits(cluster.info.getName())) {
-			retVal.add(new FileSprayWorkunitTreeItem(this, platform, wu));				
+			retVal.add(new FileSprayWorkunitTreeItem(treeViewer, this, platform, wu));				
 		}
 		Collections.sort(retVal, new WorkunitComparator());
 		return retVal.toArray();
@@ -365,8 +417,8 @@ class ClusterFileSprayWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem
 class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem {
 	FileSprayWorkunit wu;
 	
-	FileSprayWorkunitTreeItem(TreeItem parent, Platform platform, FileSprayWorkunit wu) {
-		super(parent, platform);
+	FileSprayWorkunitTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, FileSprayWorkunit wu) {
+		super(treeViewer, parent, platform);
 		this.wu = wu;
 	}
 	
@@ -389,8 +441,8 @@ class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem {
 }
 
 class ClusterTreeItem extends ClusterPlatformBaseTreeItem {
-	ClusterTreeItem(TreeItem parent, Platform platform, Cluster cluster) {
-		super(parent, platform, cluster);
+	ClusterTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Cluster cluster) {
+		super(treeViewer, parent, platform, cluster);
 	}
 	
 	String getText() {
@@ -408,17 +460,17 @@ class ClusterTreeItem extends ClusterPlatformBaseTreeItem {
 
 	public Object[] getChildren() {
 		Vector<TreeItem> retVal = new Vector<TreeItem>();
-		retVal.add(new ClusterWorkunitFolderTreeItem(this, platform, cluster));
-		retVal.add(new ClusterFileSprayWorkunitFolderTreeItem(this, platform, cluster));
-		retVal.add(new ClusterLogicalFileFolderTreeItem(this, platform, cluster));
+		retVal.add(new ClusterWorkunitFolderTreeItem(treeViewer, this, platform, cluster));
+		retVal.add(new ClusterFileSprayWorkunitFolderTreeItem(treeViewer, this, platform, cluster));
+		retVal.add(new ClusterLogicalFileFolderTreeItem(treeViewer, this, platform, cluster));
 		return retVal.toArray();
 	}
 }
 
 class LogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 
-	LogicalFileFolderTreeItem(TreeItem parent, Platform platform) {
-		super(parent, platform);
+	LogicalFileFolderTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform) {
+		super(treeViewer, parent, platform);
 	}
 
 	String getText() {
@@ -437,7 +489,7 @@ class LogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 	public Object[] getChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile wu : platform.GetLogicalFiles()) {
-			retVal.add(new LogicalFileTreeItem(this, platform, wu));				
+			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, wu));				
 		}
 		Collections.sort(retVal, new WorkunitComparator());
 		return retVal.toArray();
@@ -447,8 +499,8 @@ class LogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 class WorkunitLogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 	Workunit wu;
 
-	WorkunitLogicalFileFolderTreeItem(TreeItem parent, Platform platform, Workunit wu) {
-		super(parent, platform);
+	WorkunitLogicalFileFolderTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Workunit wu) {
+		super(treeViewer, parent, platform);
 		this.wu = wu;
 	}
 
@@ -468,7 +520,7 @@ class WorkunitLogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 	public Object[] getChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile file : wu.GetLogicalFiles()) {
-			retVal.add(new LogicalFileTreeItem(this, platform, file));
+			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, file));
 		}
 		Collections.sort(retVal, new WorkunitComparator());
 		return retVal.toArray();
@@ -477,8 +529,8 @@ class WorkunitLogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 
 class ClusterLogicalFileFolderTreeItem extends ClusterPlatformBaseTreeItem {
 
-	ClusterLogicalFileFolderTreeItem(TreeItem parent, Platform platform, Cluster cluster) {
-		super(parent, platform, cluster);
+	ClusterLogicalFileFolderTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Cluster cluster) {
+		super(treeViewer, parent, platform, cluster);
 	}
 
 	String getText() {
@@ -496,7 +548,7 @@ class ClusterLogicalFileFolderTreeItem extends ClusterPlatformBaseTreeItem {
 	public Object[] getChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile wu : platform.GetLogicalFiles(cluster.info.getName())) {
-			retVal.add(new LogicalFileTreeItem(this, platform, wu));				
+			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, wu));				
 		}
 		Collections.sort(retVal, new WorkunitComparator());
 		return retVal.toArray();
@@ -506,8 +558,8 @@ class ClusterLogicalFileFolderTreeItem extends ClusterPlatformBaseTreeItem {
 class LogicalFileTreeItem extends PlatformBaseTreeItem {
 	LogicalFile file;
 	
-	LogicalFileTreeItem(TreeItem parent, Platform platform, LogicalFile file) {
-		super(parent, platform);
+	LogicalFileTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, LogicalFile file) {
+		super(treeViewer, parent, platform);
 		this.file = file; 
 	}
 	
@@ -530,7 +582,7 @@ class LogicalFileTreeItem extends PlatformBaseTreeItem {
 		while (parent != null) {
 			if (parent instanceof LogicalFileTreeItem)
 				if (file == ((LogicalFileTreeItem)parent).file) {
-					retVal.add(new RecursiveTreeItem(this));				
+					retVal.add(new RecursiveTreeItem(treeViewer, this));				
 					break;
 				}
 			parent = parent.getParent();
@@ -538,10 +590,10 @@ class LogicalFileTreeItem extends PlatformBaseTreeItem {
 		
 		if (retVal.isEmpty()) {
 			file.Refresh();
-			retVal.add(new LogicalFileContentsTreeItem(this, platform, file));
+			retVal.add(new LogicalFileContentsTreeItem(treeViewer, this, platform, file));
 			Workunit wu = platform.GetWorkunit(file.info2.getWuid());
 			if (wu != null) {
-				retVal.add(new WorkunitTreeItem(this, platform, wu));				
+				retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
 			}
 			Collections.sort(retVal, new WorkunitComparator());
 		}
@@ -552,8 +604,8 @@ class LogicalFileTreeItem extends PlatformBaseTreeItem {
 class LogicalFileContentsTreeItem extends PlatformBaseTreeItem {
 	LogicalFile file;
 	
-	LogicalFileContentsTreeItem(TreeItem parent, Platform platform, LogicalFile file) {
-		super(parent, platform);
+	LogicalFileContentsTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, LogicalFile file) {
+		super(treeViewer, parent, platform);
 		this.file = file; 
 	}
 	
@@ -577,8 +629,8 @@ class LogicalFileContentsTreeItem extends PlatformBaseTreeItem {
 class ResultFolderTreeItem extends PlatformBaseTreeItem {
 	Workunit wu;
 	
-	ResultFolderTreeItem(TreeItem parent, Platform platform, Workunit wu) {
-		super(parent, platform);
+	ResultFolderTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Workunit wu) {
+		super(treeViewer, parent, platform);
 		this.wu = wu;
 	}
 	
@@ -598,7 +650,7 @@ class ResultFolderTreeItem extends PlatformBaseTreeItem {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		wu.Refresh();
 		for(Result r : wu.GetResults())
-			retVal.add(new ResultTreeItem(this, platform, r));
+			retVal.add(new ResultTreeItem(treeViewer, this, platform, r));
 		return retVal.toArray();
 	}
 }
@@ -606,8 +658,8 @@ class ResultFolderTreeItem extends PlatformBaseTreeItem {
 class ResultTreeItem extends PlatformBaseTreeItem {
 	Result result;
 	
-	ResultTreeItem(TreeItem parent, Platform platform, Result result) {
-		super(parent, platform);
+	ResultTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Result result) {
+		super(treeViewer, parent, platform);
 		this.result = result; 
 	}
 	
@@ -627,8 +679,8 @@ class ResultTreeItem extends PlatformBaseTreeItem {
 
 class RecursiveTreeItem extends TreeItem {
 
-	RecursiveTreeItem(TreeItem parent) {
-		super(parent);
+	RecursiveTreeItem(TreeViewer treeViewer, TreeItem parent) {
+		super(treeViewer, parent);
 	}
 
 	String getText() {

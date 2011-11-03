@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
 import org.hpccsystems.ws.wstopology.TpTargetCluster;
 import org.hpccsystems.ws.wstopology.TpTargetClusterQueryRequest;
@@ -19,7 +20,7 @@ import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 
-public class Workunit {
+public class Workunit extends Observable {
 	Data data;
 	Platform platform;
 	private Map<Integer, Result> Results;
@@ -32,6 +33,7 @@ public class Workunit {
 		this.Results = new HashMap<Integer, Result>(); 		
 		info = new ECLWorkunit();
 		info.setWuid(wuid);
+		setChanged();
 	}
 	
 	public void Refresh() {
@@ -129,9 +131,29 @@ public class Workunit {
 		return retVal;
 	}
 	
-	void Update(ECLWorkunit wu) {
-		if (info.getWuid().equals(wu.getWuid()))
+	void Update(final ECLWorkunit wu) {
+		if (info.getWuid().equals(wu.getWuid())) {
 			info = wu;
+			setChanged();
+			notifyObservers(wu.getState());
+
+			if (wu.getStateID() != 3 && wu.getStateID() != 4 && wu.getStateID() != 7) { 
+				Runnable monitor = new Runnable() {
+					public void run() {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Refresh();
+						return;
+					}
+				};
+				Thread threadMonitor = new Thread(monitor, "Monitor:  " + wu.getWuid());
+				threadMonitor.start();
+			}
+		}
 	}
 
 	void UpdateResults(ECLWorkunit wu) {
@@ -140,6 +162,8 @@ public class Workunit {
 			info.setResultLimit(wu.getResultLimit());
 			info.setResults(wu.getResults());
 			info.setResultsDesc(wu.getResultsDesc());
+			setChanged();
+			notifyObservers(null);
 		}
 	}
 
@@ -148,6 +172,8 @@ public class Workunit {
 			info.setSourceFileCount(wu.getSourceFileCount());
 			info.setSourceFilesDesc(wu.getSourceFilesDesc());
 			info.setSourceFiles(wu.getSourceFiles());
+			setChanged();
+			notifyObservers(null);
 		}
 	}
 	@Override 

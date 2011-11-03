@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
 import javax.xml.rpc.ServiceException;
 
@@ -43,7 +44,7 @@ import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 
 
-public class Platform {
+public class Platform extends Observable {
 	public static final String P_IP = "ipLaunchConfig";
 
 	public static final String P_USER = "userLaunchConfig";
@@ -81,6 +82,7 @@ public class Platform {
 			password = launchConfiguration.getAttribute(P_PASSWORD, "");
 		} catch (CoreException e) {
 		}
+		setChanged();
 	}
 
 	public Workunit Submit(IFile file, String cluster) {
@@ -89,7 +91,10 @@ public class Platform {
 		String wuid = compiler.buildAndRun(file, ip, cluster, user, password);
 		if (wuid.isEmpty())
 			return null;
-		return GetWorkunit(wuid);
+
+		Workunit retVal = GetWorkunit(wuid);
+		notifyObservers();
+		return retVal;
 	}
 
 	//  Workunit  ---
@@ -103,6 +108,7 @@ public class Platform {
 		else {
 			Workunits.put(workunit.hashCode(), workunit);
 		}
+		setChanged();
 		return workunit;
 	}
 
@@ -131,6 +137,7 @@ public class Platform {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		notifyObservers();
 		return retVal;
 	}
 
@@ -147,6 +154,7 @@ public class Platform {
 		else {
 			FileSprayWorkunits.put(workunit.hashCode(), workunit);
 		}
+		setChanged();
 		return workunit;
 	}
 
@@ -175,6 +183,7 @@ public class Platform {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		notifyObservers();
 		return retVal;
 	}
 
@@ -191,6 +200,7 @@ public class Platform {
 		else {
 			LogicalFiles.put(logicalFile.hashCode(), logicalFile);
 		}
+		setChanged();
 		return logicalFile;
 	}
 
@@ -225,6 +235,7 @@ public class Platform {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		notifyObservers();
 		return retVal;
 	}
 
@@ -241,6 +252,7 @@ public class Platform {
 		else {
 			Clusters.put(cluster.hashCode(), cluster);
 		}
+		setChanged();
 		return cluster;
 	}
 
@@ -268,6 +280,7 @@ public class Platform {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		notifyObservers();
 		return retVal;
 	}
 

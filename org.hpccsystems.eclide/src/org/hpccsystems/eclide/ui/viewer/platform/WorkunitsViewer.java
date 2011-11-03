@@ -1,15 +1,9 @@
 package org.hpccsystems.eclide.ui.viewer.platform;
 
-import java.awt.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
-
-import javax.swing.tree.DefaultTreeModel;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -18,36 +12,33 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
-import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
-import org.hpccsystems.internal.Eclipse;
-import org.hpccsystems.internal.data.Cluster;
+import org.hpccsystems.eclide.ui.viewer.platform.PlatformViewer.FileTreeContentProvider;
+import org.hpccsystems.eclide.ui.viewer.platform.PlatformViewer.FileTreeLabelProvider;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.FileSprayWorkunit;
-import org.hpccsystems.internal.data.LogicalFile;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
 
-public class PlatformViewer extends ViewPart {
+public class WorkunitsViewer extends ViewPart {
 
 	TreeViewer treeViewer;
 	Action showWebItemAction;
 	Action refreshItemAction;
+	Action updateItemAction;
 	Action reloadAction;
 	
-	class FileTreeContentProvider implements ITreeContentProvider {
+	class FileTreeContentProvider implements ITreeContentProvider, Observer{
 		Data data;
 		
 		FileTreeContentProvider(Data data) {
@@ -68,7 +59,10 @@ public class PlatformViewer extends ViewPart {
 			Vector<TreeItem> retVal = new Vector<TreeItem>();
 			if (inputElement == data) {
 				for (Platform p : data.GetPlatforms()) {
-					retVal.add(new PlatformTreeItem(treeViewer, null, p));
+					p.addObserver(this);
+					for(Workunit w : p.GetWorkunits()) {
+						retVal.add(new WorkunitTreeItem(treeViewer, null, p, w));
+					}
 				}
 			}
 			return retVal.toArray();
@@ -97,6 +91,15 @@ public class PlatformViewer extends ViewPart {
 			}
 		    return false;
 		}
+
+		@Override
+		public void update(Observable o, Object arg) {
+			Display.getDefault().asyncExec(new Runnable() {   
+				public void run() {
+					treeViewer.refresh();
+				}
+			});
+		}
 	}
 	
 	class FileTreeLabelProvider implements ILabelProvider {
@@ -104,7 +107,6 @@ public class PlatformViewer extends ViewPart {
 		@Override
 		public void addListener(ILabelProviderListener listener) {
 			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
@@ -115,13 +117,12 @@ public class PlatformViewer extends ViewPart {
 		@Override
 		public boolean isLabelProperty(Object element, String property) {
 			// TODO Auto-generated method stub
-			return false;
+			return true;
 		}
 
 		@Override
 		public void removeListener(ILabelProviderListener listener) {
 			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
@@ -142,7 +143,7 @@ public class PlatformViewer extends ViewPart {
 		}
 	}	
 	
-	public PlatformViewer() {
+	public WorkunitsViewer() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -193,6 +194,16 @@ public class PlatformViewer extends ViewPart {
 				Iterator iter = sel.iterator();
 				while (iter.hasNext()) {
 					treeViewer.refresh(iter.next());
+				}
+			}
+		};
+
+		updateItemAction = new Action("Update") {
+			public void run() { 
+				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
+				Iterator iter = sel.iterator();
+				while (iter.hasNext()) {
+					treeViewer.update(iter.next(), null);
 				}
 			}
 		};
@@ -249,6 +260,7 @@ public class PlatformViewer extends ViewPart {
 	private void fillContextMenu(IMenuManager mgr) {
 		mgr.add(showWebItemAction);
 		mgr.add(refreshItemAction);
+		mgr.add(updateItemAction);
 		mgr.add(reloadAction);
 	}	
 }

@@ -9,6 +9,12 @@
             id="org.hpccsystems.eclide.perspectives.ECLPerspective"
             name="%perspective.name.0">
       </perspective>
+      <perspective
+            class="org.hpccsystems.eclide.perspectives.ECLWatch"
+            icon="icons/releng_gears.gif"
+            id="org.hpccsystems.eclide.perspectives.ECLWatch"
+            name="ECL Watch">
+      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -56,6 +62,15 @@
             icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.viewPlatforms"
             name="Servers"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.ui.viewer.platform.WorkunitsViewer"
+            icon="icons/releng_gears.gif"
+            id="org.hpccsystems.eclide.viewWorkunits"
+            name="Workunits"
             restorable="true">
       </view>
    </extension>

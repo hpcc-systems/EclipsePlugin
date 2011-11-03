@@ -70,6 +70,7 @@ Export-Package: org.hpccsystems.eclide;
    org.eclipse.jface.text.rules",
  org.hpccsystems.eclide.ui.navigator;uses:="org.eclipse.ui.navigator,org.eclipse.ui",
  org.hpccsystems.eclide.ui.viewer;uses:="org.eclipse.ui.part,org.eclipse.swt.widgets",
+ org.hpccsystems.eclide.ui.viewer.platform,
  org.hpccsystems.eclide.wizards;
   uses:="org.eclipse.jface.wizard,
    org.eclipse.core.runtime,
@@ -78,7 +79,11 @@ Export-Package: org.hpccsystems.eclide;
    org.eclipse.swt.widgets",
  org.hpccsystems.internal;x-internal:=true,
  org.hpccsystems.internal.autoc;x-internal:=true,
+ org.hpccsystems.internal.data;x-internal:=true,
  org.hpccsystems.internal.ui;x-internal:=true,
+ org.hpccsystems.ws.filespray,
+ org.hpccsystems.ws.wsdfu,
+ org.hpccsystems.ws.wstopology,
  org.hpccsystems.ws.wsworkunits;
   uses:="org.apache.axis.client,
    org.apache.axis,
