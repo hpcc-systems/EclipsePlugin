@@ -7,11 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-import org.hpccsystems.ws.wstopology.TpTargetCluster;
-import org.hpccsystems.ws.wstopology.TpTargetClusterQueryRequest;
-import org.hpccsystems.ws.wstopology.TpTargetClusterQueryResponse;
-import org.hpccsystems.ws.wstopology.WsTopologyServiceSoap;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
+import org.hpccsystems.ws.wsworkunits.ECLGraph;
 import org.hpccsystems.ws.wsworkunits.ECLResult;
 import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
@@ -19,11 +16,14 @@ import org.hpccsystems.ws.wsworkunits.WUInfo;
 import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
-
 public class Workunit extends Observable {
+	static final public String NOTIFY_RESULTS = "NotifyResults";
+	static final public String NOTIFY_GRAPHS = "NotifyGraphs";
+	static final public String NOTIFY_STATE = "NotifyState";
 	Data data;
 	Platform platform;
 	private Map<Integer, Result> Results;
+	private Map<Integer, Graph> Graphs;
 	public ECLWorkunit info;
 
 	
@@ -31,39 +31,13 @@ public class Workunit extends Observable {
 		this.data = data;
 		this.platform = platform;
 		this.Results = new HashMap<Integer, Result>(); 		
+		this.Graphs = new HashMap<Integer, Graph>(); 		
 		info = new ECLWorkunit();
 		info.setWuid(wuid);
 		setChanged();
 	}
-	
-	public void Refresh() {
-		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
-		if (service != null) {
-			WUInfo request = new WUInfo();
-			request.setWuid(info.getWuid());
-			request.setIncludeApplicationValues(true);
-			request.setIncludeDebugValues(true);
-			request.setIncludeExceptions(true);
-			request.setIncludeGraphs(true);
-			request.setIncludeResults(true);
-			request.setIncludeResultsViewNames(true);
-			request.setIncludeSourceFiles(true);
-			request.setIncludeTimers(true);
-			request.setIncludeVariables(true);
-			request.setIncludeWorkflows(true);
-			try {
-				WUInfoResponse respsone = service.WUInfo(request);
-				Update(respsone.getWorkunit());		
-			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
+
+	//  Results  ---
 	public synchronized Result GetResult(Integer sequence) {
 		Result result = new Result(data, this, sequence);
 		if (Results.containsKey(result.hashCode())) {
@@ -72,16 +46,17 @@ public class Workunit extends Observable {
 		else {
 			Results.put(result.hashCode(), result);
 		}
+		setChanged();
 		return result;
 	}
 
-	public synchronized Result GetResult(ECLResult r) {
+	public Result GetResult(ECLResult r) {
 		Result result = GetResult(r.getSequence());
 		result.Update(r);
 		return result;
 	}
 	
-	public synchronized Collection<Result> GetResults() {
+	public Collection<Result> GetResults() {
 		Collection<Result> retVal = new ArrayList<Result>();
 		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
 		if (service != null) {
@@ -102,10 +77,56 @@ public class Workunit extends Observable {
 				e.printStackTrace();
 			}
 		}
+		notifyObservers(NOTIFY_RESULTS);
 		return retVal;
 	}
 	
-	public synchronized Collection<LogicalFile> GetLogicalFiles() {
+	//  Results  ---
+	public synchronized Graph GetGraph(String name) {
+		Graph graph = new Graph(data, this, name);
+		if (Graphs.containsKey(graph.hashCode())) {
+			return Graphs.get(graph.hashCode());
+		}
+		else {
+			Graphs.put(graph.hashCode(), graph);
+		}
+		setChanged();
+		return graph;
+	}
+
+	public Graph GetGraph(ECLGraph g) {
+		Graph graph = GetGraph(g.getName());
+		graph.Update(g);
+		return graph;
+	}
+	
+	public Collection<Graph> GetGraphs() {
+		Collection<Graph> retVal = new ArrayList<Graph>();
+		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
+		if (service != null) {
+			WUInfo request = new WUInfo();
+			request.setWuid(info.getWuid());
+			request.setIncludeGraphs(true);
+			try {
+				WUInfoResponse respsone = service.WUInfo(request);
+				UpdateGraphs(respsone.getWorkunit());
+				for(ECLGraph g : info.getGraphs()) {
+					retVal.add(GetGraph(g));
+				}
+			} catch (ArrayOfEspException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		notifyObservers(NOTIFY_GRAPHS);
+		return retVal;
+	}
+	
+	//  Source Files  ---
+	public Collection<LogicalFile> GetLogicalFiles() {
 		Collection<LogicalFile> retVal = new ArrayList<LogicalFile>();
 		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
 		if (service != null) {
@@ -128,52 +149,119 @@ public class Workunit extends Observable {
 				e.printStackTrace();
 			}
 		}
+		notifyObservers("SourceFiles");
 		return retVal;
 	}
 	
-	void Update(final ECLWorkunit wu) {
-		if (info.getWuid().equals(wu.getWuid())) {
-			info = wu;
-			setChanged();
-			notifyObservers(wu.getState());
+	//  General  ---
+	public boolean isComplete() {
+		switch (info.getStateID()) {
+		case 3:
+		case 4:
+		case 7:
+			return true;
+		}
+		return false;
+	}
 
-			if (wu.getStateID() != 3 && wu.getStateID() != 4 && wu.getStateID() != 7) { 
-				Runnable monitor = new Runnable() {
+	public void Refresh() {
+		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
+		if (service != null) {
+			WUInfo request = new WUInfo();
+			request.setWuid(info.getWuid());
+			/*
+			request.setIncludeApplicationValues(true);
+			request.setIncludeDebugValues(true);
+			request.setIncludeExceptions(true);
+			request.setIncludeGraphs(true);
+			request.setIncludeResults(true);
+			request.setIncludeResultsViewNames(true);
+			request.setIncludeSourceFiles(true);
+			request.setIncludeTimers(true);
+			request.setIncludeVariables(true);
+			request.setIncludeWorkflows(true);
+			*/
+			try {
+				WUInfoResponse respsone = service.WUInfo(request);
+				Update(respsone.getWorkunit());		
+			} catch (ArrayOfEspException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		notifyObservers(NOTIFY_STATE);
+	}
+	
+	void Update(final ECLWorkunit wu) {
+		if (info.getWuid().equals(wu.getWuid()) && !info.equals(wu)) {
+			UpdateState(wu);
+			UpdateResults(wu);
+			UpdateGraphs(wu);
+			UpdateSourceFiles(wu);
+			setChanged();
+
+			if (!isComplete()) { 
+				Thread threadMonitor = new Thread(new Runnable() {
 					public void run() {
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						Refresh();
-						return;
 					}
-				};
-				Thread threadMonitor = new Thread(monitor, "Monitor:  " + wu.getWuid());
+				}, "WU Monitor:  " + wu.getWuid());
 				threadMonitor.start();
 			}
 		}
 	}
-
+	
+	boolean hasChanged(Object target, Object source) {
+		if (source == null)
+			return false;
+		
+		return !EqualsUtil.areEqual(target, source);		
+	}
+	
+	boolean UpdateState(ECLWorkunit wu) {
+		if (info.getWuid().equals(wu.getWuid()) && hasChanged(info.getStateID(), wu.getStateID())) {
+			info.setStateID(wu.getStateID());
+			info.setStateEx(wu.getStateEx());
+			info.setState(wu.getState());
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+	
 	void UpdateResults(ECLWorkunit wu) {
-		if (info.getWuid().equals(wu.getWuid())) {
+		if (info.getWuid().equals(wu.getWuid()) && hasChanged(info.getResults(), wu.getResults())) {
 			info.setResultCount(wu.getResultCount());
 			info.setResultLimit(wu.getResultLimit());
-			info.setResults(wu.getResults());
 			info.setResultsDesc(wu.getResultsDesc());
+			info.setResults(wu.getResults());
 			setChanged();
-			notifyObservers(null);
+		}
+	}
+
+	void UpdateGraphs(ECLWorkunit wu) {
+		if (info.getWuid().equals(wu.getWuid()) && hasChanged(info.getGraphs(), wu.getGraphs())) {
+			info.setGraphCount(wu.getGraphCount());
+			info.setGraphsDesc(wu.getGraphsDesc());
+			info.setGraphs(wu.getGraphs());
+			setChanged();
 		}
 	}
 
 	void UpdateSourceFiles(ECLWorkunit wu) {
-		if (info.getWuid().equals(wu.getWuid())) {
+		if (info.getWuid().equals(wu.getWuid()) && hasChanged(info.getSourceFiles(), wu.getSourceFiles())) {
 			info.setSourceFileCount(wu.getSourceFileCount());
 			info.setSourceFilesDesc(wu.getSourceFilesDesc());
 			info.setSourceFiles(wu.getSourceFiles());
 			setChanged();
-			notifyObservers(null);
 		}
 	}
 	@Override 

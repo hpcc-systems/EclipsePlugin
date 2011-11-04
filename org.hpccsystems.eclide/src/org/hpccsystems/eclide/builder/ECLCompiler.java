@@ -21,11 +21,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.Vector;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -33,11 +29,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
@@ -301,13 +294,7 @@ public class ECLCompiler {
 //			args.put("timeout", "0");
 			//TODO process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
 			if (!wuid.isEmpty()) {
-				
 				htmlViewer.showWuid(ip, wuid, user, password);
-				Display.getDefault().asyncExec(new Runnable() {   
-					public void run() {
-						htmlViewer.getSite().getPage().activate(htmlViewer);
-					}
-				});
 			}
 			return wuid;
 		}

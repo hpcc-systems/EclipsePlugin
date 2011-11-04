@@ -48,6 +48,7 @@ public class HtmlViewer extends ViewPart {
 		Display.getDefault().asyncExec(new Runnable() {   
 			public void run() {
 				browser.navigateTo(url, user, password);
+				htmlViewer.getSite().getPage().bringToTop(htmlViewer);
 			}   
 		});
 	}

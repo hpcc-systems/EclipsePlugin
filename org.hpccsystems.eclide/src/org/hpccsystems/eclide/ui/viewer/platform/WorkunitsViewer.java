@@ -1,9 +1,9 @@
 package org.hpccsystems.eclide.ui.viewer.platform;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -24,8 +24,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
-import org.hpccsystems.eclide.ui.viewer.platform.PlatformViewer.FileTreeContentProvider;
-import org.hpccsystems.eclide.ui.viewer.platform.PlatformViewer.FileTreeLabelProvider;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
@@ -56,7 +54,7 @@ public class WorkunitsViewer extends ViewPart {
 
 		@Override
 		public Object[] getElements(Object inputElement) {
-			Vector<TreeItem> retVal = new Vector<TreeItem>();
+			ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
 			if (inputElement == data) {
 				for (Platform p : data.GetPlatforms()) {
 					p.addObserver(this);

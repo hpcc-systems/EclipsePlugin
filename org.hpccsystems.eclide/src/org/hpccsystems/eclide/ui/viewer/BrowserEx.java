@@ -58,24 +58,13 @@ public class BrowserEx extends Composite {
 		final Combo comboUrl = new Combo(this, SWT.SINGLE | SWT.BORDER);
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		comboUrl.setLayoutData(layoutData);
-		comboUrl.addModifyListener(new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (browser.getUrl().equalsIgnoreCase(comboUrl.getItem(comboUrl.getSelectionIndex())))
-					return ;
-				
-				System.out.println(comboUrl.getItem(comboUrl.getSelectionIndex()));
-				browser.setUrl(comboUrl.getItem(comboUrl.getSelectionIndex()));
-			}
-		});	
 
 		Button refreshButton = new Button(this, SWT.PUSH);
 		refreshButton.setText("Refresh");
 		refreshButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 //				navigateTo(url, user, password);
-				browser.setUrl(comboUrl.getItem(comboUrl.getSelectionIndex()));
+				browser.setUrl(comboUrl.getText());
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {

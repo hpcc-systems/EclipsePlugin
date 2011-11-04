@@ -1,15 +1,7 @@
 package org.hpccsystems.eclide.ui.viewer.platform;
 
-import java.awt.List;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Vector;
-
-import javax.swing.tree.DefaultTreeModel;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -18,27 +10,19 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
-import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
-import org.hpccsystems.internal.Eclipse;
-import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.FileSprayWorkunit;
-import org.hpccsystems.internal.data.LogicalFile;
 import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.data.Workunit;
 
 public class PlatformViewer extends ViewPart {
 
@@ -46,12 +30,14 @@ public class PlatformViewer extends ViewPart {
 	Action showWebItemAction;
 	Action refreshItemAction;
 	Action reloadAction;
-	
+
 	class FileTreeContentProvider implements ITreeContentProvider {
 		Data data;
-		
+		//Map<Object, LoadingState> loadingState;
+	
 		FileTreeContentProvider(Data data) {
 			this.data = data;
+			//loadingState = new HashMap<Object, LoadingState>();
 		}
 		
 		@Override
@@ -65,7 +51,7 @@ public class PlatformViewer extends ViewPart {
 
 		@Override
 		public Object[] getElements(Object inputElement) {
-			Vector<TreeItem> retVal = new Vector<TreeItem>();
+			ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
 			if (inputElement == data) {
 				for (Platform p : data.GetPlatforms()) {
 					retVal.add(new PlatformTreeItem(treeViewer, null, p));
@@ -95,7 +81,7 @@ public class PlatformViewer extends ViewPart {
 			if (element instanceof TreeItem) {
 				return ((TreeItem)element).hasChildren();
 			}
-		    return false;
+			return false;
 		}
 	}
 	
@@ -135,15 +121,20 @@ public class PlatformViewer extends ViewPart {
 		@Override
 		public String getText(Object element) {
 			if (element instanceof TreeItem) {
-				return ((TreeItem)element).getText();
+				final TreeItem treeItem = (TreeItem)element; 
+				switch(treeItem.getChildrenCaclState()) {
+				case UNKNOWN:
+					return treeItem.getText() + " (Unknown...)";
+				case STARTED:
+					return treeItem.getText() + " (Calculating...)";
+				}
+				return treeItem.getText();
 			}
-			// TODO Auto-generated method stub
 			return "TODO";
 		}
 	}	
 	
 	public PlatformViewer() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

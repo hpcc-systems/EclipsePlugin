@@ -112,13 +112,13 @@ public class Platform extends Observable {
 		return workunit;
 	}
 
-	public synchronized Workunit GetWorkunit(ECLWorkunit wu) {
+	public Workunit GetWorkunit(ECLWorkunit wu) {
 		Workunit workunit = GetWorkunit(wu.getWuid());
 		workunit.Update(wu);
 		return workunit;
 	}
 
-	public synchronized Collection<Workunit> GetWorkunits(String cluster) {
+	public Collection<Workunit> GetWorkunits(String cluster) {
 		Collection<Workunit> retVal = new ArrayList<Workunit>();
 		WsWorkunitsServiceSoap service = GetWsWorkunitsService();
 		WUQuery request = new WUQuery();
@@ -141,7 +141,7 @@ public class Platform extends Observable {
 		return retVal;
 	}
 
-	public synchronized Collection<Workunit> GetWorkunits() {
+	public Collection<Workunit> GetWorkunits() {
 		return GetWorkunits("");
 	}
 
@@ -158,13 +158,13 @@ public class Platform extends Observable {
 		return workunit;
 	}
 
-	public synchronized FileSprayWorkunit GetFileSprayWorkunit(DFUWorkunit wu) {
+	public FileSprayWorkunit GetFileSprayWorkunit(DFUWorkunit wu) {
 		FileSprayWorkunit workunit = GetFileSprayWorkunit(wu.getID());
 		workunit.Update(wu);
 		return workunit;
 	}
 
-	public synchronized Collection<FileSprayWorkunit> GetFileSprayWorkunits(String cluster) {
+	public Collection<FileSprayWorkunit> GetFileSprayWorkunits(String cluster) {
 		Collection<FileSprayWorkunit> retVal = new ArrayList<FileSprayWorkunit>();
 		FileSprayServiceSoap service = GetFileSprayService();
 		GetDFUWorkunits request = new GetDFUWorkunits();
@@ -187,7 +187,7 @@ public class Platform extends Observable {
 		return retVal;
 	}
 
-	public synchronized Collection<FileSprayWorkunit> GetFileSprayWorkunits() {
+	public Collection<FileSprayWorkunit> GetFileSprayWorkunits() {
 		return GetFileSprayWorkunits("");
 	}
 
@@ -204,19 +204,19 @@ public class Platform extends Observable {
 		return logicalFile;
 	}
 
-	public synchronized LogicalFile GetLogicalFile(DFULogicalFile lf) {
+	public LogicalFile GetLogicalFile(DFULogicalFile lf) {
 		LogicalFile logicalFile = GetLogicalFile(lf.getName());
 		logicalFile.Update(lf);
 		return logicalFile;
 	}
 
-	public synchronized LogicalFile GetLogicalFile(ECLSourceFile sf) {
+	public LogicalFile GetLogicalFile(ECLSourceFile sf) {
 		LogicalFile logicalFile = GetLogicalFile(sf.getName());
 		logicalFile.Update(sf);
 		return logicalFile;
 	}
 
-	public synchronized Collection<LogicalFile> GetLogicalFiles(String cluster) {
+	public Collection<LogicalFile> GetLogicalFiles(String cluster) {
 		Collection<LogicalFile> retVal = new ArrayList<LogicalFile>();
 		WsDfuServiceSoap service = GetWsDfuService();
 		DFUQueryRequest request = new DFUQueryRequest();
@@ -239,7 +239,7 @@ public class Platform extends Observable {
 		return retVal;
 	}
 
-	public synchronized Collection<LogicalFile> GetLogicalFiles() {
+	public Collection<LogicalFile> GetLogicalFiles() {
 		return GetLogicalFiles("");
 	}
 
@@ -256,13 +256,13 @@ public class Platform extends Observable {
 		return cluster;
 	}
 
-	public synchronized Cluster GetCluster(TpTargetCluster tc) {
+	public Cluster GetCluster(TpTargetCluster tc) {
 		Cluster cluster = GetCluster(tc.getName());
 		cluster.Update(tc);
 		return cluster;
 	}
 
-	public synchronized Collection<Cluster> GetClusters() {
+	public Collection<Cluster> GetClusters() {
 		Collection<Cluster> retVal = new ArrayList<Cluster>();
 		WsTopologyServiceSoap service = GetWsTopologyService();
 		TpTargetClusterQueryRequest request = new TpTargetClusterQueryRequest();

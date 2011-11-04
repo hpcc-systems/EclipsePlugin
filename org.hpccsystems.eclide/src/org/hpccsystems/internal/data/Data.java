@@ -41,7 +41,7 @@ public class Data {
 		return platform;
 	}
 
-	public synchronized Collection<Platform> GetPlatforms() {
+	public Collection<Platform> GetPlatforms() {
 		ILaunchConfiguration[] configs;
 		try {
 			configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();

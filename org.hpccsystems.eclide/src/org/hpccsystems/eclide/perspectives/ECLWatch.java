@@ -33,9 +33,13 @@ public class ECLWatch implements IPerspectiveFactory {
 
 		IFolderLayout left = layout.createFolder( "left", IPageLayout.LEFT, 0.25f, editorArea);
 		left.addView("org.hpccsystems.eclide.viewPlatforms");
+		layout.getViewLayout("org.hpccsystems.eclide.viewPlatforms").setCloseable(false);
+		layout.getViewLayout("org.hpccsystems.eclide.viewPlatforms").setMoveable(false);
 
 		IFolderLayout right = layout.createFolder( "right", IPageLayout.RIGHT, 0.75f, editorArea);
 		right.addView("org.hpccsystems.eclide.htmlView");
+		layout.getViewLayout("org.hpccsystems.eclide.htmlView").setCloseable(false);
+		layout.getViewLayout("org.hpccsystems.eclide.htmlView").setMoveable(false);
 	}
 
 	private void addActionSets() {
