@@ -36,111 +36,6 @@ public class WorkunitsViewer extends ViewPart {
 	Action updateItemAction;
 	Action reloadAction;
 	
-	class FileTreeContentProvider implements ITreeContentProvider, Observer{
-		Data data;
-		
-		FileTreeContentProvider(Data data) {
-			this.data = data;
-		}
-		
-		@Override
-		public void dispose() {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		}
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
-			if (inputElement == data) {
-				for (Platform p : data.GetPlatforms()) {
-					p.addObserver(this);
-					for(Workunit w : p.GetWorkunits()) {
-						retVal.add(new WorkunitTreeItem(treeViewer, null, p, w));
-					}
-				}
-			}
-			return retVal.toArray();
-		}
-
-		@Override
-		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof TreeItem) {
-				return ((TreeItem)parentElement).getChildren();
-			}
-			return null;
-		}
-
-		@Override
-		public Object getParent(Object element) {
-			if (element instanceof TreeItem) {
-				return ((TreeItem)element).getParent();
-			}
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(Object element) {
-			if (element instanceof TreeItem) {
-				return ((TreeItem)element).hasChildren();
-			}
-		    return false;
-		}
-
-		@Override
-		public void update(Observable o, Object arg) {
-			Display.getDefault().asyncExec(new Runnable() {   
-				public void run() {
-					treeViewer.refresh();
-				}
-			});
-		}
-	}
-	
-	class FileTreeLabelProvider implements ILabelProvider {
-
-		@Override
-		public void addListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void dispose() {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public boolean isLabelProperty(Object element, String property) {
-			// TODO Auto-generated method stub
-			return true;
-		}
-
-		@Override
-		public void removeListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public Image getImage(Object element) {
-			if (element instanceof TreeItem) {
-				return ((TreeItem)element).getImage();
-			}
-			return null;
-		}
-
-		@Override
-		public String getText(Object element) {
-			if (element instanceof TreeItem) {
-				return ((TreeItem)element).getText();
-			}
-			// TODO Auto-generated method stub
-			return "TODO";
-		}
-	}	
-	
 	public WorkunitsViewer() {
 		// TODO Auto-generated constructor stub
 	}
@@ -150,9 +45,9 @@ public class WorkunitsViewer extends ViewPart {
 		// Create the tree viewer to display the file tree
 	    treeViewer = new TreeViewer(parent);
 	    treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-	    treeViewer.setContentProvider(new FileTreeContentProvider(Data.getDefault()));
-	    treeViewer.setLabelProvider(new FileTreeLabelProvider());
-	    treeViewer.setInput(Data.getDefault()); // pass a non-null that will be ignored
+	    treeViewer.setContentProvider(new WorkunitsTreeItemContentProvider(treeViewer, Data.getDefault()));
+	    treeViewer.setLabelProvider(new TreeItemLabelProvider(treeViewer));
+	    treeViewer.setInput(Data.getDefault().GetPlatforms()); // pass a non-null that will be ignored
 	    
 	 // Create menu and toolbars.
         createActions();
@@ -180,7 +75,6 @@ public class WorkunitsViewer extends ViewPart {
 					if (o instanceof TreeItem) {
 						((TreeItem)o).showWebPage();
 					}
-					//viewer.refresh(iter.next());
 					break;
 				}
 			}
@@ -191,7 +85,9 @@ public class WorkunitsViewer extends ViewPart {
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
 				Iterator iter = sel.iterator();
 				while (iter.hasNext()) {
-					treeViewer.refresh(iter.next());
+					Object o = iter.next();
+					if (o instanceof TreeItem)
+						((TreeItem)o).refresh();
 				}
 			}
 		};
@@ -201,7 +97,9 @@ public class WorkunitsViewer extends ViewPart {
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
 				Iterator iter = sel.iterator();
 				while (iter.hasNext()) {
-					treeViewer.update(iter.next(), null);
+					Object o = iter.next();
+					if (o instanceof TreeItem)
+						((TreeItem)o).update(null);
 				}
 			}
 		};

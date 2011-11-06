@@ -17,23 +17,20 @@ import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 public class Workunit extends Observable {
-	static final public String NOTIFY_RESULTS = "NotifyResults";
-	static final public String NOTIFY_GRAPHS = "NotifyGraphs";
-	static final public String NOTIFY_STATE = "NotifyState";
 	Data data;
 	Platform platform;
 	private Map<Integer, Result> Results;
 	private Map<Integer, Graph> Graphs;
 	public ECLWorkunit info;
 
-	
+
 	Workunit(Data data, Platform platform, String wuid) {
 		this.data = data;
 		this.platform = platform;
-		this.Results = new HashMap<Integer, Result>(); 		
-		this.Graphs = new HashMap<Integer, Graph>(); 		
 		info = new ECLWorkunit();
 		info.setWuid(wuid);
+		this.Results = new HashMap<Integer, Result>(); 		
+		this.Graphs = new HashMap<Integer, Graph>(); 		
 		setChanged();
 	}
 
@@ -55,7 +52,7 @@ public class Workunit extends Observable {
 		result.Update(r);
 		return result;
 	}
-	
+
 	public Collection<Result> GetResults() {
 		Collection<Result> retVal = new ArrayList<Result>();
 		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
@@ -65,9 +62,10 @@ public class Workunit extends Observable {
 			request.setIncludeResults(true);
 			try {
 				WUInfoResponse respsone = service.WUInfo(request);
-				UpdateResults(respsone.getWorkunit());
-				for(ECLResult r : info.getResults()) {
-					retVal.add(GetResult(r));
+				if (UpdateResults(respsone.getWorkunit())) {
+					for(ECLResult r : info.getResults()) {
+						retVal.add(GetResult(r));
+					}
 				}
 			} catch (ArrayOfEspException e) {
 				// TODO Auto-generated catch block
@@ -77,10 +75,10 @@ public class Workunit extends Observable {
 				e.printStackTrace();
 			}
 		}
-		notifyObservers(NOTIFY_RESULTS);
+		notifyObservers("GetResults");
 		return retVal;
 	}
-	
+
 	//  Results  ---
 	public synchronized Graph GetGraph(String name) {
 		Graph graph = new Graph(data, this, name);
@@ -99,7 +97,7 @@ public class Workunit extends Observable {
 		graph.Update(g);
 		return graph;
 	}
-	
+
 	public Collection<Graph> GetGraphs() {
 		Collection<Graph> retVal = new ArrayList<Graph>();
 		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
@@ -109,36 +107,9 @@ public class Workunit extends Observable {
 			request.setIncludeGraphs(true);
 			try {
 				WUInfoResponse respsone = service.WUInfo(request);
-				UpdateGraphs(respsone.getWorkunit());
-				for(ECLGraph g : info.getGraphs()) {
-					retVal.add(GetGraph(g));
-				}
-			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		notifyObservers(NOTIFY_GRAPHS);
-		return retVal;
-	}
-	
-	//  Source Files  ---
-	public Collection<LogicalFile> GetLogicalFiles() {
-		Collection<LogicalFile> retVal = new ArrayList<LogicalFile>();
-		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
-		if (service != null) {
-			WUInfo request = new WUInfo();
-			request.setWuid(info.getWuid());
-			request.setIncludeSourceFiles(true);
-			try {
-				WUInfoResponse respsone = service.WUInfo(request);
-				UpdateSourceFiles(respsone.getWorkunit());
-				if (info.getSourceFiles() != null) {
-					for(ECLSourceFile sf : info.getSourceFiles()) {
-						retVal.add(platform.GetLogicalFile(sf));
+				if (UpdateGraphs(respsone.getWorkunit())) {
+					for(ECLGraph g : info.getGraphs()) {
+						retVal.add(GetGraph(g));
 					}
 				}
 			} catch (ArrayOfEspException e) {
@@ -149,10 +120,39 @@ public class Workunit extends Observable {
 				e.printStackTrace();
 			}
 		}
-		notifyObservers("SourceFiles");
+		notifyObservers("GetGraphs");
 		return retVal;
 	}
-	
+
+	//  Source Files  ---
+	public Collection<LogicalFile> GetLogicalFiles() {
+		Collection<LogicalFile> retVal = new ArrayList<LogicalFile>();
+		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
+		if (service != null) {
+			WUInfo request = new WUInfo();
+			request.setWuid(info.getWuid());
+			request.setIncludeSourceFiles(true);
+			try {
+				WUInfoResponse respsone = service.WUInfo(request);
+				if (UpdateSourceFiles(respsone.getWorkunit())) {
+					if (info.getSourceFiles() != null) {
+						for(ECLSourceFile sf : info.getSourceFiles()) {
+							retVal.add(platform.GetLogicalFile(sf));
+						}
+					}
+				}
+			} catch (ArrayOfEspException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		notifyObservers("GetLogicalFiles");
+		return retVal;
+	}
+
 	//  General  ---
 	public boolean isComplete() {
 		switch (info.getStateID()) {
@@ -180,7 +180,7 @@ public class Workunit extends Observable {
 			request.setIncludeTimers(true);
 			request.setIncludeVariables(true);
 			request.setIncludeWorkflows(true);
-			*/
+			 */
 			try {
 				WUInfoResponse respsone = service.WUInfo(request);
 				Update(respsone.getWorkunit());		
@@ -192,10 +192,10 @@ public class Workunit extends Observable {
 				e.printStackTrace();
 			}
 		}
-		notifyObservers(NOTIFY_STATE);
+		notifyObservers("Refresh");
 	}
-	
-	void Update(final ECLWorkunit wu) {
+
+	boolean Update(final ECLWorkunit wu) {
 		if (info.getWuid().equals(wu.getWuid()) && !info.equals(wu)) {
 			UpdateState(wu);
 			UpdateResults(wu);
@@ -216,16 +216,18 @@ public class Workunit extends Observable {
 				}, "WU Monitor:  " + wu.getWuid());
 				threadMonitor.start();
 			}
+			return true;
 		}
+		return false;
 	}
-	
+
 	boolean hasChanged(Object target, Object source) {
 		if (source == null)
 			return false;
-		
+
 		return !EqualsUtil.areEqual(target, source);		
 	}
-	
+
 	boolean UpdateState(ECLWorkunit wu) {
 		if (info.getWuid().equals(wu.getWuid()) && hasChanged(info.getStateID(), wu.getStateID())) {
 			info.setStateID(wu.getStateID());
@@ -236,33 +238,39 @@ public class Workunit extends Observable {
 		}
 		return false;
 	}
-	
-	void UpdateResults(ECLWorkunit wu) {
+
+	boolean UpdateResults(ECLWorkunit wu) {
 		if (info.getWuid().equals(wu.getWuid()) && hasChanged(info.getResults(), wu.getResults())) {
 			info.setResultCount(wu.getResultCount());
 			info.setResultLimit(wu.getResultLimit());
 			info.setResultsDesc(wu.getResultsDesc());
 			info.setResults(wu.getResults());
 			setChanged();
+			return true;
 		}
+		return false;
 	}
 
-	void UpdateGraphs(ECLWorkunit wu) {
+	boolean UpdateGraphs(ECLWorkunit wu) {
 		if (info.getWuid().equals(wu.getWuid()) && hasChanged(info.getGraphs(), wu.getGraphs())) {
 			info.setGraphCount(wu.getGraphCount());
 			info.setGraphsDesc(wu.getGraphsDesc());
 			info.setGraphs(wu.getGraphs());
 			setChanged();
+			return true;
 		}
+		return false;
 	}
 
-	void UpdateSourceFiles(ECLWorkunit wu) {
+	boolean UpdateSourceFiles(ECLWorkunit wu) {
 		if (info.getWuid().equals(wu.getWuid()) && hasChanged(info.getSourceFiles(), wu.getSourceFiles())) {
 			info.setSourceFileCount(wu.getSourceFileCount());
 			info.setSourceFilesDesc(wu.getSourceFilesDesc());
 			info.setSourceFiles(wu.getSourceFiles());
 			setChanged();
+			return true;
 		}
+		return false;
 	}
 	@Override 
 	public boolean equals(Object aThat) {

@@ -3,24 +3,206 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
+import org.hpccsystems.eclide.ui.viewer.platform.LazyChildLoader.CalcState;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Cluster;
+import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.FileSprayWorkunit;
 import org.hpccsystems.internal.data.Graph;
 import org.hpccsystems.internal.data.LogicalFile;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Result;
 import org.hpccsystems.internal.data.Workunit;
+
+abstract class TreeItemContentProvider implements ITreeContentProvider, Observer{
+	protected TreeViewer treeViewer;
+
+	TreeItemContentProvider(TreeViewer treeViewer) {
+		this.treeViewer = treeViewer;
+		//loadingState = new HashMap<Object, LoadingState>();
+	}
+	
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	}
+
+	@Override
+	public Object[] getChildren(Object parentElement) {
+		if (parentElement instanceof TreeItem) {
+			return ((TreeItem)parentElement).getChildren();
+		}
+		return null;
+	}
+
+	@Override
+	public Object getParent(Object element) {
+		if (element instanceof TreeItem) {
+			return ((TreeItem)element).getParent();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean hasChildren(Object element) {
+		if (element instanceof TreeItem) {
+			return ((TreeItem)element).hasChildren();
+		}
+		return false;
+	}
+}
+
+class PlatformTreeItemContentProvider extends TreeItemContentProvider {
+	Data data;
+	
+	PlatformTreeItemContentProvider(TreeViewer treeViewer, Data data) {
+		super(treeViewer);
+		this.data = data;
+	}
+
+	public Object[] getElements(Object inputElement) {
+		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
+		for (Platform p : ((Data)inputElement).GetPlatforms()) {
+			retVal.add(new PlatformTreeItem(treeViewer, null, p));
+		}
+		return retVal.toArray();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+	}
+}
+
+class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
+	Data data;
+	LazyChildLoader children;
+	
+	WorkunitsTreeItemContentProvider(TreeViewer treeViewer, Data data) {
+		super(treeViewer);
+		this.data = data;
+		this.children = new LazyChildLoader();
+	}
+
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	}
+
+	public Object[] getElements(Object inputElement) {
+		switch (children.getState()) {
+		case UNKNOWN:
+			final WorkunitsTreeItemContentProvider self = this;
+			children.start(new Runnable() {
+				public void run() {
+					children.set(fetchChildren());
+					Display.getDefault().asyncExec(new Runnable() {   
+						public void run() {
+							self.treeViewer.refresh();
+						}
+					});
+				}
+			});
+			break;
+		case STARTED:
+			break;
+		case FINISHED:
+			break;
+		}
+		return children.get();
+	}
+	
+	Object[] fetchChildren() {
+		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
+		for (Platform p : data.GetPlatforms()) {
+			p.addObserver(this);
+			for(Workunit w : p.GetWorkunits()) {
+				retVal.add(new WorkunitTreeItem(treeViewer, null, p, w));
+			}
+		}
+		return retVal.toArray();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		children.clearState();
+		Display.getDefault().asyncExec(new Runnable() {   
+			public void run() {
+				treeViewer.refresh();
+			}
+		});
+	}
+}
+
+class TreeItemLabelProvider implements ILabelProvider {
+	TreeViewer treeViewer;
+
+	TreeItemLabelProvider(TreeViewer treeViewer) {
+		this.treeViewer = treeViewer;
+	}
+
+	@Override
+	public void addListener(ILabelProviderListener listener) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean isLabelProperty(Object element, String property) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void removeListener(ILabelProviderListener listener) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public Image getImage(Object element) {
+		if (element instanceof TreeItem) {
+			return ((TreeItem)element).getImage();
+		}
+		return null;
+	}
+
+	@Override
+	public String getText(Object element) {
+		if (element instanceof TreeItem) {
+			final TreeItem treeItem = (TreeItem)element; 
+			switch(treeItem.children.getState()) {
+			case UNKNOWN:
+				return treeItem.getText() + " (Unknown...)";
+			case STARTED:
+				return treeItem.getText() + " (Calculating...)";
+			case FINISHED:
+				break;
+			}
+			return treeItem.getText();
+		}
+		return "TODO";
+	}
+}	
 
 class WorkunitComparator implements Comparator<Object> {
 
@@ -48,25 +230,56 @@ class WorkunitComparator implements Comparator<Object> {
 	}
 }
 
-enum CalcState {
-	UNKNOWN,
-	STARTED,
-	FINISHED
+class LazyChildLoader {
+	enum CalcState {
+		UNKNOWN,
+		STARTED,
+		FINISHED
+	}
+
+	CalcState state;
+	Object[] children;
+	
+	LazyChildLoader() {
+		this.state = CalcState.UNKNOWN;
+		this.children = new ArrayList<Object>().toArray();
+	}
+	
+	void clearState() {
+		this.state = CalcState.UNKNOWN;
+	}
+	
+	CalcState getState() {
+		return state;
+	}
+	
+	public void set(Object[] children) {
+		this.children = children;
+		state = CalcState.FINISHED;
+	}
+	
+	Object[] get() {
+		return children;
+	}
+
+	public void start(final Runnable childrenFetcher) {
+		state = CalcState.STARTED;
+		Thread thread = new Thread(childrenFetcher);
+		thread.start();
+	}
 }
 
 class TreeItem {
 	protected TreeViewer treeViewer;
 	protected TreeItem parent;
 	private HtmlViewer htmlViewer;
-	CalcState childrenCalcState;
-	boolean hasChildren;
+	LazyChildLoader children;
 
 	TreeItem(TreeViewer treeViewer, TreeItem parent) {
 		this.treeViewer = treeViewer;
 		this.parent = parent;
 		this.htmlViewer = null;
-		this.childrenCalcState = CalcState.UNKNOWN;
-		this.hasChildren = false;
+		this.children = new LazyChildLoader();
 	}
 	
 	HtmlViewer getHtmlViewer() {
@@ -122,6 +335,7 @@ class TreeItem {
 	}
 
 	void refresh() {
+		this.children.clearState();
 		final TreeItem self = this;
 		Display.getDefault().asyncExec(new Runnable() {   
 			public void run() {
@@ -130,35 +344,35 @@ class TreeItem {
 		});
 	}
 	
-	CalcState getChildrenCaclState() {
-		return childrenCalcState;
-	}
-	
 	final boolean hasChildren() {
-		switch (childrenCalcState) {
+		switch (children.getState()) {
 		case UNKNOWN:
-			childrenCalcState = CalcState.STARTED;
-			update(null);
 			final TreeItem self = this;
-			Thread thread = new Thread(new Runnable() {
+			children.start(new Runnable() {
 				public void run() {
-					Object[] children = getChildren();
-					hasChildren = children == null ? false : children.length > 0;
-					childrenCalcState = CalcState.FINISHED;
-					self.refresh();
+					children.set(fetchChildren());
+					Display.getDefault().asyncExec(new Runnable() {   
+						public void run() {
+							treeViewer.refresh(self);
+						}
+					});
 				}
-			}, "Load children:  " + getText());
-			thread.start();
+			});
+			update(null);
 			break;
 		case STARTED:
 			break;
 		case FINISHED:
-			return hasChildren;
+			break;
 		}
-		return false;
+		return children.get() == null ? false : children.get().length > 0;
 	}
 	
-	Object[] getChildren() {
+	final Object[] getChildren() {
+		return children.get();
+	}
+
+	Object[] fetchChildren() {
 		return null;
 	}
 }
@@ -193,6 +407,7 @@ class PlatformTreeItem extends PlatformBaseTreeItem {
 
 	PlatformTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform) {
 		super(treeViewer, parent, platform);
+		this.children.set(fetchChildren());
 	}
 
 	String getText() {
@@ -215,7 +430,7 @@ class PlatformTreeItem extends PlatformBaseTreeItem {
 		return platform.password;
 	}
 	
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
 		retVal.add(new ClusterFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new WorkunitFolderTreeItem(treeViewer, this, platform));
@@ -232,6 +447,11 @@ class ClusterFolderTreeItem extends PlatformBaseTreeItem {
 	}
 	
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "Clusters (" + children.get().length + ")";
+			}
+		}
 		return "Clusters";
 	}
 	
@@ -243,7 +463,7 @@ class ClusterFolderTreeItem extends PlatformBaseTreeItem {
 		return platform.GetURL("WsTopology", "TpTargetClusterQuery");
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Cluster c : platform.GetClusters())
 			retVal.add(new ClusterTreeItem(treeViewer, this, platform, c));
@@ -258,6 +478,12 @@ class WorkunitFolderTreeItem extends PlatformBaseTreeItem {
 	}
 	
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "Workunits (" + children.get().length + ")";
+			}
+		}
+		
 		return "Workunits";
 	}
 	
@@ -269,7 +495,7 @@ class WorkunitFolderTreeItem extends PlatformBaseTreeItem {
 		return platform.GetURL("WsWorkunits", "WUQuery");
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (Workunit wu : platform.GetWorkunits()) {
 			retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
@@ -286,6 +512,11 @@ class ClusterWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem {
 	}
 	
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "Workunits (" + children.get().length + ")";
+			}
+		}
 		return "Workunits";
 	}
 
@@ -297,7 +528,7 @@ class ClusterWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem {
 		return platform.GetURL("WsWorkunits", "WUQuery", "Cluster=" + cluster.info.getName());
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (Workunit wu : platform.GetWorkunits(cluster.info.getName())) {
 			retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
@@ -314,6 +545,7 @@ class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 		super(treeViewer, parent, platform);
 		this.workunit = wu;
 		wu.addObserver(this);
+		this.children.set(fetchChildren());
 	}
 	
 	String getText() {
@@ -378,7 +610,7 @@ class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 		return platform.GetURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.info.getWuid());
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
 		TreeItem parent = getParent();
 		while (parent != null) {
@@ -409,6 +641,11 @@ class FileSprayWorkunitFolderTreeItem extends PlatformBaseTreeItem {
 	}
 	
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "File Sprays (" + children.get().length + ")";
+			}
+		}
 		return "File Sprays";
 	}
 
@@ -420,7 +657,7 @@ class FileSprayWorkunitFolderTreeItem extends PlatformBaseTreeItem {
 		return platform.GetURL("FileSpray", "GetDFUWorkunits");
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (FileSprayWorkunit wu : platform.GetFileSprayWorkunits()) {
 			retVal.add(new FileSprayWorkunitTreeItem(treeViewer, this, platform, wu));				
@@ -437,6 +674,11 @@ class ClusterFileSprayWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem
 	}
 	
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "File Sprays (" + children.get().length + ")";
+			}
+		}
 		return "File Sprays";
 	}
 
@@ -449,7 +691,7 @@ class ClusterFileSprayWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem
 		return platform.GetURL("FileSpray", "GetDFUWorkunits", "Cluster=" + cluster.info.getName());
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (FileSprayWorkunit wu : platform.GetFileSprayWorkunits(cluster.info.getName())) {
 			retVal.add(new FileSprayWorkunitTreeItem(treeViewer, this, platform, wu));				
@@ -460,30 +702,67 @@ class ClusterFileSprayWorkunitFolderTreeItem extends ClusterPlatformBaseTreeItem
 }
 
 class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem {
-	FileSprayWorkunit wu;
+	FileSprayWorkunit workunit;
 	
 	FileSprayWorkunitTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, FileSprayWorkunit wu) {
 		super(treeViewer, parent, platform);
-		this.wu = wu;
+		this.workunit = wu;
 	}
 	
 	String getText() {
-		return wu.info.getID();
+		return workunit.info.getID();
 	}
 	
+/*enum DFUstate
+{
+0    DFUstate_unknown,
+1    DFUstate_scheduled,
+2    DFUstate_queued,
+3    DFUstate_started,
+4    DFUstate_aborted,
+5    DFUstate_failed,
+6    DFUstate_finished,
+7    DFUstate_monitoring,
+8    DFUstate_aborting
+9;
+*/	
 	Image getImage() {
-        return Activator.getImage("icons/workunit.png"); 
+		if (workunit.info.getState() == null)
+			return null;
+		
+		switch(workunit.info.getState()) {
+			case 1:
+				return Activator.getImage("icons/workunit_warning.png"); 
+			case 2:
+				return Activator.getImage("icons/workunit_submitted.png"); 
+			case 3:
+				return Activator.getImage("icons/workunit_running.png"); 
+			case 4:
+				return Activator.getImage("icons/workunit_failed.png"); 
+			case 5:
+				return Activator.getImage("icons/workunit_failed.png"); 
+			case 6:
+				return Activator.getImage("icons/workunit_completed.png"); 
+			case 7:
+				return Activator.getImage("icons/workunit_submitted"); 
+			case 8:
+				return Activator.getImage("icons/workunit_aborting.png"); 
+			default:
+				break;
+			}
+		return Activator.getImage("icons/workunit_warning.png"); 
 	}
 
 	//javascript:go('/FileSpray/GetDFUWorkunit?wuid=D20111027-153447')
 	URL getWebPageURL() throws MalformedURLException {
-		return platform.GetURL("FileSpray", "GetDFUWorkunit", "wuid=" + wu.info.getID());
+		return platform.GetURL("FileSpray", "GetDFUWorkunit", "wuid=" + workunit.info.getID());
 	}
 }
 
 class ClusterTreeItem extends ClusterPlatformBaseTreeItem {
 	ClusterTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Cluster cluster) {
 		super(treeViewer, parent, platform, cluster);
+		this.children.set(fetchChildren());
 	}
 	
 	String getText() {
@@ -499,7 +778,7 @@ class ClusterTreeItem extends ClusterPlatformBaseTreeItem {
 		return platform.GetURL("ws_machine", "GetTargetClusterInfo", "TargetClusters=" + cluster.info.getName());
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
 		retVal.add(new ClusterWorkunitFolderTreeItem(treeViewer, this, platform, cluster));
 		retVal.add(new ClusterFileSprayWorkunitFolderTreeItem(treeViewer, this, platform, cluster));
@@ -515,6 +794,11 @@ class LogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 	}
 
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "Files (" + children.get().length + ")";
+			}
+		}
 		return "Files";
 	}
 	
@@ -527,7 +811,7 @@ class LogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 		return platform.GetURL("WsDfu", "DFUQuery");
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile wu : platform.GetLogicalFiles()) {
 			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, wu));				
@@ -546,6 +830,11 @@ class WorkunitLogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 	}
 
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "Source Files (" + children.get().length + ")";
+			}
+		}
 		return "Source Files";
 	}
 	
@@ -558,7 +847,7 @@ class WorkunitLogicalFileFolderTreeItem extends PlatformBaseTreeItem {
 		return platform.GetURL("WsWorkunits", "WUInfo", "Wuid=" + wu.info.getWuid());
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile file : wu.GetLogicalFiles()) {
 			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, file));
@@ -575,6 +864,11 @@ class ClusterLogicalFileFolderTreeItem extends ClusterPlatformBaseTreeItem {
 	}
 
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "Files (" + children.get().length + ")";
+			}
+		}
 		return "Files";
 	}
 
@@ -586,7 +880,7 @@ class ClusterLogicalFileFolderTreeItem extends ClusterPlatformBaseTreeItem {
 		return platform.GetURL("WsDfu", "DFUQuery", "ClusterName=" + cluster.info.getName());
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile wu : platform.GetLogicalFiles(cluster.info.getName())) {
 			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, wu));				
@@ -617,7 +911,7 @@ class LogicalFileTreeItem extends PlatformBaseTreeItem {
 		return platform.GetURL("WsDfu", "DFUInfo", "Name=" + file.info.getName());
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		TreeItem parent = getParent();
 		while (parent != null) {
@@ -648,6 +942,7 @@ class LogicalFileContentsTreeItem extends PlatformBaseTreeItem {
 	LogicalFileContentsTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, LogicalFile file) {
 		super(treeViewer, parent, platform);
 		this.file = file; 
+		this.children.set(fetchChildren());
 	}
 	
 	String getText() {
@@ -672,6 +967,11 @@ class ResultFolderTreeItem extends PlatformBaseTreeItem {
 	}
 	
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "Results (" + children.get().length + ")";
+			}
+		}
 		return "Results";
 	}
 	
@@ -683,7 +983,7 @@ class ResultFolderTreeItem extends PlatformBaseTreeItem {
 		return platform.GetURL("WsWorkunits", "WUInfo", "Wuid=" + wu.info.getWuid());
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Result r : wu.GetResults())
 			retVal.add(new ResultTreeItem(treeViewer, this, platform, r));
@@ -697,9 +997,12 @@ class ResultTreeItem extends PlatformBaseTreeItem {
 	ResultTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Result result) {
 		super(treeViewer, parent, platform);
 		this.result = result; 
+		this.children.set(fetchChildren());
 	}
 	
 	String getText() {
+		if (!result.info.getValue().isEmpty())
+			return result.info.getName() + " " + result.info.getValue();
 		return result.info.getName();
 	}
 
@@ -721,6 +1024,11 @@ class GraphFolderTreeItem extends PlatformBaseTreeItem {
 	}
 	
 	String getText() {
+		if (children.getState() == CalcState.FINISHED) {
+			if (!treeViewer.getExpandedState(this)) {
+				return "Graphs (" + children.get().length + ")";
+			}
+		}
 		return "Graphs";
 	}
 	
@@ -732,7 +1040,7 @@ class GraphFolderTreeItem extends PlatformBaseTreeItem {
 		return platform.GetURL("WsWorkunits", "WUInfo", "Wuid=" + wu.info.getWuid());
 	}
 
-	public Object[] getChildren() {
+	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Graph g : wu.GetGraphs())
 			retVal.add(new GraphTreeItem(treeViewer, this, platform, g));
@@ -746,6 +1054,7 @@ class GraphTreeItem extends PlatformBaseTreeItem {
 	GraphTreeItem(TreeViewer treeViewer, TreeItem parent, Platform platform, Graph graph) {
 		super(treeViewer, parent, platform);
 		this.graph = graph; 
+		this.children.set(fetchChildren());
 	}
 	
 	String getText() {
@@ -773,6 +1082,7 @@ class MessageTreeItem extends TreeItem {
 	MessageTreeItem(TreeViewer treeViewer, TreeItem parent, String message) {
 		super(treeViewer, parent);
 		this.message = message;
+		this.children.set(fetchChildren());
 	}
 
 	String getText() {
@@ -783,7 +1093,7 @@ class MessageTreeItem extends TreeItem {
 class RecursiveTreeItem extends MessageTreeItem {
 
 	RecursiveTreeItem(TreeViewer treeViewer, TreeItem parent) {
-		super(treeViewer, parent, "...already expanded...");
+		super(treeViewer, parent, "...recursive expansion...");
 	}
 }
 

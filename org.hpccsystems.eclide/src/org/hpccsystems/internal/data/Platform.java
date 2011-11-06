@@ -5,6 +5,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -93,7 +94,7 @@ public class Platform extends Observable {
 			return null;
 
 		Workunit retVal = GetWorkunit(wuid);
-		notifyObservers();
+		notifyObservers("Submit");
 		return retVal;
 	}
 
@@ -118,11 +119,16 @@ public class Platform extends Observable {
 		return workunit;
 	}
 
-	public Collection<Workunit> GetWorkunits(String cluster) {
+	public Collection<Workunit> GetWorkunits(String cluster, String startDate, String endDate) {
+		Date fromDate = new Date();
+		Date toDate = new Date();
+		
 		Collection<Workunit> retVal = new ArrayList<Workunit>();
 		WsWorkunitsServiceSoap service = GetWsWorkunitsService();
 		WUQuery request = new WUQuery();
 		request.setCluster(cluster);
+		request.setStartDate(startDate);
+		request.setEndDate(startDate);
 		try {
 			WUQueryResponse response = service.WUQuery(request);
 			if (response.getWorkunits() != null) {
@@ -137,12 +143,16 @@ public class Platform extends Observable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		notifyObservers();
+		notifyObservers("GetWorkunits");
 		return retVal;
 	}
 
+	public Collection<Workunit> GetWorkunits(String cluster) {
+		return GetWorkunits(cluster, "", "");
+	}
+
 	public Collection<Workunit> GetWorkunits() {
-		return GetWorkunits("");
+		return GetWorkunits("", "", "");
 	}
 
 	//  FileSPrayWorkunit  ---
@@ -183,7 +193,7 @@ public class Platform extends Observable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		notifyObservers();
+		notifyObservers("GetFileSprayWorkunits");
 		return retVal;
 	}
 
@@ -235,7 +245,7 @@ public class Platform extends Observable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		notifyObservers();
+		notifyObservers("GetLogicalFiles");
 		return retVal;
 	}
 
@@ -280,7 +290,7 @@ public class Platform extends Observable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		notifyObservers();
+		notifyObservers("GetClusters");
 		return retVal;
 	}
 
