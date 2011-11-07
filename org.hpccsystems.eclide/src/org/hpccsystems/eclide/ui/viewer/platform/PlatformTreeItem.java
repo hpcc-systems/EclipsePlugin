@@ -125,6 +125,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 		case FINISHED:
 			break;
 		}
+		children.clearState();
 		return children.get();
 	}
 	
@@ -335,7 +336,7 @@ class TreeItem {
 	}
 
 	void refresh() {
-		this.children.clearState();
+		children.clearState();
 		final TreeItem self = this;
 		Display.getDefault().asyncExec(new Runnable() {   
 			public void run() {

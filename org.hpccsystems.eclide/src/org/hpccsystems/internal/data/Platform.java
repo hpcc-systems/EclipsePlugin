@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
+import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 
 import org.apache.axis.client.Call;
@@ -42,8 +43,6 @@ import org.hpccsystems.ws.wsworkunits.WUQuery;
 import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
-
-
 
 public class Platform extends Observable {
 	public static final String P_IP = "ipLaunchConfig";
@@ -309,14 +308,20 @@ public class Platform extends Observable {
 	public URL GetURL(String service, String method, String params) throws MalformedURLException {
 		return GetURL(service + "/" + method + "?" + params);
 	}
+	
+	void initStub(org.apache.axis.client.Stub stub) {
+		//QName portName = stub.getPortName();
+		//QName newPortName = new QName("urn:hpccsystems:ws:wsworkunits", portName.getLocalPart(), portName.getPrefix());
+		//stub.setPortName(newPortName);
+		stub.setUsername(user);
+		stub.setPassword(password);
+	}
 
 	public WsWorkunitsServiceSoap GetWsWorkunitsService() {
 		WsWorkunitsLocator locator = new WsWorkunitsLocator();
 		try {
 			WsWorkunitsServiceSoap service = locator.getWsWorkunitsServiceSoap(GetURL("WsWorkunits"));
-			org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub)service;
-			stub.setUsername(user);
-			stub.setPassword(password);
+			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -332,9 +337,7 @@ public class Platform extends Observable {
 		WsDfuLocator locator = new WsDfuLocator();
 		try {
 			WsDfuServiceSoap service = locator.getWsDfuServiceSoap(GetURL("WsDfu"));
-			org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub)service;
-			stub.setUsername(user);
-			stub.setPassword(password);
+			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -350,9 +353,7 @@ public class Platform extends Observable {
 		FileSprayLocator locator = new FileSprayLocator();
 		try {
 			FileSprayServiceSoap service = locator.getFileSprayServiceSoap(GetURL("FileSpray"));
-			org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub)service;
-			stub.setUsername(user);
-			stub.setPassword(password);
+			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -368,9 +369,7 @@ public class Platform extends Observable {
 		WsTopologyLocator locator = new WsTopologyLocator();
 		try {
 			WsTopologyServiceSoap service = locator.getWsTopologyServiceSoap(GetURL("WsTopology"));
-			org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub)service;
-			stub.setUsername(user);
-			stub.setPassword(password);
+			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
