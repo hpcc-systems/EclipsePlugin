@@ -262,5 +262,22 @@
             class="org.hpccsystems.eclide.problem.QuickFixer">
       </markerResolutionGenerator>
    </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.hpccsystems.eclide.importWizards.sampleCategory"
+            name="ECL Repository">
+      </category>
+      <wizard
+            category="org.hpccsystems.eclide.importWizards.sampleCategory"
+            class="org.hpccsystems.eclide.importWizards.ImportWizard"
+            icon="icons/sample.gif"
+            id="org.hpccsystems.eclide.importWizards.ImportWizard"
+            name="Import Repository">
+         <description>
+            Import an entire Repository from a rmote legacy server into the workspace.
+         </description>
+      </wizard>
+   </extension>
 
 </plugin>
