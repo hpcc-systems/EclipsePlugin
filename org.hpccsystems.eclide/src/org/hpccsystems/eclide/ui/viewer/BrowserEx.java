@@ -1,15 +1,11 @@
 package org.hpccsystems.eclide.ui.viewer;
 
-import java.util.Queue;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.AuthenticationEvent;
 import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.ProgressAdapter;
 import org.eclipse.swt.browser.ProgressEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -17,16 +13,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 
 public class BrowserEx extends Composite {
-	private String url;
+
 	private String user;
 	private String password;
-	
 	private Browser browser;
-	private boolean loading = false;
-
+	
 	public BrowserEx(Composite parent) {
 		super(parent, SWT.NONE);
 		
@@ -109,7 +102,6 @@ public class BrowserEx extends Composite {
 	}	
 
 	void navigateTo(String url, String user, String password) {
-		this.url = url;
 		this.user = user;
 		this.password = password;
 		browser.setUrl(url);

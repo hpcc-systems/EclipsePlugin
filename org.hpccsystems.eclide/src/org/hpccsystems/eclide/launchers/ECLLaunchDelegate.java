@@ -18,10 +18,7 @@
 
 package org.hpccsystems.eclide.launchers;
 
-import java.util.Collection;
-
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
@@ -32,17 +29,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
-import org.hpccsystems.eclide.builder.ECLCompiler;
-import org.hpccsystems.eclide.editors.ECLEditor;
-import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.data.Workunit;
 
 public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements ILaunchConfigurationDelegate {
 	@Override
@@ -51,8 +40,6 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 		return super.preLaunchCheck(configuration, mode, monitor);
 	}
 
-	private ECLLaunchShortcutLocal fShortcut = new ECLLaunchShortcutLocal(); 
-	
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		final String cluster = configuration.getAttribute(Cluster.P_CLUSTER, ""); 
@@ -79,10 +66,8 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 			//fShortcut.launch(ss, fMode, ip, cluster, user, password);
 		}
 		if (file != null) {
-			Platform platform = Data.getDefault().GetPlatform(configuration);
-			Workunit wu = platform.Submit(file, cluster);
-			wu.Refresh();
-			String wuid = wu.info.getWuid();
+			Platform platform = Data.get().GetPlatform(configuration);
+			platform.submit(file, cluster);
 		}
 	}
 }

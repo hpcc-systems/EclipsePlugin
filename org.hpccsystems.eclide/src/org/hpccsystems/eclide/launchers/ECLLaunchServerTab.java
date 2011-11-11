@@ -1,13 +1,5 @@
 package org.hpccsystems.eclide.launchers;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.RemoteException;
-
-import javax.xml.rpc.ServiceException;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -31,16 +23,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
-import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
-import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
-import org.hpccsystems.ws.wsworkunits.WUQuery;
-import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
-import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
-import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
-
 
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 

@@ -3,22 +3,16 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
-import java.util.Observer;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -27,6 +21,9 @@ import org.eclipse.ui.part.ViewPart;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.internal.ui.tree.LazyChildLoader;
+import org.hpccsystems.internal.ui.tree.TreeItem;
+import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class WorkunitsViewer extends ViewPart {
 
@@ -35,6 +32,67 @@ public class WorkunitsViewer extends ViewPart {
 	Action refreshItemAction;
 	Action updateItemAction;
 	Action reloadAction;
+	
+	class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
+		Data data;
+		LazyChildLoader children;
+		
+		WorkunitsTreeItemContentProvider(TreeViewer treeViewer, Data data) {
+			super(treeViewer);
+			this.data = data;
+			this.children = new LazyChildLoader();
+		}
+
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}
+
+		public Object[] getElements(Object inputElement) {
+			switch (children.getState()) {
+			case UNKNOWN:
+				final WorkunitsTreeItemContentProvider self = this;
+				children.start(new Runnable() {
+					public void run() {
+						children.set(fetchChildren());
+						Display.getDefault().asyncExec(new Runnable() {   
+							public void run() {
+								self.treeViewer.refresh();
+							}
+						});
+					}
+				});
+				break;
+			case STARTED:
+				break;
+			case FINISHED:
+				break;
+			}
+			children.clearState();
+			return children.get();
+		}
+		
+		Object[] fetchChildren() {
+			ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
+			for (Platform p : data.GetPlatforms()) {
+				p.addObserver(this);
+				for(Workunit w : p.getWorkunits()) {
+					retVal.add(new WorkunitTreeItem(treeViewer, null, p, w));
+				}
+			}
+			return retVal.toArray();
+		}
+
+		@Override
+		public void update(Observable o, Object arg) {
+			children.clearState();
+			Display.getDefault().asyncExec(new Runnable() {   
+				public void run() {
+					treeViewer.refresh();
+				}
+			});
+		}
+	}
+
+
 	
 	public WorkunitsViewer() {
 		// TODO Auto-generated constructor stub
@@ -45,9 +103,9 @@ public class WorkunitsViewer extends ViewPart {
 		// Create the tree viewer to display the file tree
 	    treeViewer = new TreeViewer(parent);
 	    treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-	    treeViewer.setContentProvider(new WorkunitsTreeItemContentProvider(treeViewer, Data.getDefault()));
-	    treeViewer.setLabelProvider(new TreeItemLabelProvider(treeViewer));
-	    treeViewer.setInput(Data.getDefault().GetPlatforms()); // pass a non-null that will be ignored
+	    treeViewer.setContentProvider(new WorkunitsTreeItemContentProvider(treeViewer, Data.get()));
+	    treeViewer.setLabelProvider(new PlatformTreeItemLabelProvider(treeViewer));
+	    treeViewer.setInput(Data.get().GetPlatforms()); // pass a non-null that will be ignored
 	    
 	 // Create menu and toolbars.
         createActions();
@@ -69,7 +127,7 @@ public class WorkunitsViewer extends ViewPart {
 		showWebItemAction = new Action("Show ECL Watch") {
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator iter = sel.iterator();
+				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
@@ -83,7 +141,7 @@ public class WorkunitsViewer extends ViewPart {
 		refreshItemAction = new Action("Refresh") {
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator iter = sel.iterator();
+				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem)
@@ -95,7 +153,7 @@ public class WorkunitsViewer extends ViewPart {
 		updateItemAction = new Action("Update") {
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator iter = sel.iterator();
+				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem)
@@ -115,7 +173,7 @@ public class WorkunitsViewer extends ViewPart {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator iter = sel.iterator();
+				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {

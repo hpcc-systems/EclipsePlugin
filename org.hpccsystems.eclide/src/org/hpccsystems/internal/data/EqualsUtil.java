@@ -2,6 +2,13 @@ package org.hpccsystems.internal.data;
 
 public final class EqualsUtil {
 
+	static public boolean hasChanged(Object target, Object source) {
+		if (source == null)
+			return false;
+
+		return !EqualsUtil.areEqual(target, source);		
+	}
+
 	static public boolean areEqual(boolean aThis, boolean aThat){
 		//System.out.println("boolean");
 		return aThis == aThat;

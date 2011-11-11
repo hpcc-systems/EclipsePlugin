@@ -1,33 +1,34 @@
 package org.hpccsystems.internal.data;
 
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.hpccsystems.ws.wsdfu.DFUFileDetail;
-import org.hpccsystems.ws.wsdfu.DFUInfoRequest;
-import org.hpccsystems.ws.wsdfu.DFUInfoResponse;
-import org.hpccsystems.ws.wsdfu.DFULogicalFile;
-import org.hpccsystems.ws.wsdfu.WsDfuServiceSoap;
 import org.hpccsystems.ws.wstopology.TpClusterInfoRequest;
 import org.hpccsystems.ws.wstopology.TpClusterInfoResponse;
 import org.hpccsystems.ws.wstopology.TpTargetCluster;
 import org.hpccsystems.ws.wstopology.WsTopologyServiceSoap;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
-import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
-import org.hpccsystems.ws.wsworkunits.WUInfo;
-import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
-import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
-
-public class Cluster {
+public class Cluster extends DataSingleton  {
 	public static final String P_CLUSTER = "clusterLaunchConfig";
+	private static Map<Integer, Cluster> Clusters = new HashMap<Integer, Cluster>();
+	public static synchronized Cluster get(Data data, Platform platform, String name) {
+		Cluster cluster = new Cluster(platform, name);
+		if (Clusters.containsKey(cluster.hashCode())) {
+			return Clusters.get(cluster.hashCode());
+		}
+		else {
+			Clusters.put(cluster.hashCode(), cluster);
+		}
+		return cluster;
+	}
 
-	Data data;
-	Platform platform;
-	public TpTargetCluster info;
-	public TpClusterInfoResponse info2;
+	private Platform platform;
+	private TpTargetCluster info;
+	private TpClusterInfoResponse info2;
 	
-	Cluster(Data data, Platform platform, String name) {
-		this.data = data;
+	Cluster(Platform platform, String name) {
 		this.platform = platform;
 		info = new TpTargetCluster();
 		info.setName(name);
@@ -35,8 +36,24 @@ public class Cluster {
 		info2.setName(name);
 	}
 	
-	public void Refresh() {
-		WsTopologyServiceSoap service = platform.GetWsTopologyService();
+	public String getName() {
+		return info.getName();
+	}
+
+	@Override
+	boolean isComplete() {
+		return true;
+	}
+
+	@Override
+	void fastRefresh() {
+		fullRefresh();
+	}
+
+	@Override
+	void fullRefresh() {
+		//  Probably not needed...
+		WsTopologyServiceSoap service = platform.getWsTopologyService();
 		if (service != null) {
 			TpClusterInfoRequest request = new TpClusterInfoRequest();
 			request.setName(info.getName());
@@ -54,13 +71,17 @@ public class Cluster {
 	}
 	
 	void Update(TpTargetCluster tc) {
-		if (info.getName().equals(tc.getName()))
+		if (info.getName().equals(tc.getName())) {
 			info = tc;
+			setChanged();
+		}
 	}
 
 	void Update(TpClusterInfoResponse ci) {
-		if (info2.getName().equals(ci.getName()))
+		if (info2.getName().equals(ci.getName())) {
 			info2 = ci;
+			setChanged();
+		}
 	}
 
 	@Override 
