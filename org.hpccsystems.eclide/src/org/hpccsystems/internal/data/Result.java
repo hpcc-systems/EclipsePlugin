@@ -1,30 +1,119 @@
 package org.hpccsystems.internal.data;
 
-import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLResult;
-import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
-import org.hpccsystems.ws.wsworkunits.WUInfo;
-import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
-import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
+public class Result extends DataSingleton {
+	private static Map<Integer, Result> Results = new HashMap<Integer, Result>();
+	public static synchronized Result get(Workunit workunit, Integer sequence) {
+		Result result = new Result(workunit, sequence);
+		if (Results.containsKey(result.hashCode())) {
+			return Results.get(result.hashCode());
+		}
+		else {
+			Results.put(result.hashCode(), result);
+		}
+		return result;
+	}
 
-public class Result {
-	Data data;
-	public Workunit workunit;
-	public ECLResult info;
+	private Workunit workunit;
+	private ECLResult info;
+	public enum Notification {
+		RESULT
+	}
 	
-	Result(Data data, Workunit workunit, Integer sequence) {
-		this.data = data;
+	private Result(Workunit workunit, Integer sequence) {
 		this.workunit = workunit;
 		info = new ECLResult();
 		info.setSequence(sequence);
+		setChanged();
 	}
 	
-	void Update(ECLResult result) {
-		if (info.getSequence().equals(result.getSequence()))
+	public String getWuid() {
+		return workunit.getWuid();
+	}
+
+	public Integer getSequence() {
+		return info.getSequence();
+	}
+
+	public String getName() {
+		return info.getName();
+	}
+
+	public String getValue() {
+		return info.getValue();
+	}
+
+	public State getStateID() {
+		if (info.getTotal() != null && info.getTotal() != -1) {
+			return State.COMPLETED;
+		}
+		return State.UNKNOWN;
+		}
+	
+	@Override
+	public boolean isComplete() {
+		return StateHelper.isCompleted(getStateID());
+	}
+
+	@Override
+	void fastRefresh() {
+		fullRefresh();	
+	}
+
+	@Override
+	void fullRefresh() {
+		workunit.getResults();
+		/*
+		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
+		if (service != null) {
+			WUResult request = new WUResult();
+			request.setWuid(workunit.getWuid());
+			request.setSequence(info.getSequence());
+			request.setStart(new Long(0));
+			request.setCount(1);
+
+			try {
+				WUResultResponse response = service.WUResult(request);
+				ECLResult newInfo = info;
+				newInfo.setName(response.getName());
+				newInfo.setTotal(response.getTotal());
+				Update(newInfo);
+			} catch (ArrayOfEspException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		*/
+	}
+
+	//  Updates  ---
+	boolean Update(ECLResult result) {		
+		boolean retVal = false;
+		if (result != null && info.getSequence().equals(result.getSequence()) && !info.equals(result)) {
+			if (UpdateState(result)) {
+				retVal = true;
+				notifyObservers(Notification.RESULT);
+			}
+		}
+		monitor();
+		return retVal;
+	}
+
+	synchronized boolean UpdateState(ECLResult result) {
+		if (result != null && info.getSequence().equals(result.getSequence()) &&
+				EqualsUtil.hasChanged(info, result)) {
 			info = result;
+			setChanged();
+			return true;
+		}
+		return false;
 	}
 
 	@Override 

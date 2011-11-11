@@ -1,29 +1,22 @@
 package org.hpccsystems.eclide.ui.viewer.platform;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Observable;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.ui.tree.TreeItem;
 
 public class PlatformViewer extends ViewPart {
 
@@ -41,9 +34,9 @@ public class PlatformViewer extends ViewPart {
 		// Create the tree viewer to display the file tree
 	    treeViewer = new TreeViewer(parent);
 	    treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-	    treeViewer.setContentProvider(new PlatformTreeItemContentProvider(treeViewer, Data.getDefault()));
-	    treeViewer.setLabelProvider(new TreeItemLabelProvider(treeViewer));
-	    treeViewer.setInput(Data.getDefault()); // pass a non-null that will be ignored
+	    treeViewer.setContentProvider(new PlatformTreeItemContentProvider(treeViewer, Data.get()));
+	    treeViewer.setLabelProvider(new PlatformTreeItemLabelProvider(treeViewer));
+	    treeViewer.setInput(Data.get()); // pass a non-null that will be ignored
 	    
 	 // Create menu and toolbars.
         createActions();
@@ -65,7 +58,7 @@ public class PlatformViewer extends ViewPart {
 		showWebItemAction = new Action("Show ECL Watch") {
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator iter = sel.iterator();
+				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
@@ -79,7 +72,7 @@ public class PlatformViewer extends ViewPart {
 		refreshItemAction = new Action("Refresh") {
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator iter = sel.iterator();
+				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem)
@@ -91,7 +84,7 @@ public class PlatformViewer extends ViewPart {
 		updateItemAction = new Action("Update") {
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator iter = sel.iterator();
+				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem)
@@ -111,7 +104,7 @@ public class PlatformViewer extends ViewPart {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator iter = sel.iterator();
+				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {

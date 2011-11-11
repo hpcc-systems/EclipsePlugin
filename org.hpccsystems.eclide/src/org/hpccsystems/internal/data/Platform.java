@@ -5,19 +5,13 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
 
-import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 
-import org.apache.axis.client.Call;
-import org.apache.axis.client.Stub;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.internal.Eclipse;
@@ -44,97 +38,117 @@ import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
-public class Platform extends Observable {
+public class Platform extends DataSingleton {
+	private static Map<Integer, Platform> Platforms = new HashMap<Integer, Platform>();
+	public static synchronized Platform get(Data data, ILaunchConfiguration launchConfiguration) {
+		Platform platform = new Platform(data, launchConfiguration);
+		if (Platforms.containsKey(platform.hashCode())) {
+			return Platforms.get(platform.hashCode());
+		}
+		else {
+			Platforms.put(platform.hashCode(), platform);
+		}
+		return platform;
+	}
+
 	public static final String P_IP = "ipLaunchConfig";
 
 	public static final String P_USER = "userLaunchConfig";
 	public static final String P_PASSWORD = "passwordLaunchConfig";
-
+	
 	Data data;
 	//public String name; 
-	public String ip; 
-	public String user; 
-	public String password;
+	private String ip; 
+	private String user; 
+	private String password;
+	private Collection<Cluster> clusters;
+	private Collection<Workunit> workunits;	
+	private Collection<FileSprayWorkunit> fileSprayWorkunits;
+	private Collection<LogicalFile> logicalFiles;
 
-	private Map<Integer, Workunit> Workunits;
-	private Map<Integer, FileSprayWorkunit> FileSprayWorkunits;
-	private Map<Integer, LogicalFile> LogicalFiles;
-	private Map<Integer, Cluster> Clusters;
 
 	Platform(Data data, ILaunchConfiguration launchConfiguration) {
 		this.data = data;
-		Workunits = new HashMap<Integer, Workunit>(); 
-		FileSprayWorkunits = new HashMap<Integer, FileSprayWorkunit>(); 
-		LogicalFiles = new HashMap<Integer, LogicalFile>();
-		Clusters = new HashMap<Integer, Cluster>();
 
 		//name = launchConfiguration.getName();
 
 		try {
-			ip = launchConfiguration.getAttribute(P_IP, "");
+			this.ip = launchConfiguration.getAttribute(P_IP, "");
 		} catch (CoreException e) {
 		} 
 		try {
-			user = launchConfiguration.getAttribute(P_USER, "");
+			this.user = launchConfiguration.getAttribute(P_USER, "");
 		} catch (CoreException e) {
 		} 
 		try {
-			password = launchConfiguration.getAttribute(P_PASSWORD, "");
+			this.password = launchConfiguration.getAttribute(P_PASSWORD, "");
 		} catch (CoreException e) {
 		}
+		this.clusters = new ArrayList<Cluster>();
+		this.workunits = new ArrayList<Workunit>();	
+		this.fileSprayWorkunits = new ArrayList<FileSprayWorkunit>();
+		this.logicalFiles = new ArrayList<LogicalFile>();
 		setChanged();
 	}
 
-	public Workunit Submit(IFile file, String cluster) {
+	public String getIP() {
+		return ip;
+	}
+
+	public String getUser() {
+		return user;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public Workunit submit(IFile file, String cluster) {
 		Eclipse.doSaveDirty(file.getProject());
 		ECLCompiler compiler = new ECLCompiler(file.getProject());
 		String wuid = compiler.buildAndRun(file, ip, cluster, user, password);
 		if (wuid.isEmpty())
 			return null;
 
-		Workunit retVal = GetWorkunit(wuid);
+		Workunit retVal = getWorkunit(wuid);
+		setChanged();
 		notifyObservers("Submit");
 		return retVal;
 	}
 
+	@Override
+	boolean isComplete() {
+		return true;
+	}
+
+	@Override
+	void fastRefresh() {
+	}
+
+	@Override
+	void fullRefresh() {
+	}
+
 	//  Workunit  ---
-	public synchronized Workunit GetWorkunit(String wuid) {
-		if (wuid == null || wuid.isEmpty())
-			return null;
-		Workunit workunit = new Workunit(data, this, wuid);
-		if (Workunits.containsKey(workunit.hashCode())) {
-			return Workunits.get(workunit.hashCode());
-		}
-		else {
-			Workunits.put(workunit.hashCode(), workunit);
-		}
-		setChanged();
+	public Workunit getWorkunit(String wuid) {
+		return Workunit.get(this, wuid);
+	}
+
+	public Workunit getWorkunit(ECLWorkunit wu) {
+		Workunit workunit = getWorkunit(wu.getWuid());
+		workunit.update(wu);
 		return workunit;
 	}
 
-	public Workunit GetWorkunit(ECLWorkunit wu) {
-		Workunit workunit = GetWorkunit(wu.getWuid());
-		workunit.Update(wu);
-		return workunit;
-	}
-
-	public Collection<Workunit> GetWorkunits(String cluster, String startDate, String endDate) {
-		Date fromDate = new Date();
-		Date toDate = new Date();
-		
-		Collection<Workunit> retVal = new ArrayList<Workunit>();
-		WsWorkunitsServiceSoap service = GetWsWorkunitsService();
+	public Collection<Workunit> getWorkunits(String cluster, String startDate, String endDate) {
+		WsWorkunitsServiceSoap service = getWsWorkunitsService();
 		WUQuery request = new WUQuery();
 		request.setCluster(cluster);
 		request.setStartDate(startDate);
 		request.setEndDate(startDate);
 		try {
 			WUQueryResponse response = service.WUQuery(request);
-			if (response.getWorkunits() != null) {
-				for(ECLWorkunit wu : response.getWorkunits()) {
-					retVal.add(GetWorkunit(wu));
-				}
-			}
+			updateWorkunits(response.getWorkunits());
 		} catch (ArrayOfEspException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -143,48 +157,50 @@ public class Platform extends Observable {
 			e.printStackTrace();
 		}
 		notifyObservers("GetWorkunits");
-		return retVal;
+		return workunits;
 	}
 
-	public Collection<Workunit> GetWorkunits(String cluster) {
-		return GetWorkunits(cluster, "", "");
+	public Collection<Workunit> getWorkunits(String cluster) {
+		return getWorkunits(cluster, "", "");
 	}
 
-	public Collection<Workunit> GetWorkunits() {
-		return GetWorkunits("", "", "");
+	public Collection<Workunit> getWorkunits() {
+		return getWorkunits("", "", "");
+	}
+	
+	synchronized boolean updateWorkunits(ECLWorkunit[] rawWorkunits) {
+		int beforeCount = workunits.size();
+		workunits.clear();
+		if (rawWorkunits != null) {
+			for(ECLWorkunit wu : rawWorkunits) {
+				workunits.add(getWorkunit(wu)); 	//  Will mark changed if needed  ---
+			}
+		}
+		if (beforeCount != workunits.size()) {
+			setChanged();
+			return true;
+		}		
+		return false;
 	}
 
 	//  FileSPrayWorkunit  ---
-	public synchronized FileSprayWorkunit GetFileSprayWorkunit(String id) {
-		FileSprayWorkunit workunit = new FileSprayWorkunit(data, this, id);
-		if (FileSprayWorkunits.containsKey(workunit.hashCode())) {
-			return FileSprayWorkunits.get(workunit.hashCode());
-		}
-		else {
-			FileSprayWorkunits.put(workunit.hashCode(), workunit);
-		}
-		setChanged();
-		return workunit;
+	public FileSprayWorkunit getFileSprayWorkunit(String id) {
+		return FileSprayWorkunit.get(this, id);
 	}
 
-	public FileSprayWorkunit GetFileSprayWorkunit(DFUWorkunit wu) {
-		FileSprayWorkunit workunit = GetFileSprayWorkunit(wu.getID());
+	public FileSprayWorkunit getFileSprayWorkunit(DFUWorkunit wu) {
+		FileSprayWorkunit workunit = getFileSprayWorkunit(wu.getID());
 		workunit.Update(wu);
 		return workunit;
 	}
 
-	public Collection<FileSprayWorkunit> GetFileSprayWorkunits(String cluster) {
-		Collection<FileSprayWorkunit> retVal = new ArrayList<FileSprayWorkunit>();
-		FileSprayServiceSoap service = GetFileSprayService();
+	public Collection<FileSprayWorkunit> getFileSprayWorkunits(String cluster) {
+		FileSprayServiceSoap service = getFileSprayService();
 		GetDFUWorkunits request = new GetDFUWorkunits();
 		request.setCluster(cluster);
 		try {
 			GetDFUWorkunitsResponse response = service.getDFUWorkunits(request);
-			if (response.getResults() != null) {
-				for(DFUWorkunit wu : response.getResults()) {
-					retVal.add(GetFileSprayWorkunit(wu));
-				}
-			}
+			updateFileSprayWorkunits(response.getResults());
 		} catch (ArrayOfEspException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -193,50 +209,52 @@ public class Platform extends Observable {
 			e.printStackTrace();
 		}
 		notifyObservers("GetFileSprayWorkunits");
-		return retVal;
+		return fileSprayWorkunits;
 	}
 
-	public Collection<FileSprayWorkunit> GetFileSprayWorkunits() {
-		return GetFileSprayWorkunits("");
+	public Collection<FileSprayWorkunit> getFileSprayWorkunits() {
+		return getFileSprayWorkunits("");
+	}
+
+	synchronized boolean updateFileSprayWorkunits(DFUWorkunit[] rawWorkunits) {
+		int beforeCount = fileSprayWorkunits.size();
+		fileSprayWorkunits.clear();
+		if (rawWorkunits != null) {
+			for(DFUWorkunit wu : rawWorkunits) {
+				fileSprayWorkunits.add(getFileSprayWorkunit(wu)); 	//  Will mark changed if needed  ---
+			}
+		}
+		if (beforeCount != fileSprayWorkunits.size()) {
+			setChanged();
+			return true;
+		}		
+		return false;
 	}
 
 	//  LogicalFile  ---
-	public synchronized LogicalFile GetLogicalFile(String name) {
-		LogicalFile logicalFile = new LogicalFile(data, this, name);
-		if (LogicalFiles.containsKey(logicalFile.hashCode())) {
-			return LogicalFiles.get(logicalFile.hashCode());
-		}
-		else {
-			LogicalFiles.put(logicalFile.hashCode(), logicalFile);
-		}
-		setChanged();
-		return logicalFile;
+	public LogicalFile getLogicalFile(String name) {
+		return LogicalFile.get(this, name);
 	}
 
-	public LogicalFile GetLogicalFile(DFULogicalFile lf) {
-		LogicalFile logicalFile = GetLogicalFile(lf.getName());
+	public LogicalFile getLogicalFile(DFULogicalFile lf) {
+		LogicalFile logicalFile = getLogicalFile(lf.getName());
 		logicalFile.Update(lf);
 		return logicalFile;
 	}
 
-	public LogicalFile GetLogicalFile(ECLSourceFile sf) {
-		LogicalFile logicalFile = GetLogicalFile(sf.getName());
+	public LogicalFile getLogicalFile(ECLSourceFile sf) {
+		LogicalFile logicalFile = getLogicalFile(sf.getName());
 		logicalFile.Update(sf);
 		return logicalFile;
 	}
 
-	public Collection<LogicalFile> GetLogicalFiles(String cluster) {
-		Collection<LogicalFile> retVal = new ArrayList<LogicalFile>();
-		WsDfuServiceSoap service = GetWsDfuService();
+	public Collection<LogicalFile> getLogicalFiles(String cluster) {
+		WsDfuServiceSoap service = getWsDfuService();
 		DFUQueryRequest request = new DFUQueryRequest();
 		request.setClusterName(cluster);
 		try {
 			DFUQueryResponse response = service.DFUQuery(request);
-			if (response.getDFULogicalFiles() != null) {
-				for(DFULogicalFile logicalFile : response.getDFULogicalFiles()) {
-					retVal.add(GetLogicalFile(logicalFile));
-				}
-			}
+			updateLogicalFiles(response.getDFULogicalFiles());
 		} catch (ArrayOfEspException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -245,43 +263,45 @@ public class Platform extends Observable {
 			e.printStackTrace();
 		}
 		notifyObservers("GetLogicalFiles");
-		return retVal;
+		return logicalFiles;
 	}
 
-	public Collection<LogicalFile> GetLogicalFiles() {
-		return GetLogicalFiles("");
+	public Collection<LogicalFile> getLogicalFiles() {
+		return getLogicalFiles("");
+	}
+	
+	synchronized boolean updateLogicalFiles(DFULogicalFile[] rawLogicalFiles) {
+		int beforeCount = logicalFiles.size();
+		logicalFiles.clear();
+		if (rawLogicalFiles != null) {
+			for(DFULogicalFile lf : rawLogicalFiles) {
+				logicalFiles.add(getLogicalFile(lf)); 	//  Will mark changed if needed  ---
+			}
+		}
+		if (beforeCount != logicalFiles.size()) {
+			setChanged();
+			return true;
+		}		
+		return false;
 	}
 
 	//  Cluster  ---
-	public synchronized Cluster GetCluster(String name) {
-		Cluster cluster = new Cluster(data, this, name);
-		if (Clusters.containsKey(cluster.hashCode())) {
-			return Clusters.get(cluster.hashCode());
-		}
-		else {
-			Clusters.put(cluster.hashCode(), cluster);
-		}
-		setChanged();
-		return cluster;
+	public Cluster getCluster(String name) {
+		return Cluster.get(data, this, name);
 	}
 
-	public Cluster GetCluster(TpTargetCluster tc) {
-		Cluster cluster = GetCluster(tc.getName());
+	public Cluster getCluster(TpTargetCluster tc) {
+		Cluster cluster = getCluster(tc.getName());
 		cluster.Update(tc);
 		return cluster;
 	}
 
-	public Collection<Cluster> GetClusters() {
-		Collection<Cluster> retVal = new ArrayList<Cluster>();
-		WsTopologyServiceSoap service = GetWsTopologyService();
+	public Collection<Cluster> getClusters() {
+		WsTopologyServiceSoap service = getWsTopologyService();
 		TpTargetClusterQueryRequest request = new TpTargetClusterQueryRequest();
 		try {
 			TpTargetClusterQueryResponse response = service.tpTargetClusterQuery(request);
-			if (response.getTpTargetClusters() != null) {
-				for(TpTargetCluster cluster : response.getTpTargetClusters()) {
-					retVal.add(GetCluster(cluster));
-				}
-			}
+			updateClusters(response.getTpTargetClusters());
 		} catch (ArrayOfEspException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -290,23 +310,39 @@ public class Platform extends Observable {
 			e.printStackTrace();
 		}
 		notifyObservers("GetClusters");
-		return retVal;
+		return clusters;
 	}
 
-	public URL GetURL() throws MalformedURLException {
-		return GetURL("");
+	synchronized boolean updateClusters(TpTargetCluster[] rawCluster) {
+		int beforeCount = clusters.size();
+		clusters.clear();
+		if (rawCluster != null) {
+			for(TpTargetCluster c : rawCluster) {
+				clusters.add(getCluster(c)); 	//  Will mark changed if needed  ---
+			}
+		}
+		if (beforeCount != clusters.size()) {
+			setChanged();
+			return true;
+		}		
+		return false;
 	}
 
-	public URL GetURL(String service) throws MalformedURLException {
+	//  SOAP Stub Helpers  ---
+	public URL getURL() throws MalformedURLException {
+		return getURL("");
+	}
+
+	public URL getURL(String service) throws MalformedURLException {
 		return new URL("http", ip, 8010, "/" + service);
 	}
 
-	public URL GetURL(String service, String method) throws MalformedURLException {
-		return GetURL(service + "/" + method);
+	public URL getURL(String service, String method) throws MalformedURLException {
+		return getURL(service + "/" + method);
 	}
 
-	public URL GetURL(String service, String method, String params) throws MalformedURLException {
-		return GetURL(service + "/" + method + "?" + params);
+	public URL getURL(String service, String method, String params) throws MalformedURLException {
+		return getURL(service + "/" + method + "?" + params);
 	}
 	
 	void initStub(org.apache.axis.client.Stub stub) {
@@ -317,10 +353,10 @@ public class Platform extends Observable {
 		stub.setPassword(password);
 	}
 
-	public WsWorkunitsServiceSoap GetWsWorkunitsService() {
+	public WsWorkunitsServiceSoap getWsWorkunitsService() {
 		WsWorkunitsLocator locator = new WsWorkunitsLocator();
 		try {
-			WsWorkunitsServiceSoap service = locator.getWsWorkunitsServiceSoap(GetURL("WsWorkunits"));
+			WsWorkunitsServiceSoap service = locator.getWsWorkunitsServiceSoap(getURL("WsWorkunits"));
 			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
@@ -333,10 +369,10 @@ public class Platform extends Observable {
 		return null;	
 	}
 
-	public WsDfuServiceSoap GetWsDfuService() {
+	public WsDfuServiceSoap getWsDfuService() {
 		WsDfuLocator locator = new WsDfuLocator();
 		try {
-			WsDfuServiceSoap service = locator.getWsDfuServiceSoap(GetURL("WsDfu"));
+			WsDfuServiceSoap service = locator.getWsDfuServiceSoap(getURL("WsDfu"));
 			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
@@ -349,10 +385,10 @@ public class Platform extends Observable {
 		return null;	
 	}
 
-	public FileSprayServiceSoap GetFileSprayService() {
+	public FileSprayServiceSoap getFileSprayService() {
 		FileSprayLocator locator = new FileSprayLocator();
 		try {
-			FileSprayServiceSoap service = locator.getFileSprayServiceSoap(GetURL("FileSpray"));
+			FileSprayServiceSoap service = locator.getFileSprayServiceSoap(getURL("FileSpray"));
 			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
@@ -365,10 +401,10 @@ public class Platform extends Observable {
 		return null;	
 	}
 
-	public WsTopologyServiceSoap GetWsTopologyService() {
+	public WsTopologyServiceSoap getWsTopologyService() {
 		WsTopologyLocator locator = new WsTopologyLocator();
 		try {
-			WsTopologyServiceSoap service = locator.getWsTopologyServiceSoap(GetURL("WsTopology"));
+			WsTopologyServiceSoap service = locator.getWsTopologyServiceSoap(getURL("WsTopology"));
 			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
@@ -383,7 +419,7 @@ public class Platform extends Observable {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( (Object)this == aThat ) 
+		if ( this == aThat ) 
 			return true;
 
 		if ( !(aThat instanceof Platform) ) 
@@ -394,13 +430,10 @@ public class Platform extends Observable {
 		return EqualsUtil.areEqual(this.ip, that.ip);
 	}
 
+	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
 		result = HashCodeUtil.hash(result, ip);
 		return result;
-	}
-
-	public String GetIP() {
-		return ip;
 	}
 }

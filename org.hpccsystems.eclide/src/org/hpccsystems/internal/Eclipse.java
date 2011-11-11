@@ -33,7 +33,7 @@ public class Eclipse {
 	}
 	
 	static public IResource findResource(String absolutePath) {
-		if (absolutePath.isEmpty()) {
+		if (absolutePath == null || absolutePath.isEmpty()) {
 			return null;
 		}
 

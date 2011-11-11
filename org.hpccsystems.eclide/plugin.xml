@@ -76,29 +76,18 @@
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">
-      <viewerActionBinding
-            viewerId="org.hpccsystems.eclide.navigator">
+      <viewerActionBinding viewerId="org.hpccsystems.eclide.navigator">
          <includes>
-            <actionExtension
-                  pattern="org.eclipse.ui.navigator.resources.*">
-            </actionExtension>
+            <actionExtension pattern="org.eclipse.ui.navigator.resources.*" />
          </includes>
       </viewerActionBinding>
-      <viewerContentBinding
-            viewerId="org.hpccsystems.eclide.navigator">
+      <viewerContentBinding viewerId="org.hpccsystems.eclide.navigator">
          <includes>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resourceContent">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.filters.*">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.linkHelper">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.workingSets">
-            </contentExtension>
+            <contentExtension pattern="org.hpccsystems.eclide.navigator" />
+            <contentExtension pattern="org.eclipse.ui.navigator.resourceContent" />
+            <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*" />
+            <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper" />
+            <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets" />
 			<contentExtension pattern="org.eclipse.jdt.java.ui.javaContent" />
    <contentExtension
          isRoot="true"
@@ -270,7 +259,7 @@
       </category>
       <wizard
             category="org.hpccsystems.eclide.importWizards.sampleCategory"
-            class="org.hpccsystems.eclide.importWizards.ImportWizard"
+            class="org.hpccsystems.eclide.wizards.ImportWizard"
             icon="icons/sample.gif"
             id="org.hpccsystems.eclide.importWizards.ImportWizard"
             name="Import Repository">

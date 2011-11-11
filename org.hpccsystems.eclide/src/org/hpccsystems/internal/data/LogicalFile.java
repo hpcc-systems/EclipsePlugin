@@ -1,6 +1,8 @@
 package org.hpccsystems.internal.data;
 
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.hpccsystems.ws.wsdfu.DFUFileDetail;
 import org.hpccsystems.ws.wsdfu.DFUInfoRequest;
@@ -8,25 +10,31 @@ import org.hpccsystems.ws.wsdfu.DFUInfoResponse;
 import org.hpccsystems.ws.wsdfu.DFULogicalFile;
 import org.hpccsystems.ws.wsdfu.WsDfuServiceSoap;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
-import org.hpccsystems.ws.wsworkunits.ECLResult;
 import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
-import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
-import org.hpccsystems.ws.wsworkunits.WUInfo;
-import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
-import org.hpccsystems.ws.wsworkunits.WUResult;
-import org.hpccsystems.ws.wsworkunits.WUResultResponse;
-import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 
-public class LogicalFile {
-	Data data;
-	Platform platform;
-	public DFULogicalFile info;
-	public DFUFileDetail info2;
-	public ECLSourceFile info3;
+public class LogicalFile extends DataSingleton {
+	private static Map<Integer, LogicalFile> LogicalFiles = new HashMap<Integer, LogicalFile>();
+	public static synchronized LogicalFile get(Platform platform, String name) {
+		LogicalFile logicalFile = new LogicalFile(platform, name);
+		if (LogicalFiles.containsKey(logicalFile.hashCode())) {
+			return LogicalFiles.get(logicalFile.hashCode());
+		}
+		else {
+			LogicalFiles.put(logicalFile.hashCode(), logicalFile);
+		}
+		return logicalFile;
+	}
+
+	private Platform platform;
+	private DFULogicalFile info;
+	private DFUFileDetail info2;
+	private ECLSourceFile info3;
+	public enum Notification {
+		LOGICALFILE
+	}
 	
-	LogicalFile(Data data, Platform platform, String name) {
-		this.data = data;
+	private LogicalFile(Platform platform, String name) {
 		this.platform = platform;
 		info = new DFULogicalFile();
 		info.setName(name);
@@ -36,24 +44,53 @@ public class LogicalFile {
 		info3.setName(name);
 	}
 	
-	public void Refresh() {
-			WsDfuServiceSoap service = platform.GetWsDfuService();
-			if (service != null) {
-				DFUInfoRequest request = new DFUInfoRequest();
-				request.setName(info.getName());
-				try {
-					DFUInfoResponse respsone = service.DFUInfo(request);
-					Update(respsone.getFileDetail());		
-				} catch (ArrayOfEspException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+	public String getName() {
+		return info.getName();
 	}
-	
+
+	public Workunit getWorkunit() {
+		if (info2.getWuid() == null)
+			fullRefresh();
+		return platform.getWorkunit(info2.getWuid());
+	}
+
+	public String getDir() {
+		if (info2.getDir() == null)
+			fullRefresh();
+		return info2.getDir();
+	}
+
+	@Override
+	boolean isComplete() {
+		return true;
+	}
+
+	@Override
+	void fastRefresh() {
+		fullRefresh();
+	}
+
+	@Override
+	void fullRefresh() {
+		WsDfuServiceSoap service = platform.getWsDfuService();
+		if (service != null) {
+			DFUInfoRequest request = new DFUInfoRequest();
+			request.setName(info.getName());
+			try {
+				DFUInfoResponse respsone = service.DFUInfo(request);
+				Update(respsone.getFileDetail());		
+			} catch (ArrayOfEspException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		notifyObservers(Notification.LOGICALFILE);
+	}
+
+	//  Updates  ---
 	void Update(DFULogicalFile lf) {
 		if (info.getName().equals(lf.getName()))
 			info = lf;
