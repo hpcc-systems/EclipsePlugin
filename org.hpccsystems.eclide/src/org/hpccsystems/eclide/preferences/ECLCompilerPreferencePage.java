@@ -19,9 +19,6 @@
 package org.hpccsystems.eclide.preferences;
 
 import org.eclipse.jface.preference.*;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.hpccsystems.eclide.Activator;

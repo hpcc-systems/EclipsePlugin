@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.hpccsystems.eclide.importWizards;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;

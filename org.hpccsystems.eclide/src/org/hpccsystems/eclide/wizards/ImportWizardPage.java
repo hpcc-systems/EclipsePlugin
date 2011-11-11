@@ -12,11 +12,8 @@ package org.hpccsystems.eclide.wizards;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -26,33 +23,22 @@ import java.util.concurrent.TimeUnit;
 
 import javax.xml.rpc.ServiceException;
 
-import org.apache.axis.components.threadpool.ThreadPool;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.debug.internal.ui.SWTFactory;
-import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.dialogs.WizardResourceImportPage;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.ui.PasswordFieldEditor;
-import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
-import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 import com.seisint.webservices.WsAttributes.ArrayOfEspException;
 import com.seisint.webservices.WsAttributes.ECLAttribute;

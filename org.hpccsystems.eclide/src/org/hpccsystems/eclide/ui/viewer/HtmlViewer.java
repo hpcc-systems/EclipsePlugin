@@ -1,13 +1,5 @@
 package org.hpccsystems.eclide.ui.viewer;
 
-import java.net.URL;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.AuthenticationEvent;
-import org.eclipse.swt.browser.AuthenticationListener;
-import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.browser.ProgressAdapter;
-import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;

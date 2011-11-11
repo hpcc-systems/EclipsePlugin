@@ -32,9 +32,9 @@ public class ECLProjectSupport {
         IProject project = createBaseProject(projectName, location);
         try {
             addNature(project);
-            String[] paths = {
-                "tmp"
-            }; //$NON-NLS-1$
+//            String[] paths = {
+  //              "tmp"
+        //    }; //$NON-NLS-1$
             //addToProjectStructure(project, paths);
         } catch (CoreException e) {
             e.printStackTrace();
