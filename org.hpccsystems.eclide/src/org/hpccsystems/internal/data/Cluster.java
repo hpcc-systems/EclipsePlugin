@@ -29,9 +29,8 @@ import org.hpccsystems.ws.wstopology.WsTopologyServiceSoap;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 
 public class Cluster extends DataSingleton  {
-	public static final String P_CLUSTER = "clusterLaunchConfig";
 	private static Map<Integer, Cluster> Clusters = new HashMap<Integer, Cluster>();
-	public static synchronized Cluster get(Data data, Platform platform, String name) {
+	public static synchronized Cluster get(Platform platform, String name) {
 		Cluster cluster = new Cluster(platform, name);
 		if (Clusters.containsKey(cluster.hashCode())) {
 			return Clusters.get(cluster.hashCode());

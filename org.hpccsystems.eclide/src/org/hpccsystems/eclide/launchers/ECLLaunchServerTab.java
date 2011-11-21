@@ -40,8 +40,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
-import org.hpccsystems.internal.data.Cluster;
-import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.Data;
 
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
@@ -248,11 +247,11 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
-			fClusterText.setText(configuration.getAttribute(Cluster.P_CLUSTER, "hthor"));
+			fIPText.setText(configuration.getAttribute(Data.P_IP, "localhost"));
+			fClusterText.setText(configuration.getAttribute(Data.P_CLUSTER, "hthor"));
 
-			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
-			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
+			fUserText.setText(configuration.getAttribute(Data.P_USER, ""));
+			fPasswordText.setText(configuration.getAttribute(Data.P_PASSWORD, ""));
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -261,11 +260,11 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(Platform.P_IP, fIPText.getText());
-		configuration.setAttribute(Cluster.P_CLUSTER, fClusterText.getText());
+		configuration.setAttribute(Data.P_IP, fIPText.getText());
+		configuration.setAttribute(Data.P_CLUSTER, fClusterText.getText());
 
-		configuration.setAttribute(Platform.P_USER, fUserText.getText());
-		configuration.setAttribute(Platform.P_PASSWORD, fPasswordText.getText());
+		configuration.setAttribute(Data.P_USER, fUserText.getText());
+		configuration.setAttribute(Data.P_PASSWORD, fPasswordText.getText());
 	}
 
 	protected void handleProjectButtonSelected() {

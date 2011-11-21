@@ -29,8 +29,6 @@ import java.util.Map;
 import javax.xml.rpc.ServiceException;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
@@ -58,8 +56,8 @@ import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 public class Platform extends DataSingleton {
 	private static Map<Integer, Platform> Platforms = new HashMap<Integer, Platform>();
-	public static synchronized Platform get(Data data, ILaunchConfiguration launchConfiguration) {
-		Platform platform = new Platform(data, launchConfiguration);
+	public static synchronized Platform get(String ip, String user, String password) {
+		Platform platform = new Platform(ip, user, password);
 		if (Platforms.containsKey(platform.hashCode())) {
 			return Platforms.get(platform.hashCode());
 		}
@@ -69,12 +67,7 @@ public class Platform extends DataSingleton {
 		return platform;
 	}
 
-	public static final String P_IP = "ipLaunchConfig";
 
-	public static final String P_USER = "userLaunchConfig";
-	public static final String P_PASSWORD = "passwordLaunchConfig";
-	
-	Data data;
 	//public String name; 
 	private String ip; 
 	private String user; 
@@ -85,23 +78,10 @@ public class Platform extends DataSingleton {
 	private Collection<LogicalFile> logicalFiles;
 
 
-	Platform(Data data, ILaunchConfiguration launchConfiguration) {
-		this.data = data;
-
-		//name = launchConfiguration.getName();
-
-		try {
-			this.ip = launchConfiguration.getAttribute(P_IP, "");
-		} catch (CoreException e) {
-		} 
-		try {
-			this.user = launchConfiguration.getAttribute(P_USER, "");
-		} catch (CoreException e) {
-		} 
-		try {
-			this.password = launchConfiguration.getAttribute(P_PASSWORD, "");
-		} catch (CoreException e) {
-		}
+	Platform(String ip, String user, String password) {
+		this.ip = ip;
+		this.user = user;
+		this.password = password;
 		this.clusters = new ArrayList<Cluster>();
 		this.workunits = new ArrayList<Workunit>();	
 		this.fileSprayWorkunits = new ArrayList<FileSprayWorkunit>();
@@ -305,7 +285,7 @@ public class Platform extends DataSingleton {
 
 	//  Cluster  ---
 	public Cluster getCluster(String name) {
-		return Cluster.get(data, this, name);
+		return Cluster.get(this, name);
 	}
 
 	public Cluster getCluster(TpTargetCluster tc) {

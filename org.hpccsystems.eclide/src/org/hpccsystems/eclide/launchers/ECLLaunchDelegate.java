@@ -29,7 +29,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
-import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 
@@ -42,7 +41,7 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		final String cluster = configuration.getAttribute(Cluster.P_CLUSTER, ""); 
+		final String cluster = configuration.getAttribute(Data.P_CLUSTER, ""); 
 		
 		IFile file = null;
 		IStructuredSelection ss = SelectedResourceManager.getDefault().getCurrentSelection();

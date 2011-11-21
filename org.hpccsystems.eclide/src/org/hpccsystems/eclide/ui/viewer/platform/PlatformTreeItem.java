@@ -30,13 +30,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ui.tree.TreeItem;
-import org.hpccsystems.internal.data.Cluster;
-import org.hpccsystems.internal.data.FileSprayWorkunit;
-import org.hpccsystems.internal.data.Graph;
-import org.hpccsystems.internal.data.LogicalFile;
-import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.data.Result;
-import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.internal.data.*;
 
 class WorkunitComparator implements Comparator<Object> {
 

@@ -48,17 +48,7 @@ import org.eclipse.ui.dialogs.WizardResourceImportPage;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.ui.PasswordFieldEditor;
 
-import com.seisint.webservices.WsAttributes.ArrayOfEspException;
-import com.seisint.webservices.WsAttributes.ECLAttribute;
-import com.seisint.webservices.WsAttributes.ECLModule;
-import com.seisint.webservices.WsAttributes.GetAttribute;
-import com.seisint.webservices.WsAttributes.GetAttributeResponse;
-import com.seisint.webservices.WsAttributes.GetAttributes;
-import com.seisint.webservices.WsAttributes.GetAttributesResponse;
-import com.seisint.webservices.WsAttributes.GetModules;
-import com.seisint.webservices.WsAttributes.GetModulesResponse;
-import com.seisint.webservices.WsAttributes.WsAttributesLocator;
-import com.seisint.webservices.WsAttributes.WsAttributesServiceSoap;
+import org.hpccsystems.ws.WsAttributes.*;
 
 public class ImportWizardPage extends WizardResourceImportPage {
 	
