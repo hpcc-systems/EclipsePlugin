@@ -104,6 +104,7 @@ class PlatformTreeItem extends PlatformBaseTreeItem {
 		retVal.add(new ClusterFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new WorkunitFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new FileSprayWorkunitFolderTreeItem(treeViewer, this, platform));
+		retVal.add(new QuerySetFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new LogicalFileFolderTreeItem(treeViewer, this, platform));
 		return retVal.toArray();
 	}
@@ -378,6 +379,80 @@ class ClusterTreeItem extends PlatformBaseTreeItem {
 		retVal.add(new WorkunitFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new FileSprayWorkunitFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new LogicalFileFolderTreeItem(treeViewer, this, platform));
+		return retVal.toArray();
+	}
+}
+
+class QuerySetFolderTreeItem extends FolderTreeItem {
+
+	QuerySetFolderTreeItem(TreeViewer treeViewer, PlatformBaseTreeItem parent, Platform platform) {
+		super(treeViewer, parent, platform);
+	}
+
+	@Override
+	public String getText() {
+		return "Query Sets";
+	}
+
+	//http://192.168.2.68:8010/WsWorkunits/WUQuerySets	
+	public URL getWebPageURL() throws MalformedURLException {
+		return platform.getURL("WsWorkunits", "WUQuerySets");
+	}
+
+	@Override
+	public Object[] fetchChildren() {
+		ArrayList<Object> retVal = new ArrayList<Object>();
+		for (DataQuerySet qs : platform.getDataQuerySets()) {
+			retVal.add(new DataQuerySetTreeItem(treeViewer, this, platform, qs));				
+		}
+		return retVal.toArray();
+	}
+}
+
+class DataQuerySetTreeItem extends PlatformBaseTreeItem {
+	DataQuerySet querySet;
+
+	DataQuerySetTreeItem(TreeViewer treeViewer, PlatformBaseTreeItem parent, Platform platform, DataQuerySet querySet) {
+		super(treeViewer, parent, platform);
+		this.querySet = querySet; 
+	}
+
+	@Override
+	public String getText() {
+		return querySet.getName();
+	}
+
+	@Override
+	public Image getImage() {
+		return Activator.getImage("icons/file.png"); 
+	}
+
+	//http://192.168.2.68:8010/WsWorkunits/WUQuerysetDetails?QuerySetName=myroxie
+	public URL getWebPageURL() throws MalformedURLException {
+		return platform.getURL("WsWorkunits", "WUQuerysetDetails", "QuerySetName=" + querySet.getName());
+	}
+
+	@Override
+	public Object[] fetchChildren() {
+		ArrayList<Object> retVal = new ArrayList<Object>();
+		TreeItem parent = getParent();
+		while (parent != null) {
+			if (parent instanceof DataQuerySetTreeItem)
+				if (querySet == ((DataQuerySetTreeItem)parent).querySet) {
+					retVal.add(new RecursiveTreeItem(treeViewer, this));				
+					break;
+				}
+			parent = parent.getParent();
+		}
+
+		if (retVal.isEmpty()) {
+//			retVal.add(new LogicalFileContentsTreeItem(treeViewer, this, platform, querySet));
+//			Workunit wu = querySet.getWorkunit();
+//			if (wu != null) {
+//				retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
+//			}
+//			Collections.sort(retVal, new WorkunitComparator());
+		}
 		return retVal.toArray();
 	}
 }

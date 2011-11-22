@@ -20,7 +20,6 @@ package org.hpccsystems.eclide.builder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -37,7 +36,8 @@ import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.internal.CmdArgs;
 import org.hpccsystems.internal.CmdProcess;
 import org.hpccsystems.internal.ECLArchiveParser;
-import org.hpccsystems.internal.EclCCParser;
+import org.hpccsystems.internal.EclCCError;
+import org.hpccsystems.internal.EclCCErrorParser;
 import org.hpccsystems.internal.OS;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.CmdProcess.IProcessOutput;
@@ -80,49 +80,41 @@ public class ECLCompiler {
 
 	public String wuid;
 	public Set<IFile> ancestors;
-	boolean hasError;
+	boolean hasError;	//TODO Has Error notification is all wrong.
 
 	String QUOTE = "";
-
-	class SyntaxHandler implements IProcessOutput {
-		IFile file;
-
-		public SyntaxHandler(IFile file) {
-			QUOTE = OS.isWindowsPlatform() ? "\"" : "";
-			this.file = file;
+	
+	class BasicHandler implements IProcessOutput {
+		protected StringBuilder sbOut;
+		protected StringBuilder sbErr;
+		
+		BasicHandler() {
+			sbOut = new StringBuilder();
+			sbErr = new StringBuilder();
 		}
 
 		@Override
 		public void ProcessOut(BufferedReader reader) {
-			ancestors = new HashSet<IFile>();
-			if (monitorDependees) {
-				ECLArchiveParser parser = new ECLArchiveParser(file, reader);
-				assert(parser != null);
-				ancestors = parser.ancestors;
-			}
+			final char[] buffer = new char[0x10000]; 
+			try {
+				int read; 
+				do { 
+					read = reader.read(buffer, 0, buffer.length);
+					if (read>0) { 
+						sbOut.append(buffer, 0, read); 
+					} 
+				} while (read>=0); 
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
 		}
 
 		@Override
-		public void ProcessErr(IFile file, BufferedReader errReader) {
-			String stdErr = null;
+		public void ProcessErr(BufferedReader reader) {
+			String strLine = null;
 			try {
-				while ((stdErr = errReader.readLine()) != null) {
-					eclccConsoleWriter.print("Err: ");
-					eclccConsoleWriter.println(stdErr);
-					EclCCParser parser = new EclCCParser();
-					if (parser.ParseError(stdErr)) {
-						IResource resolvedFile = null;
-						//parser.errorPath
-						resolvedFile = Eclipse.getWorkspaceRoot().getFileForLocation(parser.errorPath);
-/*						if (file != null && parser.errorPath.equals(file.getFullPath())) {	//  Error is in the actual file being syntax checked.
-							resolvedFile = file;
-						} else { 
-							resolvedFile = project.findMember(parser.errorPath);
-						}
-*/
-						Eclipse.addMarker(resolvedFile, parser.severity, parser.code, parser.message, parser.lineNumber, parser.colNumber, supressSubsequentErrors);
-					}
-					hasError = parser.hasError;
+				while ((strLine = reader.readLine()) != null) {
+					sbErr.append(strLine);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -130,9 +122,47 @@ public class ECLCompiler {
 		}
 	}
 
-	class LocalRunHandler extends SyntaxHandler {
-		LocalRunHandler(IFile file) {
-			super(file);
+	class SyntaxHandler extends BasicHandler {
+		EclCCErrorParser errorParser;		
+
+		public SyntaxHandler() {
+			super();
+		}
+
+		@Override
+		public void ProcessErr(BufferedReader errReader) {
+			errorParser = new EclCCErrorParser(errReader, eclccConsoleWriter);
+			hasError = errorParser.errorCount > 0;
+			for(EclCCError e : errorParser.items) {
+				IResource resolvedFile = Eclipse.getWorkspaceRoot().getFileForLocation(e.errorPath);
+				if (resolvedFile != null) {
+					Eclipse.addMarker(resolvedFile, e.severity, e.code, e.message, e.lineNumber, e.colNumber, supressSubsequentErrors);
+				}
+			}
+		}
+	}
+
+	class ECLArchiveHandler extends SyntaxHandler {
+
+		public ECLArchiveHandler() {
+			super();
+		}
+		
+		Set<IFile> getAncestors(IFile file) {
+			ECLArchiveParser parser = new ECLArchiveParser(file, sbOut.toString());
+			assert(parser != null);
+			return parser.ancestors;
+		}
+		
+		@Override
+		public void ProcessOut(BufferedReader reader) {
+			super.ProcessOut(reader);
+		}
+	}
+
+	class LocalRunHandler extends ECLArchiveHandler {
+		LocalRunHandler() {
+			super();
 		}
 
 		@Override
@@ -148,9 +178,9 @@ public class ECLCompiler {
 		}
 	}
 
-	class EclPlusHandler extends SyntaxHandler {
-		EclPlusHandler(IFile file) {
-			super(file);
+	class EclPlusHandler extends ECLArchiveHandler {
+		EclPlusHandler() {
+			super();
 		}
 
 		@Override
@@ -171,6 +201,7 @@ public class ECLCompiler {
 	}
 
 	public ECLCompiler(IProject project) {
+		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 		this.project = project;
 		try {
 			referencedProjects = project.getReferencedProjects();
@@ -220,13 +251,21 @@ public class ECLCompiler {
 	}
 	
 	boolean HasCompiler() {
-		return true;  //TODO:  compilerFile.canExecute();
+		return !getVersion().isEmpty();
 	}
 	
 	void GetIncludeArgs(CmdArgs cmdArgs) {
 		for (int i = 0; i < referencedProjects.length; ++i) {
 			cmdArgs.Append("I",  referencedProjects[i].getLocation().toOSString());
 		}
+	}
+	
+	public String getVersion() {
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "--version");
+		BasicHandler handler = new BasicHandler();
+		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+		process.exec(cmdArgs);
+		return handler.sbOut.toString();
 	}
 	
 	public void checkSyntax(IFile file) {
@@ -240,20 +279,37 @@ public class ECLCompiler {
 		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsSyntaxCheck);
 		GetIncludeArgs(cmdArgs);
 
-		if (monitorDependees)
+		if (monitorDependees) 
 			cmdArgs.Append("E");
-
-		CmdProcess process = new CmdProcess(workingPath, binPath, new SyntaxHandler(file), eclccConsoleWriter);
+		ECLArchiveHandler handler = new ECLArchiveHandler();
+		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
+		if (monitorDependees) {
+			ancestors = handler.getAncestors(file);
+		}
 	}
 
-//	public void buildAndRun(IFile file) {
-//		if (executeRemotely)
-//			buildAndRunRemote(file);
-//		else
-//			buildAndRunLocal(file);
-//	}
-//
+	public String getArchive(IFile file) {
+		Eclipse.deleteMarkers(file);
+		
+		if (!HasCompiler()) {
+			eclccConsoleWriter.println(noCompiler);
+			return "";
+		}
+
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompileRemote);
+		GetIncludeArgs(cmdArgs);
+
+		IPath xmlPath = file.getLocation().removeFileExtension();
+		xmlPath = xmlPath.addFileExtension("xml");
+
+		hasError = false;
+		BasicHandler handler = new SyntaxHandler();
+		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+		process.exec(cmdArgs, file, false);
+		return handler.sbOut.toString();
+	}
+
 	public String buildAndRunRemote(IFile file, String ip, String cluster, String user, String password) {
 		Eclipse.deleteMarkers(file);
 		
@@ -270,12 +326,11 @@ public class ECLCompiler {
 		cmdArgs.Append("o", QUOTE + xmlPath.toOSString() + QUOTE);
 
 		hasError = false;
-		CmdProcess process = new CmdProcess(workingPath, binPath, new EclPlusHandler(file), eclccConsoleWriter);
+		CmdProcess process = new CmdProcess(workingPath, binPath, new EclPlusHandler(), eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 		if (!hasError) {
 			CmdArgs remoteArgs = new CmdArgs(eclplusFile.getPath(), "");
 			GetIncludeArgs(cmdArgs);
-//			args.clear();
 			//eclplus action=query server=192.168.241.131 cluster=thor @test.xml			
 			remoteArgs.Append("action", "query");
 			remoteArgs.Append("server", ip);
@@ -285,14 +340,9 @@ public class ECLCompiler {
 			if (!password.isEmpty())
 				remoteArgs.Append("password", password);
 			remoteArgs.Append("timeout", "0");
-			remoteArgs.Append(QUOTE + "@" + xmlPath.toOSString() + QUOTE);
+			remoteArgs.Append(QUOTE + "@" + xmlPath.toOSString() + QUOTE);			
 			wuid = "";
 			process.exec(remoteArgs, null, true);
-//			args.put("action", "query");
-//			args.put("server", serverIP);
-//			args.put("cluster", serverCluster);
-//			args.put("timeout", "0");
-			//TODO process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
 			if (!wuid.isEmpty()) {
 				htmlViewer.showWuid(ip, wuid, user, password);
 			}
@@ -313,7 +363,7 @@ public class ECLCompiler {
 		GetIncludeArgs(cmdArgs);
 
 		hasError = false;
-		CmdProcess process = new CmdProcess(workingPath, binPath, new LocalRunHandler(file), eclccConsoleWriter);
+		CmdProcess process = new CmdProcess(workingPath, binPath, new LocalRunHandler(), eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 		if (!hasError) {
 			resultsConsole.clearConsole();

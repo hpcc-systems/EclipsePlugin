@@ -154,9 +154,10 @@ public class Eclipse {
 					}
 		
 					IMarker marker = resolvedFile.createMarker(MARKER_TYPE);
-					marker.setAttribute(IMarker.SEVERITY, severity);
-					marker.setAttribute(IMarker.MESSAGE, message);
 					marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
+					marker.setAttribute(IMarker.MESSAGE, message);
+					marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+					marker.setAttribute(IMarker.SEVERITY, severity);
 					//marker.setAttribute(IMarker.CHAR_START, 1);
 					//marker.setAttribute(IMarker.CHAR_END, 3);
 

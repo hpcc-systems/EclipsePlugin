@@ -49,8 +49,15 @@ import org.hpccsystems.ws.wstopology.WsTopologyServiceSoap;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
+import org.hpccsystems.ws.wsworkunits.QuerySet;
+import org.hpccsystems.ws.wsworkunits.WUCreateAndUpdate;
 import org.hpccsystems.ws.wsworkunits.WUQuery;
 import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
+import org.hpccsystems.ws.wsworkunits.WUQuerysets;
+import org.hpccsystems.ws.wsworkunits.WUQuerysetsResponse;
+import org.hpccsystems.ws.wsworkunits.WUSubmit;
+import org.hpccsystems.ws.wsworkunits.WUSubmitResponse;
+import org.hpccsystems.ws.wsworkunits.WUUpdateResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
@@ -67,7 +74,6 @@ public class Platform extends DataSingleton {
 		return platform;
 	}
 
-
 	//public String name; 
 	private String ip; 
 	private String user; 
@@ -75,6 +81,7 @@ public class Platform extends DataSingleton {
 	private Collection<Cluster> clusters;
 	private Collection<Workunit> workunits;	
 	private Collection<FileSprayWorkunit> fileSprayWorkunits;
+	private Collection<DataQuerySet> dataQuerySets;
 	private Collection<LogicalFile> logicalFiles;
 
 
@@ -85,6 +92,7 @@ public class Platform extends DataSingleton {
 		this.clusters = new ArrayList<Cluster>();
 		this.workunits = new ArrayList<Workunit>();	
 		this.fileSprayWorkunits = new ArrayList<FileSprayWorkunit>();
+		this.dataQuerySets = new ArrayList<DataQuerySet>();
 		this.logicalFiles = new ArrayList<LogicalFile>();
 		setChanged();
 	}
@@ -101,9 +109,55 @@ public class Platform extends DataSingleton {
 		return password;
 	}
 	
+/*
+ enum WUAction
+{
+    WUActionUnknown = 0,
+    WUActionCompile = 1,
+    WUActionCheck = 2,
+    WUActionRun = 3,
+    WUActionExecuteExisting = 4,
+    WUActionPause = 5, 
+    WUActionPauseNow = 6, 
+    WUActionResume = 7, 
+    WUActionSize = 8
+};
+*/	
 	public Workunit submit(IFile file, String cluster) {
 		Eclipse.doSaveDirty(file.getProject());
 		ECLCompiler compiler = new ECLCompiler(file.getProject());
+		String archive = compiler.getArchive(file);
+		
+		WsWorkunitsServiceSoap service = getWsWorkunitsService();
+		WUCreateAndUpdate request = new WUCreateAndUpdate();
+		request.setQueryText(archive);
+		request.setJobname(file.getFullPath().toString());
+		try {
+			WUUpdateResponse response = service.WUCreateAndUpdate(request);
+			Workunit wu = getWorkunit(response.getWorkunit());
+			if (wu != null) {
+				setChanged();
+				notifyObservers("CreateAndUpdate");
+
+				WUSubmit submitRequest = new WUSubmit();
+				submitRequest.setWuid(response.getWorkunit().getWuid());
+				submitRequest.setCluster(cluster);
+				WUSubmitResponse submitResponse = service.WUSubmit(submitRequest);
+				wu = getWorkunit(wu.getWuid());
+				setChanged();
+				notifyObservers("Submit");
+			}
+			return wu;
+		} catch (ArrayOfEspException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+		/*
 		String wuid = compiler.buildAndRun(file, ip, cluster, user, password);
 		if (wuid.isEmpty())
 			return null;
@@ -112,6 +166,7 @@ public class Platform extends DataSingleton {
 		setChanged();
 		notifyObservers("Submit");
 		return retVal;
+		*/
 	}
 
 	@Override
@@ -223,6 +278,49 @@ public class Platform extends DataSingleton {
 			}
 		}
 		if (beforeCount != fileSprayWorkunits.size()) {
+			setChanged();
+			return true;
+		}		
+		return false;
+	}
+
+	//  LogicalFile  ---
+	public DataQuerySet getDataQuerySet(String name) {
+		return DataQuerySet.get(this, name);
+	}
+
+	public DataQuerySet getDataQuerySet(QuerySet qs) {
+		DataQuerySet dataQuerySet = getDataQuerySet(qs.getQuerySetName());
+		dataQuerySet.Update(qs);
+		return dataQuerySet;
+	}
+
+	public Collection<DataQuerySet> getDataQuerySets() {
+		WsWorkunitsServiceSoap service = getWsWorkunitsService();
+		WUQuerysets request = new WUQuerysets();
+		try {
+			WUQuerysetsResponse response = service.WUQuerysets(request);
+			updateDataQuerySets(response.getQuerysets());
+		} catch (ArrayOfEspException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		notifyObservers("GetQuerySets");
+		return dataQuerySets;
+	}
+
+	synchronized boolean updateDataQuerySets(QuerySet[] rawQuerySets) {
+		int beforeCount = dataQuerySets.size();
+		dataQuerySets.clear();
+		if (rawQuerySets != null) {
+			for(QuerySet qs : rawQuerySets) {
+				dataQuerySets.add(getDataQuerySet(qs)); 	//  Will mark changed if needed  ---
+			}
+		}
+		if (beforeCount != dataQuerySets.size()) {
 			setChanged();
 			return true;
 		}		

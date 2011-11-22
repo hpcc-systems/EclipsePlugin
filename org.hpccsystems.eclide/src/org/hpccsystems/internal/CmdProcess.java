@@ -35,7 +35,7 @@ import org.eclipse.ui.console.MessageConsoleStream;
 public class CmdProcess {
 	public interface IProcessOutput {
 		void ProcessOut(BufferedReader outReader);
-		void ProcessErr(IFile file, BufferedReader errReader);
+		void ProcessErr(BufferedReader errReader);
 	}
 	
 	IPath workingPath;
@@ -70,7 +70,11 @@ public class CmdProcess {
 	
 	public void exec(String command, String args) {
 		CmdArgs cmdArgs = new CmdArgs(command, args);
-		exec(cmdArgs, null, false);
+		exec(cmdArgs);
+	}
+	
+	public void exec(CmdArgs args) {
+		exec(args, null, false);
 	}
 	
 	public void exec(CmdArgs args, final IFile target, boolean eclplusArgs) {
@@ -105,7 +109,7 @@ public class CmdProcess {
 
 			Runnable readStdErr = new Runnable() {
 				public void run() {
-					handler.ProcessErr(target, stdError);
+					handler.ProcessErr(stdError);
 				}
 			};
 			Thread threadStdErr = new Thread(readStdErr, "read stderr");

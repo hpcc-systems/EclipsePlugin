@@ -13,12 +13,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
  org.eclipse.debug.ui,
- org.apache.axis;bundle-version="1.4.0",
- org.apache.commons.discovery;bundle-version="0.2.0",
- javax.xml.rpc;bundle-version="1.1.0",
- javax.xml.soap;bundle-version="1.2.0",
- javax.wsdl;bundle-version="1.6.2",
- org.apache.commons.logging;bundle-version="1.0.4",
+ org.apache.axis,
+ org.apache.commons.discovery,
+ javax.xml.rpc,
+ javax.xml.soap,
+ javax.wsdl,
+ org.apache.commons.logging,
  org.eclipse.core.resources
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

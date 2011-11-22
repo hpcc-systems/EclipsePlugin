@@ -111,11 +111,11 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.hpccsystems.eclide.editors.ECLEditor"
+            class="org.hpccsystems.eclide.editors.ECLWindow"
             contributorClass="org.hpccsystems.eclide.editors.ECLEditorActionContributor"
             extensions="ecl"
             icon="icons/releng_gears.gif"
-            id="org.hpccsystems.eclide.editors.ECLEditor"
+            id="org.hpccsystems.eclide.editors.ECLWindow"
             name="%editor.name.0">
       </editor>
    </extension>

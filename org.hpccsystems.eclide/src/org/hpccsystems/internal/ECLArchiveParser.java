@@ -20,6 +20,7 @@ package org.hpccsystems.internal;
 
 import java.io.BufferedReader; 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
@@ -64,7 +65,7 @@ public class ECLArchiveParser {
 		}
 	}
 
-	public ECLArchiveParser(IFile file, BufferedReader reader) {
+	public void doParse(IFile file, InputSource is) {
 		parserFactory = SAXParserFactory.newInstance();
 
 		SAXParser parser = null;
@@ -80,7 +81,7 @@ public class ECLArchiveParser {
 
 		ECLArchiveHandler handler = new ECLArchiveHandler(file); 
 		try {
-			parser.parse(new InputSource(reader), handler);
+			parser.parse(is, handler);
 		} catch (SAXException e) {
 			//  If there is an error we may end up here. 
 		} catch (IOException e) {
@@ -89,4 +90,12 @@ public class ECLArchiveParser {
 			e.printStackTrace();
 		}
 	}		
+
+	public ECLArchiveParser(IFile file, String archive) {
+		doParse(file, new InputSource(new StringReader(archive)));
+	}
+	
+	public ECLArchiveParser(IFile file, BufferedReader reader) {
+		doParse(file, new InputSource(reader));
+	}
 }
