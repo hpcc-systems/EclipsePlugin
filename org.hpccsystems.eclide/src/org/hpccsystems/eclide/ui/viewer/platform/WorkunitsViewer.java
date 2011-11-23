@@ -149,7 +149,7 @@ public class WorkunitsViewer extends ViewPart {
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
-						((TreeItem)o).showWebPage();
+						((TreeItem)o).showWebPage(true);
 					}
 					break;
 				}
@@ -195,7 +195,8 @@ public class WorkunitsViewer extends ViewPart {
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
-						((TreeItem)o).showWebPage();
+						boolean resultShown = ((TreeItem)o).showResult();
+						((TreeItem)o).showWebPage(!resultShown);
 					}
 					break;
 				}

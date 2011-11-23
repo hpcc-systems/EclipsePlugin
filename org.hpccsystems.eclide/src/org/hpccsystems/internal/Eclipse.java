@@ -40,6 +40,7 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.ide.IDE;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
+import org.hpccsystems.eclide.ui.viewer.ResultViewer;
 
 public class Eclipse {
 	
@@ -124,6 +125,33 @@ public class Eclipse {
 			showHtmlViewer();
 		}
 		retVal = HtmlViewer.getDefault();
+		return retVal;
+	}
+	
+	static public void showResultViewer() {
+		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+		for (int i = 0; i < windows.length; ++i) {
+			final IWorkbenchPage window = windows[i].getActivePage();
+			if (window != null) {
+				Display.getDefault().syncExec(new Runnable() {   
+					public void run() {
+						try {
+							window.showView(ResultViewer.PI_UI_RESULTVIEW);
+						} catch (PartInitException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}
+	}
+
+	static public ResultViewer findResultViewer() {
+		ResultViewer retVal = ResultViewer.getDefault();
+		if (retVal == null) {
+			showResultViewer();
+		}
+		retVal = ResultViewer.getDefault();
 		return retVal;
 	}
 	

@@ -285,12 +285,14 @@ class FileSprayWorkunitFolderTreeItem extends FolderTreeItem {
 	}
 }
 
-class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem {
+class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 	FileSprayWorkunit workunit;
 
 	FileSprayWorkunitTreeItem(TreeViewer treeViewer, PlatformBaseTreeItem parent, Platform platform, FileSprayWorkunit wu) {
 		super(treeViewer, parent, platform);
 		this.workunit = wu;
+		this.workunit.addObserver(this);
+		this.children.set(fetchChildren());
 	}
 
 	@Override
@@ -345,6 +347,46 @@ class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem {
 	//javascript:go('/FileSpray/GetDFUWorkunit?wuid=D20111027-153447')
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("FileSpray", "GetDFUWorkunit", "wuid=" + workunit.getID());
+	}
+	
+	@Override
+	public Object[] fetchChildren() {
+		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
+		TreeItem parent = getParent();
+		while (parent != null) {
+			if (parent instanceof FileSprayWorkunitTreeItem)
+				if (workunit == ((FileSprayWorkunitTreeItem)parent).workunit) {
+					retVal.add(new RecursiveTreeItem(treeViewer, this));				
+					break;
+				}
+			parent = parent.getParent();
+		}
+		if (retVal.isEmpty()) {
+			LogicalFile lf = workunit.getLogicalFile();
+			String filePath = workunit.getFilePath();
+			if (workunit.isDespray()) {
+				if (lf != null)
+					retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, lf));
+				if (filePath != null)
+					retVal.add(new LandingZoneFileTreeItem(treeViewer, this, platform, filePath));
+			} else {
+				if (filePath != null)
+					retVal.add(new LandingZoneFileTreeItem(treeViewer, this, platform, filePath));
+				if (lf != null)
+					retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, lf));
+			}
+		}
+		return retVal.toArray();
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (arg1 instanceof Workunit.Notification) {
+			switch ((FileSprayWorkunit.Notification)arg1){
+			case LOGICALFILEWORKUNIT:
+				update(null);
+			}
+		}
 	}
 }
 
@@ -478,8 +520,8 @@ class LogicalFileFolderTreeItem extends FolderTreeItem {
 	@Override
 	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		for (LogicalFile wu : platform.getLogicalFiles(clusterName)) {
-			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, wu));				
+		for (LogicalFile lf : platform.getLogicalFiles(clusterName)) {
+			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, lf));				
 		}
 		Collections.sort(retVal, new WorkunitComparator());
 		return retVal.toArray();
@@ -568,6 +610,10 @@ class LogicalFileTreeItem extends PlatformBaseTreeItem {
 			if (wu != null) {
 				retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
 			}
+			FileSprayWorkunit fswu = file.getFileSprayWorkunit();
+			if (fswu != null) {
+				retVal.add(new FileSprayWorkunitTreeItem(treeViewer, this, platform, fswu));				
+			}
 			Collections.sort(retVal, new WorkunitComparator());
 		}
 		return retVal.toArray();
@@ -595,6 +641,26 @@ class LogicalFileContentsTreeItem extends PlatformBaseTreeItem {
 
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUResult", "LogicalName=" + file.getName());
+	}
+}
+
+class LandingZoneFileTreeItem extends PlatformBaseTreeItem {
+	String path;
+
+	LandingZoneFileTreeItem(TreeViewer treeViewer, PlatformBaseTreeItem parent, Platform platform, String path) {
+		super(treeViewer, parent, platform);
+		this.path = path; 
+		this.children.set(fetchChildren());
+	}
+
+	@Override
+	public String getText() {
+		return path;
+	}
+
+	@Override
+	public Image getImage() {
+		return Activator.getImage("icons/filecontent.png"); 
 	}
 }
 
@@ -660,10 +726,50 @@ class ResultTreeItem extends PlatformBaseTreeItem implements Observer {
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUResult", "Wuid=" + result.getWuid() + "&Sequence=" + result.getSequence());
 	}
+	
+	@Override
+	public Result getResult() {
+		return result;
+	}
+
+	@Override
+	public Object[] fetchChildren() {
+		ArrayList<Object> retVal = new ArrayList<Object>();
+		for(String s : result.getResultViews())
+			retVal.add(new ResultViewTreeItem(treeViewer, this, platform, result, s));
+		return retVal.toArray();
+	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		update(null);
+	}
+}
+
+class ResultViewTreeItem extends PlatformBaseTreeItem {
+	Result result;
+	String viewName;
+
+	ResultViewTreeItem(TreeViewer treeViewer, PlatformBaseTreeItem parent, Platform platform, Result result, String viewName) {
+		super(treeViewer, parent, platform);
+		this.result = result; 
+		this.viewName = viewName;
+		this.children.set(fetchChildren());
+	}
+
+	@Override
+	public String getText() {
+		return viewName;
+	}
+
+	@Override
+	public Image getImage() {
+		return Activator.getImage("icons/chart.png"); 
+	}
+
+	//http://192.168.2.68:8010/WsWorkunits/WUResultView?Wuid=W20111123-150928&ResultName=ScatterChart_Scatter_Test&ViewName=Google_Chart_by_Name
+	public URL getWebPageURL() throws MalformedURLException {
+		return platform.getURL("WsWorkunits", "WUResultView", "Wuid=" + result.getWuid() + "&Sequence=" + result.getSequence() + "&ViewName=" + viewName);
 	}
 }
 

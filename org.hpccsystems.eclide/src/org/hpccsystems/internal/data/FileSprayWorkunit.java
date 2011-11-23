@@ -19,14 +19,17 @@
 package org.hpccsystems.internal.data;
 
 import java.rmi.RemoteException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hpccsystems.internal.data.Workunit.Notification;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
 import org.hpccsystems.ws.filespray.FileSprayServiceSoap;
 import org.hpccsystems.ws.filespray.GetDFUWorkunit;
 import org.hpccsystems.ws.filespray.GetDFUWorkunitResponse;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
+import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 
 public class FileSprayWorkunit extends DataSingleton {
 	private static Map<Integer, FileSprayWorkunit> FileSprayWorkunits = new HashMap<Integer, FileSprayWorkunit>();
@@ -116,10 +119,54 @@ public class FileSprayWorkunit extends DataSingleton {
 		notifyObservers(Notification.LOGICALFILEWORKUNIT);
 	}
 
+	//  Logical Files  ---
+	synchronized LogicalFile getLogicalFile(String name) {
+		return LogicalFile.get(platform, name);
+	}
+
+	public LogicalFile getLogicalFile() {
+		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
+			fullRefresh();
+		
+		String logicalFileName = info.getSourceLogicalName();
+		if (logicalFileName == null || logicalFileName.isEmpty())
+			logicalFileName = info.getDestLogicalName();
+
+		if (logicalFileName == null || logicalFileName.isEmpty())
+			return null;
+		
+		return getLogicalFile(logicalFileName);
+	}
+
+	public String getFilePath() {
+		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
+			fullRefresh();
+
+		String filePath = info.getSourceFilePath();
+		if (filePath == null || filePath.isEmpty())
+			filePath = info.getDestFilePath();
+
+		if (filePath == null || filePath.isEmpty())
+			return null;
+		
+		return filePath;
+	}
+	
+	public boolean isDespray() {
+		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
+			fullRefresh();
+		if (info.getSourceLogicalName() != null && info.getDestFilePath() != null)
+			return true;
+		return false;
+	}
+
+	//  Updates  ---
 	boolean Update(DFUWorkunit wu) {
 		boolean retVal = false;
 		if (wu != null && info.getID().equals(wu.getID()) && !info.equals(wu)) {
 			if (UpdateState(wu))
+				retVal = true;
+			if (UpdateLogicalFiles(wu))
 				retVal = true;
 		}
 		monitor();
@@ -135,7 +182,19 @@ public class FileSprayWorkunit extends DataSingleton {
 		}
 		return false;
 	}
-
+	
+	synchronized boolean UpdateLogicalFiles(DFUWorkunit wu) {
+		if (wu != null && info.getID().equals(wu.getID()) && (
+					EqualsUtil.hasChanged(info.getSourceLogicalName(), wu.getSourceLogicalName()) ||
+					EqualsUtil.hasChanged(info.getDestLogicalName(), wu.getDestLogicalName()) 
+				)) {
+			info = wu;
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+	
 	@Override 
 	public boolean equals(Object aThat) {
 		if ( (Object)this == aThat ) 
@@ -156,5 +215,4 @@ public class FileSprayWorkunit extends DataSingleton {
 		result = HashCodeUtil.hash(result, info.getID());
 		return result;
 	}
-
 }

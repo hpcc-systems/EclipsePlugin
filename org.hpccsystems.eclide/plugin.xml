@@ -56,6 +56,12 @@
             name="%view.name.1">
       </view>
       <view
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.ui.viewer.ResultViewer"
+            id="org.hpccsystems.eclide.resultView"
+            name="Result View">
+      </view>
+      <view
             allowMultiple="false"
             category="org.hpccsystems.eclide"
             class="org.hpccsystems.eclide.ui.viewer.platform.PlatformViewer"

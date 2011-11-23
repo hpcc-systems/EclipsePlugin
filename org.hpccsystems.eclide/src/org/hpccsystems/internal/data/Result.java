@@ -18,10 +18,12 @@
 
 package org.hpccsystems.internal.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.hpccsystems.ws.wsworkunits.ECLResult;
+import org.hpccsystems.ws.wsworkunits.ECLSchemaItem;
 
 public class Result extends DataSingleton {
 	private static Map<Integer, Result> Results = new HashMap<Integer, Result>();
@@ -70,11 +72,31 @@ public class Result extends DataSingleton {
 			return State.COMPLETED;
 		}
 		return State.UNKNOWN;
-		}
+	}
+	
+	public Long getTotal() {
+		return info.getTotal();
+	}
+	
+	public String[] getResultViews() {
+		return workunit.getResultViews();
+	}
 	
 	@Override
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID());
+	}
+
+	public int getColumnCount() {
+		if (info.getECLSchemas() == null)
+			return 0;
+		return info.getECLSchemas().length;
+	}
+
+	public String getColumnName(int i) {
+		if (info.getECLSchemas() == null)
+			return "";
+		return info.getECLSchemas()[i].getColumnName();
 	}
 
 	@Override

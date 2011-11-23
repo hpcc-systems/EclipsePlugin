@@ -25,23 +25,31 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
+import org.hpccsystems.eclide.ui.viewer.ResultViewer;
 import org.hpccsystems.internal.Eclipse;
+import org.hpccsystems.internal.data.Result;
 
 public class TreeItem {
 	protected TreeViewer treeViewer;
 	protected TreeItem parent;
 	private HtmlViewer htmlViewer;
+	private ResultViewer resultViewer;
 	public LazyChildLoader children;
 
 	protected TreeItem(TreeViewer treeViewer, TreeItem parent) {
 		this.treeViewer = treeViewer;
 		this.parent = parent;
 		this.htmlViewer = null;
+		this.resultViewer = null;
 		this.children = new LazyChildLoader();
 	}
 	
 	HtmlViewer getHtmlViewer() {
 		return htmlViewer;
+	}
+	
+	ResultViewer getResultViewer() {
+		return resultViewer;
 	}
 	
 	public TreeItem getParent() {
@@ -56,23 +64,41 @@ public class TreeItem {
         return null;
 	}
 
-	public final void showWebPage() {
+	public void showWebPage(boolean bringToTop) {
 		if (htmlViewer == null)
 			htmlViewer = Eclipse.findHtmlViewer();
 		
 		try {
 			URL webPageURL = getWebPageURL();
 			if (htmlViewer != null && webPageURL != null) {
-				htmlViewer.showURL(webPageURL.toString(), getUser(), getPassword());
+				htmlViewer.showURL(webPageURL.toString(), getUser(), getPassword(), bringToTop);
 			}
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	public boolean showResult() {
+		Result result = getResult();
+		if (result == null)
+			return false;
+		
+		if (resultViewer == null)
+			resultViewer = Eclipse.findResultViewer();
+		
+		if (resultViewer == null) 
+			return false;
+
+		resultViewer.showResult(result);
+		return true;
+	}
+	
 	public URL getWebPageURL() throws MalformedURLException {
 		return new URL ("about:blank");
+	}
+	
+	public Result getResult() {
+		return null;
 	}
 	
 	public String getUser() {

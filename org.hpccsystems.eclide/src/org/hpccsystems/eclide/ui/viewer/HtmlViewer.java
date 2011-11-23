@@ -50,15 +50,16 @@ public class HtmlViewer extends ViewPart {
 		return getUrl(ip) + "WsWorkunits/WUInfo?Wuid=" + wuid;
 	}
 	
-	public void showWuid(final String ip, final String wuid, final String user, final String password) {
-		showURL(getWuidUrl(ip, wuid), user, password);
+	public void showWuid(final String ip, final String wuid, final String user, final String password, final boolean bringToTop) {
+		showURL(getWuidUrl(ip, wuid), user, password, bringToTop);
 	}
 
-	public void showURL(final String url, final String user, final String password) {
+	public void showURL(final String url, final String user, final String password, final boolean bringToTop) {
 		Display.getDefault().asyncExec(new Runnable() {   
 			public void run() {
 				browser.navigateTo(url, user, password);
-				htmlViewer.getSite().getPage().bringToTop(htmlViewer);
+				if (bringToTop)
+					htmlViewer.getSite().getPage().bringToTop(htmlViewer);
 			}   
 		});
 	}

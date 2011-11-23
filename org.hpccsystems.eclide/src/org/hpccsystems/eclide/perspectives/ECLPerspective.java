@@ -65,6 +65,7 @@ public class ECLPerspective implements IPerspectiveFactory {
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
 		bottom.addView(IConsoleConstants.ID_CONSOLE_VIEW);
 		bottom.addView("org.hpccsystems.eclide.htmlView");
+		bottom.addView("org.hpccsystems.eclide.resultView");
 	}
 
 	private void addActionSets() {

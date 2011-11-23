@@ -68,7 +68,17 @@ public class LogicalFile extends DataSingleton {
 	public Workunit getWorkunit() {
 		if (info2.getWuid() == null)
 			fullRefresh();
+		if (info2.getWuid() == null || !info2.getWuid().startsWith("W"))
+			return null;
 		return platform.getWorkunit(info2.getWuid());
+	}
+
+	public FileSprayWorkunit getFileSprayWorkunit() {
+		if (info2.getWuid() == null)
+			fullRefresh();
+		if (info2.getWuid() == null || !info2.getWuid().startsWith("D"))
+			return null;
+		return platform.getFileSprayWorkunit(info2.getWuid());
 	}
 
 	public String getDir() {

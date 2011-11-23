@@ -31,6 +31,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.hpccsystems.eclide.Activator;
 
 public class BrowserEx extends Composite {
 
@@ -45,7 +46,8 @@ public class BrowserEx extends Composite {
 		setLayout(layout);
 
 		final Button backButton = new Button(this, SWT.PUSH);
-		backButton.setText("Back");
+		backButton.setImage(Activator.getImage("icons/left.png"));
+		backButton.setToolTipText("Back");
 		backButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 				browser.back();
@@ -56,7 +58,8 @@ public class BrowserEx extends Composite {
 		});
 
 		final Button forwardButton = new Button(this, SWT.PUSH);
-		forwardButton.setText("Forward");
+		forwardButton.setImage(Activator.getImage("icons/right.png"));
+		forwardButton.setToolTipText("Forward");
 		forwardButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 				browser.forward();
@@ -71,7 +74,8 @@ public class BrowserEx extends Composite {
 		comboUrl.setLayoutData(layoutData);
 
 		Button refreshButton = new Button(this, SWT.PUSH);
-		refreshButton.setText("Refresh");
+		refreshButton.setImage(Activator.getImage("icons/refresh.png"));
+		refreshButton.setToolTipText("Refresh");
 		refreshButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 //				navigateTo(url, user, password);

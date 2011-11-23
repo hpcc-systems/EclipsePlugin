@@ -51,11 +51,13 @@ public class Workunit extends DataSingleton {
 	}
 	
 	private Platform platform;
+
+	private ECLWorkunit info;
+	private String[] resultViews; 
 	private Collection<Result> results;	
 	private Collection<Graph> graphs;
 	private Collection<LogicalFile> sourceFiles;
 
-	private ECLWorkunit info;
 	public enum Notification {
 		WORKUNIT,
 		RESULTS,
@@ -72,7 +74,6 @@ public class Workunit extends DataSingleton {
 		this.sourceFiles = new ArrayList<LogicalFile>(); 		
 		setChanged();
 	}
-
 	
 	public String getWuid() {
 		return info.getWuid();
@@ -127,6 +128,12 @@ public class Workunit extends DataSingleton {
 		return info.getState() != null ? info.getState() : "Unknown";
 
 	}
+	
+	public String[] getResultViews() {
+		if (resultViews == null)
+			fullRefresh(false, true, false);
+		return resultViews;
+	}
 
 	@Override
 	public boolean isComplete() {
@@ -169,6 +176,7 @@ public class Workunit extends DataSingleton {
 			request.setWuid(info.getWuid());
 			request.setIncludeGraphs(includeGraphs);
 			request.setIncludeResults(includeResults);
+			request.setIncludeResultsViewNames(includeResults);
 			request.setIncludeSourceFiles(includeSourceFiles);
 			/*
 			request.setIncludeApplicationValues(true);
@@ -181,7 +189,9 @@ public class Workunit extends DataSingleton {
 			 */
 			try {
 				WUInfoResponse respsone = service.WUInfo(request);
-				update(respsone.getWorkunit());		
+				update(respsone.getWorkunit());
+				if (respsone.getResultViews() != null)
+					resultViews = respsone.getResultViews(); 
 			} catch (ArrayOfEspException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
