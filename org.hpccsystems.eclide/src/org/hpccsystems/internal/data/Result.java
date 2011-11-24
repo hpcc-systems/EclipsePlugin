@@ -56,8 +56,8 @@ public class Result extends DataSingleton {
 	}
 	
 	class ResultData {
-		final int PAGE_SIZE = 100;
-		final int PAGE_BEFORE = 20;
+		final int PAGE_SIZE = 180;
+		final int PAGE_BEFORE = 60;
 		Map<Long, Map<Integer, String>> data;
 		
 		ResultData() {

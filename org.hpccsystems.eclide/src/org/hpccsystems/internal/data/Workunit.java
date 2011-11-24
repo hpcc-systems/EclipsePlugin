@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.ws.wsworkunits.ApplicationValue;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLGraph;
 import org.hpccsystems.ws.wsworkunits.ECLResult;
@@ -57,9 +59,11 @@ public class Workunit extends DataSingleton {
 	private Collection<Result> results;	
 	private Collection<Graph> graphs;
 	private Collection<LogicalFile> sourceFiles;
-
+	private Map<String, String> applicationValues;
+	
 	public enum Notification {
 		WORKUNIT,
+		APPLICATIONVALUES,
 		RESULTS,
 		GRAPHS,
 		SOURCEFILES
@@ -72,6 +76,7 @@ public class Workunit extends DataSingleton {
 		this.results = new ArrayList<Result>(); 		
 		this.graphs = new ArrayList<Graph>(); 		
 		this.sourceFiles = new ArrayList<LogicalFile>(); 		
+		this.applicationValues = new HashMap<String, String>();
 		setChanged();
 	}
 	
@@ -131,8 +136,63 @@ public class Workunit extends DataSingleton {
 	
 	public String[] getResultViews() {
 		if (resultViews == null)
-			fullRefresh(false, true, false);
+			fullRefresh(false, true, false, false);
 		return resultViews;
+	}
+
+	public String getApplicationValue(String key) {
+		if (applicationValues.isEmpty())
+			fullRefresh(false, false, false, true);
+		if (applicationValues.containsKey(key))
+			return applicationValues.get(key);
+		return "";
+	}
+	//  Results  ---
+	public synchronized Result getResult(Integer sequence) {
+		return Result.get(platform, this, sequence);
+	}
+
+	public Result getResult(ECLResult r) {
+		Result result = getResult(r.getSequence());
+		result.Update(r);
+		return result;
+	}
+
+	public Collection<Result> getResults() {
+		fullRefresh(false, true, false, false);
+		return results;
+	}
+
+	//  Graphs  ---
+	synchronized Graph getGraph(String name) {
+		return Graph.get(this, name);
+	}
+
+	Graph getGraph(ECLGraph g) {
+		Graph graph = getGraph(g.getName());
+		graph.Update(g);
+		return graph;
+	}
+
+	public Collection<Graph> getGraphs() {
+		fullRefresh(true, false, false, false);
+		return graphs;
+	}
+
+	//  Source Files  ---
+	synchronized LogicalFile getSourceFile(String name) {
+		return LogicalFile.get(platform, name);
+	}
+
+	LogicalFile getSourceFile(ECLSourceFile sf) {
+		LogicalFile sourceFile = getSourceFile(sf.getName());
+		sourceFile.Update(sf);
+		return sourceFile;
+	}
+
+	public Collection<LogicalFile> getSourceFiles() {
+		fullRefresh(false, false, true, false);
+		return sourceFiles;
 	}
 
 	@Override
@@ -166,10 +226,10 @@ public class Workunit extends DataSingleton {
 
 	@Override
 	void fullRefresh() {
-		fullRefresh(true, true, true);
+		fullRefresh(true, true, true, true);
 	}
 
-	void fullRefresh(boolean includeGraphs, boolean includeResults, boolean includeSourceFiles) {
+	void fullRefresh(boolean includeGraphs, boolean includeResults, boolean includeSourceFiles, boolean includeApplicationValues) {
 		WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
 		if (service != null) {
 			WUInfo request = new WUInfo();
@@ -178,6 +238,7 @@ public class Workunit extends DataSingleton {
 			request.setIncludeResults(includeResults);
 			request.setIncludeResultsViewNames(includeResults);
 			request.setIncludeSourceFiles(includeSourceFiles);
+			request.setIncludeApplicationValues(includeApplicationValues);
 			/*
 			request.setIncludeApplicationValues(true);
 			request.setIncludeDebugValues(true);
@@ -201,53 +262,6 @@ public class Workunit extends DataSingleton {
 			}
 		}
 	}
-	//  Results  ---
-	public synchronized Result getResult(Integer sequence) {
-		return Result.get(platform, this, sequence);
-	}
-
-	public Result getResult(ECLResult r) {
-		Result result = getResult(r.getSequence());
-		result.Update(r);
-		return result;
-	}
-
-	public Collection<Result> getResults() {
-		fullRefresh(false, true, false);
-		return results;
-	}
-
-	//  Graphs  ---
-	synchronized Graph getGraph(String name) {
-		return Graph.get(this, name);
-	}
-
-	Graph getGraph(ECLGraph g) {
-		Graph graph = getGraph(g.getName());
-		graph.Update(g);
-		return graph;
-	}
-
-	public Collection<Graph> getGraphs() {
-		fullRefresh(true, false, false);
-		return graphs;
-	}
-
-	//  Source Files  ---
-	synchronized LogicalFile getSourceFile(String name) {
-		return LogicalFile.get(platform, name);
-	}
-
-	LogicalFile getSourceFile(ECLSourceFile sf) {
-		LogicalFile sourceFile = getSourceFile(sf.getName());
-		sourceFile.Update(sf);
-		return sourceFile;
-	}
-
-	public Collection<LogicalFile> getSourceFiles() {
-		fullRefresh(false, false, true);
-		return sourceFiles;
-	}
 
 	//  Updates  ---
 	boolean update(ECLWorkunit wu) {		
@@ -256,6 +270,10 @@ public class Workunit extends DataSingleton {
 			if (updateState(wu)) {
 				retVal = true;
 				notifyObservers(Notification.WORKUNIT);
+			}
+			if (updateApplicationValues(wu.getApplicationValues())) {
+				retVal = true;
+				notifyObservers(Notification.APPLICATIONVALUES);
 			}
 			if (updateResults(wu.getResults())) {
 				retVal = true;
@@ -282,6 +300,24 @@ public class Workunit extends DataSingleton {
 			info.setState(wu.getState());
 			setChanged();
 			return true;
+		}
+		return false;
+	}
+
+	synchronized boolean updateApplicationValues(ApplicationValue[] rawAppVals) {
+		if (rawAppVals != null) {
+			int applicationValuesCount = applicationValues.size();
+			//  Prime results;
+			applicationValues.clear();
+			for(ApplicationValue av : rawAppVals) {
+				if (av.getApplication().compareTo(Activator.PLUGIN_ID) == 0) {
+					applicationValues.put(av.getName(), av.getValue());
+				}
+			}
+			if (applicationValuesCount != applicationValues.size()) {
+				setChanged();
+				return true;
+			}
 		}
 		return false;
 	}

@@ -37,7 +37,7 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 
 	public Object[] getElements(Object inputElement) {
 		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
-		for (Platform p : ((Data)inputElement).GetPlatforms()) {
+		for (Platform p : ((Data)inputElement).getPlatforms()) {
 			retVal.add(new PlatformTreeItem(treeViewer, null, p));
 		}
 		return retVal.toArray();

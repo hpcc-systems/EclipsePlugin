@@ -55,13 +55,13 @@ public class HtmlViewer extends ViewPart {
 	}
 
 	public void showURL(final String url, final String user, final String password, final boolean bringToTop) {
-		Display.getDefault().asyncExec(new Runnable() {   
-			public void run() {
+		//Display.getDefault().asyncExec(new Runnable() {   
+			//public void run() {
 				browser.navigateTo(url, user, password);
 				if (bringToTop)
 					htmlViewer.getSite().getPage().bringToTop(htmlViewer);
-			}   
-		});
+			//}   
+		//});
 	}
 	@Override
 	public void setFocus() {

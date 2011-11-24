@@ -29,6 +29,8 @@ import java.util.Map;
 import javax.xml.rpc.ServiceException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
+import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
@@ -46,6 +48,7 @@ import org.hpccsystems.ws.wstopology.TpTargetClusterQueryRequest;
 import org.hpccsystems.ws.wstopology.TpTargetClusterQueryResponse;
 import org.hpccsystems.ws.wstopology.WsTopologyLocator;
 import org.hpccsystems.ws.wstopology.WsTopologyServiceSoap;
+import org.hpccsystems.ws.wsworkunits.ApplicationValue;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
@@ -83,7 +86,6 @@ public class Platform extends DataSingleton {
 	private Collection<FileSprayWorkunit> fileSprayWorkunits;
 	private Collection<DataQuerySet> dataQuerySets;
 	private Collection<LogicalFile> logicalFiles;
-
 
 	Platform(String ip, String user, String password) {
 		this.ip = ip;
@@ -131,7 +133,13 @@ public class Platform extends DataSingleton {
 		WsWorkunitsServiceSoap service = getWsWorkunitsService();
 		WUCreateAndUpdate request = new WUCreateAndUpdate();
 		request.setQueryText(archive);
-		request.setJobname(file.getFullPath().toString());
+		request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
+		ApplicationValue[] appVals = new ApplicationValue[1];
+		appVals[0] = new ApplicationValue();
+		appVals[0].setApplication(Activator.PLUGIN_ID);
+		appVals[0].setName("path");
+		appVals[0].setValue(file.getFullPath().toPortableString());
+		request.setApplicationValues(appVals);
 		try {
 			WUUpdateResponse response = service.WUCreateAndUpdate(request);
 			Workunit wu = getWorkunit(response.getWorkunit());

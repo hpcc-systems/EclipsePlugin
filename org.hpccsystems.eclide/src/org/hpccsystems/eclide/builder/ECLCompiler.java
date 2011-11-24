@@ -313,48 +313,7 @@ public class ECLCompiler {
 		return handler.sbOut.toString();
 	}
 
-	public String buildAndRunRemote(IFile file, String ip, String cluster, String user, String password) {
-		Eclipse.deleteMarkers(file);
-		
-		if (!HasCompiler()) {
-			eclccConsoleWriter.println(noCompiler);
-			return "";
-		}
-
-		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompileRemote);
-		GetIncludeArgs(cmdArgs);
-
-		IPath xmlPath = file.getLocation().removeFileExtension();
-		xmlPath = xmlPath.addFileExtension("xml");
-		cmdArgs.Append("o", QUOTE + xmlPath.toOSString() + QUOTE);
-
-		hasError = false;
-		CmdProcess process = new CmdProcess(workingPath, binPath, new EclPlusHandler(), eclccConsoleWriter);
-		process.exec(cmdArgs, file, false);
-		if (!hasError) {
-			CmdArgs remoteArgs = new CmdArgs(eclplusFile.getPath(), "");
-			GetIncludeArgs(cmdArgs);
-			//eclplus action=query server=192.168.241.131 cluster=thor @test.xml			
-			remoteArgs.Append("action", "query");
-			remoteArgs.Append("server", ip);
-			remoteArgs.Append("cluster", cluster);
-			if (!user.isEmpty())
-				remoteArgs.Append("owner", user);
-			if (!password.isEmpty())
-				remoteArgs.Append("password", password);
-			remoteArgs.Append("timeout", "0");
-			remoteArgs.Append(QUOTE + "@" + xmlPath.toOSString() + QUOTE);			
-			wuid = "";
-			process.exec(remoteArgs, null, true);
-			if (!wuid.isEmpty()) {
-				htmlViewer.showWuid(ip, wuid, user, password, true);
-			}
-			return wuid;
-		}
-		return "";
-	}
-
-	public String buildAndRunLocal(IFile file) {
+	public String buildAndRun(IFile file) {
 		Eclipse.deleteMarkers(file);
 
 		if (!HasCompiler()) {
@@ -374,14 +333,5 @@ public class ECLCompiler {
 			process.exec(exePath.toOSString(), argsWULocal);
 		}
 		return "";
-	}
-
-	public String buildAndRun(IFile file, String ip, String cluster, String user, String password) {
-		if (ip.isEmpty()) {
-			return buildAndRunLocal(file);
-		}
-		else {
-			return buildAndRunRemote(file, ip, cluster, user, password);
-		}
 	}
 }

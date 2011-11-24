@@ -72,7 +72,7 @@ public class Data {
 		return Platform.get(ip, user, password);
 	}
 
-	public Collection<Platform> GetPlatforms() {
+	public Collection<Platform> getPlatforms() {
 		platforms.clear();
 		ILaunchConfiguration[] configs;
 		try {

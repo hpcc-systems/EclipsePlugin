@@ -90,7 +90,7 @@ public class WorkunitsViewer extends ViewPart {
 		
 		Object[] fetchChildren() {
 			ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
-			for (Platform p : data.GetPlatforms()) {
+			for (Platform p : data.getPlatforms()) {
 				p.addObserver(this);
 				for(Workunit w : p.getWorkunits()) {
 					retVal.add(new WorkunitTreeItem(treeViewer, null, p, w));
@@ -123,7 +123,7 @@ public class WorkunitsViewer extends ViewPart {
 	    treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 	    treeViewer.setContentProvider(new WorkunitsTreeItemContentProvider(treeViewer, Data.get()));
 	    treeViewer.setLabelProvider(new PlatformTreeItemLabelProvider(treeViewer));
-	    treeViewer.setInput(Data.get().GetPlatforms()); // pass a non-null that will be ignored
+	    treeViewer.setInput(Data.get().getPlatforms()); // pass a non-null that will be ignored
 	    
 	 // Create menu and toolbars.
         createActions();

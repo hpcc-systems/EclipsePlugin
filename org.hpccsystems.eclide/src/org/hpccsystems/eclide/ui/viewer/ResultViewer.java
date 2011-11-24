@@ -65,10 +65,12 @@ public class ResultViewer extends ViewPart {
 						item.setText(col, result.getCell(row, col - 1));
 					} 
 				}
+				table.setRedraw(false);
 				if (row == 0) {
 					for (TableColumn tc : table.getColumns()) 
 				        tc.pack(); 
 				}
+				table.setRedraw(true);
 			}
 		});
 	}

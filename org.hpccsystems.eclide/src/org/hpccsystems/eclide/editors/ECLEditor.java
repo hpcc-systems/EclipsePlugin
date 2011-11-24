@@ -30,11 +30,11 @@ public class ECLEditor extends TextEditor {
 		setSourceViewerConfiguration(new ECLConfiguration(colorManager));
 		setDocumentProvider(new ECLDocumentProvider());
 	}
+	
 	public void dispose() {
 		colorManager.dispose();
 		super.dispose();
 	}
-
 }
 
 
