@@ -18,17 +18,27 @@
 
 package org.hpccsystems.internal.data;
 
+import java.io.StringReader;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hpccsystems.internal.DatasetParser;
+import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLResult;
 import org.hpccsystems.ws.wsworkunits.ECLSchemaItem;
+import org.hpccsystems.ws.wsworkunits.WUQuery;
+import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
+import org.hpccsystems.ws.wsworkunits.WUResult;
+import org.hpccsystems.ws.wsworkunits.WUResultResponse;
+import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
+import org.xml.sax.InputSource;
 
 public class Result extends DataSingleton {
 	private static Map<Integer, Result> Results = new HashMap<Integer, Result>();
-	public static synchronized Result get(Workunit workunit, Integer sequence) {
-		Result result = new Result(workunit, sequence);
+	public static synchronized Result get(Platform platform, Workunit workunit, Integer sequence) {
+		Result result = new Result(platform, workunit, sequence);
 		if (Results.containsKey(result.hashCode())) {
 			return Results.get(result.hashCode());
 		}
@@ -38,16 +48,79 @@ public class Result extends DataSingleton {
 		return result;
 	}
 
+	private Platform platform;
 	private Workunit workunit;
 	private ECLResult info;
 	public enum Notification {
 		RESULT
 	}
 	
-	private Result(Workunit workunit, Integer sequence) {
+	class ResultData {
+		final int PAGE_SIZE = 100;
+		final int PAGE_BEFORE = 20;
+		Map<Long, Map<Integer, String>> data;
+		
+		ResultData() {
+			data = new HashMap<Long, Map<Integer, String>>();
+		}
+		
+		String GetCell(long row, int col) {
+			if (data.containsKey(row))
+				return data.get(row).get(col);
+			
+			Long start = row;
+			for (int i = 0; i < PAGE_BEFORE; ++i) {
+				if (start -1 < 0)
+					break;
+				
+				if (data.containsKey(start - 1))
+					break;
+				
+				--start;
+			}
+			
+			int count = (int)(row - start);
+			for (int i = count; i < PAGE_SIZE; ++i) {
+				if (data.containsKey(start + count))
+					break;
+				++count;
+			}
+			
+			WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
+			if (service != null) {
+				WUResult request = new WUResult();
+				request.setWuid(workunit.getWuid());
+				request.setSequence(info.getSequence());
+				request.setStart(start);
+				request.setCount(count);
+				try {
+					WUResultResponse response = service.WUResult(request);
+					String resultString = response.getResult();
+					int offset = resultString.indexOf("<Dataset");
+					resultString = resultString.substring(offset);
+					DatasetParser dp = new DatasetParser(response.getStart(), new InputSource(new StringReader(resultString)), data);
+					return data.get(row).get(col);
+				} catch (ArrayOfEspException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			return data.get(row).get(col);
+		}
+	}
+	
+	ResultData data;
+	
+	private Result(Platform platform, Workunit workunit, Integer sequence) {
+		this.platform = platform;
 		this.workunit = workunit;
 		info = new ECLResult();
 		info.setSequence(sequence);
+		data = new ResultData();
 		setChanged();
 	}
 	
@@ -99,6 +172,11 @@ public class Result extends DataSingleton {
 		return info.getECLSchemas()[i].getColumnName();
 	}
 
+	public String getCell(int row, int col) {
+		return data.GetCell(row, col);
+	}
+	
+	//  Refresh + Update  ---
 	@Override
 	void fastRefresh() {
 		fullRefresh();	

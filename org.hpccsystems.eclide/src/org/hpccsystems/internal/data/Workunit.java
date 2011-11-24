@@ -203,7 +203,7 @@ public class Workunit extends DataSingleton {
 	}
 	//  Results  ---
 	public synchronized Result getResult(Integer sequence) {
-		return Result.get(this, sequence);
+		return Result.get(platform, this, sequence);
 	}
 
 	public Result getResult(ECLResult r) {
