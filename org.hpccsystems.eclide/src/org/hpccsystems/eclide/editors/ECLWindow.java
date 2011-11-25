@@ -1,7 +1,5 @@
 package org.hpccsystems.eclide.editors;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,11 +13,7 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -35,28 +29,35 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.ui.viewer.BrowserEx;
 import org.hpccsystems.eclide.ui.viewer.TableEx;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
-import org.hpccsystems.eclide.ui.viewer.platform.FolderTreeItem;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTreeItem;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.TreeItem;
 
+import org.eclipse.swt.custom.SashForm;
+
 public class ECLWindow extends MultiPageEditorPart implements IResourceChangeListener, Observer {
 
 	private ECLEditor editor;
 	
-	class CTreeItemTabItem extends CTabItem implements TreeItemOwner{
-		private CTabFolder container;
+	class CWorkunitTabItem extends CTabItem implements TreeItemOwner{
+	
+		Workunit wu;
+		WorkunitTreeItem item;
 		
+		SashForm sashForm;
+		WorkunitViewer workunitViewer;
 		BrowserEx browser;
 		TableEx table;
-		TreeItem item;
-		boolean loaded;
 
-		public CTreeItemTabItem(CTabFolder parent, int style, int index) {
+		public CWorkunitTabItem(final CTabFolder parent, int style, int index, Workunit wu) {
 			super(parent, style, index);
+			this.wu = wu;
 			
+			item = new WorkunitTreeItem(this, null, wu.getPlatform(), wu);
+
+			/*
 			parent.setLayout(new FillLayout());
 			container = new CTabFolder(parent, SWT.BOTTOM | SWT.FLAT);
 			container.addSelectionListener(new SelectionAdapter() {
@@ -66,86 +67,31 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				}
 			});
 			setControl(container);
+			*/
 			
-			browser = new BrowserEx(container);
-			CTabItem browserItem = new CTabItem(container, SWT.NONE);
-			browserItem.setControl(browser);
-			browserItem.setText("ECL Watch");
+			parent.setLayout(new FillLayout());
+			sashForm = new SashForm(parent, SWT.HORIZONTAL);
 
-			table = new TableEx(container, SWT.VIRTUAL | SWT.FULL_SELECTION);
-			CTabItem tableItem = new CTabItem(container, SWT.NONE);
-			tableItem.setControl(table.getControl());
-			tableItem.setText("Result View");
-
-			loaded = false;
-		}
-		
-		protected void myPageChange(int newPageIndex) {
-			if (newPageIndex == 0) {
-				try {
-					URL webPageURL = item.getWebPageURL();
-					if (webPageURL != null)			
-						browser.navigateTo(webPageURL.toString(), item.getUser(), item.getPassword());
-				} catch (MalformedURLException e) {
-				}
-			}
-			if (newPageIndex == 1) {
-				table.setResult(item.getResult());
-			}
-			else {
-				CTabItem childItem = container.getItem(newPageIndex);
-				if (childItem != null && childItem instanceof CTreeItemTabItem) {
-					CTreeItemTabItem treeItemTabItem = (CTreeItemTabItem)childItem;
-					treeItemTabItem.loadChildren();					
-				}
-			}
-		}
-
-		public void setTreeItem(TreeItem item) {
-			this.item = item;
-			setText(this.item.getText());
-			setImage(this.item.getImage());
-			item.hasChildren();
-		}
-
-		void loadChildren() {
-			if (loaded || item == null)
-				return;
-
-			Object[] objs = item.getChildren();
-			if (objs == null)
-				return;
+			workunitViewer = new WorkunitViewer(wu.getPlatform(), wu);
+			workunitViewer.createPartControl(sashForm);
+			browser = new BrowserEx(sashForm);
+			//CTabItem browserItem = new CTabItem(container, SWT.NONE);
+			//browserItem.setControl(browser);
+			//browserItem.setText("ECL Watch");
 			
-			container.setRedraw(false);
-			for (Object o : objs) {
-				if (loaded == false) {
-					loaded = true;
-				}
+			//table = new TableEx(sashForm, SWT.VIRTUAL | SWT.FULL_SELECTION);
+			//CTabItem tableItem = new CTabItem(container, SWT.NONE);
+			//tableItem.setControl(table.getControl());
+			//tableItem.setText("Result View");
 
-	    		CTreeItemTabItem tabItem = createItem(container);
-	    		tabItem.setTreeItem((TreeItem)o);
-			}
-			container.setRedraw(true);
-		}
-
-		void reloadChildren() {
-			while(container.getItemCount() > 1) {
-				if (container.getItems()[1] instanceof CTreeItemTabItem)
-					((CTreeItemTabItem)container.getItems()[1]).browser.dispose();
-				container.getItems()[1].dispose();
-			}
-			loadChildren();
-		}
-		
-		CTreeItemTabItem createItem(Control control) {
-			int index = container.getItemCount();
-			return createItem(index, control);
-		}
-
-		CTreeItemTabItem createItem(int index, Control control) {
-			CTreeItemTabItem item = new CTreeItemTabItem(container, SWT.NONE, index);
-			//item.setControl(control);
-			return item;
+			//sashForm.setWeights(new int[]{1, 2});
+			setText(item.getText());
+			setImage(item.getImage());
+			int[] weights = new int[2];
+			weights[0] = 15;
+			weights[1] = 85;
+			sashForm.setWeights(weights);
+		    setControl(sashForm);
 		}
 
 		@Override
@@ -162,7 +108,6 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		public void refresh(Object element) {
 			Display.getDefault().asyncExec(new Runnable() {   
 				public void run() {
-					loadChildren();
 				}
 			});
 		}
@@ -173,14 +118,14 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 	}
 
-	CTreeItemTabItem createItem(Control control) {
+	CWorkunitTabItem createItem(Control control, Workunit wu) {
 		int index = getPageCount();
-		return createItem(index, control);
+		return createItem(index, control, wu);
 	}
 
-	CTreeItemTabItem createItem(int index, Control control) {
+	CWorkunitTabItem createItem(int index, Control control, Workunit wu) {
 		CTabFolder folder = (CTabFolder)getContainer();
-		CTreeItemTabItem item = new CTreeItemTabItem(folder, SWT.NONE, index);
+		CWorkunitTabItem item = new CWorkunitTabItem(folder, SWT.NONE, index, wu);
 		//item.setControl(control);
 		return item;
 	}
@@ -214,13 +159,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
     	}
     	
     	if (!found) {
-    		Composite composite = new Composite(getContainer(), SWT.NONE);
-    		GridLayout layout = new GridLayout();
-    		composite.setLayout(layout);
-    		layout.numColumns = 2;
-    		
-    		CTreeItemTabItem tabItem = addToEnd ? createItem(composite) : createItem(1, composite);
-    		tabItem.setTreeItem(new WorkunitTreeItem(tabItem, null, p, wu));
+    		CWorkunitTabItem tabItem = addToEnd ? createItem(getContainer(), wu) : createItem(1, getContainer(), wu);
     	}
 	}
 
@@ -289,9 +228,9 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
 		CTabItem childItem = ((CTabFolder)getContainer()).getItem(newPageIndex);
-		if (childItem != null && childItem instanceof CTreeItemTabItem) {
-			CTreeItemTabItem treeItemTabItem = (CTreeItemTabItem)childItem;
-			treeItemTabItem.loadChildren();					
+		if (childItem != null && childItem instanceof CWorkunitTabItem) {
+			CWorkunitTabItem treeItemTabItem = (CWorkunitTabItem)childItem;
+			//treeItemTabItem.loadChildren();					
 		}
 	}
 	/**

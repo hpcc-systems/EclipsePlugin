@@ -80,6 +80,10 @@ public class Workunit extends DataSingleton {
 		setChanged();
 	}
 	
+	public Platform getPlatform() {
+		return platform;
+	}
+
 	public String getWuid() {
 		return info.getWuid();
 	}
