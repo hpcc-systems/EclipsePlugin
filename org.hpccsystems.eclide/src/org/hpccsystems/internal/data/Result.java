@@ -37,8 +37,8 @@ import org.xml.sax.InputSource;
 
 public class Result extends DataSingleton {
 	private static Map<Integer, Result> Results = new HashMap<Integer, Result>();
-	public static synchronized Result get(Platform platform, Workunit workunit, Integer sequence) {
-		Result result = new Result(platform, workunit, sequence);
+	public static synchronized Result get(Workunit workunit, Integer sequence) {
+		Result result = new Result(workunit, sequence);
 		if (Results.containsKey(result.hashCode())) {
 			return Results.get(result.hashCode());
 		}
@@ -48,7 +48,6 @@ public class Result extends DataSingleton {
 		return result;
 	}
 
-	private Platform platform;
 	private Workunit workunit;
 	private ECLResult info;
 	public enum Notification {
@@ -86,7 +85,7 @@ public class Result extends DataSingleton {
 				++count;
 			}
 			
-			WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
+			WsWorkunitsServiceSoap service = workunit.getPlatform().getWsWorkunitsService();
 			if (service != null) {
 				WUResult request = new WUResult();
 				request.setWuid(workunit.getWuid());
@@ -115,8 +114,7 @@ public class Result extends DataSingleton {
 	
 	ResultData data;
 	
-	private Result(Platform platform, Workunit workunit, Integer sequence) {
-		this.platform = platform;
+	private Result(Workunit workunit, Integer sequence) {
 		this.workunit = workunit;
 		info = new ECLResult();
 		info.setSequence(sequence);

@@ -15,8 +15,8 @@ import org.hpccsystems.internal.ui.tree.TreeItem;
 public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 	Workunit workunit;
 
-	public WorkunitTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, Workunit wu) {
-		super(treeViewer, parent, platform);
+	public WorkunitTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit wu) {
+		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
 		this.children.set(fetchChildren());
@@ -77,9 +77,9 @@ public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 			parent = parent.getParent();
 		}
 		if (retVal.isEmpty()) {
-			retVal.add(new ResultFolderTreeItem(treeViewer, this, platform, workunit));
-			retVal.add(new GraphFolderTreeItem(treeViewer, this, platform, workunit));
-			retVal.add(new WorkunitLogicalFileFolderTreeItem(treeViewer, this, platform, workunit));
+			retVal.add(new ResultFolderTreeItem(treeViewer, this, workunit));
+			retVal.add(new GraphFolderTreeItem(treeViewer, this, workunit));
+			retVal.add(new WorkunitLogicalFileFolderTreeItem(treeViewer, this, workunit));
 		}
 		return retVal.toArray();
 	}

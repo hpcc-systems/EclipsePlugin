@@ -103,7 +103,7 @@ public class WorkunitsViewer extends ViewPart {
 			for (Platform p : data.getPlatforms()) {
 				p.addObserver(this);
 				for(Workunit w : p.getWorkunits()) {
-					retVal.add(new WorkunitTreeItem(this, null, p, w));
+					retVal.add(new WorkunitTreeItem(this, null, w));
 				}
 			}
 			return retVal.toArray();

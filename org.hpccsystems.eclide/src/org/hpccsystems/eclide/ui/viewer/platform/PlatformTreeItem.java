@@ -143,7 +143,7 @@ class WorkunitFolderTreeItem extends FolderTreeItem {
 	public Object[] fetchChildren() {
 		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
 		for (Workunit wu : platform.getWorkunits(clusterName)) {
-			retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
+			retVal.add(new WorkunitTreeItem(treeViewer, this, wu));				
 		}
 		Collections.sort(retVal, new WorkunitComparator());
 		return retVal.toArray();
@@ -422,8 +422,8 @@ class LogicalFileFolderTreeItem extends FolderTreeItem {
 class WorkunitLogicalFileFolderTreeItem extends FolderTreeItem implements Observer {
 	Workunit workunit;
 
-	WorkunitLogicalFileFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, Workunit wu) {
-		super(treeViewer, parent, platform);
+	WorkunitLogicalFileFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit wu) {
+		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
 	}
@@ -498,7 +498,7 @@ class LogicalFileTreeItem extends PlatformBaseTreeItem {
 			retVal.add(new LogicalFileContentsTreeItem(treeViewer, this, platform, file));
 			Workunit wu = file.getWorkunit();
 			if (wu != null) {
-				retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
+				retVal.add(new WorkunitTreeItem(treeViewer, this, wu));				
 			}
 			FileSprayWorkunit fswu = file.getFileSprayWorkunit();
 			if (fswu != null) {
@@ -556,8 +556,8 @@ class LandingZoneFileTreeItem extends PlatformBaseTreeItem {
 class ResultFolderTreeItem extends FolderTreeItem implements Observer {
 	Workunit workunit;
 
-	ResultFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, Workunit wu) {
-		super(treeViewer, parent, platform);
+	ResultFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit wu) {
+		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
 	}
@@ -665,8 +665,8 @@ class ResultViewTreeItem extends PlatformBaseTreeItem {
 class GraphFolderTreeItem extends FolderTreeItem implements Observer  {
 	Workunit workunit;
 
-	GraphFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, Workunit wu) {
-		super(treeViewer, parent, platform);
+	GraphFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit wu) {
+		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
 	}

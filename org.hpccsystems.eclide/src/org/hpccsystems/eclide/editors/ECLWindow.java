@@ -55,7 +55,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			super(parent, style, index);
 			this.wu = wu;
 			
-			item = new WorkunitTreeItem(this, null, wu.getPlatform(), wu);
+			item = new WorkunitTreeItem(this, null, wu);
 
 			/*
 			parent.setLayout(new FillLayout());
@@ -72,25 +72,19 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			parent.setLayout(new FillLayout());
 			sashForm = new SashForm(parent, SWT.HORIZONTAL);
 
-			workunitViewer = new WorkunitViewer(wu.getPlatform(), wu);
+			workunitViewer = new WorkunitViewer(wu);
 			workunitViewer.createPartControl(sashForm);
-			browser = new BrowserEx(sashForm);
-			//CTabItem browserItem = new CTabItem(container, SWT.NONE);
-			//browserItem.setControl(browser);
-			//browserItem.setText("ECL Watch");
-			
-			//table = new TableEx(sashForm, SWT.VIRTUAL | SWT.FULL_SELECTION);
-			//CTabItem tableItem = new CTabItem(container, SWT.NONE);
-			//tableItem.setControl(table.getControl());
-			//tableItem.setText("Result View");
 
-			//sashForm.setWeights(new int[]{1, 2});
+			browser = new BrowserEx(sashForm);
+			workunitViewer.setBrowser(browser);
+		
 			setText(item.getText());
 			setImage(item.getImage());
+
 			int[] weights = new int[2];
 			weights[0] = 15;
 			weights[1] = 85;
-			sashForm.setWeights(weights);
+			sashForm.setWeights(new int[] {15, 85});
 		    setControl(sashForm);
 		}
 
@@ -146,8 +140,8 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 	}
 	
-	void createWorkunitPage(Platform p, Workunit wu, boolean addToEnd) {
-		WorkunitTreeItem treeItem = new WorkunitTreeItem(null, null, p, wu);
+	void createWorkunitPage(Workunit wu, boolean addToEnd) {
+		WorkunitTreeItem treeItem = new WorkunitTreeItem(null, null, wu);
 
 		//  TODO need to do better check than label...
     	boolean found = false;
@@ -270,7 +264,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 						@Override
 						public void run() {
-					    	createWorkunitPage(p, w, addToEnd);
+					    	createWorkunitPage(w, addToEnd);
 						}
 			    	});
 			    }

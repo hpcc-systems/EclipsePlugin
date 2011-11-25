@@ -39,8 +39,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
+import org.hpccsystems.eclide.ui.viewer.BrowserEx;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.eclide.ui.viewer.ResultViewer;
+import org.hpccsystems.eclide.ui.viewer.TableEx;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformTreeItemLabelProvider;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTreeItem;
 import org.hpccsystems.internal.Eclipse;
@@ -53,12 +55,11 @@ import org.hpccsystems.internal.ui.tree.TreeItem;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class WorkunitViewer extends ViewPart {
-	Platform p;
 	Workunit wu;
 
 	TreeViewer treeViewer;
-	private HtmlViewer htmlViewer;
-	private ResultViewer resultViewer;
+	private BrowserEx browser;
+	private TableEx table;
 	
 	Action showWebItemAction;
 	Action refreshItemAction;
@@ -70,9 +71,8 @@ public class WorkunitViewer extends ViewPart {
 		Workunit wu;
 		LazyChildLoader children;
 		
-		WorkunitTreeItemContentProvider(TreeViewer treeViewer, Platform p, Workunit wu) {
+		WorkunitTreeItemContentProvider(TreeViewer treeViewer, Workunit wu) {
 			super(treeViewer);
-			this.p = p;
 			this.wu = wu;
 			this.children = new LazyChildLoader();
 		}
@@ -106,7 +106,7 @@ public class WorkunitViewer extends ViewPart {
 		
 		Object[] fetchChildren() {
 			ArrayList<Object> retVal = new ArrayList<Object>();
-			WorkunitTreeItem item = new WorkunitTreeItem(this, null, p, wu);
+			WorkunitTreeItem item = new WorkunitTreeItem(this, null, wu);
 			for (Object o : item.fetchChildren()) {
 				retVal.add(o);
 			}
@@ -124,8 +124,7 @@ public class WorkunitViewer extends ViewPart {
 		}
 	}
 
-	public WorkunitViewer(Platform p, Workunit wu) {
-		this.p = p;
+	public WorkunitViewer(Workunit wu) {
 		this.wu = wu;
 	}
 
@@ -134,12 +133,12 @@ public class WorkunitViewer extends ViewPart {
 		// Create the tree viewer to display the file tree
 	    treeViewer = new TreeViewer(parent);
 	    treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-	    treeViewer.setContentProvider(new WorkunitTreeItemContentProvider(treeViewer, p, wu));
+	    treeViewer.setContentProvider(new WorkunitTreeItemContentProvider(treeViewer, wu));
 	    treeViewer.setLabelProvider(new PlatformTreeItemLabelProvider(treeViewer));
 	    treeViewer.setInput(Data.get().getPlatforms()); // pass a non-null that will be ignored
 	    
 	 // Create menu and toolbars.
-        //createActions();
+        createActions();
         //createMenu();
         //createToolbar();
         //createContextMenu();
@@ -154,14 +153,14 @@ public class WorkunitViewer extends ViewPart {
 		treeViewer.getControl().setFocus();
 	}
 
-	public void showWebPage(TreeItem ti, boolean bringToTop) {
-		if (htmlViewer == null)
-			htmlViewer = Eclipse.findHtmlViewer();
+	public void showWebPage(TreeItem ti) {
+		if (browser == null)
+			return;
 		
 		try {
 			URL webPageURL = ti.getWebPageURL();
-			if (htmlViewer != null && webPageURL != null) {
-				htmlViewer.showURL(webPageURL.toString(), ti.getUser(), ti.getPassword(), bringToTop);
+			if (webPageURL != null) {
+				browser.navigateTo(webPageURL.toString(), ti.getUser(), ti.getPassword());
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -173,13 +172,10 @@ public class WorkunitViewer extends ViewPart {
 		if (result == null)
 			return false;
 		
-		if (resultViewer == null)
-			resultViewer = Eclipse.findResultViewer();
-		
-		if (resultViewer == null) 
+		if (table == null) 
 			return false;
 
-		resultViewer.showResult(result);
+		table.setResult(result);
 		return true;
 	}
 	
@@ -191,7 +187,7 @@ public class WorkunitViewer extends ViewPart {
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
-						showWebPage((TreeItem)o, true);
+						//showWebPage((TreeItem)o, true);
 					}
 					break;
 				}
@@ -238,7 +234,7 @@ public class WorkunitViewer extends ViewPart {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
 						boolean resultShown = showResult((TreeItem)o);
-						showWebPage((TreeItem)o, !resultShown);
+						showWebPage((TreeItem)o);
 					}
 					break;
 				}
@@ -272,5 +268,13 @@ public class WorkunitViewer extends ViewPart {
 		mgr.add(refreshItemAction);
 		mgr.add(updateItemAction);
 		mgr.add(reloadAction);
+	}
+
+	public void setBrowser(BrowserEx browser) {
+		this.browser = browser;
+	}	
+
+	public void setTable(TableEx table) {
+		this.table = table;
 	}	
 }
