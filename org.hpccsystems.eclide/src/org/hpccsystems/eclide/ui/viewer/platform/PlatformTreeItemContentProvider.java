@@ -27,7 +27,7 @@ import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.ui.tree.TreeItem;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
-class PlatformTreeItemContentProvider extends TreeItemContentProvider {
+class PlatformTreeItemContentProvider extends TreeItemContentProvider implements TreeItemOwner {
 	Data data;
 	
 	PlatformTreeItemContentProvider(TreeViewer treeViewer, Data data) {
@@ -38,12 +38,22 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 	public Object[] getElements(Object inputElement) {
 		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
 		for (Platform p : ((Data)inputElement).getPlatforms()) {
-			retVal.add(new PlatformTreeItem(treeViewer, null, p));
+			retVal.add(new PlatformTreeItem(this, null, p));
 		}
 		return retVal.toArray();
 	}
-
+	
 	@Override
 	public void update(Observable o, Object arg) {
+	}
+	
+	@Override
+	public void update(Object element, String[] properties) {
+		treeViewer.update(element, properties);
+	}
+	
+	@Override
+	public void refresh(Object element) {
+		treeViewer.refresh(element);		
 	}
 }

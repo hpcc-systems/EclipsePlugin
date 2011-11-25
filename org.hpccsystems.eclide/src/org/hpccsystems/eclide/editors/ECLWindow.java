@@ -1,13 +1,9 @@
 package org.hpccsystems.eclide.editors;
 
-import java.io.StringWriter;
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -17,47 +13,185 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FontDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.ui.viewer.BrowserEx;
+import org.hpccsystems.eclide.ui.viewer.TableEx;
+import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
+import org.hpccsystems.eclide.ui.viewer.platform.FolderTreeItem;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTreeItem;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.internal.ui.tree.TreeItem;
 
 public class ECLWindow extends MultiPageEditorPart implements IResourceChangeListener, Observer {
 
 	private ECLEditor editor;
+	
+	class CTreeItemTabItem extends CTabItem implements TreeItemOwner{
+		private CTabFolder container;
+		
+		BrowserEx browser;
+		TableEx table;
+		TreeItem item;
+		boolean loaded;
+
+		public CTreeItemTabItem(CTabFolder parent, int style, int index) {
+			super(parent, style, index);
+			
+			parent.setLayout(new FillLayout());
+			container = new CTabFolder(parent, SWT.BOTTOM | SWT.FLAT);
+			container.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					int newPageIndex = container.indexOf((CTabItem) e.item);
+					myPageChange(newPageIndex);
+				}
+			});
+			setControl(container);
+			
+			browser = new BrowserEx(container);
+			CTabItem browserItem = new CTabItem(container, SWT.NONE);
+			browserItem.setControl(browser);
+			browserItem.setText("ECL Watch");
+
+			table = new TableEx(container, SWT.VIRTUAL | SWT.FULL_SELECTION);
+			CTabItem tableItem = new CTabItem(container, SWT.NONE);
+			tableItem.setControl(table.getControl());
+			tableItem.setText("Result View");
+
+			loaded = false;
+		}
+		
+		protected void myPageChange(int newPageIndex) {
+			if (newPageIndex == 0) {
+				try {
+					URL webPageURL = item.getWebPageURL();
+					if (webPageURL != null)			
+						browser.navigateTo(webPageURL.toString(), item.getUser(), item.getPassword());
+				} catch (MalformedURLException e) {
+				}
+			}
+			if (newPageIndex == 1) {
+				table.setResult(item.getResult());
+			}
+			else {
+				CTabItem childItem = container.getItem(newPageIndex);
+				if (childItem != null && childItem instanceof CTreeItemTabItem) {
+					CTreeItemTabItem treeItemTabItem = (CTreeItemTabItem)childItem;
+					treeItemTabItem.loadChildren();					
+				}
+			}
+		}
+
+		public void setTreeItem(TreeItem item) {
+			this.item = item;
+			setText(this.item.getText());
+			setImage(this.item.getImage());
+			item.hasChildren();
+		}
+
+		void loadChildren() {
+			if (loaded || item == null)
+				return;
+
+			Object[] objs = item.getChildren();
+			if (objs == null)
+				return;
+			
+			container.setRedraw(false);
+			for (Object o : objs) {
+				if (loaded == false) {
+					loaded = true;
+				}
+
+	    		CTreeItemTabItem tabItem = createItem(container);
+	    		tabItem.setTreeItem((TreeItem)o);
+			}
+			container.setRedraw(true);
+		}
+
+		void reloadChildren() {
+			while(container.getItemCount() > 1) {
+				if (container.getItems()[1] instanceof CTreeItemTabItem)
+					((CTreeItemTabItem)container.getItems()[1]).browser.dispose();
+				container.getItems()[1].dispose();
+			}
+			loadChildren();
+		}
+		
+		CTreeItemTabItem createItem(Control control) {
+			int index = container.getItemCount();
+			return createItem(index, control);
+		}
+
+		CTreeItemTabItem createItem(int index, Control control) {
+			CTreeItemTabItem item = new CTreeItemTabItem(container, SWT.NONE, index);
+			//item.setControl(control);
+			return item;
+		}
+
+		@Override
+		public void update(Object element, String[] properties) {
+			Display.getDefault().asyncExec(new Runnable() {   
+				public void run() {
+					setText(item.getText());
+					setImage(item.getImage());
+				}
+			});
+		}
+
+		@Override
+		public void refresh(Object element) {
+			Display.getDefault().asyncExec(new Runnable() {   
+				public void run() {
+					loadChildren();
+				}
+			});
+		}
+	}
 
 	public ECLWindow() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 	}
 
+	CTreeItemTabItem createItem(Control control) {
+		int index = getPageCount();
+		return createItem(index, control);
+	}
+
+	CTreeItemTabItem createItem(int index, Control control) {
+		CTabFolder folder = (CTabFolder)getContainer();
+		CTreeItemTabItem item = new CTreeItemTabItem(folder, SWT.NONE, index);
+		//item.setControl(control);
+		return item;
+	}
+	
 	void createEditorPage() {
 		try {
 			editor = new ECLEditor();
 			int index = addPage(editor, getEditorInput());
 			this.setTitle(editor.getTitle());
 			setPageText(index, "ECL");
+			setPageImage(index, Activator.getImage("icons/releng_gears.gif"));
 		} catch (PartInitException e) {
 			ErrorDialog.openError(
 					getSite().getShell(),
@@ -67,10 +201,13 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 	}
 	
-	void createWorkunitPage(Workunit wu, boolean addToEnd) {
+	void createWorkunitPage(Platform p, Workunit wu, boolean addToEnd) {
+		WorkunitTreeItem treeItem = new WorkunitTreeItem(null, null, p, wu);
+
+		//  TODO need to do better check than label...
     	boolean found = false;
     	for (int i = 1; i < getPageCount(); ++i) {
-    		if (getPageText(i).compareTo(wu.getWuid()) == 0) {
+    		if (getPageText(i).compareTo(treeItem.getText()) == 0) {
     			found = true;
     			break;
     		}			    		
@@ -82,14 +219,8 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
     		composite.setLayout(layout);
     		layout.numColumns = 2;
     		
-    		if (addToEnd) {
-    			int index = addPage(composite);
-        		setPageText(index, wu.getWuid());
-    		}
-    		else {
-    			addPage(1, composite);
-    			setPageText(1, wu.getWuid());
-    		}
+    		CTreeItemTabItem tabItem = addToEnd ? createItem(composite) : createItem(1, composite);
+    		tabItem.setTreeItem(new WorkunitTreeItem(tabItem, null, p, wu));
     	}
 	}
 
@@ -157,7 +288,10 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	 */
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
-		if (newPageIndex == 2) {
+		CTabItem childItem = ((CTabFolder)getContainer()).getItem(newPageIndex);
+		if (childItem != null && childItem instanceof CTreeItemTabItem) {
+			CTreeItemTabItem treeItemTabItem = (CTreeItemTabItem)childItem;
+			treeItemTabItem.loadChildren();					
 		}
 	}
 	/**
@@ -183,7 +317,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	public void update(Observable o, Object arg) {
 		final boolean addToEnd = (arg instanceof Boolean) ? (Boolean)arg : false;
 		Data data = Data.get();
-		for (Platform p : data.getPlatforms()) {
+		for (final Platform p : data.getPlatforms()) {
 			p.addObserver(this);
 			for(final Workunit w : p.getWorkunits()) {
 				String path = w.getApplicationValue("path");
@@ -197,7 +331,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 						@Override
 						public void run() {
-					    	createWorkunitPage(w, addToEnd);
+					    	createWorkunitPage(p, w, addToEnd);
 						}
 			    	});
 			    }

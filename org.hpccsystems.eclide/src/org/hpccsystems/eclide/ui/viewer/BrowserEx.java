@@ -123,7 +123,7 @@ public class BrowserEx extends Composite {
 		navigateTo(url, "", "");
 	}	
 
-	void navigateTo(String url, String user, String password) {
+	public void navigateTo(String url, String user, String password) {
 		this.user = user;
 		this.password = password;
 		browser.setUrl(url);

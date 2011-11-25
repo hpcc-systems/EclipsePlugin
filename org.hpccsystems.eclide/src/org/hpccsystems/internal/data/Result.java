@@ -132,6 +132,10 @@ public class Result extends DataSingleton {
 		return info.getSequence();
 	}
 
+	public String getResultName() {
+		return info.getName();
+	}
+
 	public String getName() {
 		return info.getName();
 	}
@@ -254,4 +258,5 @@ public class Result extends DataSingleton {
 		result = HashCodeUtil.hash(result, info.getSequence());
 		return result;
 	}
+
 }

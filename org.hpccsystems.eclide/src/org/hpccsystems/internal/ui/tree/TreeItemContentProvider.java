@@ -23,8 +23,10 @@ import java.util.Observer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
+import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 
-abstract public class TreeItemContentProvider implements ITreeContentProvider, Observer{
+abstract public class TreeItemContentProvider implements ITreeContentProvider, Observer, TreeItemOwner {
 	protected TreeViewer treeViewer;
 
 	protected TreeItemContentProvider(TreeViewer treeViewer) {
@@ -63,6 +65,24 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 			return ((TreeItem)element).hasChildren();
 		}
 		return false;
+	}
+
+	@Override
+	public void update(final Object element, final String[] properties) {
+		Display.getDefault().asyncExec(new Runnable() {   
+			public void run() {
+				treeViewer.update(element, properties);
+			}
+		});
+	}
+	
+	@Override
+	public void refresh(final Object element) {
+		Display.getDefault().asyncExec(new Runnable() {   
+			public void run() {
+				treeViewer.refresh(element);
+			}
+		});
 	}
 }
 

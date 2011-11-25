@@ -18,9 +18,12 @@
 
 package org.hpccsystems.eclide.ui.viewer.platform;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -36,8 +39,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
+import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
+import org.hpccsystems.eclide.ui.viewer.ResultViewer;
+import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.Result;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.TreeItem;
@@ -46,6 +53,9 @@ import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 public class WorkunitsViewer extends ViewPart {
 
 	TreeViewer treeViewer;
+	private HtmlViewer htmlViewer;
+	private ResultViewer resultViewer;
+	
 	Action showWebItemAction;
 	Action refreshItemAction;
 	Action updateItemAction;
@@ -93,7 +103,7 @@ public class WorkunitsViewer extends ViewPart {
 			for (Platform p : data.getPlatforms()) {
 				p.addObserver(this);
 				for(Workunit w : p.getWorkunits()) {
-					retVal.add(new WorkunitTreeItem(treeViewer, null, p, w));
+					retVal.add(new WorkunitTreeItem(this, null, p, w));
 				}
 			}
 			return retVal.toArray();
@@ -110,8 +120,6 @@ public class WorkunitsViewer extends ViewPart {
 		}
 	}
 
-
-	
 	public WorkunitsViewer() {
 		// TODO Auto-generated constructor stub
 	}
@@ -141,6 +149,35 @@ public class WorkunitsViewer extends ViewPart {
 		treeViewer.getControl().setFocus();
 	}
 
+	public void showWebPage(TreeItem ti, boolean bringToTop) {
+		if (htmlViewer == null)
+			htmlViewer = Eclipse.findHtmlViewer();
+		
+		try {
+			URL webPageURL = ti.getWebPageURL();
+			if (htmlViewer != null && webPageURL != null) {
+				htmlViewer.showURL(webPageURL.toString(), ti.getUser(), ti.getPassword(), bringToTop);
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean showResult(TreeItem ti) {
+		Result result = ti.getResult();
+		if (result == null)
+			return false;
+		
+		if (resultViewer == null)
+			resultViewer = Eclipse.findResultViewer();
+		
+		if (resultViewer == null) 
+			return false;
+
+		resultViewer.showResult(result);
+		return true;
+	}
+	
 	public void createActions() {
 		showWebItemAction = new Action("Show ECL Watch") {
 			public void run() { 
@@ -149,7 +186,7 @@ public class WorkunitsViewer extends ViewPart {
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
-						((TreeItem)o).showWebPage(true);
+						showWebPage((TreeItem)o, true);
 					}
 					break;
 				}
@@ -195,8 +232,8 @@ public class WorkunitsViewer extends ViewPart {
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
-						boolean resultShown = ((TreeItem)o).showResult();
-						((TreeItem)o).showWebPage(!resultShown);
+						boolean resultShown = showResult((TreeItem)o);
+						showWebPage((TreeItem)o, !resultShown);
 					}
 					break;
 				}

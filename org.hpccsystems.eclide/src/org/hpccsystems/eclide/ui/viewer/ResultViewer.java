@@ -34,8 +34,7 @@ public class ResultViewer extends ViewPart {
 	
 	private static ResultViewer resultViewer = null;
 	
-	private Table table; 
-	private Result result;
+	private TableEx table; 
 
 	public static ResultViewer getDefault() {
 		return resultViewer;
@@ -47,65 +46,11 @@ public class ResultViewer extends ViewPart {
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		table = new Table(parent, SWT.VIRTUAL | SWT.FULL_SELECTION);
-	    table.setLinesVisible(true);
-	    table.setHeaderVisible(true);
-
-	    TableColumn tc = new TableColumn(table, SWT.NONE);
-		tc.setText("##");
-		tc.setWidth(30);
-		
-		table.addListener(SWT.SetData, new Listener() {
-			public void handleEvent(Event event) {
-				TableItem item = (TableItem) event.item;
-				int row = table.indexOf(item);
-				item.setText(Integer.toString(row + 1));
-				if (result != null) {
-					for (int col = 1; col < table.getColumnCount(); ++col) {
-						item.setText(col, result.getCell(row, col - 1));
-					} 
-				}
-				table.setRedraw(false);
-				if (row == 0) {
-					for (TableColumn tc : table.getColumns()) 
-				        tc.pack(); 
-				}
-				table.setRedraw(true);
-			}
-		});
-	}
-	
-	String getUrl(String ip) {
-		return "http://" + ip + ":8010/";
-	}
-	
-	String getWuidUrl(String ip, String wuid) {
-		return getUrl(ip) + "WsWorkunits/WUInfo?Wuid=" + wuid;
-	}
-	
-	public void showWuid(final String ip, final String wuid, final String user, final String password) {
-		showURL(getWuidUrl(ip, wuid), user, password);
-	}
-
-	public void showURL(final String url, final String user, final String password) {
+		table = new TableEx(parent, SWT.VIRTUAL | SWT.FULL_SELECTION);
 	}
 
 	public void showResult(final Result result) {
-		table.setRedraw(false);
-		table.setItemCount(0);
-		this.result = null;
-		while (table.getColumnCount() > 1 ) { 
-		    table.getColumns()[1].dispose(); 
-		} 
-		this.result = result;
-
-		for (int i = 0; i < result.getColumnCount(); ++i) {
-		    TableColumn tc = new TableColumn(table, SWT.NONE, i + 1);
-		    tc.setText(result.getColumnName(i));
-		    tc.setWidth(120);
-		}
-		table.setItemCount(result.getTotal().intValue());
-		table.setRedraw(true);
+		table.setResult(result);
 		resultViewer.getSite().getPage().bringToTop(resultViewer);
 	}
 
