@@ -71,28 +71,6 @@ public class Graph extends DataSingleton {
 	@Override
 	void fullRefresh() {
 		workunit.getGraphs();
-		/*
-		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
-		if (service != null) {
-			WUGraphInfo request = new WUGraphInfo();
-			request.setWuid(workunit.getWuid());
-			request.setName(info.getName());
-
-			try {
-				WUGraphInfoResponse response = service.WUGraphInfo(request);
-				ECLGraph newInfo = info;
-				newInfo.setRunning(response.getRunning());
-				Update(newInfo);
-			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		notifyObservers(Notification.GRAPH);
-		*/
 	}
 
 	//  Updates  ---

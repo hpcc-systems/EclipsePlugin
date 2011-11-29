@@ -12,7 +12,7 @@ package org.hpccsystems.internal.data;
 
 import java.util.Observable;
 
-public abstract class DataSingleton extends Observable{
+public abstract class DataSingleton extends Observable {
 	static final int MONITOR_SLEEP = 1000;
 
 	Thread monitorThread;

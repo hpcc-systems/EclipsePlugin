@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="Test Install/Update Site" url="https://gordon.homeserver.com/eclipse">
-      Temporary update site for Eclipse ECL Plugin.
+   <description name="HPCC Sytems Update Site" url="https://gordon.homeserver.com/eclipse">
+      Update site for Eclipse ECL Plugin.
    </description>
-   <feature url="features/ECL_Language_1.0.0.201110171700.jar" id="ECL_Language" version="1.0.0.201110171700">
-      <category name="HPCC_Systems"/>
+   <feature url="features/ECL_Language_1.0.0.201111290952.jar" id="ECL_Language" version="1.0.0.201111290952">
+      <category name="hpcc_systems"/>
    </feature>
-   <category-def name="HPCC_Systems" label="HPCC Systems">
+   <category-def name="hpcc_systems" label="HPCC Systems">
       <description>
          HPCC (High Performance Computing Cluster) is a massive parallel-processing computing platform that solves Big Data problems.
       </description>

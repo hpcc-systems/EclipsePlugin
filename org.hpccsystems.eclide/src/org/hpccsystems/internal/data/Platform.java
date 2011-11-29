@@ -156,17 +156,6 @@ public class Platform extends DataSingleton {
 			e.printStackTrace();
 		}
 		return null;
-		
-		/*
-		String wuid = compiler.buildAndRun(file, ip, cluster, user, password);
-		if (wuid.isEmpty())
-			return null;
-
-		Workunit retVal = getWorkunit(wuid);
-		setChanged();
-		notifyObservers("Submit");
-		return retVal;
-		*/
 	}
 
 	@Override
@@ -442,9 +431,6 @@ public class Platform extends DataSingleton {
 	}
 	
 	void initStub(org.apache.axis.client.Stub stub) {
-		//QName portName = stub.getPortName();
-		//QName newPortName = new QName("urn:hpccsystems:ws:wsworkunits", portName.getLocalPart(), portName.getPrefix());
-		//stub.setPortName(newPortName);
 		stub.setUsername(user);
 		stub.setPassword(password);
 	}

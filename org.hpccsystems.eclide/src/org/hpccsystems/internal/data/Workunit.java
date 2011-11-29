@@ -235,15 +235,6 @@ public class Workunit extends DataSingleton {
 			request.setIncludeResultsViewNames(includeResults);
 			request.setIncludeSourceFiles(includeSourceFiles);
 			request.setIncludeApplicationValues(includeApplicationValues);
-			/*
-			request.setIncludeApplicationValues(true);
-			request.setIncludeDebugValues(true);
-			request.setIncludeExceptions(true);
-			request.setIncludeResultsViewNames(true);
-			request.setIncludeTimers(true);
-			request.setIncludeVariables(true);
-			request.setIncludeWorkflows(true);
-			 */
 			try {
 				WUInfoResponse respsone = service.WUInfo(request);
 				update(respsone.getWorkunit());
