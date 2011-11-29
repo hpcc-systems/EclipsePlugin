@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.ui.tree.TreeItem;
@@ -48,12 +49,24 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider implements
 	}
 	
 	@Override
-	public void update(Object element, String[] properties) {
-		treeViewer.update(element, properties);
+	public void update(final Object element, final String[] properties) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				treeViewer.update(element, properties);
+			} 
+		});
 	}
 	
 	@Override
-	public void refresh(Object element) {
-		treeViewer.refresh(element);		
+	public void refresh(final Object element) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				treeViewer.refresh(element);		
+			} 
+		});
 	}
 }

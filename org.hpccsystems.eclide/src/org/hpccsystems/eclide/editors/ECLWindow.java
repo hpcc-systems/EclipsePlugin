@@ -51,7 +51,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		BrowserEx browser;
 		TableEx table;
 
-		public CWorkunitTabItem(final CTabFolder parent, int style, int index, Workunit wu) {
+		public CWorkunitTabItem(CTabFolder parent, int style, int index, Workunit wu) {
 			super(parent, style, index);
 			this.wu = wu;
 			

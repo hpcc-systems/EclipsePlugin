@@ -90,7 +90,7 @@ public class TreeItem {
 					});
 				}
 			});
-			update(null);
+			//  Java does not like this (but it is being used to display "calculating") -> update(null);
 			break;
 		case STARTED:
 			break;
