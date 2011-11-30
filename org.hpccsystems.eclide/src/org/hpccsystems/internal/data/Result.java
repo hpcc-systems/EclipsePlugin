@@ -151,7 +151,7 @@ public class Result extends DataSingleton {
 	
 	@Override
 	public boolean isComplete() {
-		return StateHelper.isCompleted(getStateID());
+		return StateHelper.isCompleted(getStateID()) || workunit.isComplete();
 	}
 
 	public int getColumnCount() {
@@ -179,30 +179,6 @@ public class Result extends DataSingleton {
 	@Override
 	void fullRefresh() {
 		workunit.getResults();
-		/*
-		WsWorkunitsServiceSoap service = platform.GetWsWorkunitsService();
-		if (service != null) {
-			WUResult request = new WUResult();
-			request.setWuid(workunit.getWuid());
-			request.setSequence(info.getSequence());
-			request.setStart(new Long(0));
-			request.setCount(1);
-
-			try {
-				WUResultResponse response = service.WUResult(request);
-				ECLResult newInfo = info;
-				newInfo.setName(response.getName());
-				newInfo.setTotal(response.getTotal());
-				Update(newInfo);
-			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		*/
 	}
 
 	//  Updates  ---
@@ -221,6 +197,8 @@ public class Result extends DataSingleton {
 	synchronized boolean UpdateState(ECLResult result) {
 		if (result != null && info.getSequence().equals(result.getSequence()) &&
 				EqualsUtil.hasChanged(info, result)) {
+			
+			assert(result.getECLSchemas() != null);
 			info = result;
 			setChanged();
 			return true;

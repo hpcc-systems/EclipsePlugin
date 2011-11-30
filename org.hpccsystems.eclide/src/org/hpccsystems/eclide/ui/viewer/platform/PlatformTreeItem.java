@@ -691,12 +691,13 @@ class GraphFolderTreeItem extends FolderTreeItem implements Observer  {
 	}
 }
 
-class GraphTreeItem extends PlatformBaseTreeItem {
+class GraphTreeItem extends PlatformBaseTreeItem implements Observer {
 	Graph graph;
 
 	GraphTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, Graph graph) {
 		super(treeViewer, parent, platform);
 		this.graph = graph; 
+		this.graph.addObserver(this);
 		this.children.set(fetchChildren());
 	}
 
@@ -720,6 +721,11 @@ class GraphTreeItem extends PlatformBaseTreeItem {
 	//http://192.168.2.68:8010/WsWorkunits/GVCAjaxGraph?Name=W20111103-233901&GraphName=graph1
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "GVCAjaxGraph", "Name=" + graph.getWuid() + "&GraphName=" + graph.getName());
+	}
+	
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		update(null);
 	}
 }
 

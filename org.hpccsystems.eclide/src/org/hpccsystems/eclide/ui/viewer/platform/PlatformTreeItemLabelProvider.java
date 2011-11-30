@@ -26,7 +26,7 @@ public class PlatformTreeItemLabelProvider extends TreeItemLabelProvider {
 			final TreeItem treeItem = (TreeItem)element; 
 			switch(treeItem.children.getState()) {
 			case UNKNOWN:
-				return treeItem.getText() + " (Unknown...)";
+				return treeItem.getText() + " (Loading...)";
 			case STARTED:
 				return treeItem.getText() + " (Calculating...)";
 			case FINISHED:

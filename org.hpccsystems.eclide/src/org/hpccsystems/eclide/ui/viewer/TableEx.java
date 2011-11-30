@@ -25,8 +25,8 @@ public class TableEx {
 	private Table table;
 	private Result result;
 
-	public TableEx(Composite parent, int style) {
-		table = new Table(parent, style);
+	public TableEx(Composite parent) {
+		table = new Table(parent, SWT.VIRTUAL | SWT.FULL_SELECTION);
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);

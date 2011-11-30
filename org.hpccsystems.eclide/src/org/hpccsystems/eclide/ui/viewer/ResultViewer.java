@@ -38,7 +38,7 @@ public class ResultViewer extends ViewPart {
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		table = new TableEx(parent, SWT.VIRTUAL | SWT.FULL_SELECTION);
+		table = new TableEx(parent);
 	}
 
 	public void showResult(final Result result) {

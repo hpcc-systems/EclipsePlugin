@@ -42,6 +42,7 @@ import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTreeItem;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.Result;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.TreeItem;
 
@@ -56,10 +57,12 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		Workunit wu;
 		WorkunitTreeItem item;
 		
-		SashForm sashForm;
+		SashForm sashFormMain;
+		SashForm sashFormResult;
 		WorkunitViewer workunitViewer;
-		BrowserEx browser;
-		TableEx table;
+		
+		private BrowserEx browser;
+		private TableEx table;
 
 		public CWorkunitTabItem(CTabFolder parent, int style, int index, Workunit wu) {
 			super(parent, style, index);
@@ -67,35 +70,26 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			
 			item = new WorkunitTreeItem(this, null, wu);
 
-			/*
 			parent.setLayout(new FillLayout());
-			container = new CTabFolder(parent, SWT.BOTTOM | SWT.FLAT);
-			container.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					int newPageIndex = container.indexOf((CTabItem) e.item);
-					myPageChange(newPageIndex);
-				}
-			});
-			setControl(container);
-			*/
-			
-			parent.setLayout(new FillLayout());
-			sashForm = new SashForm(parent, SWT.HORIZONTAL);
+			sashFormMain = new SashForm(parent, SWT.HORIZONTAL);
 
 			workunitViewer = new WorkunitViewer(wu);
-			workunitViewer.createPartControl(sashForm);
+			workunitViewer.createPartControl(sashFormMain);
 
-			browser = new BrowserEx(sashForm);
-			workunitViewer.setBrowser(browser);
-		
+			sashFormResult = new SashForm(sashFormMain, SWT.VERTICAL);
+
+			browser = new BrowserEx(sashFormResult);
+			table = new TableEx(sashFormResult);
+
 			setText(item.getText());
 			setImage(item.getImage());
 
-			int[] weights = new int[2];
-			weights[0] = 15;
-			weights[1] = 85;
-			sashForm.setWeights(new int[] {15, 85});
-		    setControl(sashForm);
+			sashFormMain.setWeights(new int[] {15, 85});
+			sashFormResult.setWeights(new int[] {100, 0});
+			
+			workunitViewer.setOwner(this);
+
+		    setControl(sashFormMain);
 		}
 
 		@Override
@@ -114,6 +108,16 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				public void run() {
 				}
 			});
+		}
+
+		void navigateTo(String url, String user, String password) {
+			browser.navigateTo(url, user, password);
+			sashFormResult.setWeights(new int[] {100, 0});
+		}
+
+		void setResult(Result result) {
+			table.setResult(result);
+			sashFormResult.setWeights(new int[] {0, 100});
 		}
 	}
 
@@ -259,26 +263,33 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	@Override
 	public void update(Observable o, Object arg) {
 		final boolean addToEnd = (arg instanceof Boolean) ? (Boolean)arg : false;
-		Data data = Data.get();
-		for (final Platform p : data.getPlatforms()) {
-			p.addObserver(this);
-			for(final Workunit w : p.getWorkunits()) {
-				String path = w.getApplicationValue("path");
-	
-			    IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
-			    IFile file = input.getFile();
-			    String path2 = file.getFullPath().toPortableString();
-	
-			    if (path.compareTo(path2) == 0) {
-			    	Display.getDefault().asyncExec(new Runnable() {
+		final ECLWindow self = this;
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Data data = Data.get();
+				for (final Platform p : data.getPlatforms()) {
+					p.addObserver(self);
+					for(final Workunit w : p.getWorkunits()) {
+						String path = w.getApplicationValue("path");
+			
+					    IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
+					    IFile file = input.getFile();
+					    String path2 = file.getFullPath().toPortableString();
+			
+					    if (path.compareTo(path2) == 0) {
+					    	Display.getDefault().syncExec(new Runnable() {
 
-						@Override
-						public void run() {
-					    	createWorkunitPage(w, addToEnd);
-						}
-			    	});
-			    }
+								@Override
+								public void run() {
+							    	createWorkunitPage(w, addToEnd);
+								}
+					    	});
+					    }
+					}
+				}
 			}
-		}
+		});
+		thread.start();
 	}
 }

@@ -19,7 +19,6 @@ import java.util.Observable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -31,13 +30,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
+import org.hpccsystems.eclide.editors.ECLWindow.CWorkunitTabItem;
 import org.hpccsystems.eclide.ui.viewer.BrowserEx;
-import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
-import org.hpccsystems.eclide.ui.viewer.ResultViewer;
 import org.hpccsystems.eclide.ui.viewer.TableEx;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformTreeItemLabelProvider;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTreeItem;
-import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Result;
@@ -50,8 +47,8 @@ public class WorkunitViewer extends ViewPart {
 	Workunit wu;
 
 	TreeViewer treeViewer;
-	private BrowserEx browser;
-	private TableEx table;
+	
+	CWorkunitTabItem owner;
 	
 	Action showWebItemAction;
 	Action refreshItemAction;
@@ -146,13 +143,13 @@ public class WorkunitViewer extends ViewPart {
 	}
 
 	public void showWebPage(TreeItem ti) {
-		if (browser == null)
+		if (owner == null)
 			return;
 		
 		try {
 			URL webPageURL = ti.getWebPageURL();
 			if (webPageURL != null) {
-				browser.navigateTo(webPageURL.toString(), ti.getUser(), ti.getPassword());
+				owner.navigateTo(webPageURL.toString(), ti.getUser(), ti.getPassword());
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -164,10 +161,10 @@ public class WorkunitViewer extends ViewPart {
 		if (result == null)
 			return false;
 		
-		if (table == null) 
+		if (owner == null) 
 			return false;
 
-		table.setResult(result);
+		owner.setResult(result);
 		return true;
 	}
 	
@@ -225,8 +222,8 @@ public class WorkunitViewer extends ViewPart {
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
-						boolean resultShown = showResult((TreeItem)o);
 						showWebPage((TreeItem)o);
+						showResult((TreeItem)o);
 					}
 					break;
 				}
@@ -262,11 +259,7 @@ public class WorkunitViewer extends ViewPart {
 		mgr.add(reloadAction);
 	}
 
-	public void setBrowser(BrowserEx browser) {
-		this.browser = browser;
-	}	
-
-	public void setTable(TableEx table) {
-		this.table = table;
+	public void setOwner(CWorkunitTabItem workunitTabItem) {
+		this.owner = workunitTabItem;
 	}	
 }

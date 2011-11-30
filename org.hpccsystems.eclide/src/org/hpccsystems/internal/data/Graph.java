@@ -60,7 +60,7 @@ public class Graph extends DataSingleton {
 	
 	@Override
 	public boolean isComplete() {
-		return StateHelper.isCompleted(getStateID());
+		return StateHelper.isCompleted(getStateID()) || workunit.isComplete();
 	}
 
 	@Override

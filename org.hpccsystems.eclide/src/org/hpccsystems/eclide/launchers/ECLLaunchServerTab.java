@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.launchers;
 
+import java.awt.Checkbox;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -34,6 +36,7 @@ import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 import org.hpccsystems.internal.data.Data;
+import org.hpccsystems.internal.data.Platform;
 
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
@@ -51,28 +54,9 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			Object source= e.getSource();
 			if (source == testButton) {
 				refreshBrowser();
+			} else if (source == enableButton) {
+				scheduleUpdateJob();
 			}
-//			if (source == fWorkspaceButton) {
-////				handleWorkspaceDirBrowseButtonSelected();
-//			}
-//			else if (source == fFileSystemButton) {
-////				handleWorkingDirBrowseButtonSelected();
-//			} 
-//			else if (source == fVariablesButton) {
-////				handleWorkingDirVariablesButtonSelected();
-//			} 
-//			else if(source == localButton) {
-//				//only perform the action if this is the button that was selected
-////				if(fUseDefaultDirButton.getSelection()) {
-////					setDefaultWorkingDir();
-////				}
-//			} 
-//			else if(source == remoteButton) {
-//				//only perform the action if this is the button that was selected
-////				if(fUseOtherDirButton.getSelection()) {
-////					handleUseOtherWorkingDirButtonSelected();
-////				}
-//			}
 		}
 	}
 	
@@ -80,14 +64,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	
     Image image;
 
-//    // Local directory
-//	private Button fWorkspaceButton;
-//	private Button fFileSystemButton;
-//	private Button fVariablesButton;
-//	
-//	//bug 29565 fix
-//	private Button localButton = null;
-//	private Button remoteButton = null;
+	private Button enableButton;
 	protected Text fIPText;
 	protected Text fClusterText;
 
@@ -100,28 +77,13 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
-		/*
-		setErrorMessage("");
-		try {
-			IProject targetProject = Eclipse.findProject(launchConfig.getAttribute(ECLLaunchConstants.P_PROJECT, ""));
-			if (targetProject == null || !targetProject.exists()) {
-				setErrorMessage("Project does not exist");
-				return false;
-			}
-			IFile targetFile = Eclipse.findFile(targetProject, launchConfig.getAttribute(ECLLaunchConstants.P_FILE, ""));
-			if (targetFile == null || !targetFile.exists()) {
-				setErrorMessage("File does not exist");
-				return false;
-			}
-		} catch (CoreException e) {
-			return false;
-		}
-		 */
-
 		return super.isValid(launchConfig);
 	}
 
 	protected void createServerEditor(Composite parent) {
+		enableButton = SWTFactory.createCheckButton(parent, "Server Active (Will be disabled if unreachable)", null, true, 1);
+		enableButton.addSelectionListener(fListener);
+
 		Group group = SWTFactory.createGroup(parent, "Server:", 2, 1, GridData.FILL_HORIZONTAL);
 		SWTFactory.createLabel(group, "IP Address:  ", 1);
 		fIPText = SWTFactory.createSingleText(group, 1);
@@ -178,57 +140,6 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		createBrowser(projComp);
 		setControl(projComp);
 		
-//		Font font = parent.getFont();	
-//		SWTFactory.createHorizontalSpacer(parent, 1);
-//
-//		Group serverGroup = SWTFactory.createGroup(parent, "Server", 2, 1, GridData.FILL_HORIZONTAL);
-//		setControl(serverGroup);
-//		SWTFactory.createLabel(serverGroup, "IP Address:  ", 1);
-//		ip = SWTFactory.createSingleText(serverGroup, 1); 
-//		ip.addModifyListener(fListener);
-//
-//		SWTFactory.createLabel(serverGroup, "Cluster:  ", 1);
-//		cluster = SWTFactory.createSingleText(serverGroup, 1);
-//		cluster.addModifyListener(fListener);
-//
-//		//setControl(parent);
-//		//Group launchItemGroup = SWTFactory.createGroup(parent, "Launch Item", 2, 1, GridData.FILL_HORIZONTAL);
-//		setControl(serverGroup);
-//		fProjText = SWTFactory.createSingleText(serverGroup, 1);
-//		fProjText.addModifyListener(fListener);
-//		//ControlAccessibleListener.addListener(fProjText, group.getText());
-//		fProjButton = createPushButton(serverGroup, "LauncherMessages.AbstractJavaMainTab_1", null); 
-//		fProjButton.addSelectionListener(fListener);
-//
-//		Composite projComp = SWTFactory.createComposite(parent, parent.getFont(), 1, 1, GridData.FILL_BOTH); 
-//		((GridLayout)projComp.getLayout()).verticalSpacing = 0;
-//
-//		Group group = SWTFactory.createGroup(parent, "LauncherMessages.AbstractJavaMainTab_0", 2, 1, GridData.FILL_HORIZONTAL);
-//		fProjText = SWTFactory.createSingleText(group, 1);
-//		fProjText.addModifyListener(fListener);
-//		//ControlAccessibleListener.addListener(fProjText, group.getText());
-//		fProjButton = createPushButton(group, "LauncherMessages.AbstractJavaMainTab_1", null); 
-//		fProjButton.addSelectionListener(fListener);
-//		
-//		createVerticalSpacer(projComp, 1);
-//		createMainTypeEditor(projComp, LauncherMessages.appletlauncher_maintab_mainclasslabel_name);
-//		createVerticalSpacer(projComp, 1);
-//		createAppletViewerControl(projComp);
-//		setControl(projComp);
-	//	PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(), IJavaDebugHelpContextIds.LAUNCH_CONFIGURATION_DIALOG_APPLET_MAIN_TAB);
-	
-		
-//		//buttons
-//		Composite buttonComp = SWTFactory.createComposite(comp, font, 3, 2, GridData.HORIZONTAL_ALIGN_END); 
-//		GridLayout ld = (GridLayout)buttonComp.getLayout();
-//		ld.marginHeight = 1;
-//		ld.marginWidth = 0;
-//		fWorkspaceButton = createPushButton(buttonComp, DebugUIMessages.WorkingDirectoryBlock_0, null); 
-//		fWorkspaceButton.addSelectionListener(fListener);
-//		fFileSystemButton = createPushButton(buttonComp, DebugUIMessages.WorkingDirectoryBlock_1, null); 
-//		fFileSystemButton.addSelectionListener(fListener);
-//		fVariablesButton = createPushButton(buttonComp, DebugUIMessages.WorkingDirectoryBlock_17, null); 
-//		fVariablesButton.addSelectionListener(fListener);
 	}
 	
 	@Override
@@ -240,11 +151,13 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			fIPText.setText(configuration.getAttribute(Data.P_IP, "localhost"));
-			fClusterText.setText(configuration.getAttribute(Data.P_CLUSTER, "hthor"));
+			enableButton.setSelection(configuration.getAttribute(Platform.P_ENABLED, true));
 
-			fUserText.setText(configuration.getAttribute(Data.P_USER, ""));
-			fPasswordText.setText(configuration.getAttribute(Data.P_PASSWORD, ""));
+			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
+			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor"));
+
+			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
+			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -253,11 +166,13 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(Data.P_IP, fIPText.getText());
-		configuration.setAttribute(Data.P_CLUSTER, fClusterText.getText());
+		configuration.setAttribute(Platform.P_ENABLED, enableButton.getSelection());
 
-		configuration.setAttribute(Data.P_USER, fUserText.getText());
-		configuration.setAttribute(Data.P_PASSWORD, fPasswordText.getText());
+		configuration.setAttribute(Platform.P_IP, fIPText.getText());
+		configuration.setAttribute(Platform.P_CLUSTER, fClusterText.getText());
+
+		configuration.setAttribute(Platform.P_USER, fUserText.getText());
+		configuration.setAttribute(Platform.P_PASSWORD, fPasswordText.getText());
 	}
 
 	protected void handleProjectButtonSelected() {

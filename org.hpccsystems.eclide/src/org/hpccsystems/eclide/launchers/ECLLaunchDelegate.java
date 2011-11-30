@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
-import org.eclipse.debug.internal.ui.stringsubstitution.SelectedResourceManager;
+import org.eclipse.debug.internal.ui.stringsubstitution.*;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
@@ -33,7 +33,7 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		final String cluster = configuration.getAttribute(Data.P_CLUSTER, ""); 
+		final String cluster = configuration.getAttribute(Platform.P_CLUSTER, ""); 
 		
 		IFile file = null;
 		IStructuredSelection ss = SelectedResourceManager.getDefault().getCurrentSelection();
@@ -44,18 +44,17 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 			if (input != null) {
 				file = input.getFile();
 			}
-		
-//			fShortcut.launch((IEditorPart) o, fMode, ip, cluster, user, password);
 		}
-		else {
-			if (ss instanceof TreeSelection) {
-				TreeSelection treeSel = (TreeSelection) ss;
-				if (treeSel.size() >= 1) {
-					file = (IFile) treeSel.getFirstElement();
+		else if (ss instanceof TreeSelection) {
+			TreeSelection treeSel = (TreeSelection) ss;
+			for (Object selItem : treeSel.toList()) {
+				if (selItem instanceof IFile) {
+					file = (IFile) selItem;
+					break;
 				}
 			}
-			//fShortcut.launch(ss, fMode, ip, cluster, user, password);
 		}
+
 		if (file != null) {
 			Platform platform = Data.get().GetPlatform(configuration);
 			platform.submit(file, cluster);

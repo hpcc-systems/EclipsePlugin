@@ -27,28 +27,29 @@ public class LazyChildLoader {
 		this.children = new ArrayList<Object>().toArray();
 	}
 	
-	public void clearState() {
-		this.state = CalcState.UNKNOWN;
+	public synchronized void clearState() {
+		state = CalcState.UNKNOWN;
 	}
 	
-	public CalcState getState() {
+	public synchronized CalcState getState() {
 		return state;
 	}
 	
-	public void set(Object[] children) {
+	public synchronized void set(Object[] children) {
 		this.children = children;
 		state = CalcState.FINISHED;
 	}
 	
-	public Object[] get() {
+	public synchronized Object[] get() {
 		return children;
 	}
 
-	public int getCount() {
+	public synchronized int getCount() {
 		return children != null ? children.length : 0;
 	}
 
-	public void start(final Runnable childrenFetcher) {
+	public synchronized void start(final Runnable childrenFetcher) {
+		assert(state == CalcState.UNKNOWN);
 		state = CalcState.STARTED;
 		Thread thread = new Thread(childrenFetcher);
 		thread.start();

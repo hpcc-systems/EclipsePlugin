@@ -12,6 +12,7 @@ package org.hpccsystems.internal.data;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class Workunit extends DataSingleton {
 	private Platform platform;
 
 	private ECLWorkunit info;
-	private String[] resultViews; 
+	private Collection<String> resultViews; 
 	private Collection<Result> results;	
 	private Collection<Graph> graphs;
 	private Collection<LogicalFile> sourceFiles;
@@ -65,6 +66,7 @@ public class Workunit extends DataSingleton {
 		this.platform = platform;
 		info = new ECLWorkunit();
 		info.setWuid(wuid); 		
+		this.resultViews = new ArrayList<String>(); 		
 		this.results = new ArrayList<Result>(); 		
 		this.graphs = new ArrayList<Graph>(); 		
 		this.sourceFiles = new ArrayList<LogicalFile>(); 		
@@ -133,7 +135,7 @@ public class Workunit extends DataSingleton {
 	public String[] getResultViews() {
 		if (resultViews == null)
 			fullRefresh(false, true, false, false);
-		return resultViews;
+		return resultViews.toArray(new String[0]);
 	}
 
 	public String getApplicationValue(String key) {
@@ -154,9 +156,9 @@ public class Workunit extends DataSingleton {
 		return result;
 	}
 
-	public Collection<Result> getResults() {
+	public Result[] getResults() {
 		fullRefresh(false, true, false, false);
-		return results;
+		return results.toArray(new Result[0]);
 	}
 
 	//  Graphs  ---
@@ -170,9 +172,9 @@ public class Workunit extends DataSingleton {
 		return graph;
 	}
 
-	public Collection<Graph> getGraphs() {
+	public Graph[] getGraphs() {
 		fullRefresh(true, false, false, false);
-		return graphs;
+		return graphs.toArray(new Graph[0]);
 	}
 
 	//  Source Files  ---
@@ -186,9 +188,9 @@ public class Workunit extends DataSingleton {
 		return sourceFile;
 	}
 
-	public Collection<LogicalFile> getSourceFiles() {
+	public LogicalFile[] getSourceFiles() {
 		fullRefresh(false, false, true, false);
-		return sourceFiles;
+		return sourceFiles.toArray(new LogicalFile[0]);
 	}
 
 	@Override
@@ -233,13 +235,14 @@ public class Workunit extends DataSingleton {
 			request.setIncludeGraphs(includeGraphs);
 			request.setIncludeResults(includeResults);
 			request.setIncludeResultsViewNames(includeResults);
+			request.setSuppressResultSchemas(!includeResults);
 			request.setIncludeSourceFiles(includeSourceFiles);
 			request.setIncludeApplicationValues(includeApplicationValues);
 			try {
 				WUInfoResponse respsone = service.WUInfo(request);
 				update(respsone.getWorkunit());
 				if (respsone.getResultViews() != null)
-					resultViews = respsone.getResultViews(); 
+					resultViews = Arrays.asList(respsone.getResultViews()); 
 			} catch (ArrayOfEspException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
