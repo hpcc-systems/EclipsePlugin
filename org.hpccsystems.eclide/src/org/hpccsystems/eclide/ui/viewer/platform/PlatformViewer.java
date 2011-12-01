@@ -156,8 +156,8 @@ public class PlatformViewer extends ViewPart {
 				while (iter.hasNext()) {
 					Object o = iter.next();
 					if (o instanceof TreeItem) {
-						boolean resultShown = showResult((TreeItem)o);
-						showWebPage((TreeItem)o, !resultShown);
+						boolean somethingShown = showResult((TreeItem)o);
+						showWebPage((TreeItem)o, !somethingShown);
 					}
 					break;
 				}

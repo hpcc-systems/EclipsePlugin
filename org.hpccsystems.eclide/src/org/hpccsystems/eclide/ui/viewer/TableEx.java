@@ -11,6 +11,7 @@
 package org.hpccsystems.eclide.ui.viewer;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -20,13 +21,18 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.hpccsystems.internal.data.Result;
 
-public class TableEx {
+public class TableEx extends Composite {
 
 	private Table table;
 	private Result result;
 
 	public TableEx(Composite parent) {
-		table = new Table(parent, SWT.VIRTUAL | SWT.FULL_SELECTION);
+		super(parent, SWT.NONE);
+		
+		FillLayout layout = new FillLayout();
+		setLayout(layout);
+		
+		table = new Table(this, SWT.VIRTUAL | SWT.FULL_SELECTION);
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -76,8 +82,8 @@ public class TableEx {
 		table.setRedraw(true);
 	}
 
-	public void setFocus() {
-		table.setFocus();		
+	public boolean setFocus() {
+		return table.setFocus();		
 	}
 
 	public Table getControl() {

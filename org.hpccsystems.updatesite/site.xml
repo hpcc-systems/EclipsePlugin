@@ -3,7 +3,7 @@
    <description name="HPCC Sytems Update Site" url="https://gordon.homeserver.com/eclipse">
       Update site for Eclipse ECL Plugin.
    </description>
-   <feature url="features/ECL_Language_1.0.0.201111291834.jar" id="ECL_Language" version="1.0.0.201111291834">
+   <feature url="features/ECL_Language_1.0.0.201111301734.jar" id="ECL_Language" version="1.0.0.201111301734">
       <category name="hpcc_systems"/>
    </feature>
    <category-def name="hpcc_systems" label="HPCC Systems">

@@ -38,6 +38,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.ui.viewer.BrowserEx;
 import org.hpccsystems.eclide.ui.viewer.TableEx;
+import org.hpccsystems.eclide.ui.viewer.TextEx;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTreeItem;
 import org.hpccsystems.internal.data.Data;
@@ -58,12 +59,19 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		WorkunitTreeItem item;
 		
 		SashForm sashFormMain;
-		SashForm sashFormResult;
+
+		CTabFolder resultContainer;
+		
+		//SashForm sashFormResult;
 		WorkunitViewer workunitViewer;
 		
+		CTabItem browserTab;
 		private BrowserEx browser;
+		CTabItem tableTab;
 		private TableEx table;
-
+		CTabItem textTab;
+		private TextEx text;
+	
 		public CWorkunitTabItem(CTabFolder parent, int style, int index, Workunit wu) {
 			super(parent, style, index);
 			this.wu = wu;
@@ -76,16 +84,29 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			workunitViewer = new WorkunitViewer(wu);
 			workunitViewer.createPartControl(sashFormMain);
 
-			sashFormResult = new SashForm(sashFormMain, SWT.VERTICAL);
+			//sashFormResult = new SashForm(sashFormMain, SWT.VERTICAL);
+			resultContainer = new CTabFolder(sashFormMain, SWT.TOP);
 
-			browser = new BrowserEx(sashFormResult);
-			table = new TableEx(sashFormResult);
+			browserTab = new CTabItem(resultContainer, SWT.NONE);
+			browser = new BrowserEx(resultContainer);
+			browserTab.setControl(browser);
+			browserTab.setText("ECL Watch");
+						
+			tableTab = new CTabItem(resultContainer, SWT.NONE);
+			table = new TableEx(resultContainer);
+			tableTab.setControl(table);
+			tableTab.setText("Result View");
+
+			textTab = new CTabItem(resultContainer, SWT.NONE);
+			text = new TextEx(resultContainer);
+			textTab.setControl(text);
+			textTab.setText("Query");
 
 			setText(item.getText());
 			setImage(item.getImage());
 
 			sashFormMain.setWeights(new int[] {15, 85});
-			sashFormResult.setWeights(new int[] {100, 0});
+			//sashFormResult.setWeights(new int[] {100, 0});
 			
 			workunitViewer.setOwner(this);
 
@@ -111,13 +132,19 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 
 		void navigateTo(String url, String user, String password) {
-			browser.navigateTo(url, user, password);
-			sashFormResult.setWeights(new int[] {100, 0});
+			browser.setUrl(url, user, password);
+			resultContainer.setSelection(browserTab);
 		}
 
 		void setResult(Result result) {
 			table.setResult(result);
-			sashFormResult.setWeights(new int[] {0, 100});
+			resultContainer.setSelection(tableTab);
+		}
+
+		void setQuery(String query) {
+			text.setText(query);
+			//table.setResult(result);
+			resultContainer.setSelection(textTab);
 		}
 	}
 
@@ -144,7 +171,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			int index = addPage(editor, getEditorInput());
 			this.setTitle(editor.getTitle());
 			setPageText(index, "ECL");
-			setPageImage(index, Activator.getImage("icons/releng_gears.gif"));
+			setPageImage(index, Activator.getImage("icons/doc.png"));
 		} catch (PartInitException e) {
 			ErrorDialog.openError(
 					getSite().getShell(),

@@ -21,6 +21,7 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.ws.wsworkunits.ApplicationValue;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLGraph;
+import org.hpccsystems.ws.wsworkunits.ECLQuery;
 import org.hpccsystems.ws.wsworkunits.ECLResult;
 import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
@@ -56,6 +57,7 @@ public class Workunit extends DataSingleton {
 	
 	public enum Notification {
 		WORKUNIT,
+		QUERY,
 		APPLICATIONVALUES,
 		RESULTS,
 		GRAPHS,
@@ -80,6 +82,12 @@ public class Workunit extends DataSingleton {
 
 	public String getWuid() {
 		return info.getWuid();
+	}
+
+	public String getQueryText() {
+		if (info.getQuery() == null)
+			fullRefresh(false, false, false, false);
+		return info.getQuery().getText();
 	}
 
 	/*
@@ -261,6 +269,10 @@ public class Workunit extends DataSingleton {
 				retVal = true;
 				notifyObservers(Notification.WORKUNIT);
 			}
+			if (updateQuery(wu.getQuery())) {
+				retVal = true;
+				notifyObservers(Notification.QUERY);
+			}
 			if (updateApplicationValues(wu.getApplicationValues())) {
 				retVal = true;
 				notifyObservers(Notification.APPLICATIONVALUES);
@@ -288,6 +300,15 @@ public class Workunit extends DataSingleton {
 			info.setStateID(wu.getStateID());
 			info.setStateEx(wu.getStateEx());
 			info.setState(wu.getState());
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+
+	synchronized boolean updateQuery(ECLQuery q) {
+		if (q != null && EqualsUtil.hasChanged(info.getQuery(), q)) {
+			info.setQuery(q);
 			setChanged();
 			return true;
 		}

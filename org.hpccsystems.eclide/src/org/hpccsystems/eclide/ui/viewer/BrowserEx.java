@@ -93,7 +93,7 @@ public class BrowserEx extends Composite {
 			}
 		});
 
-    	navigateTo("about:blank");
+    	setUrl("about:blank");
 
 		browser.addProgressListener(new ProgressAdapter() {
 			public void completed(ProgressEvent event) {
@@ -111,11 +111,11 @@ public class BrowserEx extends Composite {
 		});
 	}
 
-	void navigateTo(String url) {
-		navigateTo(url, "", "");
+	void setUrl(String url) {
+		setUrl(url, "", "");
 	}	
 
-	public void navigateTo(String url, String user, String password) {
+	public void setUrl(String url, String user, String password) {
 		this.user = user;
 		this.password = password;
 		browser.setUrl(url);

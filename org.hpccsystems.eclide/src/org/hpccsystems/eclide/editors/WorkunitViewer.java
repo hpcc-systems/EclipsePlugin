@@ -34,6 +34,7 @@ import org.hpccsystems.eclide.editors.ECLWindow.CWorkunitTabItem;
 import org.hpccsystems.eclide.ui.viewer.BrowserEx;
 import org.hpccsystems.eclide.ui.viewer.TableEx;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformTreeItemLabelProvider;
+import org.hpccsystems.eclide.ui.viewer.platform.TextTreeItem;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTreeItem;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
@@ -157,15 +158,27 @@ public class WorkunitViewer extends ViewPart {
 	}
 	
 	public boolean showResult(TreeItem ti) {
+		if (owner == null) 
+			return false;
+
 		Result result = ti.getResult();
 		if (result == null)
 			return false;
 		
-		if (owner == null) 
-			return false;
-
 		owner.setResult(result);
 		return true;
+	}
+	
+	public boolean showQuery(TreeItem ti) {
+		if (owner == null) 
+			return false;
+		
+		if (ti instanceof TextTreeItem) {
+			TextTreeItem tti = (TextTreeItem)ti;
+			owner.setQuery(tti.getQueryText());
+			return true;
+		}
+		return false;
 	}
 	
 	public void createActions() {
@@ -224,6 +237,7 @@ public class WorkunitViewer extends ViewPart {
 					if (o instanceof TreeItem) {
 						showWebPage((TreeItem)o);
 						showResult((TreeItem)o);
+						showQuery((TreeItem)o);
 					}
 					break;
 				}

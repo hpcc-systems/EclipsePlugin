@@ -120,7 +120,7 @@
             class="org.hpccsystems.eclide.editors.ECLWindow"
             contributorClass="org.hpccsystems.eclide.editors.ECLEditorActionContributor"
             extensions="ecl"
-            icon="icons/releng_gears.gif"
+            icon="icons/doc.png"
             id="org.hpccsystems.eclide.editors.ECLWindow"
             name="%editor.name.0">
       </editor>
@@ -198,7 +198,7 @@
             category="org.hpccsystems.eclide"
             class="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
             finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
-            icon="icons/releng_gears.gif"
+            icon="icons/doc.png"
             id="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
             name="%wizard.name.2"
             preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective">

@@ -90,6 +90,7 @@ public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 			retVal.add(new ResultFolderTreeItem(treeViewer, this, workunit));
 			retVal.add(new GraphFolderTreeItem(treeViewer, this, workunit));
 			retVal.add(new WorkunitLogicalFileFolderTreeItem(treeViewer, this, workunit));
+			retVal.add(new TextTreeItem(treeViewer, this, workunit));
 		}
 		return retVal.toArray();
 	}
