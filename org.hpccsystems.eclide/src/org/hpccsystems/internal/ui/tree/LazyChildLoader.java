@@ -20,11 +20,11 @@ public class LazyChildLoader {
 	}
 
 	private CalcState state;
-	private Object[] children;
+	private ArrayList<Object> children;
 	
 	public LazyChildLoader() {
 		this.state = CalcState.UNKNOWN;
-		this.children = new ArrayList<Object>().toArray();
+		this.children = new ArrayList<Object>();
 	}
 	
 	public synchronized void clearState() {
@@ -36,16 +36,42 @@ public class LazyChildLoader {
 	}
 	
 	public synchronized void set(Object[] children) {
-		this.children = children;
+		this.children.clear();
+		if (children != null) {
+			for (Object o : children)
+				this.children.add(o);
+		}
 		state = CalcState.FINISHED;
 	}
 	
 	public synchronized Object[] get() {
-		return children;
+		return children.toArray().clone();
+	}
+
+	public synchronized void add(Object newChild) {
+		this.children.add(newChild);
+	}
+
+	public synchronized void add(Object[] newChildren) {
+		if (newChildren != null) {
+			for (Object o : newChildren)
+				this.children.add(o);
+		}
+	}
+
+	public synchronized void remove(Object[] oldChildren) {
+		if (oldChildren != null) {
+			for (Object o : oldChildren)
+				this.children.remove(o);
+		}
+	}
+
+	public synchronized void remove(Object oldChild) {
+		this.children.remove(oldChild);
 	}
 
 	public synchronized int getCount() {
-		return children != null ? children.length : 0;
+		return children != null ? children.size() : 0;
 	}
 
 	public synchronized void start(final Runnable childrenFetcher) {

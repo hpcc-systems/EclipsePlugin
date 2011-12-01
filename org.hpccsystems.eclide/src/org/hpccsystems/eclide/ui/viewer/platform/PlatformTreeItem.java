@@ -18,16 +18,15 @@ import java.util.Comparator;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.ui.tree.TreeItem;
+import org.hpccsystems.internal.ui.tree.MyTreeItem;
 import org.hpccsystems.internal.data.*;
 
-class WorkunitComparator implements Comparator<TreeItem> {
+class WorkunitComparator implements Comparator<MyTreeItem> {
 
 	@Override
-	public int compare(TreeItem left, TreeItem right) {
+	public int compare(MyTreeItem left, MyTreeItem right) {
 		String l = left.getText();
 		String r = right.getText();
 
@@ -38,7 +37,7 @@ class WorkunitComparator implements Comparator<TreeItem> {
 	}
 }
 
-class PlatformBaseTreeItem extends TreeItem {
+class PlatformBaseTreeItem extends MyTreeItem {
 	Platform platform;
 	String clusterName;
 
@@ -80,7 +79,7 @@ class PlatformTreeItem extends PlatformBaseTreeItem {
 
 	@Override
 	public Object[] fetchChildren() {
-		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
+		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
 		retVal.add(new ClusterFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new WorkunitFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new FileSprayWorkunitFolderTreeItem(treeViewer, this, platform));
@@ -133,7 +132,7 @@ class WorkunitFolderTreeItem extends FolderTreeItem {
 
 	@Override
 	public Object[] fetchChildren() {
-		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
+		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
 		for (Workunit wu : platform.getWorkunits(clusterName)) {
 			retVal.add(new WorkunitTreeItem(treeViewer, this, wu));				
 		}
@@ -161,7 +160,7 @@ class FileSprayWorkunitFolderTreeItem extends FolderTreeItem {
 
 	@Override
 	public Object[] fetchChildren() {
-		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
+		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
 		for (FileSprayWorkunit wu : platform.getFileSprayWorkunits(clusterName)) {
 			retVal.add(new FileSprayWorkunitTreeItem(treeViewer, this, platform, wu));				
 		}
@@ -236,8 +235,8 @@ class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem implements Observer
 	
 	@Override
 	public Object[] fetchChildren() {
-		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
-		TreeItem parent = getParent();
+		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
+		MyTreeItem parent = getParent();
 		while (parent != null) {
 			if (parent instanceof FileSprayWorkunitTreeItem)
 				if (workunit == ((FileSprayWorkunitTreeItem)parent).workunit) {
@@ -302,7 +301,7 @@ class ClusterTreeItem extends PlatformBaseTreeItem {
 
 	@Override
 	public Object[] fetchChildren() {
-		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
+		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
 		retVal.add(new WorkunitFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new FileSprayWorkunitFolderTreeItem(treeViewer, this, platform));
 		retVal.add(new LogicalFileFolderTreeItem(treeViewer, this, platform));
@@ -362,7 +361,7 @@ class DataQuerySetTreeItem extends PlatformBaseTreeItem {
 	@Override
 	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		TreeItem parent = getParent();
+		MyTreeItem parent = getParent();
 		while (parent != null) {
 			if (parent instanceof DataQuerySetTreeItem)
 				if (querySet == ((DataQuerySetTreeItem)parent).querySet) {
@@ -476,7 +475,7 @@ class LogicalFileTreeItem extends PlatformBaseTreeItem {
 	@Override
 	public Object[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		TreeItem parent = getParent();
+		MyTreeItem parent = getParent();
 		while (parent != null) {
 			if (parent instanceof LogicalFileTreeItem)
 				if (file == ((LogicalFileTreeItem)parent).file) {
@@ -603,7 +602,7 @@ class ResultTreeItem extends PlatformBaseTreeItem implements Observer {
 	public Image getImage() {
 		return Activator.getImage("icons/result.png"); 
 	}
-	//http://192.168.2.68:8010/WsWorkunits/WUResult?Wuid=W20111026-161619&Sequence=0
+
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUResult", "Wuid=" + result.getWuid() + "&Sequence=" + result.getSequence());
 	}
@@ -648,7 +647,6 @@ class ResultViewTreeItem extends PlatformBaseTreeItem {
 		return Activator.getImage("icons/chart.png"); 
 	}
 
-	//http://192.168.2.68:8010/WsWorkunits/WUResultView?Wuid=W20111123-150928&ResultName=ScatterChart_Scatter_Test&ViewName=Google_Chart_by_Name
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUResultView", "Wuid=" + result.getWuid() + "&ResultName=" + result.getResultName() + "&ViewName=" + viewName);
 	}
@@ -729,10 +727,10 @@ class GraphTreeItem extends PlatformBaseTreeItem implements Observer {
 	}
 }
 
-class MessageTreeItem extends TreeItem {
+class MessageTreeItem extends MyTreeItem {
 	String message;
 
-	MessageTreeItem(TreeItemOwner treeViewer, TreeItem parent, String message) {
+	MessageTreeItem(TreeItemOwner treeViewer, MyTreeItem parent, String message) {
 		super(treeViewer, parent);
 		this.message = message;
 		this.children.set(fetchChildren());
@@ -746,14 +744,14 @@ class MessageTreeItem extends TreeItem {
 
 class RecursiveTreeItem extends MessageTreeItem {
 
-	RecursiveTreeItem(TreeItemOwner treeViewer, TreeItem parent) {
+	RecursiveTreeItem(TreeItemOwner treeViewer, MyTreeItem parent) {
 		super(treeViewer, parent, "...recursive expansion...");
 	}
 }
 
 class LoadingTreeItem extends MessageTreeItem {
 
-	LoadingTreeItem(TreeItemOwner treeViewer, TreeItem parent) {
+	LoadingTreeItem(TreeItemOwner treeViewer, MyTreeItem parent) {
 		super(treeViewer, parent, "...loading...");
 	}
 }

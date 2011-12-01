@@ -13,20 +13,17 @@ package org.hpccsystems.internal.data;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import javax.xml.rpc.ServiceException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.internal.core.LaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.Activator;
@@ -58,7 +55,6 @@ import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
 import org.hpccsystems.ws.wsworkunits.WUQuerysets;
 import org.hpccsystems.ws.wsworkunits.WUQuerysetsResponse;
 import org.hpccsystems.ws.wsworkunits.WUSubmit;
-import org.hpccsystems.ws.wsworkunits.WUSubmitResponse;
 import org.hpccsystems.ws.wsworkunits.WUUpdateResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
@@ -99,11 +95,11 @@ public class Platform extends DataSingleton {
 		this.name = "";
 		this.user = "";
 		this.password = "";
-		this.clusters = new ArrayList<Cluster>();
-		this.workunits = new ArrayList<Workunit>();	
-		this.fileSprayWorkunits = new ArrayList<FileSprayWorkunit>();
-		this.dataQuerySets = new ArrayList<DataQuerySet>();
-		this.logicalFiles = new ArrayList<LogicalFile>();
+		this.clusters = new HashSet<Cluster>();
+		this.workunits = new HashSet<Workunit>();	
+		this.fileSprayWorkunits = new HashSet<FileSprayWorkunit>();
+		this.dataQuerySets = new HashSet<DataQuerySet>();
+		this.logicalFiles = new HashSet<LogicalFile>();
 		setChanged();
 	}
 	
@@ -170,6 +166,7 @@ public class Platform extends DataSingleton {
 */	
 	public Workunit submit(IFile file, String cluster) {
 		if (isEnabled()) {
+			CollectionMonitor monitor = new CollectionMonitor("submit", workunits);
 			Eclipse.doSaveDirty(file.getProject());
 			ECLCompiler compiler = new ECLCompiler(file.getProject());
 			String archive = compiler.getArchive(file);
@@ -187,17 +184,17 @@ public class Platform extends DataSingleton {
 			try {
 				WUUpdateResponse response = service.WUCreateAndUpdate(request);
 				Workunit wu = getWorkunit(response.getWorkunit());
+				workunits.add(wu);
 				if (wu != null) {
 					setChanged();
-					notifyObservers("CreateAndUpdate");
+					notifyObservers(monitor.calcChanges(workunits));
 	
 					WUSubmit submitRequest = new WUSubmit();
 					submitRequest.setWuid(response.getWorkunit().getWuid());
 					submitRequest.setCluster(cluster);
-					WUSubmitResponse submitResponse = service.WUSubmit(submitRequest);
+					service.WUSubmit(submitRequest);
 					wu = getWorkunit(wu.getWuid());
 					setChanged();
-					notifyObservers("Submit");
 				}
 				return wu;
 			} catch (ArrayOfEspException e) {
@@ -237,6 +234,7 @@ public class Platform extends DataSingleton {
 
 	public Workunit[] getWorkunits(String cluster, String startDate, String endDate) {
 		if (isEnabled()) {
+			CollectionMonitor monitor = new CollectionMonitor("getWorkunits", workunits);
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
 			WUQuery request = new WUQuery();
 			request.setCluster(cluster);
@@ -252,7 +250,7 @@ public class Platform extends DataSingleton {
 				confirmDisable();
 				e.printStackTrace();
 			}
-			notifyObservers("GetWorkunits");
+			notifyObservers(monitor.calcChanges(workunits));
 		}
 		return workunits.toArray(new Workunit[0]);
 	}
@@ -293,6 +291,7 @@ public class Platform extends DataSingleton {
 
 	public FileSprayWorkunit[] getFileSprayWorkunits(String cluster) {
 		if (isEnabled()) {
+			CollectionMonitor monitor = new CollectionMonitor("getFileSprayWorkunits", fileSprayWorkunits);
 			FileSprayServiceSoap service = getFileSprayService();
 			GetDFUWorkunits request = new GetDFUWorkunits();
 			request.setCluster(cluster);
@@ -306,7 +305,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			notifyObservers("GetFileSprayWorkunits");
+			notifyObservers(monitor.calcChanges(fileSprayWorkunits));
 		}
 		return fileSprayWorkunits.toArray(new FileSprayWorkunit[0]);
 	}
@@ -343,6 +342,7 @@ public class Platform extends DataSingleton {
 
 	public DataQuerySet[] getDataQuerySets() {
 		if (isEnabled()) {
+			CollectionMonitor monitor = new CollectionMonitor("getDataQuerySets", dataQuerySets);
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
 			WUQuerysets request = new WUQuerysets();
 			try {
@@ -355,7 +355,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			notifyObservers("GetQuerySets");
+			notifyObservers(monitor.calcChanges(dataQuerySets));
 		}
 		return dataQuerySets.toArray(new DataQuerySet[0]);
 	}
@@ -394,6 +394,7 @@ public class Platform extends DataSingleton {
 
 	public LogicalFile[] getLogicalFiles(String cluster) {
 		if (isEnabled()) {
+			CollectionMonitor monitor = new CollectionMonitor("getLogicalFiles", logicalFiles);
 			WsDfuServiceSoap service = getWsDfuService();
 			DFUQueryRequest request = new DFUQueryRequest();
 			request.setClusterName(cluster);
@@ -407,7 +408,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			notifyObservers("GetLogicalFiles");
+			notifyObservers(monitor.calcChanges(logicalFiles));
 		}
 		return logicalFiles.toArray(new LogicalFile[0]);
 	}
@@ -444,6 +445,7 @@ public class Platform extends DataSingleton {
 
 	public Cluster[] getClusters() {
 		if (isEnabled()) {
+			CollectionMonitor monitor = new CollectionMonitor("getClusters", clusters);
 			WsTopologyServiceSoap service = getWsTopologyService();
 			TpTargetClusterQueryRequest request = new TpTargetClusterQueryRequest();
 			try {
@@ -456,7 +458,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			notifyObservers("GetClusters");
+			notifyObservers(monitor.calcChanges(clusters));
 		}
 		return clusters.toArray(new Cluster[0]);
 	}

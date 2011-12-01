@@ -11,7 +11,7 @@
 package org.hpccsystems.eclide.ui.viewer.platform;
 
 import org.eclipse.jface.viewers.TreeViewer;
-import org.hpccsystems.internal.ui.tree.TreeItem;
+import org.hpccsystems.internal.ui.tree.MyTreeItem;
 import org.hpccsystems.internal.ui.tree.TreeItemLabelProvider;
 
 public class PlatformTreeItemLabelProvider extends TreeItemLabelProvider {
@@ -22,8 +22,8 @@ public class PlatformTreeItemLabelProvider extends TreeItemLabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof TreeItem) {
-			final TreeItem treeItem = (TreeItem)element; 
+		if (element instanceof MyTreeItem) {
+			final MyTreeItem treeItem = (MyTreeItem)element; 
 			switch(treeItem.children.getState()) {
 			case UNKNOWN:
 				return treeItem.getText() + " (Loading...)";
@@ -40,6 +40,8 @@ public class PlatformTreeItemLabelProvider extends TreeItemLabelProvider {
 			}
 			return super.getText(element);
 		}
+		if (element instanceof PlatformTreeItem) 
+			return "PTODO";
 		return "TODO";
 	}
 }	

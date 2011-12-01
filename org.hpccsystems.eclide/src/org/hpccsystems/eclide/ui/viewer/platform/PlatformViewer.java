@@ -32,7 +32,8 @@ import org.hpccsystems.eclide.ui.viewer.ResultViewer;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Result;
-import org.hpccsystems.internal.ui.tree.TreeItem;
+import org.hpccsystems.internal.ui.tree.MyTreeItem;
+import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class PlatformViewer extends ViewPart {
 
@@ -47,33 +48,50 @@ public class PlatformViewer extends ViewPart {
 
 	public PlatformViewer() {
 	}
+	
+	TreeItemContentProvider getContentProvider() {
+		return new PlatformTreeItemContentProvider(treeViewer, Data.get());
+	}
+	
+	ISelectionChangedListener getSelectionListener() {
+		return new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
+				Iterator<?> iter = sel.iterator();
+				while (iter.hasNext()) {
+					Object o = iter.next();
+					if (o instanceof MyTreeItem) {
+						boolean resultShown = showResult((MyTreeItem)o);
+						showWebPage((MyTreeItem)o, !resultShown);
+						break;
+					}
+				}
+			}
+		};
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-		// Create the tree viewer to display the file tree
 	    treeViewer = new TreeViewer(parent);
 	    treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-	    treeViewer.setContentProvider(new PlatformTreeItemContentProvider(treeViewer, Data.get()));
+	    treeViewer.setContentProvider(getContentProvider());
 	    treeViewer.setLabelProvider(new PlatformTreeItemLabelProvider(treeViewer));
 	    treeViewer.setInput(Data.get()); // pass a non-null that will be ignored
 	    
-	 // Create menu and toolbars.
         createActions();
-        //createMenu();
         createToolbar();
         createContextMenu();
-        //hookGlobalActions();
-         
-        // Restore state from the previous session.
-        //restoreState();
-  	}
+
+		treeViewer.addSelectionChangedListener(getSelectionListener());
+	}
 
 	@Override
 	public void setFocus() {
 		treeViewer.getControl().setFocus();
 	}
 
-	public void showWebPage(TreeItem ti, boolean bringToTop) {
+	public void showWebPage(MyTreeItem ti, boolean bringToTop) {
 		if (htmlViewer == null)
 			htmlViewer = Eclipse.findHtmlViewer();
 		
@@ -87,7 +105,7 @@ public class PlatformViewer extends ViewPart {
 		}
 	}
 	
-	public boolean showResult(TreeItem ti) {
+	public boolean showResult(MyTreeItem ti) {
 		Result result = ti.getResult();
 		if (result == null)
 			return false;
@@ -109,8 +127,8 @@ public class PlatformViewer extends ViewPart {
 				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
-					if (o instanceof TreeItem) {
-						showWebPage((TreeItem)o, true);
+					if (o instanceof MyTreeItem) {
+						showWebPage((MyTreeItem)o, true);
 					}
 					break;
 				}
@@ -120,11 +138,15 @@ public class PlatformViewer extends ViewPart {
 		refreshItemAction = new Action("Refresh") {
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator<?> iter = sel.iterator();
-				while (iter.hasNext()) {
-					Object o = iter.next();
-					if (o instanceof TreeItem)
-						((TreeItem)o).refresh();
+				if (sel.size() == 0) {	//  No selection == reload
+					treeViewer.refresh();
+				} else {
+					Iterator<?> iter = sel.iterator();
+					while (iter.hasNext()) {
+						Object o = iter.next();
+						if (o instanceof MyTreeItem)
+							((MyTreeItem)o).refresh();
+					}
 				}
 			}
 		};
@@ -135,8 +157,8 @@ public class PlatformViewer extends ViewPart {
 				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
-					if (o instanceof TreeItem)
-						((TreeItem)o).update(null);
+					if (o instanceof MyTreeItem)
+						((MyTreeItem)o).update(null);
 				}
 			}
 		};
@@ -146,34 +168,17 @@ public class PlatformViewer extends ViewPart {
 				treeViewer.refresh();
 			}
 		};
-
-		// Add selection listener.
-		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator<?> iter = sel.iterator();
-				while (iter.hasNext()) {
-					Object o = iter.next();
-					if (o instanceof TreeItem) {
-						boolean somethingShown = showResult((TreeItem)o);
-						showWebPage((TreeItem)o, !somethingShown);
-					}
-					break;
-				}
-			}
-		});
    }
 	
 	/**
 	 * Create toolbar.
 	 */
-	private void createToolbar() {
+	protected void createToolbar() {
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
 		mgr.add(reloadAction);
 	}
 
-	private void createContextMenu() {
+	protected void createContextMenu() {
 		// Create menu manager.
 		MenuManager menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
@@ -192,9 +197,8 @@ public class PlatformViewer extends ViewPart {
 	}	
 	
 	private void fillContextMenu(IMenuManager mgr) {
-		mgr.add(showWebItemAction);
+		//mgr.add(showWebItemAction);
 		mgr.add(refreshItemAction);
-		mgr.add(updateItemAction);
-		mgr.add(reloadAction);
+		//mgr.add(updateItemAction);
 	}	
 }

@@ -18,18 +18,18 @@ import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.internal.data.Result;
 
-public class TreeItem {
+public class MyTreeItem {
 	protected TreeItemOwner treeViewer;
-	protected TreeItem parent;
+	protected MyTreeItem parent;
 	public LazyChildLoader children;
 
-	protected TreeItem(TreeItemOwner treeViewer, TreeItem parent) {
+	protected MyTreeItem(TreeItemOwner treeViewer, MyTreeItem parent) {
 		this.treeViewer = treeViewer;
 		this.parent = parent;
 		this.children = new LazyChildLoader();
 	}
 	
-	public TreeItem getParent() {
+	public MyTreeItem getParent() {
 		return parent;
 	}
 
@@ -71,7 +71,7 @@ public class TreeItem {
 	public boolean hasChildren() {
 		switch (children.getState()) {
 		case UNKNOWN:
-			final TreeItem self = this;
+			final MyTreeItem self = this;
 			children.start(new Runnable() {
 				public void run() {
 					children.set(fetchChildren());

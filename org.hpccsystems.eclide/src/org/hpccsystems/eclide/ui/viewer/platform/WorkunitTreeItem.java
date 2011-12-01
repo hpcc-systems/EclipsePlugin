@@ -18,9 +18,8 @@ import java.util.Observer;
 
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
-import org.hpccsystems.internal.ui.tree.TreeItem;
+import org.hpccsystems.internal.ui.tree.MyTreeItem;
 
 public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 	Workunit workunit;
@@ -32,6 +31,9 @@ public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 		this.children.set(fetchChildren());
 	}
 
+	public Workunit getWorkunit() {
+		return workunit;
+	}
 	@Override
 	public String getText() {
 		if (workunit.isComplete()) 
@@ -76,8 +78,8 @@ public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 
 	@Override
 	public Object[] fetchChildren() {
-		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
-		TreeItem parent = getParent();
+		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
+		MyTreeItem parent = getParent();
 		while (parent != null) {
 			if (parent instanceof WorkunitTreeItem)
 				if (workunit == ((WorkunitTreeItem)parent).workunit) {

@@ -45,16 +45,16 @@ public class TreeItemLabelProvider implements ILabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof TreeItem) {
-			return ((TreeItem)element).getImage();
+		if (element instanceof MyTreeItem) {
+			return ((MyTreeItem)element).getImage();
 		}
 		return null;
 	}
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof TreeItem) {
-			return ((TreeItem)element).getText();
+		if (element instanceof MyTreeItem) {
+			return ((MyTreeItem)element).getText();
 		}
 		return "TODO";
 	}

@@ -14,13 +14,12 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.ui.tree.TreeItem;
+import org.hpccsystems.internal.ui.tree.MyTreeItem;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
-class PlatformTreeItemContentProvider extends TreeItemContentProvider implements TreeItemOwner {
+class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 	Data data;
 	
 	PlatformTreeItemContentProvider(TreeViewer treeViewer, Data data) {
@@ -29,36 +28,15 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider implements
 	}
 
 	public Object[] getElements(Object inputElement) {
-		ArrayList<TreeItem> retVal = new ArrayList<TreeItem>();
+		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
 		for (Platform p : ((Data)inputElement).getPlatforms()) {
 			retVal.add(new PlatformTreeItem(this, null, p));
 		}
 		return retVal.toArray();
 	}
-	
+
 	@Override
 	public void update(Observable o, Object arg) {
 	}
 	
-	@Override
-	public void update(final Object element, final String[] properties) {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				treeViewer.update(element, properties);
-			} 
-		});
-	}
-	
-	@Override
-	public void refresh(final Object element) {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				treeViewer.refresh(element);		
-			} 
-		});
-	}
 }
