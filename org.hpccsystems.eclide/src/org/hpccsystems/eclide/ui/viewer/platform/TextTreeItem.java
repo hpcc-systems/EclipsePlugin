@@ -23,7 +23,7 @@ public class TextTreeItem extends PlatformBaseTreeItem {
 	TextTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit workunit) {
 		super(treeViewer, parent, workunit.getPlatform());
 		this.workunit = workunit; 
-		this.children.set(fetchChildren());
+		primeChildren();
 	}
 
 	@Override

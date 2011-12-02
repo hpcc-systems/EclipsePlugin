@@ -55,6 +55,7 @@ import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
 import org.hpccsystems.ws.wsworkunits.WUQuerysets;
 import org.hpccsystems.ws.wsworkunits.WUQuerysetsResponse;
 import org.hpccsystems.ws.wsworkunits.WUSubmit;
+import org.hpccsystems.ws.wsworkunits.WUSubmitResponse;
 import org.hpccsystems.ws.wsworkunits.WUUpdateResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
@@ -183,18 +184,17 @@ public class Platform extends DataSingleton {
 			request.setApplicationValues(appVals);
 			try {
 				WUUpdateResponse response = service.WUCreateAndUpdate(request);
+				response.getWorkunit().setCluster(cluster);	//  WUSubmit does not return an updated ECLWorkunit, so set cluster here...  
 				Workunit wu = getWorkunit(response.getWorkunit());
-				workunits.add(wu);
 				if (wu != null) {
+					workunits.add(wu);
 					setChanged();
 					notifyObservers(monitor.calcChanges(workunits));
-	
+
 					WUSubmit submitRequest = new WUSubmit();
 					submitRequest.setWuid(response.getWorkunit().getWuid());
 					submitRequest.setCluster(cluster);
-					service.WUSubmit(submitRequest);
-					wu = getWorkunit(wu.getWuid());
-					setChanged();
+					WUSubmitResponse submitResponse = service.WUSubmit(submitRequest);
 				}
 				return wu;
 			} catch (ArrayOfEspException e) {
@@ -232,7 +232,7 @@ public class Platform extends DataSingleton {
 		return workunit;
 	}
 
-	public Workunit[] getWorkunits(String cluster, String startDate, String endDate) {
+	private Workunit[] getWorkunits(String cluster, String startDate, String endDate) {
 		if (isEnabled()) {
 			CollectionMonitor monitor = new CollectionMonitor("getWorkunits", workunits);
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
@@ -255,7 +255,7 @@ public class Platform extends DataSingleton {
 		return workunits.toArray(new Workunit[0]);
 	}
 
-	public Workunit[] getWorkunits(String cluster) {
+	private Workunit[] getWorkunits(String cluster) {
 		return getWorkunits(cluster, "", "");
 	}
 

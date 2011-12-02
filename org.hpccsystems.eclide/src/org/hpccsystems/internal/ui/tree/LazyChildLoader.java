@@ -11,8 +11,10 @@
 package org.hpccsystems.internal.ui.tree;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-public class LazyChildLoader {
+public class LazyChildLoader<T> {
 	public enum CalcState {
 		UNKNOWN,
 		STARTED,
@@ -20,25 +22,30 @@ public class LazyChildLoader {
 	}
 
 	private CalcState state;
-	private ArrayList<Object> children;
+	private ArrayList<T> children;
 	
 	public LazyChildLoader() {
 		this.state = CalcState.UNKNOWN;
-		this.children = new ArrayList<Object>();
+		this.children = new ArrayList<T>();
 	}
 	
-	public synchronized void clearState() {
+	public synchronized void clear() {
 		state = CalcState.UNKNOWN;
+		this.children.clear();
 	}
 	
+	public synchronized void setState(CalcState state) {
+		this.state = state;
+	}
+
 	public synchronized CalcState getState() {
 		return state;
 	}
 	
-	public synchronized void set(Object[] children) {
+	public synchronized void set(T[] children) {
 		this.children.clear();
 		if (children != null) {
-			for (Object o : children)
+			for (T o : children)
 				this.children.add(o);
 		}
 		state = CalcState.FINISHED;
@@ -48,25 +55,27 @@ public class LazyChildLoader {
 		return children.toArray().clone();
 	}
 
-	public synchronized void add(Object newChild) {
+	public synchronized void add(T newChild) {
 		this.children.add(newChild);
+		state = CalcState.FINISHED;
 	}
 
-	public synchronized void add(Object[] newChildren) {
+	public synchronized void add(T[] newChildren) {
 		if (newChildren != null) {
-			for (Object o : newChildren)
+			for (T o : newChildren)
 				this.children.add(o);
 		}
+		state = CalcState.FINISHED;
 	}
 
-	public synchronized void remove(Object[] oldChildren) {
+	public synchronized void remove(T[] oldChildren) {
 		if (oldChildren != null) {
-			for (Object o : oldChildren)
+			for (T o : oldChildren)
 				this.children.remove(o);
 		}
 	}
 
-	public synchronized void remove(Object oldChild) {
+	public synchronized void remove(T oldChild) {
 		this.children.remove(oldChild);
 	}
 
@@ -79,6 +88,10 @@ public class LazyChildLoader {
 		state = CalcState.STARTED;
 		Thread thread = new Thread(childrenFetcher);
 		thread.start();
+	}
+
+	public synchronized void sort(Comparator<T> comparator) {
+		Collections.sort(children, comparator);
 	}
 }
 

@@ -38,6 +38,7 @@ import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 public class PlatformViewer extends ViewPart {
 
 	TreeViewer treeViewer;
+	TreeItemContentProvider contentProvider;
 	private HtmlViewer htmlViewer;
 	private ResultViewer resultViewer;
 	
@@ -47,9 +48,10 @@ public class PlatformViewer extends ViewPart {
 	Action reloadAction;
 
 	public PlatformViewer() {
+		contentProvider = null;
 	}
 	
-	TreeItemContentProvider getContentProvider() {
+	synchronized TreeItemContentProvider getContentProvider() {
 		return new PlatformTreeItemContentProvider(treeViewer, Data.get());
 	}
 	
@@ -75,9 +77,10 @@ public class PlatformViewer extends ViewPart {
 	public void createPartControl(Composite parent) {
 	    treeViewer = new TreeViewer(parent);
 	    treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-	    treeViewer.setContentProvider(getContentProvider());
+	    contentProvider = getContentProvider();
+	    treeViewer.setContentProvider(contentProvider);
 	    treeViewer.setLabelProvider(new PlatformTreeItemLabelProvider(treeViewer));
-	    treeViewer.setInput(Data.get()); // pass a non-null that will be ignored
+	    treeViewer.setInput(Data.get()); 
 	    
         createActions();
         createToolbar();
@@ -164,8 +167,8 @@ public class PlatformViewer extends ViewPart {
 		};
 
 		reloadAction = new Action("Reload") {
-			public void run() { 
-				treeViewer.refresh();
+			public void run() {
+				contentProvider.reloadChildren();
 			}
 		};
    }

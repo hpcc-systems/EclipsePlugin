@@ -10,15 +10,15 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.ui.viewer.platform;
 
-import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class WorkunitsViewer extends PlatformViewer {
 
 	public WorkunitsViewer() {
+		contentProvider = null;
 	}
 
-	TreeItemContentProvider getContentProvider() {
-		return new WorkunitsTreeItemContentProvider(treeViewer, Data.get());
+	synchronized TreeItemContentProvider getContentProvider() {
+		return new WorkunitsTreeItemContentProvider(treeViewer);
 	}
 }

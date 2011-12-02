@@ -57,6 +57,7 @@ public class Workunit extends DataSingleton {
 	
 	public enum Notification {
 		WORKUNIT,
+		CLUSTER,
 		QUERY,
 		APPLICATIONVALUES,
 		RESULTS,
@@ -88,6 +89,12 @@ public class Workunit extends DataSingleton {
 		if (info.getQuery() == null)
 			fullRefresh(false, false, false, false);
 		return info.getQuery().getText();
+	}
+	
+	public Object getClusterName() {
+		if (info.getCluster() == null)
+			fullRefresh(false, false, false, false);
+		return info.getCluster();
 	}
 
 	/*
@@ -269,6 +276,10 @@ public class Workunit extends DataSingleton {
 				retVal = true;
 				notifyObservers(Notification.WORKUNIT);
 			}
+			if (updateCluster(wu.getCluster())) {
+				retVal = true;
+				notifyObservers(Notification.CLUSTER);
+			}
 			if (updateQuery(wu.getQuery())) {
 				retVal = true;
 				notifyObservers(Notification.QUERY);
@@ -300,12 +311,22 @@ public class Workunit extends DataSingleton {
 			info.setStateID(wu.getStateID());
 			info.setStateEx(wu.getStateEx());
 			info.setState(wu.getState());
+			info.setCluster(wu.getCluster());
 			setChanged();
 			return true;
 		}
 		return false;
 	}
 
+	synchronized boolean updateCluster(String cluster) {
+		if (cluster != null && EqualsUtil.hasChanged(info.getCluster(), cluster)) {
+			info.setCluster(cluster);
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+	
 	synchronized boolean updateQuery(ECLQuery q) {
 		if (q != null && EqualsUtil.hasChanged(info.getQuery(), q)) {
 			info.setQuery(q);

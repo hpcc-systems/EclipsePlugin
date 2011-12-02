@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.editors;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -35,30 +37,42 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitFolderTreeItem;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTabItem;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTreeItem;
+import org.hpccsystems.internal.data.CollectionMonitor;
 import org.hpccsystems.internal.data.Data;
+import org.hpccsystems.internal.data.DataSingleton;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.internal.ui.tree.LazyChildLoader;
+import org.hpccsystems.internal.ui.tree.MyTreeItem;
+import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
-public class ECLWindow extends MultiPageEditorPart implements IResourceChangeListener, Observer {
+public class ECLWindow extends MultiPageEditorPart implements IResourceChangeListener, Observer, TreeItemOwner {
 
 	private ECLEditor editor;
+
+	Data data; 
+	LazyChildLoader<MyTreeItem> topItems;
+	LazyChildLoader<WorkunitTabItem> children;
 	
 	public ECLWindow() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+		topItems = new LazyChildLoader<MyTreeItem>();
+		children = new LazyChildLoader<WorkunitTabItem>();
 	}
 
-	WorkunitTabItem createItem(Control control, Workunit wu) {
+	WorkunitTabItem createItem(Control control, WorkunitTreeItem wuti) {
 		int index = getPageCount();
-		return createItem(index, control, wu);
+		return createItem(index, control, wuti);
 	}
 
-	WorkunitTabItem createItem(int index, Control control, Workunit wu) {
+	WorkunitTabItem createItem(int index, Control control, WorkunitTreeItem wuti) {
 		CTabFolder folder = (CTabFolder)getContainer();
-		WorkunitTabItem item = new WorkunitTabItem(folder, SWT.NONE, index, wu);
-		//item.setControl(control);
+		WorkunitTabItem item = new WorkunitTabItem(folder, SWT.NONE, index, wuti);
 		return item;
 	}
 	
@@ -78,25 +92,112 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 	}
 	
-	void createWorkunitPage(Workunit wu, boolean addToEnd) {
-		WorkunitTreeItem treeItem = new WorkunitTreeItem(null, null, wu);
-
+	WorkunitTabItem createWorkunitPage(WorkunitTreeItem wuti, boolean addToEnd) {
 		//  TODO need to do better check than label...
     	boolean found = false;
     	for (int i = 1; i < getPageCount(); ++i) {
-    		if (getPageText(i).compareTo(treeItem.getText()) == 0) {
+    		if (getPageText(i).compareTo(wuti.getText()) == 0) {
     			found = true;
     			break;
     		}			    		
     	}
     	
     	if (!found) {
-    		WorkunitTabItem tabItem = addToEnd ? createItem(getContainer(), wu) : createItem(1, getContainer(), wu);
+    		return addToEnd ? createItem(getContainer(), wuti) : createItem(1, getContainer(), wuti);
     	}
+    	return null;
 	}
 
+	void primeChildren() {
+		for (final Platform platform : data.getPlatforms()) {
+			platform.deleteObserver(this);
+			
+			WorkunitFolderTreeItem wuFolder = new WorkunitFolderTreeItem(this, null, platform);
+			wuFolder.primeChildren();
+			topItems.add(wuFolder);
+			for (Object o : wuFolder.getChildren()) {
+				if (o instanceof WorkunitTreeItem) {
+					WorkunitTreeItem wuti = (WorkunitTreeItem)o;
+					Workunit w = wuti.getWorkunit();
+					
+					String path = w.getApplicationValue("path");
+					
+				    IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
+				    IFile file = input.getFile();
+				    String path2 = file.getFullPath().toPortableString();
+		
+				    if (path.compareTo(path2) == 0) {
+				    	children.add(createWorkunitPage(wuti, true));
+				    }
+				}
+			}
+			
+			platform.addObserver(this);
+		}
+	}
+	
+	
+	public void reloadChildren() {
+		for (final Platform platform : data.getPlatforms()) {
+			platform.getWorkunits();
+		}
+	}
+
+	Collection<Workunit> getCurrentWorkunits() {
+		Collection<Workunit> retVal = new ArrayList<Workunit>();
+		for (Object item : children.get().clone()) {
+			if (item instanceof WorkunitTreeItem) {
+				WorkunitTreeItem ti = (WorkunitTreeItem)item;
+				retVal.add(ti.getWorkunit());
+			}
+		}
+		return retVal;
+	}
+	
+	boolean mergeChanges(CollectionMonitor monitor) {
+		boolean changed = false;
+		for (Object item : children.get().clone()) {
+			if (item instanceof WorkunitTabItem) {
+				WorkunitTabItem ti = (WorkunitTabItem)item;
+
+				//  Remove deleted workunits  --- 
+				if (monitor.removeContains(ti.getWorkunit())) {
+					children.remove(ti);
+					changed = true;
+				}
+			}
+		}
+		
+		//  Add new workunits  ---
+		for (DataSingleton ds : monitor.getAdded()) {
+			if (ds instanceof Workunit) {
+				Workunit w = (Workunit)ds;
+				
+				String path = w.getApplicationValue("path");
+				
+			    IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
+			    IFile file = input.getFile();
+			    String path2 = file.getFullPath().toPortableString();
+	
+			    if (path.compareTo(path2) == 0) {
+					children.add(createWorkunitPage(new WorkunitTreeItem(this, null, w), true));						
+			    }
+				changed = true;
+			}
+		}
+		
+		//if (changed)
+			//children.sort(new WorkunitComparator());
+
+		return changed;
+	}
+	
+	
+
 	void createWorkunitPages() {
-		update(null, new Boolean(true));
+		data = Data.get();
+		primeChildren();
+		//update(null, new Boolean(true));
 	}
 
 	protected void createPages() {
@@ -179,34 +280,31 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 	@Override
 	public void update(Observable o, Object arg) {
-		final boolean addToEnd = (arg instanceof Boolean) ? (Boolean)arg : false;
-		final ECLWindow self = this;
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Data data = Data.get();
-				for (final Platform p : data.getPlatforms()) {
-					p.addObserver(self);
-					for(final Workunit w : p.getWorkunits()) {
-						String path = w.getApplicationValue("path");
-			
-					    IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
-					    IFile file = input.getFile();
-					    String path2 = file.getFullPath().toPortableString();
-			
-					    if (path.compareTo(path2) == 0) {
-					    	Display.getDefault().syncExec(new Runnable() {
-
-								@Override
-								public void run() {
-							    	createWorkunitPage(w, addToEnd);
-								}
-					    	});
-					    }
-					}
+		if (o instanceof Platform) {
+			if (arg instanceof CollectionMonitor) {
+				CollectionMonitor monitor = (CollectionMonitor)arg;
+				if (mergeChanges(monitor)) {
+					refresh();
 				}
 			}
-		});
-		thread.start();
+		}
+	}
+
+	@Override
+	public void update(Object element, String[] properties) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refresh(Object element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		
 	}
 }

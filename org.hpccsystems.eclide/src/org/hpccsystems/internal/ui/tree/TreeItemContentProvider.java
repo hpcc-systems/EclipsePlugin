@@ -76,5 +76,19 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 			}
 		});
 	}
-}
 
+	@Override
+	public void refresh() {
+		Display.getDefault().asyncExec(new Runnable() {   
+			public void run() {
+				treeViewer.refresh();
+			}
+		});
+	}
+	
+	public void primeChildren() {
+	}
+	
+	public void reloadChildren() {
+	}
+}

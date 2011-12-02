@@ -12,9 +12,9 @@ import org.hpccsystems.eclide.ui.viewer.TextEx;
 import org.hpccsystems.internal.data.Result;
 import org.hpccsystems.internal.data.Workunit;
 
-public class WorkunitTabItem extends CTabItem implements TreeItemOwner{
+public class WorkunitTabItem extends CTabItem {
 	
-	Workunit wu;
+	Workunit workunit;
 	WorkunitTreeItem item;
 	
 	SashForm sashFormMain;
@@ -31,16 +31,16 @@ public class WorkunitTabItem extends CTabItem implements TreeItemOwner{
 	CTabItem textTab;
 	private TextEx text;
 
-	public WorkunitTabItem(CTabFolder parent, int style, int index, Workunit wu) {
+	public WorkunitTabItem(CTabFolder parent, int style, int index, WorkunitTreeItem wuti) {
 		super(parent, style, index);
-		this.wu = wu;
+		this.workunit = wuti.getWorkunit();
 		
-		item = new WorkunitTreeItem(this, null, wu);
+		item = wuti;
 
 		parent.setLayout(new FillLayout());
 		sashFormMain = new SashForm(parent, SWT.HORIZONTAL);
 
-		workunitViewer = new WorkunitViewer(this, wu);
+		workunitViewer = new WorkunitViewer(this, workunit);
 		workunitViewer.createPartControl(sashFormMain);
 
 		//sashFormResult = new SashForm(sashFormMain, SWT.VERTICAL);
@@ -69,25 +69,37 @@ public class WorkunitTabItem extends CTabItem implements TreeItemOwner{
 		
 	    setControl(sashFormMain);
 	}
-
-	@Override
-	public void update(Object element, String[] properties) {
-		Display.getDefault().asyncExec(new Runnable() {   
-			public void run() {
-				setText(item.getText());
-				setImage(item.getImage());
-			}
-		});
+	
+	public Workunit getWorkunit() {
+		return workunit;
 	}
 
-	@Override
-	public void refresh(Object element) {
-		Display.getDefault().asyncExec(new Runnable() {   
-			public void run() {
-			}
-		});
-	}
-
+//	@Override
+//	public void update(Object element, String[] properties) {
+//		Display.getDefault().asyncExec(new Runnable() {   
+//			public void run() {
+//				setText(item.getText());
+//				setImage(item.getImage());
+//			}
+//		});
+//	}
+//
+//	@Override
+//	public void refresh(Object element) {
+//		Display.getDefault().asyncExec(new Runnable() {   
+//			public void run() {
+//			}
+//		});
+//	}
+//
+//	@Override
+//	public void refresh() {
+//		Display.getDefault().asyncExec(new Runnable() {   
+//			public void run() {
+//			}
+//		});
+//	}
+//
 	void navigateTo(String url, String user, String password) {
 		browser.setUrl(url, user, password);
 		resultContainer.setSelection(browserTab);

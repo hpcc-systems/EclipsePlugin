@@ -17,6 +17,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.internal.data.Result;
+import org.hpccsystems.internal.ui.tree.LazyChildLoader.CalcState;
 
 public class MyTreeItem {
 	protected TreeItemOwner treeViewer;
@@ -26,7 +27,7 @@ public class MyTreeItem {
 	protected MyTreeItem(TreeItemOwner treeViewer, MyTreeItem parent) {
 		this.treeViewer = treeViewer;
 		this.parent = parent;
-		this.children = new LazyChildLoader();
+		this.children = new LazyChildLoader<MyTreeItem>();
 	}
 	
 	public MyTreeItem getParent() {
@@ -63,7 +64,7 @@ public class MyTreeItem {
 	}
 
 	public void refresh() {
-		children.clearState();
+		children.clear();
 		if (treeViewer != null)
 			treeViewer.refresh(this);
 	}
@@ -74,15 +75,11 @@ public class MyTreeItem {
 			final MyTreeItem self = this;
 			children.start(new Runnable() {
 				public void run() {
-					children.set(fetchChildren());
-					Display.getDefault().asyncExec(new Runnable() {   
-						public void run() {
-							treeViewer.refresh(self);
-						}
-					});
+					primeChildren();
+					children.setState(CalcState.FINISHED);
+					treeViewer.refresh(self);
 				}
 			});
-			//  Java does not like this (but it is being used to display "calculating") -> update(null);
 			break;
 		case STARTED:
 			break;
@@ -96,7 +93,7 @@ public class MyTreeItem {
 		return children.get();
 	}
 
-	public Object[] fetchChildren() {
-		return null;
+	public void primeChildren() {
+		children.set(new MyTreeItem[0]);
 	}
 }

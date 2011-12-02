@@ -28,7 +28,7 @@ public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
-		this.children.set(fetchChildren());
+		primeChildren();
 	}
 
 	public Workunit getWorkunit() {
@@ -77,7 +77,7 @@ public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 	}
 
 	@Override
-	public Object[] fetchChildren() {
+	public void primeChildren() {
 		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
 		MyTreeItem parent = getParent();
 		while (parent != null) {
@@ -94,7 +94,7 @@ public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 			retVal.add(new WorkunitLogicalFileFolderTreeItem(treeViewer, this, workunit));
 			retVal.add(new TextTreeItem(treeViewer, this, workunit));
 		}
-		return retVal.toArray();
+		children.set(retVal.toArray(new MyTreeItem[0]));
 	}
 
 	@Override

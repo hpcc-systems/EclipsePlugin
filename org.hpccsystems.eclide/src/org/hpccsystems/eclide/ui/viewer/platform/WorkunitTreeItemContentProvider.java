@@ -18,17 +18,18 @@ import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader;
+import org.hpccsystems.internal.ui.tree.MyTreeItem;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 class WorkunitTreeItemContentProvider extends TreeItemContentProvider {
 	Platform p;
 	Workunit wu;
-	LazyChildLoader children;
+	LazyChildLoader<MyTreeItem> children;
 
 	WorkunitTreeItemContentProvider(TreeViewer treeViewer, Workunit wu) {
 		super(treeViewer);
 		this.wu = wu;
-		this.children = new LazyChildLoader();
+		this.children = new LazyChildLoader<MyTreeItem>();
 	}
 
 	public Object[] getElements(Object inputElement) {
@@ -51,22 +52,22 @@ class WorkunitTreeItemContentProvider extends TreeItemContentProvider {
 		case FINISHED:
 			break;
 		}
-		children.clearState();
 		return children.get();
 	}
 
-	Object[] fetchChildren() {
+	MyTreeItem[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		WorkunitTreeItem item = new WorkunitTreeItem(this, null, wu);
-		for (Object o : item.fetchChildren()) {
+		item.primeChildren();
+		for (Object o : item.getChildren()) {
 			retVal.add(o);
 		}
-		return retVal.toArray();
+		return retVal.toArray(new MyTreeItem[0]);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		children.clearState();
+		children.clear();
 		Display.getDefault().asyncExec(new Runnable() {   
 			public void run() {
 				treeViewer.refresh();
