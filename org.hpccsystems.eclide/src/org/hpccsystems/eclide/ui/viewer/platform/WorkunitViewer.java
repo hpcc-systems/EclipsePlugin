@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.hpccsystems.internal.data.Result;
 import org.hpccsystems.internal.data.Workunit;
-import org.hpccsystems.internal.ui.tree.MyTreeItem;
+import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class WorkunitViewer extends PlatformViewer {
@@ -45,10 +45,10 @@ public class WorkunitViewer extends PlatformViewer {
 				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
-					if (o instanceof MyTreeItem) {
-						showWebPage((MyTreeItem)o);
-						showResult((MyTreeItem)o);
-						showQuery((MyTreeItem)o);
+					if (o instanceof ItemView) {
+						showWebPage((ItemView)o);
+						showResult((ItemView)o);
+						showQuery((ItemView)o);
 						break;
 					}
 				}
@@ -56,7 +56,7 @@ public class WorkunitViewer extends PlatformViewer {
 		};
 	}
 	
-	public void showWebPage(MyTreeItem ti) {
+	public void showWebPage(ItemView ti) {
 		if (owner == null)
 			return;
 		
@@ -70,7 +70,7 @@ public class WorkunitViewer extends PlatformViewer {
 		}
 	}
 	
-	public boolean showResult(MyTreeItem ti) {
+	public boolean showResult(ItemView ti) {
 		if (owner == null) 
 			return false;
 
@@ -82,12 +82,12 @@ public class WorkunitViewer extends PlatformViewer {
 		return true;
 	}
 	
-	public boolean showQuery(MyTreeItem ti) {
+	public boolean showQuery(ItemView ti) {
 		if (owner == null) 
 			return false;
 		
-		if (ti instanceof TextTreeItem) {
-			TextTreeItem tti = (TextTreeItem)ti;
+		if (ti instanceof TextItemView) {
+			TextItemView tti = (TextItemView)ti;
 			owner.setQuery(tti.getQueryText());
 			return true;
 		}

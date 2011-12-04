@@ -11,10 +11,10 @@
 package org.hpccsystems.eclide.ui.viewer.platform;
 
 import org.eclipse.jface.viewers.TreeViewer;
-import org.hpccsystems.internal.ui.tree.MyTreeItem;
-import org.hpccsystems.internal.ui.tree.TreeItemLabelProvider;
+import org.hpccsystems.internal.ui.tree.ItemView;
+import org.hpccsystems.internal.ui.tree.TreeItemLabelFontProvider;
 
-public class PlatformTreeItemLabelProvider extends TreeItemLabelProvider {
+public class PlatformTreeItemLabelProvider extends TreeItemLabelFontProvider {
 
 	public PlatformTreeItemLabelProvider(TreeViewer treeViewer) {
 		super(treeViewer);
@@ -22,15 +22,15 @@ public class PlatformTreeItemLabelProvider extends TreeItemLabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof MyTreeItem) {
-			final MyTreeItem treeItem = (MyTreeItem)element; 
+		if (element instanceof ItemView) {
+			final ItemView treeItem = (ItemView)element; 
 			switch(treeItem.children.getState()) {
 			case UNKNOWN:
 				return treeItem.getText() + " (Loading...)";
 			case STARTED:
 				return treeItem.getText() + " (Calculating...)";
 			case FINISHED:
-				if (treeItem instanceof FolderTreeItem) {
+				if (treeItem instanceof FolderItemView) {
 					//if (!treeViewer.getExpandedState(element)) {
 						if (treeItem.children.getCount() > 0)
 							return treeItem.getText() + " (" + treeItem.children.get().length + ")";
@@ -40,7 +40,7 @@ public class PlatformTreeItemLabelProvider extends TreeItemLabelProvider {
 			}
 			return super.getText(element);
 		}
-		if (element instanceof PlatformTreeItem) 
+		if (element instanceof PlatformItemView) 
 			return "PTODO";
 		return "TODO";
 	}

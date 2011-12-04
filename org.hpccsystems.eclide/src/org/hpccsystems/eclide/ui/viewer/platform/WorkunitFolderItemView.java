@@ -10,65 +10,46 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.ui.viewer.platform;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
+import java.util.Observer;
+
 import org.hpccsystems.internal.data.CollectionDelta;
-import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.DataSingleton;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.data.WorkunitSingletonCollection;
-import org.hpccsystems.internal.ui.tree.LazyChildLoader;
-import org.hpccsystems.internal.ui.tree.ItemView;
-import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
-class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
-	Data data;
-	LazyChildLoader<ItemView> children;
+public class WorkunitFolderItemView extends FolderItemView implements Observer {
 
-	WorkunitsTreeItemContentProvider(TreeViewer treeViewer) {
-		super(treeViewer);
-		this.children = new LazyChildLoader<ItemView>();
+	public WorkunitFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
+		super(treeViewer, parent, platform);
 	}
-	
+
 	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		if (newInput != null && !newInput.equals(oldInput)) {
-			if (newInput instanceof Data) {
-				data = (Data)newInput;
-				children.start(new Runnable() {
-					public void run() {
-						refreshChildren();
-						refresh();
-					}
-				});
-			}
-		}
+	public String getText() {
+		return "Workunits";
 	}
 
-	public Object[] getElements(Object inputElement) {
-		return children.get();
+	public URL getWebPageURL() throws MalformedURLException {
+		if (clusterName.isEmpty())
+			return platform.getURL("WsWorkunits", "WUQuery");
+		return platform.getURL("WsWorkunits", "WUQuery", "Cluster=" + clusterName);
 	}
-	
-	@Override 
+
+	@Override
 	public void refreshChildren() {
 		Workunit.All.deleteObserver(this);
-			
+		
 		CollectionDelta monitor = new CollectionDelta("primeChildren", getCurrentWorkunits());
-		monitor.calcChanges(data.getWorkunits(null, "", "", ""));
+		monitor.calcChanges(platform.getWorkunits());
 		mergeChanges(monitor);
 
 		Workunit.All.addObserver(this);
-	}
-	
-	public void reloadChildren() {
-		children.clear();
-		refreshChildren();
-		refresh();
 	}
 
 	Collection<Workunit> getCurrentWorkunits() {
@@ -100,7 +81,8 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 		for (DataSingleton ds : monitor.getAdded()) {
 			if (ds instanceof Workunit) {
 				Workunit wu = (Workunit)ds;
-				children.add(new WorkunitItemView(this, null, wu));						
+				if (platform.equals(wu.getPlatform())  && (clusterName.isEmpty() || clusterName.equals(wu.getClusterName())))
+					children.add(new WorkunitItemView(treeViewer, this, wu));						
 				changed = true;
 			}
 		}
@@ -110,7 +92,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 
 		return changed;
 	}
-	
+
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof WorkunitSingletonCollection) {

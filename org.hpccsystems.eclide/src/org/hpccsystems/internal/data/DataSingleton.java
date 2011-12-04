@@ -45,13 +45,17 @@ public abstract class DataSingleton extends Observable {
 								fullRefresh();
 						}
 					}
+					monitorThread = null;
 				}
 			});
 			monitorThread.start();
 		}
 	}
 
+	abstract boolean isComplete();
 	abstract void fastRefresh();
 	abstract void fullRefresh();
-	abstract boolean isComplete();
+	
+	public abstract boolean equals(Object aThat);
+	public abstract int hashCode();
 }

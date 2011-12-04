@@ -10,14 +10,21 @@
  ******************************************************************************/
 package org.hpccsystems.internal.data;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Observable;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
+import org.hpccsystems.ws.wsworkunits.WUQuery;
+import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
+import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
-public class Data {
+public class Data extends Observable {
 	private static Data singletonFactory;
 	
 	private Collection<Platform> platforms;	
@@ -54,6 +61,10 @@ public class Data {
 		return retVal;
 	}
 
+	public Platform GetPlatformNoCreate(String ip) {
+		return Platform.getNoCreate(ip);
+	}
+
 	public final Platform[] getPlatforms() {
 		platforms.clear();
 		ILaunchConfiguration[] configs;
@@ -69,5 +80,21 @@ public class Data {
 			e.printStackTrace();
 		}
 		return platforms.toArray(new Platform[0]);
+	}
+
+	public Collection<Workunit> getWorkunits(Platform platform, String cluster, String startDate, String endDate) {
+		Collection<Workunit> workunits = new HashSet<Workunit>();
+		try {
+			Workunit.All.pushTransaction("Data.getWorkunits");
+			for (Platform p : getPlatforms()) {
+				if (platform == null || platform.equals(p)) {
+					workunits.addAll(p.getWorkunits(cluster, startDate, endDate));
+				}
+			}
+		}
+		finally {
+			Workunit.All.popTransaction();
+		}
+		return workunits;
 	}
 }

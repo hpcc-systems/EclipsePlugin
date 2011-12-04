@@ -13,24 +13,25 @@ package org.hpccsystems.internal.ui.tree;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.internal.data.Result;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader.CalcState;
 
-public class MyTreeItem {
+public class ItemView {
 	protected TreeItemOwner treeViewer;
-	protected MyTreeItem parent;
-	public LazyChildLoader children;
+	protected ItemView parent;
+	public LazyChildLoader<ItemView> children;
 
-	protected MyTreeItem(TreeItemOwner treeViewer, MyTreeItem parent) {
+	protected ItemView(TreeItemOwner treeViewer, ItemView parent) {
 		this.treeViewer = treeViewer;
 		this.parent = parent;
-		this.children = new LazyChildLoader<MyTreeItem>();
+		this.children = new LazyChildLoader<ItemView>();
 	}
 	
-	public MyTreeItem getParent() {
+	public ItemView getParent() {
 		return parent;
 	}
 
@@ -40,6 +41,18 @@ public class MyTreeItem {
 	
 	public Image getImage() {
         return null;
+	}
+
+	public Font getFont() {
+		return null;
+	}
+
+	public Color getForeground() {
+		return null;
+	}
+
+	public Color getBackground() {
+		return null;
 	}
 
 	public URL getWebPageURL() throws MalformedURLException {
@@ -64,7 +77,8 @@ public class MyTreeItem {
 	}
 
 	public void refresh() {
-		children.clear();
+		refreshItem();
+		refreshChildren();
 		if (treeViewer != null)
 			treeViewer.refresh(this);
 	}
@@ -72,10 +86,10 @@ public class MyTreeItem {
 	public boolean hasChildren() {
 		switch (children.getState()) {
 		case UNKNOWN:
-			final MyTreeItem self = this;
+			final ItemView self = this;
 			children.start(new Runnable() {
 				public void run() {
-					primeChildren();
+					refreshChildren();
 					children.setState(CalcState.FINISHED);
 					treeViewer.refresh(self);
 				}
@@ -93,7 +107,10 @@ public class MyTreeItem {
 		return children.get();
 	}
 
-	public void primeChildren() {
-		children.set(new MyTreeItem[0]);
+	public void refreshItem() {
+	}
+
+	public void refreshChildren() {
+		children.set(new ItemView[0]);
 	}
 }

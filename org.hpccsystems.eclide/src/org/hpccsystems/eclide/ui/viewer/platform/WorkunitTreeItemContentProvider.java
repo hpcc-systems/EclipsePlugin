@@ -18,18 +18,18 @@ import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader;
-import org.hpccsystems.internal.ui.tree.MyTreeItem;
+import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 class WorkunitTreeItemContentProvider extends TreeItemContentProvider {
 	Platform p;
 	Workunit wu;
-	LazyChildLoader<MyTreeItem> children;
+	LazyChildLoader<ItemView> children;
 
 	WorkunitTreeItemContentProvider(TreeViewer treeViewer, Workunit wu) {
 		super(treeViewer);
 		this.wu = wu;
-		this.children = new LazyChildLoader<MyTreeItem>();
+		this.children = new LazyChildLoader<ItemView>();
 	}
 
 	public Object[] getElements(Object inputElement) {
@@ -55,14 +55,14 @@ class WorkunitTreeItemContentProvider extends TreeItemContentProvider {
 		return children.get();
 	}
 
-	MyTreeItem[] fetchChildren() {
+	ItemView[] fetchChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		WorkunitTreeItem item = new WorkunitTreeItem(this, null, wu);
-		item.primeChildren();
+		WorkunitItemView item = new WorkunitItemView(this, null, wu);
+		item.refreshChildren();
 		for (Object o : item.getChildren()) {
 			retVal.add(o);
 		}
-		return retVal.toArray(new MyTreeItem[0]);
+		return retVal.toArray(new ItemView[0]);
 	}
 
 	@Override

@@ -37,24 +37,24 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (parentElement instanceof MyTreeItem) {
-			return ((MyTreeItem)parentElement).getChildren();
+		if (parentElement instanceof ItemView) {
+			return ((ItemView)parentElement).getChildren();
 		}
 		return null;
 	}
 
 	@Override
 	public Object getParent(Object element) {
-		if (element instanceof MyTreeItem) {
-			return ((MyTreeItem)element).getParent();
+		if (element instanceof ItemView) {
+			return ((ItemView)element).getParent();
 		}
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if (element instanceof MyTreeItem) {
-			return ((MyTreeItem)element).hasChildren();
+		if (element instanceof ItemView) {
+			return ((ItemView)element).hasChildren();
 		}
 		return false;
 	}
@@ -86,7 +86,7 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 		});
 	}
 	
-	public void primeChildren() {
+	public void refreshChildren() {
 	}
 	
 	public void reloadChildren() {

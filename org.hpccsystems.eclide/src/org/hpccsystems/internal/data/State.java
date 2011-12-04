@@ -12,6 +12,7 @@ package org.hpccsystems.internal.data;
 
 public enum State {
 	UNKNOWN,
+	UNKNOWN_ONSERVER,
 
 	// Not started  ---
 	SCHEDULED,

@@ -15,7 +15,7 @@ import org.hpccsystems.internal.data.Workunit;
 public class WorkunitTabItem extends CTabItem {
 	
 	Workunit workunit;
-	WorkunitTreeItem item;
+	WorkunitItemView item;
 	
 	SashForm sashFormMain;
 
@@ -31,7 +31,7 @@ public class WorkunitTabItem extends CTabItem {
 	CTabItem textTab;
 	private TextEx text;
 
-	public WorkunitTabItem(CTabFolder parent, int style, int index, WorkunitTreeItem wuti) {
+	public WorkunitTabItem(CTabFolder parent, int style, int index, WorkunitItemView wuti) {
 		super(parent, style, index);
 		this.workunit = wuti.getWorkunit();
 		
@@ -101,7 +101,7 @@ public class WorkunitTabItem extends CTabItem {
 //	}
 //
 	void navigateTo(String url, String user, String password) {
-		browser.setUrl(url, user, password);
+		browser.setUrl(null, url, user, password);
 		resultContainer.setSelection(browserTab);
 	}
 

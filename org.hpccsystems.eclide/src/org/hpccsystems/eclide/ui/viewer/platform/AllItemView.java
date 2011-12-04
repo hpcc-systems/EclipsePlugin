@@ -20,15 +20,15 @@ import java.util.Observer;
 
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.ui.tree.MyTreeItem;
+import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 import org.hpccsystems.internal.data.*;
 
-class PlatformBaseTreeItem extends MyTreeItem {
+class PlatformBaseItemView extends ItemView {
 	Platform platform;
 	String clusterName;
 
-	PlatformBaseTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform) {
+	PlatformBaseItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
 		super(treeViewer, parent);
 		this.platform = platform;
 		clusterName = parent != null ? parent.clusterName : "";
@@ -43,9 +43,9 @@ class PlatformBaseTreeItem extends MyTreeItem {
 	}
 }
 
-class ClusterFolderTreeItem extends FolderTreeItem {
+class ClusterFolderItemView extends FolderItemView {
 
-	ClusterFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform) {
+	ClusterFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 	}
 
@@ -69,17 +69,17 @@ class ClusterFolderTreeItem extends FolderTreeItem {
 	}
 
 	@Override
-	public void primeChildren() {
+	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Cluster c : platform.getClusters())
-			retVal.add(new ClusterTreeItem(treeViewer, this, platform, c));
-		children.set(retVal.toArray(new MyTreeItem[0]));
+			retVal.add(new ClusterItemView(treeViewer, this, platform, c));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class FileSprayWorkunitFolderTreeItem extends FolderTreeItem {
+class FileSprayWorkunitFolderItemView extends FolderItemView {
 
-	FileSprayWorkunitFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform) {
+	FileSprayWorkunitFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 	}
 
@@ -95,24 +95,24 @@ class FileSprayWorkunitFolderTreeItem extends FolderTreeItem {
 	}
 
 	@Override
-	public void primeChildren() {
-		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
+	public void refreshChildren() {
+		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
 		for (FileSprayWorkunit wu : platform.getFileSprayWorkunits(clusterName)) {
-			retVal.add(new FileSprayWorkunitTreeItem(treeViewer, this, platform, wu));				
+			retVal.add(new FileSprayWorkunitItemView(treeViewer, this, platform, wu));				
 		}
 		Collections.sort(retVal, new WorkunitComparator());
-		children.set(retVal.toArray(new MyTreeItem[0]));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
+class FileSprayWorkunitItemView extends PlatformBaseItemView implements Observer {
 	FileSprayWorkunit workunit;
 
-	FileSprayWorkunitTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, FileSprayWorkunit wu) {
+	FileSprayWorkunitItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, FileSprayWorkunit wu) {
 		super(treeViewer, parent, platform);
 		this.workunit = wu;
 		this.workunit.addObserver(this);
-		primeChildren();
+		refreshChildren();
 	}
 
 	@Override
@@ -170,13 +170,13 @@ class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem implements Observer
 	}
 	
 	@Override
-	public void primeChildren() {
-		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
-		MyTreeItem parent = getParent();
+	public void refreshChildren() {
+		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
+		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof FileSprayWorkunitTreeItem)
-				if (workunit == ((FileSprayWorkunitTreeItem)parent).workunit) {
-					retVal.add(new RecursiveTreeItem(treeViewer, this));				
+			if (parent instanceof FileSprayWorkunitItemView)
+				if (workunit == ((FileSprayWorkunitItemView)parent).workunit) {
+					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
 			parent = parent.getParent();
@@ -186,17 +186,17 @@ class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem implements Observer
 			String filePath = workunit.getFilePath();
 			if (workunit.isDespray()) {
 				if (lf != null)
-					retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, lf));
+					retVal.add(new LogicalFileItemView(treeViewer, this, platform, lf));
 				if (filePath != null)
-					retVal.add(new LandingZoneFileTreeItem(treeViewer, this, platform, filePath));
+					retVal.add(new LandingZoneFileItemView(treeViewer, this, platform, filePath));
 			} else {
 				if (filePath != null)
-					retVal.add(new LandingZoneFileTreeItem(treeViewer, this, platform, filePath));
+					retVal.add(new LandingZoneFileItemView(treeViewer, this, platform, filePath));
 				if (lf != null)
-					retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, lf));
+					retVal.add(new LogicalFileItemView(treeViewer, this, platform, lf));
 			}
 		}
-		children.set(retVal.toArray(new MyTreeItem[0]));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 
 	@Override
@@ -210,14 +210,14 @@ class FileSprayWorkunitTreeItem extends PlatformBaseTreeItem implements Observer
 	}
 }
 
-class ClusterTreeItem extends PlatformBaseTreeItem {
+class ClusterItemView extends PlatformBaseItemView {
 	Cluster cluster;
 
-	ClusterTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, Cluster cluster) {
+	ClusterItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, Cluster cluster) {
 		super(treeViewer, parent, platform);
 		this.cluster = cluster;
 		this.clusterName = cluster.getName();
-		primeChildren();
+		refreshChildren();
 	}
 
 	@Override
@@ -236,18 +236,18 @@ class ClusterTreeItem extends PlatformBaseTreeItem {
 	}
 
 	@Override
-	public void primeChildren() {
-		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
-		retVal.add(new WorkunitFolderTreeItem(treeViewer, this, platform));
-		retVal.add(new FileSprayWorkunitFolderTreeItem(treeViewer, this, platform));
-		retVal.add(new LogicalFileFolderTreeItem(treeViewer, this, platform));
-		children.set(retVal.toArray(new MyTreeItem[0]));
+	public void refreshChildren() {
+		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
+		retVal.add(new WorkunitFolderItemView(treeViewer, this, platform));
+		retVal.add(new FileSprayWorkunitFolderItemView(treeViewer, this, platform));
+		retVal.add(new LogicalFileFolderItemView(treeViewer, this, platform));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class QuerySetFolderTreeItem extends FolderTreeItem {
+class QuerySetFolderItemView extends FolderItemView {
 
-	QuerySetFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform) {
+	QuerySetFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 	}
 
@@ -262,19 +262,19 @@ class QuerySetFolderTreeItem extends FolderTreeItem {
 	}
 
 	@Override
-	public void primeChildren() {
+	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (DataQuerySet qs : platform.getDataQuerySets()) {
-			retVal.add(new DataQuerySetTreeItem(treeViewer, this, platform, qs));				
+			retVal.add(new DataQuerySetItemView(treeViewer, this, platform, qs));				
 		}
-		children.set(retVal.toArray(new MyTreeItem[0]));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class DataQuerySetTreeItem extends PlatformBaseTreeItem {
+class DataQuerySetItemView extends PlatformBaseItemView {
 	DataQuerySet querySet;
 
-	DataQuerySetTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, DataQuerySet querySet) {
+	DataQuerySetItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, DataQuerySet querySet) {
 		super(treeViewer, parent, platform);
 		this.querySet = querySet; 
 	}
@@ -295,13 +295,13 @@ class DataQuerySetTreeItem extends PlatformBaseTreeItem {
 }
 
 	@Override
-	public void primeChildren() {
+	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		MyTreeItem parent = getParent();
+		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof DataQuerySetTreeItem)
-				if (querySet == ((DataQuerySetTreeItem)parent).querySet) {
-					retVal.add(new RecursiveTreeItem(treeViewer, this));				
+			if (parent instanceof DataQuerySetItemView)
+				if (querySet == ((DataQuerySetItemView)parent).querySet) {
+					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
 			parent = parent.getParent();
@@ -314,13 +314,13 @@ class DataQuerySetTreeItem extends PlatformBaseTreeItem {
 //				retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
 //			}
 		}
-		children.set(retVal.toArray(new MyTreeItem[0]));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class LogicalFileFolderTreeItem extends FolderTreeItem {
+class LogicalFileFolderItemView extends FolderItemView {
 
-	LogicalFileFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform) {
+	LogicalFileFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 	}
 
@@ -337,19 +337,19 @@ class LogicalFileFolderTreeItem extends FolderTreeItem {
 	}
 
 	@Override
-	public void primeChildren() {
+	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile lf : platform.getLogicalFiles(clusterName)) {
-			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, lf));				
+			retVal.add(new LogicalFileItemView(treeViewer, this, platform, lf));				
 		}
-		children.set(retVal.toArray(new MyTreeItem[0]));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class WorkunitLogicalFileFolderTreeItem extends FolderTreeItem implements Observer {
+class WorkunitLogicalFileFolderItemView extends FolderItemView implements Observer {
 	Workunit workunit;
 
-	WorkunitLogicalFileFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit wu) {
+	WorkunitLogicalFileFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
@@ -366,12 +366,12 @@ class WorkunitLogicalFileFolderTreeItem extends FolderTreeItem implements Observ
 	}
 
 	@Override
-	public void primeChildren() {
+	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile file : workunit.getSourceFiles()) {
-			retVal.add(new LogicalFileTreeItem(treeViewer, this, platform, file));
+			retVal.add(new LogicalFileItemView(treeViewer, this, platform, file));
 		}
-		children.set(retVal.toArray(new MyTreeItem[0]));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 
 	@Override
@@ -385,10 +385,10 @@ class WorkunitLogicalFileFolderTreeItem extends FolderTreeItem implements Observ
 	}
 }
 
-class LogicalFileTreeItem extends PlatformBaseTreeItem {
+class LogicalFileItemView extends PlatformBaseItemView {
 	LogicalFile file;
 
-	LogicalFileTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, LogicalFile file) {
+	LogicalFileItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, LogicalFile file) {
 		super(treeViewer, parent, platform);
 		this.file = file; 
 	}
@@ -409,40 +409,40 @@ class LogicalFileTreeItem extends PlatformBaseTreeItem {
 	}
 
 	@Override
-	public void primeChildren() {
+	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		MyTreeItem parent = getParent();
+		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof LogicalFileTreeItem)
-				if (file == ((LogicalFileTreeItem)parent).file) {
-					retVal.add(new RecursiveTreeItem(treeViewer, this));				
+			if (parent instanceof LogicalFileItemView)
+				if (file == ((LogicalFileItemView)parent).file) {
+					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
 			parent = parent.getParent();
 		}
 
 		if (retVal.isEmpty()) {
-			retVal.add(new LogicalFileContentsTreeItem(treeViewer, this, platform, file));
+			retVal.add(new LogicalFileContentsItemView(treeViewer, this, platform, file));
 			Workunit wu = file.getWorkunit();
 			if (wu != null) {
-				retVal.add(new WorkunitTreeItem(treeViewer, this, wu));				
+				retVal.add(new WorkunitItemView(treeViewer, this, wu));				
 			}
 			FileSprayWorkunit fswu = file.getFileSprayWorkunit();
 			if (fswu != null) {
-				retVal.add(new FileSprayWorkunitTreeItem(treeViewer, this, platform, fswu));				
+				retVal.add(new FileSprayWorkunitItemView(treeViewer, this, platform, fswu));				
 			}
 		}
-		children.set(retVal.toArray(new MyTreeItem[0]));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class LogicalFileContentsTreeItem extends PlatformBaseTreeItem {
+class LogicalFileContentsItemView extends PlatformBaseItemView {
 	LogicalFile file;
 
-	LogicalFileContentsTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, LogicalFile file) {
+	LogicalFileContentsItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, LogicalFile file) {
 		super(treeViewer, parent, platform);
 		this.file = file; 
-		primeChildren();
+		refreshChildren();
 	}
 
 	@Override
@@ -460,13 +460,13 @@ class LogicalFileContentsTreeItem extends PlatformBaseTreeItem {
 	}
 }
 
-class LandingZoneFileTreeItem extends PlatformBaseTreeItem {
+class LandingZoneFileItemView extends PlatformBaseItemView {
 	String path;
 
-	LandingZoneFileTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, String path) {
+	LandingZoneFileItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, String path) {
 		super(treeViewer, parent, platform);
 		this.path = path; 
-		primeChildren();
+		refreshChildren();
 	}
 
 	@Override
@@ -480,10 +480,10 @@ class LandingZoneFileTreeItem extends PlatformBaseTreeItem {
 	}
 }
 
-class ResultFolderTreeItem extends FolderTreeItem implements Observer {
+class ResultFolderItemView extends FolderItemView implements Observer {
 	Workunit workunit;
 
-	ResultFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit wu) {
+	ResultFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
@@ -499,11 +499,11 @@ class ResultFolderTreeItem extends FolderTreeItem implements Observer {
 	}
 
 	@Override
-	public void primeChildren() {
+	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Result r : workunit.getResults())
-			retVal.add(new ResultTreeItem(treeViewer, this, platform, r));
-		children.set(retVal.toArray(new MyTreeItem[0]));
+			retVal.add(new ResultItemView(treeViewer, this, platform, r));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 	
 	@Override
@@ -517,14 +517,14 @@ class ResultFolderTreeItem extends FolderTreeItem implements Observer {
 	}
 }
 
-class ResultTreeItem extends PlatformBaseTreeItem implements Observer {
+class ResultItemView extends PlatformBaseItemView implements Observer {
 	Result result;
 
-	ResultTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, Result result) {
+	ResultItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, Result result) {
 		super(treeViewer, parent, platform);
 		this.result = result; 
 		this.result.addObserver(this);
-		primeChildren();
+		refreshChildren();
 	}
 
 	@Override
@@ -549,11 +549,11 @@ class ResultTreeItem extends PlatformBaseTreeItem implements Observer {
 	}
 
 	@Override
-	public void primeChildren() {
+	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(String s : result.getResultViews())
-			retVal.add(new ResultViewTreeItem(treeViewer, this, platform, result, s));
-		children.set(retVal.toArray(new MyTreeItem[0]));
+			retVal.add(new ResultViewItemView(treeViewer, this, platform, result, s));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 
 	@Override
@@ -562,15 +562,15 @@ class ResultTreeItem extends PlatformBaseTreeItem implements Observer {
 	}
 }
 
-class ResultViewTreeItem extends PlatformBaseTreeItem {
+class ResultViewItemView extends PlatformBaseItemView {
 	Result result;
 	String viewName;
 
-	ResultViewTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, Result result, String viewName) {
+	ResultViewItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, Result result, String viewName) {
 		super(treeViewer, parent, platform);
 		this.result = result; 
 		this.viewName = viewName;
-		primeChildren();
+		refreshChildren();
 	}
 
 	@Override
@@ -588,10 +588,10 @@ class ResultViewTreeItem extends PlatformBaseTreeItem {
 	}
 }
 
-class GraphFolderTreeItem extends FolderTreeItem implements Observer  {
+class GraphFolderItemView extends FolderItemView implements Observer  {
 	Workunit workunit;
 
-	GraphFolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit wu) {
+	GraphFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
@@ -607,11 +607,11 @@ class GraphFolderTreeItem extends FolderTreeItem implements Observer  {
 	}
 
 	@Override
-	public void primeChildren() {
+	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Graph g : workunit.getGraphs())
-			retVal.add(new GraphTreeItem(treeViewer, this, platform, g));
-		children.set(retVal.toArray(new MyTreeItem[0]));
+			retVal.add(new GraphItemView(treeViewer, this, platform, g));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 	
 	@Override
@@ -625,14 +625,14 @@ class GraphFolderTreeItem extends FolderTreeItem implements Observer  {
 	}
 }
 
-class GraphTreeItem extends PlatformBaseTreeItem implements Observer {
+class GraphItemView extends PlatformBaseItemView implements Observer {
 	Graph graph;
 
-	GraphTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform, Graph graph) {
+	GraphItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, Graph graph) {
 		super(treeViewer, parent, platform);
 		this.graph = graph; 
 		this.graph.addObserver(this);
-		primeChildren();
+		refreshChildren();
 	}
 
 	@Override
@@ -663,13 +663,13 @@ class GraphTreeItem extends PlatformBaseTreeItem implements Observer {
 	}
 }
 
-class MessageTreeItem extends MyTreeItem {
+class MessageItemView extends ItemView {
 	String message;
 
-	MessageTreeItem(TreeItemOwner treeViewer, MyTreeItem parent, String message) {
+	MessageItemView(TreeItemOwner treeViewer, ItemView parent, String message) {
 		super(treeViewer, parent);
 		this.message = message;
-		primeChildren();
+		refreshChildren();
 	}
 
 	@Override
@@ -678,16 +678,16 @@ class MessageTreeItem extends MyTreeItem {
 	}
 }
 
-class RecursiveTreeItem extends MessageTreeItem {
+class RecursiveItemView extends MessageItemView {
 
-	RecursiveTreeItem(TreeItemOwner treeViewer, MyTreeItem parent) {
+	RecursiveItemView(TreeItemOwner treeViewer, ItemView parent) {
 		super(treeViewer, parent, "...recursive expansion...");
 	}
 }
 
-class LoadingTreeItem extends MessageTreeItem {
+class LoadingItemView extends MessageItemView {
 
-	LoadingTreeItem(TreeItemOwner treeViewer, MyTreeItem parent) {
+	LoadingItemView(TreeItemOwner treeViewer, ItemView parent) {
 		super(treeViewer, parent, "...loading...");
 	}
 }

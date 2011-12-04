@@ -72,7 +72,15 @@ public class Platform extends DataSingleton {
 		}
 		return platform;
 	}
-
+	
+	public static synchronized Platform getNoCreate(String ip) {
+		Platform platform = new Platform(ip);
+		if (Platforms.containsKey(platform.hashCode())) {
+			return Platforms.get(platform.hashCode());
+		}
+		return null;
+	}
+	
 	public static final String P_ENABLED = "enabledConfig";
 	public static final String P_IP = "ipLaunchConfig";
 	public static final String P_USER = "userLaunchConfig";
@@ -101,7 +109,6 @@ public class Platform extends DataSingleton {
 		this.fileSprayWorkunits = new HashSet<FileSprayWorkunit>();
 		this.dataQuerySets = new HashSet<DataQuerySet>();
 		this.logicalFiles = new HashSet<LogicalFile>();
-		setChanged();
 	}
 	
 	public void update(ILaunchConfiguration launchConfiguration) {
@@ -167,42 +174,44 @@ public class Platform extends DataSingleton {
 */	
 	public Workunit submit(IFile file, String cluster) {
 		if (isEnabled()) {
-			CollectionMonitor monitor = new CollectionMonitor("submit", workunits);
-			Eclipse.doSaveDirty(file.getProject());
-			ECLCompiler compiler = new ECLCompiler(file.getProject());
-			String archive = compiler.getArchive(file);
-			
-			WsWorkunitsServiceSoap service = getWsWorkunitsService();
-			WUCreateAndUpdate request = new WUCreateAndUpdate();
-			request.setQueryText(archive);
-			request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
-			ApplicationValue[] appVals = new ApplicationValue[1];
-			appVals[0] = new ApplicationValue();
-			appVals[0].setApplication(Activator.PLUGIN_ID);
-			appVals[0].setName("path");
-			appVals[0].setValue(file.getFullPath().toPortableString());
-			request.setApplicationValues(appVals);
 			try {
-				WUUpdateResponse response = service.WUCreateAndUpdate(request);
-				response.getWorkunit().setCluster(cluster);	//  WUSubmit does not return an updated ECLWorkunit, so set cluster here...  
-				Workunit wu = getWorkunit(response.getWorkunit());
-				if (wu != null) {
-					workunits.add(wu);
-					setChanged();
-					notifyObservers(monitor.calcChanges(workunits));
-
-					WUSubmit submitRequest = new WUSubmit();
-					submitRequest.setWuid(response.getWorkunit().getWuid());
-					submitRequest.setCluster(cluster);
-					WUSubmitResponse submitResponse = service.WUSubmit(submitRequest);
+				Workunit.All.pushTransaction("Platform.submit");
+				Eclipse.doSaveDirty(file.getProject());
+				ECLCompiler compiler = new ECLCompiler(file.getProject());
+				String archive = compiler.getArchive(file);
+				
+				WsWorkunitsServiceSoap service = getWsWorkunitsService();
+				WUCreateAndUpdate request = new WUCreateAndUpdate();
+				request.setQueryText(archive);
+				request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
+				ApplicationValue[] appVals = new ApplicationValue[1];
+				appVals[0] = new ApplicationValue();
+				appVals[0].setApplication(Activator.PLUGIN_ID);
+				appVals[0].setName("path");
+				appVals[0].setValue(file.getFullPath().toPortableString());
+				request.setApplicationValues(appVals);
+				try {
+					WUUpdateResponse response = service.WUCreateAndUpdate(request);
+					response.getWorkunit().setCluster(cluster);	//  WUSubmit does not return an updated ECLWorkunit, so set cluster here...  
+					Workunit wu = getWorkunit(response.getWorkunit());
+					if (wu != null) {
+						workunits.add(wu);
+	
+						WUSubmit submitRequest = new WUSubmit();
+						submitRequest.setWuid(response.getWorkunit().getWuid());
+						submitRequest.setCluster(cluster);
+						WUSubmitResponse submitResponse = service.WUSubmit(submitRequest);
+					}
+					return wu;
+				} catch (ArrayOfEspException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				return wu;
-			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} finally {
+				Workunit.All.popTransaction();
 			}
 		}
 		return null;
@@ -223,7 +232,7 @@ public class Platform extends DataSingleton {
 
 	//  Workunit  ---
 	public Workunit getWorkunit(String wuid) {
-		return Workunit.get(this, wuid);
+		return Workunit.All.get(this, wuid);
 	}
 
 	public Workunit getWorkunit(ECLWorkunit wu) {
@@ -232,9 +241,9 @@ public class Platform extends DataSingleton {
 		return workunit;
 	}
 
-	private Workunit[] getWorkunits(String cluster, String startDate, String endDate) {
+	Collection<Workunit> getWorkunits(String cluster, String startDate, String endDate) {
 		if (isEnabled()) {
-			CollectionMonitor monitor = new CollectionMonitor("getWorkunits", workunits);
+			Workunit.All.pushTransaction("platform.getWorkunits");
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
 			WUQuery request = new WUQuery();
 			request.setCluster(cluster);
@@ -250,32 +259,26 @@ public class Platform extends DataSingleton {
 				confirmDisable();
 				e.printStackTrace();
 			}
-			notifyObservers(monitor.calcChanges(workunits));
+			Workunit.All.popTransaction();
 		}
-		return workunits.toArray(new Workunit[0]);
+		return new HashSet<Workunit>(workunits);
 	}
 
-	private Workunit[] getWorkunits(String cluster) {
+	Collection<Workunit> getWorkunits(String cluster) {
 		return getWorkunits(cluster, "", "");
 	}
 
-	public Workunit[] getWorkunits() {
+	public Collection<Workunit> getWorkunits() {
 		return getWorkunits("", "", "");
 	}
 	
-	synchronized boolean updateWorkunits(ECLWorkunit[] rawWorkunits) {
-		int beforeCount = workunits.size();
+	synchronized void updateWorkunits(ECLWorkunit[] rawWorkunits) {
 		workunits.clear();
 		if (rawWorkunits != null) {
 			for(ECLWorkunit wu : rawWorkunits) {
 				workunits.add(getWorkunit(wu)); 	//  Will mark changed if needed  ---
 			}
 		}
-		if (beforeCount != workunits.size()) {
-			setChanged();
-			return true;
-		}		
-		return false;
 	}
 
 	//  FileSPrayWorkunit  ---
@@ -291,7 +294,7 @@ public class Platform extends DataSingleton {
 
 	public FileSprayWorkunit[] getFileSprayWorkunits(String cluster) {
 		if (isEnabled()) {
-			CollectionMonitor monitor = new CollectionMonitor("getFileSprayWorkunits", fileSprayWorkunits);
+			//TODO CollectionDelta monitor = new CollectionDelta("getFileSprayWorkunits", fileSprayWorkunits);
 			FileSprayServiceSoap service = getFileSprayService();
 			GetDFUWorkunits request = new GetDFUWorkunits();
 			request.setCluster(cluster);
@@ -305,7 +308,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			notifyObservers(monitor.calcChanges(fileSprayWorkunits));
+			//TODO notifyObservers(monitor.calcChanges(fileSprayWorkunits));
 		}
 		return fileSprayWorkunits.toArray(new FileSprayWorkunit[0]);
 	}
@@ -314,19 +317,13 @@ public class Platform extends DataSingleton {
 		return getFileSprayWorkunits("");
 	}
 
-	synchronized boolean updateFileSprayWorkunits(DFUWorkunit[] rawWorkunits) {
-		int beforeCount = fileSprayWorkunits.size();
+	synchronized void updateFileSprayWorkunits(DFUWorkunit[] rawWorkunits) {
 		fileSprayWorkunits.clear();
 		if (rawWorkunits != null) {
 			for(DFUWorkunit wu : rawWorkunits) {
 				fileSprayWorkunits.add(getFileSprayWorkunit(wu)); 	//  Will mark changed if needed  ---
 			}
 		}
-		if (beforeCount != fileSprayWorkunits.size()) {
-			setChanged();
-			return true;
-		}		
-		return false;
 	}
 
 	//  LogicalFile  ---
@@ -342,7 +339,7 @@ public class Platform extends DataSingleton {
 
 	public DataQuerySet[] getDataQuerySets() {
 		if (isEnabled()) {
-			CollectionMonitor monitor = new CollectionMonitor("getDataQuerySets", dataQuerySets);
+			//TODO CollectionDelta monitor = new CollectionDelta("getDataQuerySets", dataQuerySets);
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
 			WUQuerysets request = new WUQuerysets();
 			try {
@@ -355,24 +352,18 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			notifyObservers(monitor.calcChanges(dataQuerySets));
+			//TODO notifyObservers(monitor.calcChanges(dataQuerySets));
 		}
 		return dataQuerySets.toArray(new DataQuerySet[0]);
 	}
 
-	synchronized boolean updateDataQuerySets(QuerySet[] rawQuerySets) {
-		int beforeCount = dataQuerySets.size();
+	synchronized void updateDataQuerySets(QuerySet[] rawQuerySets) {
 		dataQuerySets.clear();
 		if (rawQuerySets != null) {
 			for(QuerySet qs : rawQuerySets) {
 				dataQuerySets.add(getDataQuerySet(qs)); 	//  Will mark changed if needed  ---
 			}
 		}
-		if (beforeCount != dataQuerySets.size()) {
-			setChanged();
-			return true;
-		}		
-		return false;
 	}
 
 	//  LogicalFile  ---
@@ -394,7 +385,7 @@ public class Platform extends DataSingleton {
 
 	public LogicalFile[] getLogicalFiles(String cluster) {
 		if (isEnabled()) {
-			CollectionMonitor monitor = new CollectionMonitor("getLogicalFiles", logicalFiles);
+			//TODO CollectionDelta monitor = new CollectionDelta("getLogicalFiles", logicalFiles);
 			WsDfuServiceSoap service = getWsDfuService();
 			DFUQueryRequest request = new DFUQueryRequest();
 			request.setClusterName(cluster);
@@ -408,7 +399,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			notifyObservers(monitor.calcChanges(logicalFiles));
+			//TODO notifyObservers(monitor.calcChanges(logicalFiles));
 		}
 		return logicalFiles.toArray(new LogicalFile[0]);
 	}
@@ -417,19 +408,13 @@ public class Platform extends DataSingleton {
 		return getLogicalFiles("");
 	}
 	
-	synchronized boolean updateLogicalFiles(DFULogicalFile[] rawLogicalFiles) {
-		int beforeCount = logicalFiles.size();
+	synchronized void updateLogicalFiles(DFULogicalFile[] rawLogicalFiles) {
 		logicalFiles.clear();
 		if (rawLogicalFiles != null) {
 			for(DFULogicalFile lf : rawLogicalFiles) {
 				logicalFiles.add(getLogicalFile(lf)); 	//  Will mark changed if needed  ---
 			}
 		}
-		if (beforeCount != logicalFiles.size()) {
-			setChanged();
-			return true;
-		}		
-		return false;
 	}
 
 	//  Cluster  ---
@@ -445,7 +430,7 @@ public class Platform extends DataSingleton {
 
 	public Cluster[] getClusters() {
 		if (isEnabled()) {
-			CollectionMonitor monitor = new CollectionMonitor("getClusters", clusters);
+			//TODO CollectionDelta monitor = new CollectionDelta("getClusters", clusters);
 			WsTopologyServiceSoap service = getWsTopologyService();
 			TpTargetClusterQueryRequest request = new TpTargetClusterQueryRequest();
 			try {
@@ -458,24 +443,17 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			notifyObservers(monitor.calcChanges(clusters));
+			//TODO notifyObservers(monitor.calcChanges(clusters));
 		}
 		return clusters.toArray(new Cluster[0]);
 	}
 
-	synchronized boolean updateClusters(TpTargetCluster[] rawCluster) {
-		int beforeCount = clusters.size();
-		clusters.clear();
+	synchronized void updateClusters(TpTargetCluster[] rawCluster) {
 		if (rawCluster != null) {
 			for(TpTargetCluster c : rawCluster) {
 				clusters.add(getCluster(c)); 	//  Will mark changed if needed  ---
 			}
 		}
-		if (beforeCount != clusters.size()) {
-			setChanged();
-			return true;
-		}		
-		return false;
 	}
 
 	//  SOAP Stub Helpers  ---

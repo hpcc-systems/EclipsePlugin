@@ -17,7 +17,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.ws.Response;
+
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.ws.wsworkunits.EspException;
 import org.hpccsystems.ws.wsworkunits.ApplicationValue;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLGraph;
@@ -32,20 +35,8 @@ import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 public class Workunit extends DataSingleton {
-	private static Map<Integer, Workunit> Workunits = new HashMap<Integer, Workunit>();
-	public static synchronized Workunit get(Platform platform, String wuid) {
-		if (wuid == null || wuid.isEmpty())
-			return null;
-		Workunit workunit = new Workunit(platform, wuid);
-		if (Workunits.containsKey(workunit.hashCode())) {
-			return Workunits.get(workunit.hashCode());
-		}
-		else {
-			Workunits.put(workunit.hashCode(), workunit);
-		}
-		return workunit;
-	}
-	
+	public static WorkunitSingletonCollection All = new WorkunitSingletonCollection();	
+
 	private Platform platform;
 
 	private ECLWorkunit info;
@@ -65,7 +56,7 @@ public class Workunit extends DataSingleton {
 		SOURCEFILES
 	}
 
-	private Workunit(Platform platform, String wuid) {
+	public Workunit(Platform platform, String wuid) {
 		this.platform = platform;
 		info = new ECLWorkunit();
 		info.setWuid(wuid); 		
@@ -108,13 +99,15 @@ public class Workunit extends DataSingleton {
 	WUStateAborted,7
 	WUStateBlocked,8
 	WUStateSubmitted,9
-	WUStateScheduled,0
-	WUStateCompiling,1
-	WUStateWait,2
-	WUStateWaitingForUpload,3
-	WUStateDebugPaused,4
-	WUStateDebugRunning,5
-	WUStateSize	//Don't forget to update the string table below..
+	WUStateScheduled,10
+	WUStateCompiling,11
+	WUStateWait,12
+	WUStateWaitingForUpload,13
+	WUStateDebugPaused,14
+	WUStateDebugRunning,15
+	WUStateSize
+	
+	WUStateNoLongerOnServer 999
 	 */
 
 	public State getStateID() {
@@ -135,6 +128,7 @@ public class Workunit extends DataSingleton {
 			case 13:	return State.WAIT;
 			case 14:	return State.WAIT;
 			case 15:	return State.RUNNING;
+			case 999:	return State.UNKNOWN_ONSERVER;
 			}
 		}
 		return State.UNKNOWN;
@@ -212,6 +206,10 @@ public class Workunit extends DataSingleton {
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID());
 	}
+	
+	public void refreshState() {
+		fullRefresh(false, false, false, false);
+	}
 
 	@Override
 	void fastRefresh() {
@@ -254,10 +252,22 @@ public class Workunit extends DataSingleton {
 			request.setIncludeSourceFiles(includeSourceFiles);
 			request.setIncludeApplicationValues(includeApplicationValues);
 			try {
-				WUInfoResponse respsone = service.WUInfo(request);
-				update(respsone.getWorkunit());
-				if (respsone.getResultViews() != null)
-					resultViews = Arrays.asList(respsone.getResultViews()); 
+				WUInfoResponse response = service.WUInfo(request);
+				if (response.getWorkunit() == null) {	//  Call succeeded, but no response...
+					for (EspException e : response.getExceptions().getException()) {
+						if (e.getCode().equals("20082")) {	//  No longer exists...
+							info.setStateID(999);	
+							setChanged();
+							notifyObservers(Notification.WORKUNIT);
+							
+						}
+					}
+					
+				} else {
+					update(response.getWorkunit());
+				}
+				if (response.getResultViews() != null)
+					resultViews = Arrays.asList(response.getResultViews()); 
 			} catch (ArrayOfEspException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

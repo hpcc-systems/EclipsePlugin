@@ -13,22 +13,28 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.data.Workunit;
-import org.hpccsystems.internal.ui.tree.MyTreeItem;
+import org.hpccsystems.internal.ui.tree.ItemView;
 
-public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
+public class WorkunitItemView extends PlatformBaseItemView implements Observer {
 	Workunit workunit;
 
-	public WorkunitTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit wu) {
+	public WorkunitItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
-		primeChildren();
+		refreshChildren();
 	}
 
 	public Workunit getWorkunit() {
@@ -68,33 +74,48 @@ public class WorkunitTreeItem extends PlatformBaseTreeItem implements Observer {
 			return Activator.getImage("icons/workunit_warning.png"); 
 		case COMPILED:
 			return Activator.getImage("icons/workunit_completed.png"); 
+		case UNKNOWN_ONSERVER:
+			return Activator.getImage("icons/workunit_failed.png"); 
 		}
 		return Activator.getImage("icons/workunit.png"); 
 	}
 
+	public Color getBackground() {
+		switch (workunit.getStateID()) {
+		case UNKNOWN_ONSERVER:
+			return Display.getDefault().getSystemColor(SWT.COLOR_RED);
+		}
+		return null;
+	}
+	
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
 
 	@Override
-	public void primeChildren() {
-		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
-		MyTreeItem parent = getParent();
+	public void refreshItem() {
+		workunit.refreshState();		
+	}
+	
+	@Override
+	public void refreshChildren() {
+		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
+		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof WorkunitTreeItem)
-				if (workunit == ((WorkunitTreeItem)parent).workunit) {
-					retVal.add(new RecursiveTreeItem(treeViewer, this));				
+			if (parent instanceof WorkunitItemView)
+				if (workunit == ((WorkunitItemView)parent).workunit) {
+					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
 			parent = parent.getParent();
 		}
 		if (retVal.isEmpty()) {
-			retVal.add(new ResultFolderTreeItem(treeViewer, this, workunit));
-			retVal.add(new GraphFolderTreeItem(treeViewer, this, workunit));
-			retVal.add(new WorkunitLogicalFileFolderTreeItem(treeViewer, this, workunit));
-			retVal.add(new TextTreeItem(treeViewer, this, workunit));
+			retVal.add(new ResultFolderItemView(treeViewer, this, workunit));
+			retVal.add(new GraphFolderItemView(treeViewer, this, workunit));
+			retVal.add(new WorkunitLogicalFileFolderItemView(treeViewer, this, workunit));
+			retVal.add(new TextItemView(treeViewer, this, workunit));
 		}
-		children.set(retVal.toArray(new MyTreeItem[0]));
+		children.set(retVal.toArray(new ItemView[0]));
 	}
 
 	@Override

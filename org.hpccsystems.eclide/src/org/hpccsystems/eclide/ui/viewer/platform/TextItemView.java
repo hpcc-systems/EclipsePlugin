@@ -17,13 +17,13 @@ import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.data.Workunit;
 
-public class TextTreeItem extends PlatformBaseTreeItem {
+public class TextItemView extends PlatformBaseItemView {
 	Workunit workunit;
 
-	TextTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Workunit workunit) {
+	TextItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit workunit) {
 		super(treeViewer, parent, workunit.getPlatform());
 		this.workunit = workunit; 
-		primeChildren();
+		refreshChildren();
 	}
 
 	@Override

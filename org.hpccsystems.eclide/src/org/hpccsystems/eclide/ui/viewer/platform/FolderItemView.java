@@ -14,9 +14,9 @@ import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.data.Platform;
 
-public class FolderTreeItem extends PlatformBaseTreeItem {
+public class FolderItemView extends PlatformBaseItemView {
 
-	FolderTreeItem(TreeItemOwner treeViewer, PlatformBaseTreeItem parent, Platform platform) {
+	FolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 	}
 

@@ -13,6 +13,7 @@ package org.hpccsystems.eclide.ui.viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
+import org.hpccsystems.internal.ui.tree.ItemView;
 
 public class HtmlViewer extends ViewPart {
 	public static final String PI_UI_HTMLVIEW = "org.hpccsystems.eclide.htmlView";
@@ -42,14 +43,10 @@ public class HtmlViewer extends ViewPart {
 		return getUrl(ip) + "WsWorkunits/WUInfo?Wuid=" + wuid;
 	}
 	
-	public void showWuid(final String ip, final String wuid, final String user, final String password, final boolean bringToTop) {
-		showURL(getWuidUrl(ip, wuid), user, password, bringToTop);
-	}
-
-	public void showURL(final String url, final String user, final String password, final boolean bringToTop) {
+	public void showURL(ItemView treeItem, final String url, final String user, final String password, final boolean bringToTop) {
 		//Display.getDefault().asyncExec(new Runnable() {   
 			//public void run() {
-				browser.setUrl(url, user, password);
+				browser.setUrl(treeItem, url, user, password);
 				if (bringToTop)
 					htmlViewer.getSite().getPage().bringToTop(htmlViewer);
 			//}   

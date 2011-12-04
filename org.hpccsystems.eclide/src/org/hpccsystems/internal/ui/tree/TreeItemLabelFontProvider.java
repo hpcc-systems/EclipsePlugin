@@ -10,15 +10,19 @@
  ******************************************************************************/
 package org.hpccsystems.internal.ui.tree;
 
+import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
-public class TreeItemLabelProvider implements ILabelProvider {
+public class TreeItemLabelFontProvider implements ILabelProvider, IFontProvider, IColorProvider {
 	protected TreeViewer treeViewer;
 
-	public TreeItemLabelProvider(TreeViewer treeViewer) {
+	public TreeItemLabelFontProvider(TreeViewer treeViewer) {
 		this.treeViewer = treeViewer;
 	}
 
@@ -45,16 +49,40 @@ public class TreeItemLabelProvider implements ILabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof MyTreeItem) {
-			return ((MyTreeItem)element).getImage();
+		if (element instanceof ItemView) {
+			return ((ItemView)element).getImage();
+		}
+		return null;
+	}
+
+	@Override
+	public Font getFont(Object element) {
+		if (element instanceof ItemView) {
+			return ((ItemView)element).getFont();
+		}
+		return null;
+	}
+
+	@Override
+	public Color getForeground(Object element) {
+		if (element instanceof ItemView) {
+			return ((ItemView)element).getForeground();
+		}
+		return null;
+	}
+
+	@Override
+	public Color getBackground(Object element) {
+		if (element instanceof ItemView) {
+			return ((ItemView)element).getBackground();
 		}
 		return null;
 	}
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof MyTreeItem) {
-			return ((MyTreeItem)element).getText();
+		if (element instanceof ItemView) {
+			return ((ItemView)element).getText();
 		}
 		return "TODO";
 	}

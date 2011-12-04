@@ -14,8 +14,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.AuthenticationEvent;
 import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.browser.LocationListener;
+import org.eclipse.swt.browser.OpenWindowListener;
 import org.eclipse.swt.browser.ProgressAdapter;
 import org.eclipse.swt.browser.ProgressEvent;
+import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -24,12 +28,21 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.internal.data.Data;
+import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.internal.ui.tree.ItemView;
+import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 public class BrowserEx extends Composite {
 
 	private String user;
 	private String password;
 	private Browser browser;
+	private Workunit previousWU;
+	private ItemView previousTreeItem;
+	private ItemView nextTreeItem;
+	private String nextUrl;
 	
 	public BrowserEx(Composite parent) {
 		super(parent, SWT.NONE);
@@ -92,8 +105,24 @@ public class BrowserEx extends Composite {
 				event.password = password;
 			}
 		});
+		browser.addLocationListener(new LocationListener() {
+			@Override
+			public void changing(LocationEvent event) {
+			}
 
-    	setUrl("about:blank");
+			@Override
+			public void changed(LocationEvent event) {
+				if (nextTreeItem != null && event.location.equals(nextUrl)) {
+					previousTreeItem = nextTreeItem;
+					nextTreeItem = null;
+				} else if (previousTreeItem != null) {
+					previousTreeItem.refresh();
+					previousTreeItem = null;
+				}
+			}
+		});
+
+    	setUrl(null, "about:blank");
 
 		browser.addProgressListener(new ProgressAdapter() {
 			public void completed(ProgressEvent event) {
@@ -109,15 +138,54 @@ public class BrowserEx extends Composite {
 				comboUrl.select(0);
 			}
 		});
+	
 	}
 
-	void setUrl(String url) {
-		setUrl(url, "", "");
+	void setUrl(ItemView treeItem, String url) {
+		setUrl(treeItem, url, "", "");
 	}	
 
-	public void setUrl(String url, String user, String password) {
+	public void setUrl(ItemView treeItem, String url, String user, String password) {
+		previousWU = null;
+		previousTreeItem = null;
 		this.user = user;
 		this.password = password;
+		
+		nextUrl = url;
+		nextTreeItem = treeItem;
 		browser.setUrl(url);
+
+		int ipPos = url.indexOf("http://");
+		if (ipPos >= 0) {
+			ipPos += 7;
+			StringBuilder ipsb = new StringBuilder();
+			for (int i = ipPos; i < url.length(); ++i) {
+				char c = url.charAt(i);
+				if (c == '.' || Character.isDigit(c)) {
+					ipsb.append(url.charAt(i));
+				} else {
+					break;
+				}
+			}
+
+			Platform p = Data.get().GetPlatformNoCreate(ipsb.toString());
+			if (p != null) {
+				int wuidPos = url.indexOf("Wuid=");
+				if (wuidPos >= 0) {
+					wuidPos += 5;
+					StringBuilder wuidsb = new StringBuilder(url.substring(wuidPos, wuidPos + 16));
+					for (int i = wuidPos + 16; i < url.length(); ++i) {
+						char c = url.charAt(i);
+						if (c == '-' || Character.isDigit(c)) {
+							wuidsb.append(url.charAt(i));
+						} else {
+							break;
+						}
+					}
+					String wuid =  wuidsb.toString();
+					//previousWU = p.getWorkunit(wuid);
+				}
+			}
+		}
 	}	
 }

@@ -14,9 +14,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.graphics.Font;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.ui.tree.MyTreeItem;
+import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 class PlatformTreeItemContentProvider extends TreeItemContentProvider {
@@ -28,9 +29,9 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 	}
 
 	public Object[] getElements(Object inputElement) {
-		ArrayList<MyTreeItem> retVal = new ArrayList<MyTreeItem>();
+		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
 		for (Platform p : ((Data)inputElement).getPlatforms()) {
-			retVal.add(new PlatformTreeItem(this, null, p));
+			retVal.add(new PlatformItemView(this, null, p));
 		}
 		return retVal.toArray();
 	}
@@ -38,5 +39,5 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 	@Override
 	public void update(Observable o, Object arg) {
 	}
-	
+
 }

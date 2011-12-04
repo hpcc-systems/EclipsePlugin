@@ -32,7 +32,7 @@ import org.hpccsystems.eclide.ui.viewer.ResultViewer;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Result;
-import org.hpccsystems.internal.ui.tree.MyTreeItem;
+import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class PlatformViewer extends ViewPart {
@@ -46,6 +46,7 @@ public class PlatformViewer extends ViewPart {
 	Action refreshItemAction;
 	Action updateItemAction;
 	Action reloadAction;
+	Action refreshAction;
 
 	public PlatformViewer() {
 		contentProvider = null;
@@ -63,9 +64,9 @@ public class PlatformViewer extends ViewPart {
 				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
-					if (o instanceof MyTreeItem) {
-						boolean resultShown = showResult((MyTreeItem)o);
-						showWebPage((MyTreeItem)o, !resultShown);
+					if (o instanceof ItemView) {
+						boolean resultShown = showResult((ItemView)o);
+						showWebPage((ItemView)o, !resultShown);
 						break;
 					}
 				}
@@ -80,7 +81,7 @@ public class PlatformViewer extends ViewPart {
 	    contentProvider = getContentProvider();
 	    treeViewer.setContentProvider(contentProvider);
 	    treeViewer.setLabelProvider(new PlatformTreeItemLabelProvider(treeViewer));
-	    treeViewer.setInput(Data.get()); 
+	    treeViewer.setInput(Data.get());
 	    
         createActions();
         createToolbar();
@@ -94,21 +95,21 @@ public class PlatformViewer extends ViewPart {
 		treeViewer.getControl().setFocus();
 	}
 
-	public void showWebPage(MyTreeItem ti, boolean bringToTop) {
+	public void showWebPage(ItemView ti, boolean bringToTop) {
 		if (htmlViewer == null)
 			htmlViewer = Eclipse.findHtmlViewer();
 		
 		try {
 			URL webPageURL = ti.getWebPageURL();
 			if (htmlViewer != null && webPageURL != null) {
-				htmlViewer.showURL(webPageURL.toString(), ti.getUser(), ti.getPassword(), bringToTop);
+				htmlViewer.showURL(ti, webPageURL.toString(), ti.getUser(), ti.getPassword(), bringToTop);
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public boolean showResult(MyTreeItem ti) {
+	public boolean showResult(ItemView ti) {
 		Result result = ti.getResult();
 		if (result == null)
 			return false;
@@ -130,8 +131,8 @@ public class PlatformViewer extends ViewPart {
 				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
-					if (o instanceof MyTreeItem) {
-						showWebPage((MyTreeItem)o, true);
+					if (o instanceof ItemView) {
+						showWebPage((ItemView)o, true);
 					}
 					break;
 				}
@@ -147,8 +148,8 @@ public class PlatformViewer extends ViewPart {
 					Iterator<?> iter = sel.iterator();
 					while (iter.hasNext()) {
 						Object o = iter.next();
-						if (o instanceof MyTreeItem)
-							((MyTreeItem)o).refresh();
+						if (o instanceof ItemView)
+							((ItemView)o).refresh();
 					}
 				}
 			}
@@ -160,8 +161,8 @@ public class PlatformViewer extends ViewPart {
 				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
-					if (o instanceof MyTreeItem)
-						((MyTreeItem)o).update(null);
+					if (o instanceof ItemView)
+						((ItemView)o).update(null);
 				}
 			}
 		};
@@ -171,13 +172,20 @@ public class PlatformViewer extends ViewPart {
 				contentProvider.reloadChildren();
 			}
 		};
-   }
+
+		refreshAction = new Action("Refresh") {
+			public void run() {
+				contentProvider.refreshChildren();
+			}
+		};
+	}
 	
 	/**
 	 * Create toolbar.
 	 */
 	protected void createToolbar() {
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+		mgr.add(refreshAction);
 		mgr.add(reloadAction);
 	}
 

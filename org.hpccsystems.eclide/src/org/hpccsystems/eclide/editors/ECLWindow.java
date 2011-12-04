@@ -38,16 +38,16 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
-import org.hpccsystems.eclide.ui.viewer.platform.WorkunitFolderTreeItem;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitFolderItemView;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTabItem;
-import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTreeItem;
-import org.hpccsystems.internal.data.CollectionMonitor;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitItemView;
+import org.hpccsystems.internal.data.CollectionDelta;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.DataSingleton;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader;
-import org.hpccsystems.internal.ui.tree.MyTreeItem;
+import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 public class ECLWindow extends MultiPageEditorPart implements IResourceChangeListener, Observer, TreeItemOwner {
@@ -55,22 +55,22 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	private ECLEditor editor;
 
 	Data data; 
-	LazyChildLoader<MyTreeItem> topItems;
+	LazyChildLoader<ItemView> topItems;
 	LazyChildLoader<WorkunitTabItem> children;
 	
 	public ECLWindow() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
-		topItems = new LazyChildLoader<MyTreeItem>();
+		topItems = new LazyChildLoader<ItemView>();
 		children = new LazyChildLoader<WorkunitTabItem>();
 	}
 
-	WorkunitTabItem createItem(Control control, WorkunitTreeItem wuti) {
+	WorkunitTabItem createItem(Control control, WorkunitItemView wuti) {
 		int index = getPageCount();
 		return createItem(index, control, wuti);
 	}
 
-	WorkunitTabItem createItem(int index, Control control, WorkunitTreeItem wuti) {
+	WorkunitTabItem createItem(int index, Control control, WorkunitItemView wuti) {
 		CTabFolder folder = (CTabFolder)getContainer();
 		WorkunitTabItem item = new WorkunitTabItem(folder, SWT.NONE, index, wuti);
 		return item;
@@ -92,7 +92,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 	}
 	
-	WorkunitTabItem createWorkunitPage(WorkunitTreeItem wuti, boolean addToEnd) {
+	WorkunitTabItem createWorkunitPage(WorkunitItemView wuti, boolean addToEnd) {
 		//  TODO need to do better check than label...
     	boolean found = false;
     	for (int i = 1; i < getPageCount(); ++i) {
@@ -112,12 +112,12 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		for (final Platform platform : data.getPlatforms()) {
 			platform.deleteObserver(this);
 			
-			WorkunitFolderTreeItem wuFolder = new WorkunitFolderTreeItem(this, null, platform);
-			wuFolder.primeChildren();
+			WorkunitFolderItemView wuFolder = new WorkunitFolderItemView(this, null, platform);
+			wuFolder.refreshChildren();
 			topItems.add(wuFolder);
 			for (Object o : wuFolder.getChildren()) {
-				if (o instanceof WorkunitTreeItem) {
-					WorkunitTreeItem wuti = (WorkunitTreeItem)o;
+				if (o instanceof WorkunitItemView) {
+					WorkunitItemView wuti = (WorkunitItemView)o;
 					Workunit w = wuti.getWorkunit();
 					
 					String path = w.getApplicationValue("path");
@@ -146,15 +146,15 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	Collection<Workunit> getCurrentWorkunits() {
 		Collection<Workunit> retVal = new ArrayList<Workunit>();
 		for (Object item : children.get().clone()) {
-			if (item instanceof WorkunitTreeItem) {
-				WorkunitTreeItem ti = (WorkunitTreeItem)item;
+			if (item instanceof WorkunitItemView) {
+				WorkunitItemView ti = (WorkunitItemView)item;
 				retVal.add(ti.getWorkunit());
 			}
 		}
 		return retVal;
 	}
 	
-	boolean mergeChanges(CollectionMonitor monitor) {
+	boolean mergeChanges(CollectionDelta monitor) {
 		boolean changed = false;
 		for (Object item : children.get().clone()) {
 			if (item instanceof WorkunitTabItem) {
@@ -180,7 +180,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			    String path2 = file.getFullPath().toPortableString();
 	
 			    if (path.compareTo(path2) == 0) {
-					children.add(createWorkunitPage(new WorkunitTreeItem(this, null, w), true));						
+					children.add(createWorkunitPage(new WorkunitItemView(this, null, w), true));						
 			    }
 				changed = true;
 			}
@@ -202,7 +202,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 	protected void createPages() {
 		createEditorPage();
-		createWorkunitPages();
+//		createWorkunitPages();
 //		createPage1();
 //		createPage2();
 	}
@@ -281,8 +281,8 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof Platform) {
-			if (arg instanceof CollectionMonitor) {
-				CollectionMonitor monitor = (CollectionMonitor)arg;
+			if (arg instanceof CollectionDelta) {
+				CollectionDelta monitor = (CollectionDelta)arg;
 				if (mergeChanges(monitor)) {
 					refresh();
 				}
