@@ -40,7 +40,7 @@ public class PlatformTreeItemLabelProvider extends TreeItemLabelFontProvider {
 			}
 			return super.getText(element);
 		}
-		if (element instanceof PlatformItemView) 
+		if (element instanceof PlatformView) 
 			return "PTODO";
 		return "TODO";
 	}

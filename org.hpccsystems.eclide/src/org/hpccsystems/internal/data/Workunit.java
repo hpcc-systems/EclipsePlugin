@@ -17,9 +17,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.ws.Response;
-
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.internal.data.DataSingletonCollection;
 import org.hpccsystems.ws.wsworkunits.EspException;
 import org.hpccsystems.ws.wsworkunits.ApplicationValue;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
@@ -35,7 +34,13 @@ import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 public class Workunit extends DataSingleton {
-	public static WorkunitSingletonCollection All = new WorkunitSingletonCollection();	
+	public static DataSingletonCollection All = new DataSingletonCollection();	
+	public static Workunit get(Platform platform, String wuid) {
+		if (wuid == null || wuid.isEmpty())
+			return null;
+		
+		return (Workunit)All.get(new Workunit(platform, wuid));
+	}
 
 	private Platform platform;
 
@@ -56,7 +61,7 @@ public class Workunit extends DataSingleton {
 		SOURCEFILES
 	}
 
-	public Workunit(Platform platform, String wuid) {
+	private Workunit(Platform platform, String wuid) {
 		this.platform = platform;
 		info = new ECLWorkunit();
 		info.setWuid(wuid); 		
@@ -259,7 +264,7 @@ public class Workunit extends DataSingleton {
 							info.setStateID(999);	
 							setChanged();
 							notifyObservers(Notification.WORKUNIT);
-							
+							break;
 						}
 					}
 					

@@ -87,10 +87,12 @@ public class Result extends DataSingleton {
 				try {
 					WUResultResponse response = service.WUResult(request);
 					String resultString = response.getResult();
-					int offset = resultString.indexOf("<Dataset");
-					resultString = resultString.substring(offset);
-					DatasetParser dp = new DatasetParser(response.getStart(), new InputSource(new StringReader(resultString)), data);
-					return data.get(row).get(col);
+					if (resultString != null) {
+						int offset = resultString.indexOf("<Dataset");
+						resultString = resultString.substring(offset);
+						DatasetParser dp = new DatasetParser(response.getStart(), new InputSource(new StringReader(resultString)), data);
+						return data.get(row).get(col);
+					}
 				} catch (ArrayOfEspException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

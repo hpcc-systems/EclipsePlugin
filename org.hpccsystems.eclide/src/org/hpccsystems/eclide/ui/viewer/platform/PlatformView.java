@@ -9,11 +9,15 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
-public class PlatformItemView extends PlatformBaseItemView {
+public class PlatformView extends PlatformBaseView {
 
-	PlatformItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
+	PlatformView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 		refreshChildren();
+	}
+
+	public Platform getPlatform() {
+		return platform;
 	}
 
 	@Override
@@ -33,11 +37,12 @@ public class PlatformItemView extends PlatformBaseItemView {
 	@Override
 	public void refreshChildren() {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
-		retVal.add(new ClusterFolderItemView(treeViewer, this, platform));
-		retVal.add(new WorkunitFolderItemView(treeViewer, this, platform));
-		retVal.add(new FileSprayWorkunitFolderItemView(treeViewer, this, platform));
-		retVal.add(new QuerySetFolderItemView(treeViewer, this, platform));
-		retVal.add(new LogicalFileFolderItemView(treeViewer, this, platform));
+		retVal.add(new ClusterFolderView(treeViewer, this, platform));
+		retVal.add(new DropZoneFolderView(treeViewer, this, platform));
+		retVal.add(new WorkunitFolderView(treeViewer, this, platform));
+		retVal.add(new FileSprayWorkunitFolderView(treeViewer, this, platform));
+		retVal.add(new QuerySetFolderView(treeViewer, this, platform));
+		retVal.add(new LogicalFileFolderView(treeViewer, this, platform));
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }

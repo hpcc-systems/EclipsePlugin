@@ -1,5 +1,8 @@
 package org.hpccsystems.eclide.ui.viewer.platform;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -12,10 +15,10 @@ import org.hpccsystems.eclide.ui.viewer.TextEx;
 import org.hpccsystems.internal.data.Result;
 import org.hpccsystems.internal.data.Workunit;
 
-public class WorkunitTabItem extends CTabItem {
+public class WorkunitTabItem extends CTabItem implements Observer {
 	
 	Workunit workunit;
-	WorkunitItemView item;
+	WorkunitView wuView;
 	
 	SashForm sashFormMain;
 
@@ -31,11 +34,12 @@ public class WorkunitTabItem extends CTabItem {
 	CTabItem textTab;
 	private TextEx text;
 
-	public WorkunitTabItem(CTabFolder parent, int style, int index, WorkunitItemView wuti) {
+	public WorkunitTabItem(CTabFolder parent, int style, int index, WorkunitView wuti) {
 		super(parent, style, index);
 		this.workunit = wuti.getWorkunit();
 		
-		item = wuti;
+		wuView = wuti;
+		wuView.getWorkunit().addObserver(this);
 
 		parent.setLayout(new FillLayout());
 		sashFormMain = new SashForm(parent, SWT.HORIZONTAL);
@@ -61,8 +65,8 @@ public class WorkunitTabItem extends CTabItem {
 		textTab.setControl(text);
 		textTab.setText("Query");
 
-		setText(item.getText());
-		setImage(item.getImage());
+		setText(wuView.getText());
+		setImage(wuView.getImage());
 
 		sashFormMain.setWeights(new int[] {15, 85});
 		//sashFormResult.setWeights(new int[] {100, 0});
@@ -74,32 +78,6 @@ public class WorkunitTabItem extends CTabItem {
 		return workunit;
 	}
 
-//	@Override
-//	public void update(Object element, String[] properties) {
-//		Display.getDefault().asyncExec(new Runnable() {   
-//			public void run() {
-//				setText(item.getText());
-//				setImage(item.getImage());
-//			}
-//		});
-//	}
-//
-//	@Override
-//	public void refresh(Object element) {
-//		Display.getDefault().asyncExec(new Runnable() {   
-//			public void run() {
-//			}
-//		});
-//	}
-//
-//	@Override
-//	public void refresh() {
-//		Display.getDefault().asyncExec(new Runnable() {   
-//			public void run() {
-//			}
-//		});
-//	}
-//
 	void navigateTo(String url, String user, String password) {
 		browser.setUrl(null, url, user, password);
 		resultContainer.setSelection(browserTab);
@@ -114,6 +92,16 @@ public class WorkunitTabItem extends CTabItem {
 		text.setText(query);
 		//table.setResult(result);
 		resultContainer.setSelection(textTab);
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		Display.getDefault().asyncExec(new Runnable() {   
+		public void run() {
+			setText(wuView.getText());
+			setImage(wuView.getImage());
+		}
+	});
 	}
 }
 

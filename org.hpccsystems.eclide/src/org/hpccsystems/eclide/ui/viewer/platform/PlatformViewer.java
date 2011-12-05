@@ -53,7 +53,7 @@ public class PlatformViewer extends ViewPart {
 	}
 	
 	synchronized TreeItemContentProvider getContentProvider() {
-		return new PlatformTreeItemContentProvider(treeViewer, Data.get());
+		return new PlatformTreeItemContentProvider(treeViewer);
 	}
 	
 	ISelectionChangedListener getSelectionListener() {

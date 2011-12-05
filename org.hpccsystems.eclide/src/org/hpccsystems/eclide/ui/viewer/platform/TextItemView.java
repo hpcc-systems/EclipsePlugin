@@ -17,10 +17,10 @@ import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.data.Workunit;
 
-public class TextItemView extends PlatformBaseItemView {
+public class TextItemView extends PlatformBaseView {
 	Workunit workunit;
 
-	TextItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit workunit) {
+	TextItemView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit workunit) {
 		super(treeViewer, parent, workunit.getPlatform());
 		this.workunit = workunit; 
 		refreshChildren();

@@ -24,11 +24,11 @@ import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 import org.hpccsystems.internal.data.*;
 
-class PlatformBaseItemView extends ItemView {
+class PlatformBaseView extends ItemView {
 	Platform platform;
 	String clusterName;
 
-	PlatformBaseItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
+	PlatformBaseView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
 		super(treeViewer, parent);
 		this.platform = platform;
 		clusterName = parent != null ? parent.clusterName : "";
@@ -43,9 +43,9 @@ class PlatformBaseItemView extends ItemView {
 	}
 }
 
-class ClusterFolderItemView extends FolderItemView {
+class ClusterFolderView extends FolderItemView {
 
-	ClusterFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
+	ClusterFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 	}
 
@@ -72,148 +72,15 @@ class ClusterFolderItemView extends FolderItemView {
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Cluster c : platform.getClusters())
-			retVal.add(new ClusterItemView(treeViewer, this, platform, c));
+			retVal.add(new ClusterView(treeViewer, this, platform, c));
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class FileSprayWorkunitFolderItemView extends FolderItemView {
-
-	FileSprayWorkunitFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
-		super(treeViewer, parent, platform);
-	}
-
-	@Override
-	public String getText() {
-		return "File Sprays";
-	}
-
-	public URL getWebPageURL() throws MalformedURLException {
-		if (clusterName.isEmpty())
-			return platform.getURL("FileSpray", "GetDFUWorkunits");
-		return platform.getURL("FileSpray", "GetDFUWorkunits", "Cluster=" + clusterName);
-	}
-
-	@Override
-	public void refreshChildren() {
-		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
-		for (FileSprayWorkunit wu : platform.getFileSprayWorkunits(clusterName)) {
-			retVal.add(new FileSprayWorkunitItemView(treeViewer, this, platform, wu));				
-		}
-		Collections.sort(retVal, new WorkunitComparator());
-		children.set(retVal.toArray(new ItemView[0]));
-	}
-}
-
-class FileSprayWorkunitItemView extends PlatformBaseItemView implements Observer {
-	FileSprayWorkunit workunit;
-
-	FileSprayWorkunitItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, FileSprayWorkunit wu) {
-		super(treeViewer, parent, platform);
-		this.workunit = wu;
-		this.workunit.addObserver(this);
-		refreshChildren();
-	}
-
-	@Override
-	public String getText() {
-		return workunit.getID();
-	}
-
-	/*enum DFUstate
-{
-0    DFUstate_unknown,
-1    DFUstate_scheduled,
-2    DFUstate_queued,
-3    DFUstate_started,
-4    DFUstate_aborted,
-5    DFUstate_failed,
-6    DFUstate_finished,
-7    DFUstate_monitoring,
-8    DFUstate_aborting
-9;
-	 */	
-	@Override
-	public Image getImage() {
-		switch(workunit.getStateID()) {
-		case SCHEDULED:
-			return Activator.getImage("icons/workunit_warning.png"); 
-		case SUBMITTED:
-			return Activator.getImage("icons/workunit_submitted.png"); 
-		case RUNNING:
-			return Activator.getImage("icons/workunit_running.png"); 
-		case ABORTING:
-			return Activator.getImage("icons/workunit_aborting.png"); 
-		case BLOCKED:
-			return Activator.getImage("icons/workunit_warning.png"); 
-		case WAIT:
-			return Activator.getImage("icons/workunit_warning.png"); 
-		case COMPILING:
-			return Activator.getImage("icons/workunit_running.png"); 
-		case COMPLETED:
-			return Activator.getImage("icons/workunit_completed.png"); 
-		case FAILED:
-			return Activator.getImage("icons/workunit_failed.png"); 
-		case ABORTED:
-			return Activator.getImage("icons/workunit_failed.png"); 
-		case ARCHIVED:
-			return Activator.getImage("icons/workunit_warning.png"); 
-		case COMPILED:
-			return Activator.getImage("icons/workunit_completed.png"); 
-		}
-		return Activator.getImage("icons/workunit.png"); 
-	}
-
-	//javascript:go('/FileSpray/GetDFUWorkunit?wuid=D20111027-153447')
-	public URL getWebPageURL() throws MalformedURLException {
-		return platform.getURL("FileSpray", "GetDFUWorkunit", "wuid=" + workunit.getID());
-	}
-	
-	@Override
-	public void refreshChildren() {
-		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
-		ItemView parent = getParent();
-		while (parent != null) {
-			if (parent instanceof FileSprayWorkunitItemView)
-				if (workunit == ((FileSprayWorkunitItemView)parent).workunit) {
-					retVal.add(new RecursiveItemView(treeViewer, this));				
-					break;
-				}
-			parent = parent.getParent();
-		}
-		if (retVal.isEmpty()) {
-			LogicalFile lf = workunit.getLogicalFile();
-			String filePath = workunit.getFilePath();
-			if (workunit.isDespray()) {
-				if (lf != null)
-					retVal.add(new LogicalFileItemView(treeViewer, this, platform, lf));
-				if (filePath != null)
-					retVal.add(new LandingZoneFileItemView(treeViewer, this, platform, filePath));
-			} else {
-				if (filePath != null)
-					retVal.add(new LandingZoneFileItemView(treeViewer, this, platform, filePath));
-				if (lf != null)
-					retVal.add(new LogicalFileItemView(treeViewer, this, platform, lf));
-			}
-		}
-		children.set(retVal.toArray(new ItemView[0]));
-	}
-
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		if (arg1 instanceof Workunit.Notification) {
-			switch ((FileSprayWorkunit.Notification)arg1){
-			case LOGICALFILEWORKUNIT:
-				update(null);
-			}
-		}
-	}
-}
-
-class ClusterItemView extends PlatformBaseItemView {
+class ClusterView extends PlatformBaseView {
 	Cluster cluster;
 
-	ClusterItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, Cluster cluster) {
+	ClusterView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, Cluster cluster) {
 		super(treeViewer, parent, platform);
 		this.cluster = cluster;
 		this.clusterName = cluster.getName();
@@ -238,16 +105,86 @@ class ClusterItemView extends PlatformBaseItemView {
 	@Override
 	public void refreshChildren() {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
-		retVal.add(new WorkunitFolderItemView(treeViewer, this, platform));
-		retVal.add(new FileSprayWorkunitFolderItemView(treeViewer, this, platform));
-		retVal.add(new LogicalFileFolderItemView(treeViewer, this, platform));
+		retVal.add(new WorkunitFolderView(treeViewer, this, platform));
+		retVal.add(new FileSprayWorkunitFolderView(treeViewer, this, platform));
+		retVal.add(new LogicalFileFolderView(treeViewer, this, platform));
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class QuerySetFolderItemView extends FolderItemView {
+class DropZoneFolderView extends FolderItemView {
 
-	QuerySetFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
+	DropZoneFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
+		super(treeViewer, parent, platform);
+	}
+
+	@Override
+	public String getText() {
+		return "Drop Zones";
+	}
+	
+	@Override
+	public boolean hasChildren() {
+		return super.hasChildren();
+	}
+
+	@Override
+	public Object[] getChildren() {
+		return super.getChildren();
+	}
+
+	//  http://192.168.2.68:8010/FileSpray/DropZoneFiles?ver_=1.03
+	public URL getWebPageURL() throws MalformedURLException {
+		return platform.getURL("FileSpray", "DropZoneFiles");
+	}
+
+	@Override
+	public void refreshChildren() {
+		ArrayList<Object> retVal = new ArrayList<Object>();
+		for (DropZone dz : platform.getDropZones()) {
+			retVal.add(new DropZoneView(treeViewer, this, platform, dz));
+		}
+		children.set(retVal.toArray(new ItemView[0]));
+	}
+}
+
+class DropZoneView extends PlatformBaseView {
+	DropZone dropZone;
+
+	DropZoneView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, DropZone dropZone) {
+		super(treeViewer, parent, platform);
+		this.dropZone = dropZone;
+		refreshChildren();
+	}
+
+	@Override
+	public String getText() {
+		return dropZone.getName();
+	}
+
+	@Override
+	public Image getImage() {
+		return Activator.getImage("icons/cluster.png"); 
+	}
+
+	public URL getWebPageURL() throws MalformedURLException {
+		//http://192.168.2.68:8010/FileSpray/FileList?Netaddr=192.168.2.68&OS=1&Path=/var/lib/HPCCSystems/mydropzone
+		return platform.getURL("FileSpray", "FileList", "Netaddr=" + dropZone.getIP() + "&OS=" + dropZone.getOS() + "&Path=" + dropZone.getDirectory());
+	}
+
+	@Override
+	public void refreshChildren() {
+		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
+//		retVal.add(new WorkunitFolderView(treeViewer, this, platform));
+//		retVal.add(new FileSprayWorkunitFolderView(treeViewer, this, platform));
+//		retVal.add(new LogicalFileFolderView(treeViewer, this, platform));
+		children.set(retVal.toArray(new ItemView[0]));
+	}
+}
+
+class QuerySetFolderView extends FolderItemView {
+
+	QuerySetFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 	}
 
@@ -265,16 +202,16 @@ class QuerySetFolderItemView extends FolderItemView {
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (DataQuerySet qs : platform.getDataQuerySets()) {
-			retVal.add(new DataQuerySetItemView(treeViewer, this, platform, qs));				
+			retVal.add(new DataQuerySetView(treeViewer, this, platform, qs));				
 		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class DataQuerySetItemView extends PlatformBaseItemView {
+class DataQuerySetView extends PlatformBaseView {
 	DataQuerySet querySet;
 
-	DataQuerySetItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, DataQuerySet querySet) {
+	DataQuerySetView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, DataQuerySet querySet) {
 		super(treeViewer, parent, platform);
 		this.querySet = querySet; 
 	}
@@ -299,8 +236,8 @@ class DataQuerySetItemView extends PlatformBaseItemView {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof DataQuerySetItemView)
-				if (querySet == ((DataQuerySetItemView)parent).querySet) {
+			if (parent instanceof DataQuerySetView)
+				if (querySet == ((DataQuerySetView)parent).querySet) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
@@ -318,9 +255,9 @@ class DataQuerySetItemView extends PlatformBaseItemView {
 	}
 }
 
-class LogicalFileFolderItemView extends FolderItemView {
+class LogicalFileFolderView extends FolderItemView {
 
-	LogicalFileFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform) {
+	LogicalFileFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 	}
 
@@ -340,16 +277,16 @@ class LogicalFileFolderItemView extends FolderItemView {
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile lf : platform.getLogicalFiles(clusterName)) {
-			retVal.add(new LogicalFileItemView(treeViewer, this, platform, lf));				
+			retVal.add(new LogicalFileView(treeViewer, this, platform, lf));				
 		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class WorkunitLogicalFileFolderItemView extends FolderItemView implements Observer {
+class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 	Workunit workunit;
 
-	WorkunitLogicalFileFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit wu) {
+	WorkunitLogicalFileFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
@@ -369,7 +306,7 @@ class WorkunitLogicalFileFolderItemView extends FolderItemView implements Observ
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for (LogicalFile file : workunit.getSourceFiles()) {
-			retVal.add(new LogicalFileItemView(treeViewer, this, platform, file));
+			retVal.add(new LogicalFileView(treeViewer, this, platform, file));
 		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
@@ -385,10 +322,10 @@ class WorkunitLogicalFileFolderItemView extends FolderItemView implements Observ
 	}
 }
 
-class LogicalFileItemView extends PlatformBaseItemView {
+class LogicalFileView extends PlatformBaseView {
 	LogicalFile file;
 
-	LogicalFileItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, LogicalFile file) {
+	LogicalFileView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, LogicalFile file) {
 		super(treeViewer, parent, platform);
 		this.file = file; 
 	}
@@ -413,8 +350,8 @@ class LogicalFileItemView extends PlatformBaseItemView {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof LogicalFileItemView)
-				if (file == ((LogicalFileItemView)parent).file) {
+			if (parent instanceof LogicalFileView)
+				if (file == ((LogicalFileView)parent).file) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
@@ -422,24 +359,24 @@ class LogicalFileItemView extends PlatformBaseItemView {
 		}
 
 		if (retVal.isEmpty()) {
-			retVal.add(new LogicalFileContentsItemView(treeViewer, this, platform, file));
+			retVal.add(new LogicalFileContentsView(treeViewer, this, platform, file));
 			Workunit wu = file.getWorkunit();
 			if (wu != null) {
-				retVal.add(new WorkunitItemView(treeViewer, this, wu));				
+				retVal.add(new WorkunitView(treeViewer, this, wu));				
 			}
 			FileSprayWorkunit fswu = file.getFileSprayWorkunit();
 			if (fswu != null) {
-				retVal.add(new FileSprayWorkunitItemView(treeViewer, this, platform, fswu));				
+				retVal.add(new FileSprayWorkunitView(treeViewer, this, fswu));				
 			}
 		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
 
-class LogicalFileContentsItemView extends PlatformBaseItemView {
+class LogicalFileContentsView extends PlatformBaseView {
 	LogicalFile file;
 
-	LogicalFileContentsItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, LogicalFile file) {
+	LogicalFileContentsView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, LogicalFile file) {
 		super(treeViewer, parent, platform);
 		this.file = file; 
 		refreshChildren();
@@ -460,10 +397,10 @@ class LogicalFileContentsItemView extends PlatformBaseItemView {
 	}
 }
 
-class LandingZoneFileItemView extends PlatformBaseItemView {
+class LandingZoneFileView extends PlatformBaseView {
 	String path;
 
-	LandingZoneFileItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, String path) {
+	LandingZoneFileView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, String path) {
 		super(treeViewer, parent, platform);
 		this.path = path; 
 		refreshChildren();
@@ -480,10 +417,10 @@ class LandingZoneFileItemView extends PlatformBaseItemView {
 	}
 }
 
-class ResultFolderItemView extends FolderItemView implements Observer {
+class ResultFolderView extends FolderItemView implements Observer {
 	Workunit workunit;
 
-	ResultFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit wu) {
+	ResultFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
@@ -502,7 +439,7 @@ class ResultFolderItemView extends FolderItemView implements Observer {
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Result r : workunit.getResults())
-			retVal.add(new ResultItemView(treeViewer, this, platform, r));
+			retVal.add(new ResultView(treeViewer, this, platform, r));
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 	
@@ -517,10 +454,10 @@ class ResultFolderItemView extends FolderItemView implements Observer {
 	}
 }
 
-class ResultItemView extends PlatformBaseItemView implements Observer {
+class ResultView extends PlatformBaseView implements Observer {
 	Result result;
 
-	ResultItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, Result result) {
+	ResultView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, Result result) {
 		super(treeViewer, parent, platform);
 		this.result = result; 
 		this.result.addObserver(this);
@@ -552,7 +489,7 @@ class ResultItemView extends PlatformBaseItemView implements Observer {
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(String s : result.getResultViews())
-			retVal.add(new ResultViewItemView(treeViewer, this, platform, result, s));
+			retVal.add(new ResultViewView(treeViewer, this, platform, result, s));
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 
@@ -562,11 +499,11 @@ class ResultItemView extends PlatformBaseItemView implements Observer {
 	}
 }
 
-class ResultViewItemView extends PlatformBaseItemView {
+class ResultViewView extends PlatformBaseView {
 	Result result;
 	String viewName;
 
-	ResultViewItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, Result result, String viewName) {
+	ResultViewView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, Result result, String viewName) {
 		super(treeViewer, parent, platform);
 		this.result = result; 
 		this.viewName = viewName;
@@ -588,10 +525,10 @@ class ResultViewItemView extends PlatformBaseItemView {
 	}
 }
 
-class GraphFolderItemView extends FolderItemView implements Observer  {
+class GraphFolderView extends FolderItemView implements Observer  {
 	Workunit workunit;
 
-	GraphFolderItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit wu) {
+	GraphFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
@@ -610,7 +547,7 @@ class GraphFolderItemView extends FolderItemView implements Observer  {
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		for(Graph g : workunit.getGraphs())
-			retVal.add(new GraphItemView(treeViewer, this, platform, g));
+			retVal.add(new GraphView(treeViewer, this, platform, g));
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 	
@@ -625,10 +562,10 @@ class GraphFolderItemView extends FolderItemView implements Observer  {
 	}
 }
 
-class GraphItemView extends PlatformBaseItemView implements Observer {
+class GraphView extends PlatformBaseView implements Observer {
 	Graph graph;
 
-	GraphItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Platform platform, Graph graph) {
+	GraphView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, Graph graph) {
 		super(treeViewer, parent, platform);
 		this.graph = graph; 
 		this.graph.addObserver(this);
@@ -682,12 +619,5 @@ class RecursiveItemView extends MessageItemView {
 
 	RecursiveItemView(TreeItemOwner treeViewer, ItemView parent) {
 		super(treeViewer, parent, "...recursive expansion...");
-	}
-}
-
-class LoadingItemView extends MessageItemView {
-
-	LoadingItemView(TreeItemOwner treeViewer, ItemView parent) {
-		super(treeViewer, parent, "...loading...");
 	}
 }

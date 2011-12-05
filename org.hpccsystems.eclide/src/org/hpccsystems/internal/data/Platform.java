@@ -14,9 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import javax.xml.rpc.ServiceException;
 
@@ -39,6 +37,10 @@ import org.hpccsystems.ws.wsdfu.DFUQueryRequest;
 import org.hpccsystems.ws.wsdfu.DFUQueryResponse;
 import org.hpccsystems.ws.wsdfu.WsDfuLocator;
 import org.hpccsystems.ws.wsdfu.WsDfuServiceSoap;
+import org.hpccsystems.ws.wstopology.TpDropZone;
+import org.hpccsystems.ws.wstopology.TpServiceQueryRequest;
+import org.hpccsystems.ws.wstopology.TpServiceQueryResponse;
+import org.hpccsystems.ws.wstopology.TpServices;
 import org.hpccsystems.ws.wstopology.TpTargetCluster;
 import org.hpccsystems.ws.wstopology.TpTargetClusterQueryRequest;
 import org.hpccsystems.ws.wstopology.TpTargetClusterQueryResponse;
@@ -61,24 +63,18 @@ import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 public class Platform extends DataSingleton {
-	private static Map<Integer, Platform> Platforms = new HashMap<Integer, Platform>();
-	public static synchronized Platform get(String ip) {
-		Platform platform = new Platform(ip);
-		if (Platforms.containsKey(platform.hashCode())) {
-			return Platforms.get(platform.hashCode());
-		}
-		else {
-			Platforms.put(platform.hashCode(), platform);
-		}
-		return platform;
+	public static DataSingletonCollection All = new DataSingletonCollection();	
+	public static Platform get(String ip) {
+		if (ip == null || ip.isEmpty())
+			return null;
+		
+		return (Platform)All.get(new Platform(ip));
 	}
-	
-	public static synchronized Platform getNoCreate(String ip) {
-		Platform platform = new Platform(ip);
-		if (Platforms.containsKey(platform.hashCode())) {
-			return Platforms.get(platform.hashCode());
-		}
-		return null;
+	public static Platform getNoCreate(String ip) {
+		if (ip == null || ip.isEmpty())
+			return null;
+		
+		return (Platform)All.getNoCreate(new Platform(ip));
 	}
 	
 	public static final String P_ENABLED = "enabledConfig";
@@ -93,11 +89,14 @@ public class Platform extends DataSingleton {
 	private String user;
 	private String password;
 	private Collection<Cluster> clusters;
+	private Collection<DropZone> dropZones;
 	private Collection<Workunit> workunits;	
 	private Collection<FileSprayWorkunit> fileSprayWorkunits;
 	private Collection<DataQuerySet> dataQuerySets;
 	private Collection<LogicalFile> logicalFiles;
-
+	
+	static int LATENCY_TEST = 0;
+	
 	Platform(String ip) {
 		this.ip = ip;
 		this.isEnabled = false;
@@ -105,6 +104,7 @@ public class Platform extends DataSingleton {
 		this.user = "";
 		this.password = "";
 		this.clusters = new HashSet<Cluster>();
+		this.dropZones = new HashSet<DropZone>();
 		this.workunits = new HashSet<Workunit>();	
 		this.fileSprayWorkunits = new HashSet<FileSprayWorkunit>();
 		this.dataQuerySets = new HashSet<DataQuerySet>();
@@ -232,7 +232,7 @@ public class Platform extends DataSingleton {
 
 	//  Workunit  ---
 	public Workunit getWorkunit(String wuid) {
-		return Workunit.All.get(this, wuid);
+		return Workunit.get(this, wuid);
 	}
 
 	public Workunit getWorkunit(ECLWorkunit wu) {
@@ -264,7 +264,7 @@ public class Platform extends DataSingleton {
 		return new HashSet<Workunit>(workunits);
 	}
 
-	Collection<Workunit> getWorkunits(String cluster) {
+	public Collection<Workunit> getWorkunits(String cluster) {
 		return getWorkunits(cluster, "", "");
 	}
 
@@ -288,7 +288,7 @@ public class Platform extends DataSingleton {
 
 	public FileSprayWorkunit getFileSprayWorkunit(DFUWorkunit wu) {
 		FileSprayWorkunit workunit = getFileSprayWorkunit(wu.getID());
-		workunit.Update(wu);
+		workunit.update(wu);
 		return workunit;
 	}
 
@@ -455,7 +455,53 @@ public class Platform extends DataSingleton {
 			}
 		}
 	}
+	
+	//  Drop Zones  ---
+	public DropZone getDropZone(String name) {
+		return DropZone.get(this, name);
+	}
 
+	public DropZone getDropZone(TpDropZone dz) {
+		DropZone dropZone = getDropZone(dz.getName());
+		dropZone.update(dz);
+		return dropZone;
+	}
+
+	public DropZone[] getDropZones() {
+		if (isEnabled()) {
+			//TODO CollectionDelta monitor = new CollectionDelta("getClusters", clusters);
+			WsTopologyServiceSoap service = getWsTopologyService();
+			TpServiceQueryRequest request = new TpServiceQueryRequest();
+			request.setType("ALLSERVICES");
+			try {
+				TpServiceQueryResponse response = service.tpServiceQuery(request);
+				updateServices(response.getServiceList());
+			} catch (ArrayOfEspException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//TODO notifyObservers(monitor.calcChanges(clusters));
+		}
+		return dropZones.toArray(new DropZone[0]);
+	}
+
+	private void updateServices(TpServices serviceList) {
+		if (serviceList != null) {
+			updateDropZones(serviceList.getTpDropZones());
+		}
+		
+	}
+	private void updateDropZones(TpDropZone[] rawDropZones) {
+		if (rawDropZones != null) {
+			for(TpDropZone dz : rawDropZones) {
+				dropZones.add(getDropZone(dz));
+			}
+		}
+	}
+	
 	//  SOAP Stub Helpers  ---
 	public URL getURL() throws MalformedURLException {
 		return getURL("");
@@ -477,8 +523,18 @@ public class Platform extends DataSingleton {
 		stub.setUsername(getUser());
 		stub.setPassword(getPassword());
 	}
+	
+	void latencyTest() {
+		try {
+			Thread.sleep(LATENCY_TEST);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public WsWorkunitsServiceSoap getWsWorkunitsService() {
+		latencyTest();
 		WsWorkunitsLocator locator = new WsWorkunitsLocator();
 		try {
 			WsWorkunitsServiceSoap service = locator.getWsWorkunitsServiceSoap(getURL("WsWorkunits"));
@@ -495,6 +551,7 @@ public class Platform extends DataSingleton {
 	}
 
 	public WsDfuServiceSoap getWsDfuService() {
+		latencyTest();
 		WsDfuLocator locator = new WsDfuLocator();
 		try {
 			WsDfuServiceSoap service = locator.getWsDfuServiceSoap(getURL("WsDfu"));
@@ -511,6 +568,7 @@ public class Platform extends DataSingleton {
 	}
 
 	public FileSprayServiceSoap getFileSprayService() {
+		latencyTest();
 		FileSprayLocator locator = new FileSprayLocator();
 		try {
 			FileSprayServiceSoap service = locator.getFileSprayServiceSoap(getURL("FileSpray"));
@@ -527,6 +585,7 @@ public class Platform extends DataSingleton {
 	}
 
 	public WsTopologyServiceSoap getWsTopologyService() {
+		latencyTest();
 		WsTopologyLocator locator = new WsTopologyLocator();
 		try {
 			WsTopologyServiceSoap service = locator.getWsTopologyServiceSoap(getURL("WsTopology"));

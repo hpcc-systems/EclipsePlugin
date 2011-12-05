@@ -11,29 +11,21 @@
 package org.hpccsystems.internal.data;
 
 import java.rmi.RemoteException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.hpccsystems.internal.data.Workunit.Notification;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
+import org.hpccsystems.ws.filespray.EspException;
 import org.hpccsystems.ws.filespray.FileSprayServiceSoap;
 import org.hpccsystems.ws.filespray.GetDFUWorkunit;
 import org.hpccsystems.ws.filespray.GetDFUWorkunitResponse;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
-import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 
 public class FileSprayWorkunit extends DataSingleton {
-	private static Map<Integer, FileSprayWorkunit> FileSprayWorkunits = new HashMap<Integer, FileSprayWorkunit>();
-	public static synchronized FileSprayWorkunit get(Platform platform, String id) {
-		FileSprayWorkunit workunit = new FileSprayWorkunit(platform, id);
-		if (FileSprayWorkunits.containsKey(workunit.hashCode())) {
-			return FileSprayWorkunits.get(workunit.hashCode());
-		}
-		else {
-			FileSprayWorkunits.put(workunit.hashCode(), workunit);
-		}
-		return workunit;
+	public static DataSingletonCollection All = new DataSingletonCollection();	
+	public static FileSprayWorkunit get(Platform platform, String wuid) {
+		if (wuid == null || wuid.isEmpty())
+			return null;
+		
+		return (FileSprayWorkunit)All.get(new FileSprayWorkunit(platform, wuid));
 	}
 	
 	private Platform platform;
@@ -49,6 +41,10 @@ public class FileSprayWorkunit extends DataSingleton {
 		setChanged();
 	}
 	
+	public Platform getPlatform() {
+		return platform;
+	}
+
 	public String getID() {
 		return info.getID();
 	}
@@ -64,7 +60,8 @@ public class FileSprayWorkunit extends DataSingleton {
 6    DFUstate_finished,
 7    DFUstate_monitoring,
 8    DFUstate_aborting
-9;
+	
+	WUStateNoLongerOnServer 999
 	 */	
 	public State getStateID() {
 		if (info.getState() != null) {
@@ -77,38 +74,10 @@ public class FileSprayWorkunit extends DataSingleton {
 			case 6:		return State.COMPLETED;
 			case 7:		return State.COMPLETED;
 			case 8:		return State.ABORTING;
+			case 999:	return State.UNKNOWN_ONSERVER;
 			}
 		}
 		return State.UNKNOWN;
-	}
-	@Override
-	boolean isComplete() {
-		return false;
-	}
-
-	@Override
-	void fastRefresh() {
-		fullRefresh();
-	}
-
-	@Override
-	void fullRefresh() {
-		FileSprayServiceSoap service = platform.getFileSprayService();
-		if (service != null) {
-			GetDFUWorkunit request = new GetDFUWorkunit();
-			request.setWuid(info.getID());
-			try {
-				GetDFUWorkunitResponse respsone = service.getDFUWorkunit(request);
-				Update(respsone.getResult());		
-			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		notifyObservers(Notification.LOGICALFILEWORKUNIT);
 	}
 
 	//  Logical Files  ---
@@ -152,20 +121,68 @@ public class FileSprayWorkunit extends DataSingleton {
 		return false;
 	}
 
+	@Override
+	public boolean isComplete() {
+		return StateHelper.isCompleted(getStateID());
+	}
+	
+	public void refreshState() {
+		fullRefresh();
+	}
+
+	@Override
+	void fastRefresh() {
+		fullRefresh();
+	}
+
+	@Override
+	void fullRefresh() {
+		FileSprayServiceSoap service = platform.getFileSprayService();
+		if (service != null) {
+			GetDFUWorkunit request = new GetDFUWorkunit();
+			request.setWuid(info.getID());
+			try {
+				GetDFUWorkunitResponse response = service.getDFUWorkunit(request);
+				if (response.getResult() == null) {	//  Call succeeded, but no response...
+					for (EspException e : response.getExceptions().getException()) {
+						if (e.getCode().equals("20082")) {	//  No longer exists...
+							info.setState(999);	
+							setChanged();
+							notifyObservers(Notification.LOGICALFILEWORKUNIT);
+							break;
+						}
+					}
+				} else {
+					update(response.getResult());		
+				}
+			} catch (ArrayOfEspException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 	//  Updates  ---
-	boolean Update(DFUWorkunit wu) {
+	boolean update(DFUWorkunit wu) {
 		boolean retVal = false;
 		if (wu != null && info.getID().equals(wu.getID()) && !info.equals(wu)) {
-			if (UpdateState(wu))
+			if (updateState(wu)) {
 				retVal = true;
-			if (UpdateLogicalFiles(wu))
+				notifyObservers(Notification.LOGICALFILEWORKUNIT);
+			}
+			if (updateLogicalFiles(wu)) {
 				retVal = true;
+				notifyObservers(Notification.LOGICALFILEWORKUNIT);
+			}
 		}
 		monitor();
 		return retVal;
 	}
 
-	synchronized boolean UpdateState(DFUWorkunit wu) {
+	synchronized boolean updateState(DFUWorkunit wu) {
 		if (wu != null && info.getID().equals(wu.getID()) && 
 				EqualsUtil.hasChanged(info.getState(), wu.getState())) {
 			info.setState(wu.getState());
@@ -175,7 +192,7 @@ public class FileSprayWorkunit extends DataSingleton {
 		return false;
 	}
 	
-	synchronized boolean UpdateLogicalFiles(DFUWorkunit wu) {
+	synchronized boolean updateLogicalFiles(DFUWorkunit wu) {
 		if (wu != null && info.getID().equals(wu.getID()) && (
 					EqualsUtil.hasChanged(info.getSourceLogicalName(), wu.getSourceLogicalName()) ||
 					EqualsUtil.hasChanged(info.getDestLogicalName(), wu.getDestLogicalName()) 

@@ -86,9 +86,6 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 		});
 	}
 	
-	public void refreshChildren() {
-	}
-	
-	public void reloadChildren() {
-	}
+	abstract public void refreshChildren();
+	abstract public void reloadChildren();
 }

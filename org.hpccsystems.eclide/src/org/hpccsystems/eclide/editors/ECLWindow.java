@@ -12,6 +12,8 @@ package org.hpccsystems.eclide.editors;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -38,13 +40,12 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
-import org.hpccsystems.eclide.ui.viewer.platform.WorkunitFolderItemView;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTabItem;
-import org.hpccsystems.eclide.ui.viewer.platform.WorkunitItemView;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitView;
 import org.hpccsystems.internal.data.CollectionDelta;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.DataSingleton;
-import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.DataSingletonCollection;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.ItemView;
@@ -54,25 +55,28 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 	private ECLEditor editor;
 
-	Data data; 
-	LazyChildLoader<ItemView> topItems;
-	LazyChildLoader<WorkunitTabItem> children;
+	Data data;
+	CTabFolder workunitFolder;
+	LazyChildLoader<ItemView> children;
 	
+	Map<WorkunitView, WorkunitTabItem> workunitViewTabMap;
+
 	public ECLWindow() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
-		topItems = new LazyChildLoader<ItemView>();
-		children = new LazyChildLoader<WorkunitTabItem>();
+		this.data = null;
+		this.workunitFolder = null;
+		this.children = new LazyChildLoader<ItemView>();
+		this.workunitViewTabMap = new HashMap<WorkunitView, WorkunitTabItem>();
 	}
 
-	WorkunitTabItem createItem(Control control, WorkunitItemView wuti) {
+	WorkunitTabItem createItem(Control control, WorkunitView wuti) {
 		int index = getPageCount();
 		return createItem(index, control, wuti);
 	}
 
-	WorkunitTabItem createItem(int index, Control control, WorkunitItemView wuti) {
-		CTabFolder folder = (CTabFolder)getContainer();
-		WorkunitTabItem item = new WorkunitTabItem(folder, SWT.NONE, index, wuti);
+	WorkunitTabItem createItem(int index, Control control, WorkunitView wuView) {
+		WorkunitTabItem item = new WorkunitTabItem(workunitFolder, SWT.NONE, index, wuView);
 		return item;
 	}
 	
@@ -92,7 +96,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 	}
 	
-	WorkunitTabItem createWorkunitPage(WorkunitItemView wuti, boolean addToEnd) {
+	WorkunitTabItem createWorkunitPage(WorkunitView wuti, boolean addToEnd) {
 		//  TODO need to do better check than label...
     	boolean found = false;
     	for (int i = 1; i < getPageCount(); ++i) {
@@ -108,103 +112,20 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
     	return null;
 	}
 
-	void primeChildren() {
-		for (final Platform platform : data.getPlatforms()) {
-			platform.deleteObserver(this);
-			
-			WorkunitFolderItemView wuFolder = new WorkunitFolderItemView(this, null, platform);
-			wuFolder.refreshChildren();
-			topItems.add(wuFolder);
-			for (Object o : wuFolder.getChildren()) {
-				if (o instanceof WorkunitItemView) {
-					WorkunitItemView wuti = (WorkunitItemView)o;
-					Workunit w = wuti.getWorkunit();
-					
-					String path = w.getApplicationValue("path");
-					
-				    IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
-				    IFile file = input.getFile();
-				    String path2 = file.getFullPath().toPortableString();
-		
-				    if (path.compareTo(path2) == 0) {
-				    	children.add(createWorkunitPage(wuti, true));
-				    }
-				}
-			}
-			
-			platform.addObserver(this);
-		}
-	}
-	
-	
-	public void reloadChildren() {
-		for (final Platform platform : data.getPlatforms()) {
-			platform.getWorkunits();
-		}
-	}
-
-	Collection<Workunit> getCurrentWorkunits() {
-		Collection<Workunit> retVal = new ArrayList<Workunit>();
-		for (Object item : children.get().clone()) {
-			if (item instanceof WorkunitItemView) {
-				WorkunitItemView ti = (WorkunitItemView)item;
-				retVal.add(ti.getWorkunit());
-			}
-		}
-		return retVal;
-	}
-	
-	boolean mergeChanges(CollectionDelta monitor) {
-		boolean changed = false;
-		for (Object item : children.get().clone()) {
-			if (item instanceof WorkunitTabItem) {
-				WorkunitTabItem ti = (WorkunitTabItem)item;
-
-				//  Remove deleted workunits  --- 
-				if (monitor.removeContains(ti.getWorkunit())) {
-					children.remove(ti);
-					changed = true;
-				}
-			}
-		}
-		
-		//  Add new workunits  ---
-		for (DataSingleton ds : monitor.getAdded()) {
-			if (ds instanceof Workunit) {
-				Workunit w = (Workunit)ds;
-				
-				String path = w.getApplicationValue("path");
-				
-			    IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
-			    IFile file = input.getFile();
-			    String path2 = file.getFullPath().toPortableString();
-	
-			    if (path.compareTo(path2) == 0) {
-					children.add(createWorkunitPage(new WorkunitItemView(this, null, w), true));						
-			    }
-				changed = true;
-			}
-		}
-		
-		//if (changed)
-			//children.sort(new WorkunitComparator());
-
-		return changed;
-	}
-	
-	
-
 	void createWorkunitPages() {
 		data = Data.get();
-		primeChildren();
-		//update(null, new Boolean(true));
+		workunitFolder = (CTabFolder)getContainer(); 		
+		children.start(new Runnable() {
+			public void run() {
+				refreshChildren();
+				refresh();
+			}
+		});
 	}
 
 	protected void createPages() {
 		createEditorPage();
-//		createWorkunitPages();
-//		createPage1();
-//		createPage2();
+		createWorkunitPages();
 	}
 	/**
 	 * The <code>MultiPageEditorPart</code> implementation of this 
@@ -273,17 +194,78 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 							pages[i].closeEditor(editorPart,true);
 						}
 					}
-				}            
+				}
 			});
 		}
 	}
 
+	public void refreshChildren() {
+		Workunit.All.deleteObserver(this);
+			
+		CollectionDelta delta = new CollectionDelta("primeChildren", getCurrentWorkunits());
+		delta.calcChanges(data.getWorkunits(null, "", "", ""));
+		mergeChanges(delta);
+
+		Workunit.All.addObserver(this);
+	}
+	
+	public void reloadChildren() {
+		children.clear();
+		refreshChildren();
+		refresh();
+	}
+
+	Collection<Workunit> getCurrentWorkunits() {
+		Collection<Workunit> retVal = new ArrayList<Workunit>();
+		for (Object item : children.get().clone()) {
+			if (item instanceof WorkunitView) {
+				WorkunitView ti = (WorkunitView)item;
+				retVal.add(ti.getWorkunit());
+			}
+		}
+		return retVal;
+	}
+
+	boolean mergeChanges(CollectionDelta delta) {
+		boolean changed = false;
+		for (Object item : children.get().clone()) {
+			if (item instanceof WorkunitView) {
+				WorkunitView ti = (WorkunitView)item;
+
+				//  Remove deleted workunits  --- 
+				if (delta.removeContains(ti.getWorkunit())) {
+					ti.getWorkunit().refreshState();
+					changed = true;
+				}
+			}
+		}
+		
+		//  Add new workunits  ---
+		IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
+		IFile file = input.getFile();
+		String filePath = file.getFullPath().toPortableString();
+		for (DataSingleton ds : delta.getAdded()) {
+			if (ds instanceof Workunit) {
+				Workunit wu = (Workunit)ds;
+				
+				if (filePath.compareTo(wu.getApplicationValue("path")) == 0) {
+					children.add(new WorkunitView(this, null, wu));
+					changed = true;
+				}
+			}
+		}
+		
+		if (changed)
+			children.sort(new WorkunitComparator());
+
+		return changed;
+	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
-		if (o instanceof Platform) {
+		if (o instanceof DataSingletonCollection) {
 			if (arg instanceof CollectionDelta) {
-				CollectionDelta monitor = (CollectionDelta)arg;
-				if (mergeChanges(monitor)) {
+				if (mergeChanges((CollectionDelta)arg)) {
 					refresh();
 				}
 			}
@@ -304,7 +286,21 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
-		
+		Display.getDefault().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				int pos = 1;
+				for (Object item : children.get().clone()) {
+					if (item instanceof WorkunitView) {
+						WorkunitView wuView = (WorkunitView)item;
+						if (!workunitViewTabMap.containsKey(wuView)) {
+							workunitViewTabMap.put(wuView, new WorkunitTabItem(workunitFolder, SWT.NONE, pos, wuView));
+						}
+						++pos;
+					}
+				}
+			}
+		});
 	}
 }

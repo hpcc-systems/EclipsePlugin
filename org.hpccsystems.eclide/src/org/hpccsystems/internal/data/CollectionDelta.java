@@ -55,8 +55,8 @@ public class CollectionDelta {
 		return cause;
 	}
 
-	public boolean removeContains(Workunit workunit) {
-		return removed.contains(workunit);
+	public boolean removeContains(DataSingleton item) {
+		return removed.contains(item);
 	}
 	
 	public ArrayList<DataSingleton> getAdded() {

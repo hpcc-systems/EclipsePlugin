@@ -293,11 +293,13 @@ public class ECLCompiler {
 		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompileRemote);
 		GetIncludeArgs(cmdArgs);
 
-		IPath manifestPath = file.getLocation().removeLastSegments(1);
-		manifestPath = manifestPath.append("files");
-		manifestPath = manifestPath.append("manifest.xml");
-		if (manifestPath.toFile().exists())
-			cmdArgs.Append("manifest=", manifestPath.toOSString());
+		if (!argsCompileRemote.contains("manifest=")) {
+			IPath manifestPath = file.getLocation().removeLastSegments(1);
+			manifestPath = manifestPath.append("files");
+			manifestPath = manifestPath.append("manifest.xml");
+			if (manifestPath.toFile().exists())
+				cmdArgs.Append("manifest=", manifestPath.toOSString());
+		}
 
 		hasError = false;
 		BasicHandler handler = new SyntaxHandler();

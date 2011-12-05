@@ -13,24 +13,21 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
-public class WorkunitItemView extends PlatformBaseItemView implements Observer {
+public class WorkunitView extends PlatformBaseView implements Observer {
 	Workunit workunit;
 
-	public WorkunitItemView(TreeItemOwner treeViewer, PlatformBaseItemView parent, Workunit wu) {
+	public WorkunitView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
 		this.workunit = wu;
 		this.workunit.addObserver(this);
@@ -75,12 +72,13 @@ public class WorkunitItemView extends PlatformBaseItemView implements Observer {
 		case COMPILED:
 			return Activator.getImage("icons/workunit_completed.png"); 
 		case UNKNOWN_ONSERVER:
-			return Activator.getImage("icons/workunit_failed.png"); 
+			return Activator.getImage("icons/workunit_deleted.png"); 
 		}
 		return Activator.getImage("icons/workunit.png"); 
 	}
 
-	public Color getBackground() {
+	@Override
+	public Color getForeground() {
 		switch (workunit.getStateID()) {
 		case UNKNOWN_ONSERVER:
 			return Display.getDefault().getSystemColor(SWT.COLOR_RED);
@@ -88,6 +86,7 @@ public class WorkunitItemView extends PlatformBaseItemView implements Observer {
 		return null;
 	}
 	
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
@@ -102,17 +101,17 @@ public class WorkunitItemView extends PlatformBaseItemView implements Observer {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof WorkunitItemView)
-				if (workunit == ((WorkunitItemView)parent).workunit) {
+			if (parent instanceof WorkunitView)
+				if (workunit == ((WorkunitView)parent).workunit) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
 			parent = parent.getParent();
 		}
 		if (retVal.isEmpty()) {
-			retVal.add(new ResultFolderItemView(treeViewer, this, workunit));
-			retVal.add(new GraphFolderItemView(treeViewer, this, workunit));
-			retVal.add(new WorkunitLogicalFileFolderItemView(treeViewer, this, workunit));
+			retVal.add(new ResultFolderView(treeViewer, this, workunit));
+			retVal.add(new GraphFolderView(treeViewer, this, workunit));
+			retVal.add(new WorkunitLogicalFileFolderView(treeViewer, this, workunit));
 			retVal.add(new TextItemView(treeViewer, this, workunit));
 		}
 		children.set(retVal.toArray(new ItemView[0]));
