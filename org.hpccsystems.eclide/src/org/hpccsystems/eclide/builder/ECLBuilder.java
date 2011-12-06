@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ECLBuilder extends IncrementalProjectBuilder {
+
 	class ECLDeltaVisitor implements IResourceDeltaVisitor {
 		private IProgressMonitor monitor;
 		
@@ -103,6 +104,8 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			checkedFiles.add(file);
 			monitor.subTask(file.getName());
 			ECLCompiler compiler = new ECLCompiler(getProject());
+			//compiler.refreshMeta(file);			
+
 			RelationshipHelper rhelper = new RelationshipHelper(file);
 			try {
 				compiler.checkSyntax(file);
@@ -121,6 +124,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	}
 
 	protected void fullBuild(final IProgressMonitor monitor) throws CoreException {
+		ECLMeta.get().clear();
 		getProject().accept(new ECLResourceVisitor(monitor));
 	}
 

@@ -123,16 +123,6 @@ class DropZoneFolderView extends FolderItemView {
 		return "Drop Zones";
 	}
 	
-	@Override
-	public boolean hasChildren() {
-		return super.hasChildren();
-	}
-
-	@Override
-	public Object[] getChildren() {
-		return super.getChildren();
-	}
-
 	//  http://192.168.2.68:8010/FileSpray/DropZoneFiles?ver_=1.03
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("FileSpray", "DropZoneFiles");
@@ -175,9 +165,9 @@ class DropZoneView extends PlatformBaseView {
 	@Override
 	public void refreshChildren() {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
-//		retVal.add(new WorkunitFolderView(treeViewer, this, platform));
-//		retVal.add(new FileSprayWorkunitFolderView(treeViewer, this, platform));
-//		retVal.add(new LogicalFileFolderView(treeViewer, this, platform));
+		for (LogicalFile lf : dropZone.getFiles()) {
+			retVal.add(new LogicalFileView(treeViewer, this, platform, lf));
+		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }

@@ -11,11 +11,18 @@
 package org.hpccsystems.eclide.editors;
 
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
+import org.eclipse.jface.text.quickassist.IQuickAssistAssistant;
+import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.hpccsystems.eclide.text.ECLPartitionScanner;
@@ -25,6 +32,41 @@ import org.hpccsystems.eclide.text.IECLColorConstants;
 import org.hpccsystems.eclide.text.NonRuleBasedDamagerRepairer;
 
 public class ECLConfiguration extends TextSourceViewerConfiguration {
+
+	@Override
+	public int[] getConfiguredTextHoverStateMasks(ISourceViewer sourceViewer, String contentType) {
+		// TODO Auto-generated method stub
+		return super.getConfiguredTextHoverStateMasks(sourceViewer, contentType);
+	}
+
+	@Override
+	public IContentAssistant getContentAssistant(ISourceViewer sv) {
+        ContentAssistant ca = new ContentAssistant();
+        IContentAssistProcessor cap = new ECLCompletionProcessor();
+        ca.setContentAssistProcessor(cap, IDocument.DEFAULT_CONTENT_TYPE);
+        ca.setInformationControlCreator(getInformationControlCreator(sv));
+        return ca;
+     }
+	@Override
+	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
+		//if (contentType.equals(ECLPartitionScanner.ECL_BODY)) {
+			return new ECLTextHover(sourceViewer, contentType);
+		//}
+		//return super.getTextHover(sourceViewer, contentType);
+	}
+
+	@Override
+	public IReconciler getReconciler(ISourceViewer sourceViewer) {
+		// TODO Auto-generated method stub
+		return super.getReconciler(sourceViewer);
+	}
+
+	@Override
+	public IQuickAssistAssistant getQuickAssistAssistant(ISourceViewer sourceViewer) {
+		// TODO Auto-generated method stub
+		return super.getQuickAssistAssistant(sourceViewer);
+	}
+
 	//private ECLDoubleClickStrategy doubleClickStrategy;
 	private ECLTagScanner tagScanner;
 	private ECLScanner scanner;
@@ -51,10 +93,10 @@ public class ECLConfiguration extends TextSourceViewerConfiguration {
 //		return doubleClickStrategy;
 //	}
 
-//	@Override
-//	public IAnnotationHover getAnnotationHover(ISourceViewer sourceViewer) {
-//		return new DefaultAnnotationHover();//sourceViewer);
-//	}
+	@Override
+	public IAnnotationHover getAnnotationHover(ISourceViewer sourceViewer) {
+		return super.getAnnotationHover(sourceViewer);
+	}
 	
 	protected ECLScanner getECLScanner() {
 		if (scanner == null) {

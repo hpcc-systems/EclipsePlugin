@@ -156,10 +156,10 @@
             nameFilter="*"
             objectClass="org.eclipse.core.resources.IProject">
          <action
-               class="org.hpccsystems.eclide.builder.ToggleNatureAction"
+               class="org.hpccsystems.eclide.builder.ECLProjectAction"
                enablesFor="+"
                id="org.hpccsystems.eclide.addRemoveNatureAction"
-               label="%action.label.0"
+               label="%action.label"
                menubarPath="additions">
          </action>
       </objectContribution>

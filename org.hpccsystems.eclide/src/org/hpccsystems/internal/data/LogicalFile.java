@@ -14,6 +14,7 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hpccsystems.ws.filespray.PhysicalFileStruct;
 import org.hpccsystems.ws.wsdfu.DFUFileDetail;
 import org.hpccsystems.ws.wsdfu.DFUInfoRequest;
 import org.hpccsystems.ws.wsdfu.DFUInfoResponse;
@@ -39,6 +40,7 @@ public class LogicalFile extends DataSingleton {
 	private DFULogicalFile info;
 	private DFUFileDetail info2;
 	private ECLSourceFile info3;
+	private PhysicalFileStruct info4;
 	public enum Notification {
 		LOGICALFILE
 	}
@@ -51,6 +53,8 @@ public class LogicalFile extends DataSingleton {
 		info2.setName(name);
 		info3 = new ECLSourceFile();
 		info3.setName(name);
+		info4 = new PhysicalFileStruct();
+		info4.setName(name);
 	}
 	
 	public String getName() {
@@ -116,7 +120,7 @@ public class LogicalFile extends DataSingleton {
 	}
 
 	void Update(DFUFileDetail fd) {
-		if (info2.getName().equals(fd.getName()))
+		if (fd != null && info2.getName().equals(fd.getName()))
 			info2 = fd;
 	}
 	
@@ -125,6 +129,11 @@ public class LogicalFile extends DataSingleton {
 			info3 = sf;
 	}
 
+	public void Update(PhysicalFileStruct fileStruct) {
+		if (info4.getName().equals(fileStruct.getName()))
+			info4 = fileStruct;
+	}
+	
 	@Override 
 	public boolean equals(Object aThat) {
 		if ( (Object)this == aThat ) 

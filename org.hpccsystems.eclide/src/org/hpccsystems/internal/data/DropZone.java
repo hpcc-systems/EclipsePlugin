@@ -11,21 +11,14 @@
 package org.hpccsystems.internal.data;
 
 import java.rmi.RemoteException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.hpccsystems.ws.filespray.FileListRequest;
 import org.hpccsystems.ws.filespray.FileListResponse;
 import org.hpccsystems.ws.filespray.FileSprayServiceSoap;
 import org.hpccsystems.ws.filespray.PhysicalFileStruct;
-import org.hpccsystems.ws.wstopology.TpClusterInfoRequest;
-import org.hpccsystems.ws.wstopology.TpClusterInfoResponse;
 import org.hpccsystems.ws.wstopology.TpDropZone;
-import org.hpccsystems.ws.wstopology.TpServiceQueryRequest;
-import org.hpccsystems.ws.wstopology.TpServiceQueryResponse;
-import org.hpccsystems.ws.wstopology.TpServices;
-import org.hpccsystems.ws.wstopology.TpTargetCluster;
-import org.hpccsystems.ws.wstopology.WsTopologyServiceSoap;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 
 public class DropZone extends DataSingleton  {
@@ -39,11 +32,13 @@ public class DropZone extends DataSingleton  {
 
 	private Platform platform;
 	private TpDropZone info;
+	private Collection<LogicalFile> files;
 	
 	DropZone(Platform platform, String name) {
 		this.platform = platform;
-		info = new TpDropZone();
-		info.setName(name);
+		this.info = new TpDropZone();
+		this.info.setName(name);
+		this.files = new HashSet<LogicalFile>(); 		
 	}
 	
 	public String getName() {
@@ -73,50 +68,23 @@ public class DropZone extends DataSingleton  {
 		}
 		return null;
 	}
-
 	
-	//  Drop Zones  ---
-//	public DropZone getFile(String name) {
-//		return DropZone.get(this, name);
-//	}
-//
-//	public DropZone getDropZone(TpDropZone dz) {
-//		DropZone dropZone = getDropZone(dz.getName());
-//		dropZone.update(dz);
-//		return dropZone;
-//	}
-//
-	public Object[] getFiles() {
-		if (platform.isEnabled()) {
-			//TODO CollectionDelta monitor = new CollectionDelta("getClusters", clusters);
-			FileSprayServiceSoap service = platform.getFileSprayService();
-			FileListRequest request = new FileListRequest();
-			request.setNetaddr(getIP());
-			request.setOS(getOS());
-			request.setPath(getDirectory());
-			try {
-				FileListResponse response = service.fileList(request);
-				updatePhysicalFileStruct(response.getFiles());
-			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			//TODO notifyObservers(monitor.calcChanges(clusters));
-		}
-		return null;//dropZones.toArray(new DropZone[0]);
+	//  Files  ---
+	synchronized LogicalFile getFile(String name) {
+		return LogicalFile.get(platform, name);
 	}
 
-	private void updatePhysicalFileStruct(PhysicalFileStruct[] files) {
-		if (files != null) {
-			for(PhysicalFileStruct f : files) {
-				//dropZones.add(getDropZone(dz));
-			}
-		}
+	LogicalFile getFile(PhysicalFileStruct fileStruct) {
+		LogicalFile file = getFile(fileStruct.getName());
+		file.Update(fileStruct);
+		return file;
 	}
-	
+
+	public LogicalFile[] getFiles() {
+		fullRefresh();
+		return files.toArray(new LogicalFile[0]);
+	}
+
 	@Override
 	boolean isComplete() {
 		return true;
@@ -124,10 +92,28 @@ public class DropZone extends DataSingleton  {
 
 	@Override
 	void fastRefresh() {
+		fullRefresh();
 	}
 
 	@Override
 	void fullRefresh() {
+		FileSprayServiceSoap service = platform.getFileSprayService();
+		if (service != null) {
+			FileListRequest request = new FileListRequest();
+			request.setNetaddr(getIP());
+			request.setOS(getOS());
+			request.setPath(getDirectory());
+			try {
+				FileListResponse response = service.fileList(request);
+				update(response.getFiles());
+			} catch (ArrayOfEspException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	void update(TpDropZone dz) {
@@ -137,6 +123,16 @@ public class DropZone extends DataSingleton  {
 		}
 	}
 
+	synchronized boolean update(PhysicalFileStruct[] rawFileStructs) {
+		if (rawFileStructs != null) {
+			files.clear();
+			for(PhysicalFileStruct file : rawFileStructs) {
+				files.add(getFile(file));	//  Will mark changed if needed  ---
+			}
+		}
+		return false;
+	}
+	
 	@Override 
 	public boolean equals(Object aThat) {
 		if ( (Object)this == aThat ) 

@@ -308,6 +308,21 @@ public class ECLCompiler {
 		return handler.sbOut.toString();
 	}
 
+	public String getMeta(IFile file) {
+		if (!HasCompiler()) {
+			eclccConsoleWriter.println(noCompiler);
+			return "";
+		}
+
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "-M");
+		GetIncludeArgs(cmdArgs);
+
+		BasicHandler handler = new BasicHandler();
+		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+		process.exec(cmdArgs, file, false);
+		return handler.sbOut.toString();
+	}
+
 	public String buildAndRun(IFile file) {
 		Eclipse.deleteMarkers(file);
 
@@ -328,5 +343,9 @@ public class ECLCompiler {
 			process.exec(exePath.toOSString(), argsWULocal);
 		}
 		return "";
+	}
+
+	public void refreshMeta(IFile file) {
+		ECLMeta.get().append(getMeta(file));
 	}
 }
