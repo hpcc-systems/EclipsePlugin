@@ -44,7 +44,7 @@ public class ECLProjectAction implements IObjectActionDelegate {
 				}
 				
 				if (project != null) {
-					addNature(project);
+					setNature(project);
 				}
 			}
 		}
@@ -75,6 +75,17 @@ public class ECLProjectAction implements IObjectActionDelegate {
 	 * @param project
 	 *            to have ECL nature added or removed
 	 */
+	private void setNature(IProject project) {
+		try {
+			IProjectDescription description = project.getDescription();
+			String[] newNatures = new String[1];
+			newNatures[0] = ECLNature.NATURE_ID;
+			description.setNatureIds(newNatures);
+			project.setDescription(description, null);
+		} catch (CoreException e) {
+		}
+	}
+
 	private void addNature(IProject project) {
 		try {
 			IProjectDescription description = project.getDescription();

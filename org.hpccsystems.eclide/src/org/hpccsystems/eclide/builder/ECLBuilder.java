@@ -26,9 +26,10 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
+import org.hpccsystems.eclide.builder.meta.ECLMetaData;
 
 public class ECLBuilder extends IncrementalProjectBuilder {
-
 	class ECLDeltaVisitor implements IResourceDeltaVisitor {
 		private IProgressMonitor monitor;
 		
@@ -92,6 +93,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 				incrementalBuild(delta, monitor);
 			}
 		}
+		ECLGlobalMeta.save();
 		return null;
 	}
 
@@ -104,7 +106,8 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			checkedFiles.add(file);
 			monitor.subTask(file.getName());
 			ECLCompiler compiler = new ECLCompiler(getProject());
-			compiler.refreshMeta(file);			
+
+			ECLGlobalMeta.parse(compiler.getMeta(file));
 
 			RelationshipHelper rhelper = new RelationshipHelper(file);
 			try {
@@ -124,7 +127,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	}
 
 	protected void fullBuild(final IProgressMonitor monitor) throws CoreException {
-		ECLMeta.get().clear();
+		//meta.clear(); //  TODO: One meta.dat per project?
 		getProject().accept(new ECLResourceVisitor(monitor));
 	}
 

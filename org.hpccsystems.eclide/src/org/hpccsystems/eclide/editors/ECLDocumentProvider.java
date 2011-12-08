@@ -11,9 +11,11 @@
 package org.hpccsystems.eclide.editors;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.hpccsystems.eclide.text.ECLPartitionScanner;
 
@@ -34,4 +36,16 @@ public class ECLDocumentProvider extends FileDocumentProvider {
 		}
 		return document;
 	}
+	
+	protected IDocument createEmptyDocument() {
+		return new ECLDocument();
+	}
+	
+	protected boolean setDocumentContent(IDocument document, IEditorInput editorInput, String encoding) throws CoreException {
+		if (document instanceof ECLDocument) {
+			((ECLDocument)document).setEditorInput(editorInput);
+		}
+		return super.setDocumentContent(document, editorInput, encoding);
+	}
+	
 }
