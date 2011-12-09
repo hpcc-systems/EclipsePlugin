@@ -114,6 +114,10 @@ public class ECLGlobalMeta {
 
 	}
 	
+	static public void clear() {
+		get().clear();
+	}
+	
 	public static void parse(String xml) {
 		if (xml.isEmpty())
 			return;

@@ -127,7 +127,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	}
 
 	protected void fullBuild(final IProgressMonitor monitor) throws CoreException {
-		//meta.clear(); //  TODO: One meta.dat per project?
+		ECLGlobalMeta.clear(); //  TODO: One meta.dat per project?
 		getProject().accept(new ECLResourceVisitor(monitor));
 	}
 

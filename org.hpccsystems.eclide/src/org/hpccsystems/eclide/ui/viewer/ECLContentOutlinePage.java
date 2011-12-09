@@ -32,7 +32,6 @@ import org.hpccsystems.eclide.builder.meta.ECLSource;
 
 public class ECLContentOutlinePage extends ContentOutlinePage implements Observer {
 	ECLMetaData meta;
-	ECLSource source;
 	TreeViewer viewer;
 	IEditorInput editorInput;
 	
@@ -67,9 +66,11 @@ public class ECLContentOutlinePage extends ContentOutlinePage implements Observe
 		viewer.setLabelProvider(new MetaSourceLabelProvider());
 		viewer.setSorter(new MySorter());
 		if (editorInput instanceof FileEditorInput) {
-			source = meta.getSource(((FileEditorInput)editorInput).getPath());
-			viewer.setInput(source);
-			source.addObserver(this);
+			ECLSource source = meta.getSource(((FileEditorInput)editorInput).getPath());
+			if (source != null) {
+				viewer.setInput(source);
+				source.addObserver(this);
+			}
 		}
 		viewer.expandAll();
 		
