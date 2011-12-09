@@ -54,7 +54,7 @@ public class ECLSource extends ECLDefinition implements Serializable {
 		}
 		return this;
 	}
-
+	
 	@Override 
 	public ECLDefinition getDefinition(String _text) {
 		if (_text.isEmpty())

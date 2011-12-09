@@ -46,7 +46,7 @@ public class ECLTextHover implements ITextHover {
 		try {
 			for (int n = offset-1; n >= 0; n--) {
 				char c = doc.getChar(n);
-				if (!Character.isJavaIdentifierPart(c) && c != '.' && c != '$')
+				if (!Character.isJavaIdentifierPart(c) && c != '.' && c != '#')
 					return n + 1;
 			}
 		} catch (BadLocationException e) {
@@ -59,7 +59,7 @@ public class ECLTextHover implements ITextHover {
 		try {
 			for (int n = offset; n < doc.getLength(); ++n) {
 				char c = doc.getChar(n);
-				if (!Character.isJavaIdentifierPart(c) && c != '.' && c != '$')
+				if (!Character.isJavaIdentifierPart(c) && c != '.')
 					return n;
 			}
 		} catch (BadLocationException e) {

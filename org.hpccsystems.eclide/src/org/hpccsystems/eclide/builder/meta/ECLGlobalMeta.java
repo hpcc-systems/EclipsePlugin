@@ -66,8 +66,12 @@ public class ECLGlobalMeta {
 				get().append((ECLSource) metaStack.peek());
 			} else if (e.tag.equals("Definition") || e.tag.equals("Field")) {
 				ECLDefinition parent = (ECLDefinition)metaStack.peek();
-				metaStack.push(new ECLDefinition(parent, attributes));
-				parent.addDefinition((ECLDefinition)metaStack.peek());
+				if (parent instanceof ECLSource && attributes.getValue("name").equals(parent.getName())) {
+					metaStack.push(parent);
+				} else {
+					metaStack.push(new ECLDefinition(parent, attributes));
+					parent.addDefinition((ECLDefinition)metaStack.peek());
+				}
 			} else if (e.tag.equals("Import")) {
 				ECLSource parent = (ECLSource)metaStack.peek();
 				parent.setImport(new ECLImport(attributes));

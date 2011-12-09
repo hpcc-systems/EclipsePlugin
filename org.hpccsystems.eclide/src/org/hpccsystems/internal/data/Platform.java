@@ -131,14 +131,16 @@ public class Platform extends DataSingleton {
 		}
 	}
 
-	void confirmDisable() {
-		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+	synchronized void confirmDisable() {
+		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 		    public void run() {
-			    Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-	            if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?")) {
-            		isEnabled = false;
+				if (isEnabled) {
+				    Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		            if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {
+	            		isEnabled = false;
+		            }
 	            }
-			}
+		    }
 		});
 	}
 	
