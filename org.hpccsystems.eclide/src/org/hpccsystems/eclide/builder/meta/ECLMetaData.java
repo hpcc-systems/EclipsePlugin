@@ -51,7 +51,7 @@ public class ECLMetaData implements Serializable {
 		String eclID = _text.toLowerCase();
 		while(!eclID.isEmpty()) {
 			if (nameSourceMap.containsKey(eclID)) {
-				String remainder = eclID.length() + 1 > _text.length() ? "" :_text.substring(eclID.length() + 1);
+				String remainder = nameSourceMap.get(eclID).getName() + _text.substring(eclID.length() + 1);
 				ECLDefinition retVal = nameSourceMap.get(eclID).getDefinition(remainder);
 				if (retVal != null)
 					return retVal;
@@ -69,10 +69,11 @@ public class ECLMetaData implements Serializable {
 		String eclID = _text.toLowerCase();
 		while(!eclID.isEmpty()) {
 			if (nameSourceMap.containsKey(eclID)) {
-				String remainder = eclID.length() + 1 > _text.length() ? "" :_text.substring(eclID.length() + 1);
+				String remainder = nameSourceMap.get(eclID).getName() + _text.substring(eclID.length());
 				nameSourceMap.get(eclID).getDefinitionList(remainder, retVal);
-				if (!retVal.isEmpty())
+				if (!retVal.isEmpty()) {
 					return;
+				}
 			}
 
 			int pos = eclID.lastIndexOf(".");

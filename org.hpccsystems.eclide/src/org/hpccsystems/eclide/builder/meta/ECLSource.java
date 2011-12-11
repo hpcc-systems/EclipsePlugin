@@ -55,23 +55,23 @@ public class ECLSource extends ECLDefinition implements Serializable {
 		return this;
 	}
 	
-	@Override 
-	public ECLDefinition getDefinition(String _text) {
-		if (_text.isEmpty())
-			return super.getDefinition(getName());
+//	@Override 
+//	public ECLDefinition getDefinition(String _text) {
+//		if (_text.isEmpty())
+//			return super.getDefinition(getName());
+//
+//		return super.getDefinition(_text);
+//	}
 
-		return super.getDefinition(_text);
-	}
-
-	@Override 
-	public void getDefinitionList(String _text, Collection<ECLDefinition> retVal) {
-		if (_text.isEmpty()) {
-			super.getDefinitionList(getName(), retVal);
-			return;
-		}
-
-		super.getDefinitionList(_text, retVal);
-	}
+//	@Override 
+//	public void getDefinitionList(String _text, Collection<ECLDefinition> retVal) {
+//		if (_text.isEmpty()) {
+//			super.getDefinitionList(getName(), retVal);
+//			return;
+//		}
+//
+//		super.getDefinitionList(_text, retVal);
+//	}
 
 	public void clear() {
 		definitions.clear();

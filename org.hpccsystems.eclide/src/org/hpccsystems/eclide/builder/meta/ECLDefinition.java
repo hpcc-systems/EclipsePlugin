@@ -95,18 +95,29 @@ public class ECLDefinition extends ECLBase implements Serializable {
 	}
 	
 	public ECLDefinition getDefinition(String _text) {
+		if (_text.isEmpty())
+			return null;
+		
 		String text = _text.toLowerCase();
+		String firstID;
+		String remainderID;
 		if (text.contains(".")) {
 			int pos = text.indexOf(".");
-			String firstID = text.substring(0, pos);
-			String remainderID = text.substring(pos + 1);
-			if (definitions.containsKey(firstID)) {
-				return definitions.get(firstID).getDefinition(remainderID);
-			}
-		} else if (getQualifiedName().equals(text)) {
-			return this;
-		} else if (definitions.containsKey(text)) {
-			return definitions.get(text);
+			firstID = text.substring(0, pos);
+			remainderID = text.substring(pos + 1);
+		} else {
+			firstID = text;
+			remainderID = "";
+		}
+		
+		if (getName().equals(firstID)) {
+			if (remainderID.isEmpty())
+				return this;
+			return getDefinition(remainderID);
+		} else if (definitions.containsKey(firstID)) {
+			if (remainderID.isEmpty())
+				return definitions.get(firstID);
+			return definitions.get(firstID).getDefinition(remainderID);
 		}
 		return null;
 	}
@@ -128,19 +139,27 @@ public class ECLDefinition extends ECLBase implements Serializable {
 	}
 	
 	public void getDefinitionList(String _text, Collection<ECLDefinition> retVal) {
+		if (_text.isEmpty())
+			return;
+		
 		String text = _text.toLowerCase();
+		String firstID;
+		String remainderID;
 		if (text.contains(".")) {
 			int pos = text.indexOf(".");
-			String firstID = text.substring(0, pos);
-			String remainderID = text.substring(pos + 1);
-			if (definitions.containsKey(firstID)) {
-				retVal.add(definitions.get(firstID));
-				definitions.get(firstID).getDefinitionList(remainderID, retVal);
-			}
-		} else if (getQualifiedName().equals(text)) {
+			firstID = text.substring(0, pos);
+			remainderID = text.substring(pos + 1);
+		} else {
+			firstID = text;
+			remainderID = "";
+		}
+		
+		if (getName().equals(firstID)) {
 			retVal.add(this);
-		} else if (definitions.containsKey(text)) {
-			retVal.add(definitions.get(text));
+			getDefinitionList(remainderID, retVal);
+		} else if (definitions.containsKey(firstID)) {
+			retVal.add(definitions.get(firstID));
+			definitions.get(firstID).getDefinitionList(remainderID, retVal);
 		}
 	}
 
@@ -177,7 +196,7 @@ public class ECLDefinition extends ECLBase implements Serializable {
 	}
 
 	public ECLDefinition getContext(int offset) {
-		if (!(getName().startsWith("__") && getName().endsWith("__"))) {
+		if (getName().startsWith("__") && getName().endsWith("__")) {
 			return null;
 		}
 		
