@@ -27,6 +27,7 @@ public class ECLDefinition extends ECLBase implements Serializable {
 
 	ECLDefinition parent;
 	Map<String, ECLDefinition> definitions;
+	transient Collection<ECLDefinition> pushedDefinitions;
 	
 	public ECLDefinition(ECLDefinition parent, Attributes attributes) {
 		super(attributes);
@@ -49,7 +50,7 @@ public class ECLDefinition extends ECLBase implements Serializable {
 		if (attributes.containsKey("name")) {
 			return attributes.get("name");
 		} else {	//  Plugins have no name at the moment  ...
-			assert(attributes.containsKey("sourcePath"));
+			//assert(attributes.containsKey("sourcePath"));
 			return attributes.get("sourcePath");
 		}
 		//return "";
@@ -72,11 +73,8 @@ public class ECLDefinition extends ECLBase implements Serializable {
 	}
 
 	public void addDefinition(ECLDefinition def) {
-		String name = def.getQualifiedName();
-		if (!(name.startsWith("__") && name.endsWith("__"))) {
-			definitions.put(def.getQualifiedName(), def);
-			setChanged();
-		}
+		definitions.put(def.getQualifiedName(), def);
+		setChanged();
 	}
 	
 	public ECLDefinition findDefinition(String _text) {
@@ -179,6 +177,10 @@ public class ECLDefinition extends ECLBase implements Serializable {
 	}
 
 	public ECLDefinition getContext(int offset) {
+		if (!(getName().startsWith("__") && getName().endsWith("__"))) {
+			return null;
+		}
+		
 		ECLDefinition retVal = null;
 		if (offset >= getOffset() && offset <= getEndOffset()) {
 			for (ECLDefinition def : definitions.values()) {
@@ -189,5 +191,25 @@ public class ECLDefinition extends ECLBase implements Serializable {
 			retVal = this;
 		}
 		return retVal;
+	}
+
+	public void pushDefinitions() {
+		pushedDefinitions = new HashSet<ECLDefinition>();
+		pushedDefinitions.addAll(definitions.values());
+	}
+
+	synchronized public void popDefinition(ECLDefinition def) {
+		pushedDefinitions.remove(def);
+	}
+
+	synchronized public void popDefinitions(boolean deleteItems) {
+		if (pushedDefinitions != null) {
+			for(ECLDefinition def : pushedDefinitions) {
+				if (deleteItems) {
+					definitions.remove(def.getName());
+				}
+			}
+		}
+		pushedDefinitions.clear();
 	}
 }

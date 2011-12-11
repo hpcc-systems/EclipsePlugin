@@ -30,7 +30,7 @@ import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaData;
 import org.hpccsystems.eclide.builder.meta.ECLSource;
 
-public class ECLContentOutlinePage extends ContentOutlinePage implements Observer {
+public class ECLContentOutlinePage extends ContentOutlinePage {
 	ECLMetaData meta;
 	TreeViewer viewer;
 	IEditorInput editorInput;
@@ -66,11 +66,7 @@ public class ECLContentOutlinePage extends ContentOutlinePage implements Observe
 		viewer.setLabelProvider(new MetaSourceLabelProvider());
 		viewer.setSorter(new MySorter());
 		if (editorInput instanceof FileEditorInput) {
-			ECLSource source = meta.getSource(((FileEditorInput)editorInput).getPath());
-			if (source != null) {
-				viewer.setInput(source);
-				source.addObserver(this);
-			}
+			viewer.setInput(((FileEditorInput)editorInput).getPath());
 		}
 		viewer.expandAll();
 		
@@ -78,15 +74,5 @@ public class ECLContentOutlinePage extends ContentOutlinePage implements Observe
 
 	public void setInput(IEditorInput editorInput) {
 		this.editorInput = editorInput;
-	}
-
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				viewer.refresh();
-			}
-		});
 	}
 }

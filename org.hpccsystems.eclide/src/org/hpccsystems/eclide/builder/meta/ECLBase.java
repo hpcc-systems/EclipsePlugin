@@ -20,10 +20,14 @@ public class ECLBase extends Observable implements Serializable {
 	private static final long serialVersionUID = 6777457786109500872L;
 	private static final String DOLLAR = "_local_directory_";
 	
-	final HashMap<String, String> attributes;
+	HashMap<String, String> attributes;
 
 	public ECLBase(Attributes attributes) {
 		this.attributes = new HashMap<String, String>();
+		update(attributes);
+	}
+
+	public void update(Attributes attributes) {
 		for(int i = 0; i < attributes.getLength(); ++i) {
 			this.attributes.put(attributes.getQName(i), attributes.getValue(i));
 			if (attributes.getQName(i).equals("name")) {

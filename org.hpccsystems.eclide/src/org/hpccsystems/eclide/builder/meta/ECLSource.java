@@ -60,10 +60,6 @@ public class ECLSource extends ECLDefinition implements Serializable {
 		if (_text.isEmpty())
 			return super.getDefinition(getName());
 
-		ECLDefinition retVal = super.getDefinition(getName() + "." + _text);
-		if (retVal != null)
-			return retVal;
-		
 		return super.getDefinition(_text);
 	}
 
@@ -74,13 +70,7 @@ public class ECLSource extends ECLDefinition implements Serializable {
 			return;
 		}
 
-		super.getDefinitionList(getName() + "." + _text, retVal);
-		
-//		String text = _text.startsWith("$.") ? _text.substring(2) : _text;
 		super.getDefinitionList(_text, retVal);
-//		if (retVal.isEmpty()) {
-//			super.getDefinitionList(getName() + "." + text, retVal);
-//		}
 	}
 
 	public void clear() {

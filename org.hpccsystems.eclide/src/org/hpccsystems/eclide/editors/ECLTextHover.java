@@ -87,6 +87,8 @@ public class ECLTextHover implements ITextHover {
 		if (doc instanceof ECLDocument) {
 			IFile file = ((ECLDocument)doc).getFile();
 			source = meta.getSource(file.getLocation());
+			if (source == null)
+				return "---  NO META  ---";
 		}
 
 		String text = getHoverWord(doc, hoverRegion.getOffset());

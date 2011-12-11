@@ -43,38 +43,56 @@ public class ECLGlobalMeta {
 	//  Parser  ---
 	static class ECLMetaHandler extends StackHandler {
 
-		Stack<ECLBase> metaStack;
+		Stack<ECLDefinition> metaStack;
 
 		ECLMetaHandler() {
 			super();
-			metaStack = new Stack<ECLBase>();
+			metaStack = new Stack<ECLDefinition>();
 		}
 
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 			super.startElement(uri, localName, qName, attributes);
 			Element e = elementStack.peek();
+			ECLDefinition itemToPush = null;
 			if (e.tag.equals("Source")) {
 				String path = attributes.getValue("sourcePath");
 				ECLSource source = get().getSource(path);
 				if (source != null) {
-					metaStack.push(source);
-					source.clear();
+					itemToPush = source;
+					source.update(attributes);
 				}
-				else
-					metaStack.push(new ECLSource(attributes));
-				get().append((ECLSource) metaStack.peek());
+				else {
+					itemToPush = new ECLSource(attributes);
+				}
+				get().append((ECLSource)itemToPush);
+				assert(itemToPush != null);
 			} else if (e.tag.equals("Definition") || e.tag.equals("Field")) {
-				ECLDefinition parent = (ECLDefinition)metaStack.peek();
-				if (parent instanceof ECLSource && attributes.getValue("name").equals(parent.getName())) {
-					metaStack.push(parent);
+				ECLDefinition top = (ECLDefinition)metaStack.peek();
+				if (top instanceof ECLSource && top.getName().equals(attributes.getValue("name"))) {
+					itemToPush = top;
 				} else {
-					metaStack.push(new ECLDefinition(parent, attributes));
-					parent.addDefinition((ECLDefinition)metaStack.peek());
+					String name = attributes.getValue("name");
+					ECLDefinition def = top.getDefinition(name);
+					if (def != null) {
+						itemToPush = def;
+						def.update(attributes);
+						top.popDefinition(def);
+					} else {
+						ECLDefinition def22 = top.getDefinition(name);
+						itemToPush = new ECLDefinition(top, attributes);
+						top.addDefinition(itemToPush);
+					}
 				}
+				assert(itemToPush != null);
 			} else if (e.tag.equals("Import")) {
-				ECLSource parent = (ECLSource)metaStack.peek();
-				parent.setImport(new ECLImport(attributes));
+				ECLSource top = (ECLSource)metaStack.peek();
+				top.setImport(new ECLImport(attributes));
+			}
+			
+			if (itemToPush != null) {
+				metaStack.push(itemToPush);
+				itemToPush.pushDefinitions();
 			}
 		}
 
@@ -82,6 +100,7 @@ public class ECLGlobalMeta {
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			Element e = elementStack.peek();
 			if (e.tag.equals("Source") || e.tag.equals("Definition") || e.tag.equals("Field")) {
+				metaStack.peek().popDefinitions(true);
 				metaStack.peek().notifyObservers();
 				metaStack.pop();
 			} else if (e.tag.equals("Import")) {

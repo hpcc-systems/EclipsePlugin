@@ -11,13 +11,22 @@
 package org.hpccsystems.eclide.ui.viewer;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.part.FileEditorInput;
 import org.hpccsystems.eclide.builder.meta.ECLDefinition;
+import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLSource;
 
-class MetaSourceTreeItemContentProvider implements ITreeContentProvider {
+class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observer{
+	TreeViewer viewer;
+	IPath path;
 	ECLSource source;
 
 	MetaSourceTreeItemContentProvider() {
@@ -26,10 +35,17 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider {
 	
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		this.viewer = (TreeViewer)viewer;
 		source = null;
 		if (newInput != null && !newInput.equals(oldInput)) {
-			if (newInput instanceof ECLSource) {
-				source = (ECLSource)newInput;
+			if (newInput instanceof IPath) {
+				this.path = (IPath)newInput;
+				if (source == null) {
+					source = ECLGlobalMeta.get().getSource(path);
+					if (source != null) {
+						source.addObserver(this);
+					}
+				}
 			}
 		}
 	}
@@ -38,9 +54,10 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider {
 	public Object[] getElements(Object inputElement) {
 		ArrayList<ECLDefinition> defs = new ArrayList<ECLDefinition>(); 
 		if (source != null) {
-			for (ECLDefinition def : source.getDefinitions()) {
+			defs.add(source);
+			/*for (ECLDefinition def : source.getDefinitions()) {
 				defs.add(def);
-			}
+			}*/
 		}
 		return defs.toArray();
 	}
@@ -51,9 +68,14 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
+		ArrayList<ECLDefinition> defs = new ArrayList<ECLDefinition>(); 
 		if (parentElement instanceof ECLDefinition)
-			return ((ECLDefinition)parentElement).getDefinitions().toArray();
-		return null;
+			for (ECLDefinition def : ((ECLDefinition)parentElement).getDefinitions()) {
+				if (!(def.getName().startsWith("__") && def.getName().endsWith("__"))) {
+					defs.add(def);
+				}
+			}
+		return defs.toArray();
 	}
 
 	@Override
@@ -66,6 +88,23 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider {
 		if (element instanceof ECLDefinition)
 			return ((ECLDefinition)element).getDefinitions().size() > 0;
 		return false;
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (path != null && source == null) {
+			source = ECLGlobalMeta.get().getSource(path);
+			if (source != null) {
+				source.addObserver(this);
+			}
+		}
+
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				viewer.refresh(source);
+			}
+		});
 	}
 
 }
