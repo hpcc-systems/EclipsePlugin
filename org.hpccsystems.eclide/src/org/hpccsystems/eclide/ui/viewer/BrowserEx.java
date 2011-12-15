@@ -155,6 +155,7 @@ public class BrowserEx extends Composite {
 		nextTreeItem = treeItem;
 		browser.setUrl(url);
 
+		/*  TODO:  We may want some URL parsing to help tree refreshing  --- 
 		int ipPos = url.indexOf("http://");
 		if (ipPos >= 0) {
 			ipPos += 7;
@@ -187,5 +188,6 @@ public class BrowserEx extends Composite {
 				}
 			}
 		}
+		*/
 	}	
 }

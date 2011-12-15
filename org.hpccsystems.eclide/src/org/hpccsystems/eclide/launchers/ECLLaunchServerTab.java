@@ -46,7 +46,9 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			Object source= e.getSource();
 			if (source == fIPText) {
 				refreshAddress();
-			} if (source == fAddressText) {
+			} else if (source == fPortText) {
+				refreshAddress();
+			} else if (source == fAddressText) {
 			}
 		}
 		
@@ -66,6 +68,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	private Button enableButton;
 	protected Text fIPText;
+	protected Text fPortText;
 	protected Text fClusterText;
 
 	protected Text fUserText;
@@ -88,6 +91,10 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		SWTFactory.createLabel(group, "IP Address:  ", 1);
 		fIPText = SWTFactory.createSingleText(group, 1);
 		fIPText.addModifyListener(fListener);
+
+		SWTFactory.createLabel(group, "Port:  ", 1);
+		fPortText = SWTFactory.createSingleText(group, 1);
+		fPortText.addModifyListener(fListener);
 
 		SWTFactory.createLabel(group, "Target:  ", 1);
 		fClusterText = SWTFactory.createSingleText(group, 1);
@@ -154,6 +161,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			enableButton.setSelection(configuration.getAttribute(Platform.P_ENABLED, true));
 
 			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
+			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, 8010)));
 			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor"));
 
 			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
@@ -169,6 +177,11 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		configuration.setAttribute(Platform.P_ENABLED, enableButton.getSelection());
 
 		configuration.setAttribute(Platform.P_IP, fIPText.getText());
+		try {
+			configuration.setAttribute(Platform.P_PORT, Integer.parseInt(fPortText.getText()));
+		} catch (NumberFormatException e) {
+			configuration.setAttribute(Platform.P_PORT, 8010);
+		}
 		configuration.setAttribute(Platform.P_CLUSTER, fClusterText.getText());
 
 		configuration.setAttribute(Platform.P_USER, fUserText.getText());
@@ -187,7 +200,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	void refreshAddress() {
 		StringBuilder url = new StringBuilder("http://");
 		url.append(fIPText.getText());
-		url.append(":8010/");
+		url.append(":" + fPortText.getText() + "/");
 		fAddressText.setText(url.toString());
 	}
 	

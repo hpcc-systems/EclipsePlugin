@@ -32,6 +32,8 @@ public class PlatformView extends PlatformBaseView {
 
 	@Override
 	public String getText() {
+		if (platform.getPort() != 8010)
+			return platform.getIP() + ":" + platform.getPort();
 		return platform.getIP();
 	}
 
