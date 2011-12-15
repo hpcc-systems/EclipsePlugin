@@ -2,6 +2,12 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.hpccsystems.eclide.preferences.ECLPreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.hpccsystems.eclide.perspectives.ECLPerspective"
@@ -31,10 +37,38 @@
       </page>
    </extension>
    <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.hpccsystems.eclide.preferences.ECLPreferenceInitializer">
-      </initializer>
+         id="eclBuilder"
+         name="%extension.name.2"
+         point="org.eclipse.core.resources.builders">
+      <builder hasNature="true">
+         <run
+               class="org.hpccsystems.eclide.builder.ECLBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="eclNature"
+         name="%extension.name.3"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.hpccsystems.eclide.builder.ECLNature">
+         </run>
+      </runtime>
+      <builder
+            id="org.hpccsystems.eclide.eclBuilder">
+      </builder>
+   </extension>
+   <extension
+         id="eclProblem"
+         name="%extension.name.4"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -126,29 +160,6 @@
       </editor>
    </extension>
    <extension
-         id="eclBuilder"
-         name="%extension.name.2"
-         point="org.eclipse.core.resources.builders">
-      <builder hasNature="true">
-         <run
-               class="org.hpccsystems.eclide.builder.ECLBuilder">
-         </run>
-      </builder>
-   </extension>
-   <extension
-         id="eclNature"
-         name="%extension.name.3"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run
-               class="org.hpccsystems.eclide.builder.ECLNature">
-         </run>
-      </runtime>
-      <builder
-            id="org.hpccsystems.eclide.eclBuilder">
-      </builder>
-   </extension>
-   <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="true"
@@ -163,17 +174,6 @@
                menubarPath="additions">
          </action>
       </objectContribution>
-   </extension>
-   <extension
-         id="eclProblem"
-         name="%extension.name.4"
-         point="org.eclipse.core.resources.markers">
-      <super
-            type="org.eclipse.core.resources.problemmarker">
-      </super>
-      <persistent
-            value="true">
-      </persistent>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
@@ -208,9 +208,34 @@
       </wizard>
    </extension>
    <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            markerType="org.hpccsystems.eclide.eclProblem"
+            class="org.hpccsystems.eclide.problem.QuickFixer">
+      </markerResolutionGenerator>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.hpccsystems.eclide.importWizards.sampleCategory"
+            name="ECL Repository">
+      </category>
+      <wizard
+            category="org.hpccsystems.eclide.importWizards.sampleCategory"
+            class="org.hpccsystems.eclide.wizards.ImportWizard"
+            icon="icons/sample.gif"
+            id="org.hpccsystems.eclide.importWizards.ImportWizard"
+            name="Import Repository">
+         <description>
+            Import an entire Repository from a rmote legacy server into the workspace.
+         </description>
+      </wizard>
+   </extension>
+   <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
             delegate="org.hpccsystems.eclide.launchers.ECLLaunchDelegate"
+            delegateName="ECL Launcher"
             id="org.hpccsystems.eclide.launching.ECLConfigurationType"
             modes="run"
             name="%launchConfigurationType.name"
@@ -250,29 +275,4 @@
          </contextualLaunch>
       </shortcut>
    </extension>
-   <extension
-         point="org.eclipse.ui.ide.markerResolution">
-      <markerResolutionGenerator
-            markerType="org.hpccsystems.eclide.eclProblem"
-            class="org.hpccsystems.eclide.problem.QuickFixer">
-      </markerResolutionGenerator>
-   </extension>
-   <extension
-         point="org.eclipse.ui.importWizards">
-      <category
-            id="org.hpccsystems.eclide.importWizards.sampleCategory"
-            name="ECL Repository">
-      </category>
-      <wizard
-            category="org.hpccsystems.eclide.importWizards.sampleCategory"
-            class="org.hpccsystems.eclide.wizards.ImportWizard"
-            icon="icons/sample.gif"
-            id="org.hpccsystems.eclide.importWizards.ImportWizard"
-            name="Import Repository">
-         <description>
-            Import an entire Repository from a rmote legacy server into the workspace.
-         </description>
-      </wizard>
-   </extension>
-
 </plugin>

@@ -11,7 +11,10 @@
 package org.hpccsystems.eclide.launchers;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.ui.ILaunchShortcut;
+import org.eclipse.debug.ui.ILaunchShortcut2;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
@@ -19,9 +22,9 @@ import org.eclipse.ui.IFileEditorInput;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.internal.Eclipse;
 
-public class ECLLaunchShortcutLocal implements ILaunchShortcut {
+public class ECLLaunchShortcutLocal implements ILaunchShortcut2 {
 	
-	public void launch(ISelection selection, String mode) {
+	public void launchXXX(ISelection selection, String mode) {
 		if (selection instanceof TreeSelection) {
 			TreeSelection treeSel = (TreeSelection) selection;
 			IFile file = null;
@@ -38,7 +41,7 @@ public class ECLLaunchShortcutLocal implements ILaunchShortcut {
 		}
 	}
 	
-	public void launch(IEditorPart editor, String mode) {
+	public void launchXXX(IEditorPart editor, String mode) {
 		//ProgressMonitor monitor = new ProgressMonitor((Component) editor, "Save All", "", 0, 0);
 		//editor.doSave(null);
 		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
@@ -49,5 +52,41 @@ public class ECLLaunchShortcutLocal implements ILaunchShortcut {
 			compiler.buildAndRun(file);
 		}
 		assert(input != null);
+	}
+
+	@Override
+	public void launch(ISelection selection, String mode) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void launch(IEditorPart editor, String mode) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ILaunchConfiguration[] getLaunchConfigurations(ISelection selection) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILaunchConfiguration[] getLaunchConfigurations(IEditorPart editorpart) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResource getLaunchableResource(ISelection selection) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IResource getLaunchableResource(IEditorPart editorpart) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

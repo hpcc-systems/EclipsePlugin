@@ -15,15 +15,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.debug.ui,
  org.apache.axis,
- org.apache.commons.discovery,
- javax.xml.rpc,
- javax.xml.soap,
- javax.wsdl,
- org.apache.commons.logging,
- org.eclipse.core.resources
+ javax.xml.rpc
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.eclipse.jdt.debug.ui.launchConfigurations
 Export-Package: org.hpccsystems.eclide;
   uses:="org.eclipse.jface.resource,
    org.eclipse.ui.plugin,
