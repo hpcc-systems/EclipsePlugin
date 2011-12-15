@@ -47,7 +47,7 @@ public class PlatformView extends PlatformBaseView {
 	@Override
 	public void refreshChildren() {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
-		retVal.add(new ClusterFolderView(treeViewer, this, platform));
+		retVal.add(new TargetFolderView(treeViewer, this, platform));
 		retVal.add(new DropZoneFolderView(treeViewer, this, platform));
 		retVal.add(new WorkunitFolderView(treeViewer, this, platform));
 		retVal.add(new FileSprayWorkunitFolderView(treeViewer, this, platform));

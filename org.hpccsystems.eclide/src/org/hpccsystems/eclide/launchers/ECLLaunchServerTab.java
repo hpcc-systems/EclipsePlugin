@@ -89,7 +89,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		fIPText = SWTFactory.createSingleText(group, 1);
 		fIPText.addModifyListener(fListener);
 
-		SWTFactory.createLabel(group, "Cluster:  ", 1);
+		SWTFactory.createLabel(group, "Target:  ", 1);
 		fClusterText = SWTFactory.createSingleText(group, 1);
 		fClusterText.addModifyListener(fListener);
 	}
