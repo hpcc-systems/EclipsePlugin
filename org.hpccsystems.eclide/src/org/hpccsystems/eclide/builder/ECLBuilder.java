@@ -106,7 +106,9 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			monitor.subTask(file.getName());
 			ECLCompiler compiler = new ECLCompiler(getProject());
 
+			/*  TODO:  Meta not used yet
 			ECLGlobalMeta.parse(compiler.getMeta(file));
+			*/
 
 			RelationshipHelper rhelper = new RelationshipHelper(file);
 			try {
