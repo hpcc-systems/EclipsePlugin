@@ -10,8 +10,13 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.launchers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.debug.ui.ILaunchShortcut2;
@@ -21,6 +26,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.internal.Eclipse;
+import org.hpccsystems.internal.data.Platform;
 
 public class ECLLaunchShortcutLocal implements ILaunchShortcut2 {
 	
@@ -56,37 +62,56 @@ public class ECLLaunchShortcutLocal implements ILaunchShortcut2 {
 
 	@Override
 	public void launch(ISelection selection, String mode) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void launch(IEditorPart editor, String mode) {
-		// TODO Auto-generated method stub
-		
+	}
+
+	public ILaunchConfiguration[] getLaunchConfigurations() {
+		Collection<ILaunchConfiguration> retVal = new ArrayList<ILaunchConfiguration>();
+		try {
+			ILaunchConfiguration[] configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
+			for(int i = 0; i < configs.length; ++i) {
+				//if (configs[i].getAttribute(Platform.P_ENABLED, true)) {
+					retVal.add(configs[i]);
+				//}
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return retVal.toArray(new ILaunchConfiguration[0]);
 	}
 
 	@Override
 	public ILaunchConfiguration[] getLaunchConfigurations(ISelection selection) {
-		// TODO Auto-generated method stub
-		return null;
+		return getLaunchConfigurations();
 	}
 
 	@Override
 	public ILaunchConfiguration[] getLaunchConfigurations(IEditorPart editorpart) {
-		// TODO Auto-generated method stub
-		return null;
+		return getLaunchConfigurations();
 	}
 
 	@Override
 	public IResource getLaunchableResource(ISelection selection) {
-		// TODO Auto-generated method stub
+		if (selection instanceof TreeSelection) {
+			TreeSelection treeSel = (TreeSelection) selection;
+			for (Object selItem : treeSel.toList()) {
+				if (selItem instanceof IFile) {
+					return (IFile) selItem;
+				}
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public IResource getLaunchableResource(IEditorPart editorpart) {
-		// TODO Auto-generated method stub
+		IFileEditorInput input = (IFileEditorInput)editorpart.getEditorInput();
+		if (input != null) {
+			return input.getFile();
+		}
 		return null;
 	}
 }
