@@ -8,20 +8,20 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.ui.tree;
+package org.hpccsystems.eclide.builder.meta;
 
-import java.util.Comparator;
+import java.io.Serializable;
 
-public class WorkunitComparator implements Comparator<ItemView> {
+import org.xml.sax.Attributes;
 
-	@Override
-	public int compare(ItemView left, ItemView right) {
-		String l = left.getText();
-		String r = right.getText();
+public class ECLImport extends ECLBase implements Serializable {
 
-		//  Ignore "W" and "D" and maybe "L"  ---
-		l = l.substring(1);
-		r = r.substring(1);
-		return r.compareTo(l);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5720495962909839717L;
+
+	public ECLImport(Attributes attributes) {
+		super(attributes);
 	}
 }

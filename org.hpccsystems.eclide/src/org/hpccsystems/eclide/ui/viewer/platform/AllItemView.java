@@ -43,15 +43,15 @@ class PlatformBaseView extends ItemView {
 	}
 }
 
-class ClusterFolderView extends FolderItemView {
+class TargetFolderView extends FolderItemView {
 
-	ClusterFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
+	TargetFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
 		super(treeViewer, parent, platform);
 	}
 
 	@Override
 	public String getText() {
-		return "Clusters";
+		return "Targets";
 	}
 	
 	@Override

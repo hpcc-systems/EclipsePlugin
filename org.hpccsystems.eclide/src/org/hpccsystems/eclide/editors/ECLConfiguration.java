@@ -42,8 +42,11 @@ public class ECLConfiguration extends TextSourceViewerConfiguration {
 	@Override
 	public IContentAssistant getContentAssistant(ISourceViewer sv) {
         ContentAssistant ca = new ContentAssistant();
+        ca.enableAutoActivation(true);
+        
         IContentAssistProcessor cap = new ECLCompletionProcessor();
         ca.setContentAssistProcessor(cap, IDocument.DEFAULT_CONTENT_TYPE);
+        ca.setContentAssistProcessor(cap, ECLPartitionScanner.ECL_BODY);
         ca.setInformationControlCreator(getInformationControlCreator(sv));
         return ca;
      }

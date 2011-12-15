@@ -47,18 +47,21 @@ public class ECLPerspective implements IPerspectiveFactory {
 		// Note that each new Folder uses a percentage of the remaining EditorArea.
 		String editorArea = layout.getEditorArea();
 
-		IFolderLayout left = layout.createFolder( "left", IPageLayout.LEFT, 0.25f, editorArea);
+		IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.25f, editorArea);
 		left.addView("org.hpccsystems.eclide.viewWorkunits");
 		IFolderLayout bottomLeft = layout.createFolder( "bottomLeft", IPageLayout.BOTTOM, 0.25f, "left");
 		bottomLeft.addView("org.hpccsystems.eclide.navigator");
 		//bottomLeft.addView("org.hpccsystems.eclide.viewPlatforms");
 
-		IFolderLayout bottom = layout.createFolder( "bottomRight", IPageLayout.BOTTOM, 0.75f, editorArea);
+		IFolderLayout bottom = layout.createFolder("bottomRight", IPageLayout.BOTTOM, 0.75f, editorArea);
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
 		bottom.addView(IConsoleConstants.ID_CONSOLE_VIEW);
 		bottom.addView("org.hpccsystems.eclide.htmlView");
 		bottom.addView("org.hpccsystems.eclide.resultView");
-	}
+
+		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, 0.75f, editorArea);
+		right.addView(IPageLayout.ID_OUTLINE);
+}
 
 	private void addActionSets() {
 		layout.addActionSet("org.eclipse.debug.ui.launchActionSet"); //NON-NLS-1
@@ -99,7 +102,7 @@ public class ECLPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(IConsoleConstants.ID_CONSOLE_VIEW);
 		//factory.addShowViewShortcut(JavaUI.ID_PACKAGES);
 		layout.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
-		//factory.addShowViewShortcut(IPageLayout.ID_OUTLINE);
+		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 	}
 
 }

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2011 HPCC Systems.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     HPCC Systems - initial API and implementation
+ ******************************************************************************/
 package org.hpccsystems.eclide.ui.viewer.platform;
 
 import java.net.MalformedURLException;
@@ -37,7 +47,7 @@ public class PlatformView extends PlatformBaseView {
 	@Override
 	public void refreshChildren() {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
-		retVal.add(new ClusterFolderView(treeViewer, this, platform));
+		retVal.add(new TargetFolderView(treeViewer, this, platform));
 		retVal.add(new DropZoneFolderView(treeViewer, this, platform));
 		retVal.add(new WorkunitFolderView(treeViewer, this, platform));
 		retVal.add(new FileSprayWorkunitFolderView(treeViewer, this, platform));

@@ -24,6 +24,11 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -38,7 +43,10 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.builder.meta.ECLDefinition;
+import org.hpccsystems.eclide.ui.viewer.ECLContentOutlinePage;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTabItem;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitView;
@@ -53,6 +61,16 @@ import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 public class ECLWindow extends MultiPageEditorPart implements IResourceChangeListener, Observer, TreeItemOwner {
 
+	private final class SelectionChangedEventExtension extends
+			SelectionChangedEvent {
+		private SelectionChangedEventExtension(ISelectionProvider source,
+				ISelection selection) {
+			super(source, selection);
+		}
+	}
+
+	ECLContentOutlinePage eclOutlinePage;
+	
 	private ECLEditor editor;
 
 	Data data;
@@ -197,6 +215,33 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				}
 			});
 		}
+	}
+	
+	@Override
+	public Object getAdapter(Class required) {
+		if (IContentOutlinePage.class.equals(required)) {
+			if (eclOutlinePage == null) {
+				eclOutlinePage = new ECLContentOutlinePage();
+				eclOutlinePage.setInput(getEditorInput());
+				eclOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
+
+					@Override
+					public void selectionChanged(SelectionChangedEvent event) {
+						ISelection selection = event.getSelection();
+						if (selection != null && selection instanceof TreeSelection) {
+							Object o = ((TreeSelection)selection).getFirstElement();
+							if (o != null && o instanceof ECLDefinition) {
+								ECLDefinition def = (ECLDefinition)o;
+								editor.setHighlightRange(def.getOffset(), def.getLength(), true);
+							}
+						}
+					}
+				});
+				
+			}
+			return eclOutlinePage;
+		}
+		return super.getAdapter(required);
 	}
 
 	public void refreshChildren() {

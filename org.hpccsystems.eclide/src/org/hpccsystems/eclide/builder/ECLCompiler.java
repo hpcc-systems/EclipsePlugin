@@ -24,8 +24,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
-import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.internal.CmdArgs;
 import org.hpccsystems.internal.CmdProcess;
 import org.hpccsystems.internal.ECLArchiveParser;
@@ -40,6 +40,8 @@ public class ECLCompiler {
 	final static String noCompiler = "Error:  Unable to locate eclcc.";
 	IProject project;
 	IProject[] referencedProjects;
+	
+	static String version = null;
 	
 	IPath binPath;
 	File eclccFile;
@@ -68,8 +70,6 @@ public class ECLCompiler {
 
 	MessageConsole resultsConsole;
 	MessageConsoleStream resultsConsoleWriter;
-
-	HtmlViewer htmlViewer;
 
 	public String wuid;
 	public Set<IFile> ancestors;
@@ -195,6 +195,7 @@ public class ECLCompiler {
 
 	public ECLCompiler(IProject project) {
 		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
+		
 		this.project = project;
 		try {
 			referencedProjects = project.getReferencedProjects();
@@ -238,9 +239,6 @@ public class ECLCompiler {
 		eclccConsole = Eclipse.findConsole("eclcc");
 		eclccConsoleWriter = eclccConsole.newMessageStream();
 		//eclccConsoleWriter.setActivateOnWrite(true);
-		
-		htmlViewer = Eclipse.findHtmlViewer();
-		assert(htmlViewer != null);
 	}
 	
 	boolean HasCompiler() {
@@ -254,11 +252,15 @@ public class ECLCompiler {
 	}
 	
 	public String getVersion() {
-		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "--version");
-		BasicHandler handler = new BasicHandler();
-		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
-		process.exec(cmdArgs);
-		return handler.sbOut.toString();
+		if (version == null) {
+			version = new String();
+			CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "--version");
+			BasicHandler handler = new BasicHandler();
+			CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+			process.exec(cmdArgs);
+			version = handler.sbOut.toString();
+		}
+		return version;
 	}
 	
 	public void checkSyntax(IFile file) {
@@ -343,9 +345,5 @@ public class ECLCompiler {
 			process.exec(exePath.toOSString(), argsWULocal);
 		}
 		return "";
-	}
-
-	public void refreshMeta(IFile file) {
-		ECLMeta.get().append(getMeta(file));
 	}
 }
