@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.hpccsystems.internal.data;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,10 +18,7 @@ import java.util.Observable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
-import org.hpccsystems.ws.wsworkunits.WUQuery;
-import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
-import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
+import org.eclipse.debug.core.ILaunchConfigurationListener;
 
 public class Data extends Observable {
 	private static Data singletonFactory;
@@ -32,6 +28,51 @@ public class Data extends Observable {
 	//  Singleton Pattern
 	private Data() {
 		this.platforms = new ArrayList<Platform>();
+
+		//  Load platforms  ---
+		ILaunchConfiguration[] configs;
+		try {
+			configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
+			for(int i = 0; i < configs.length; ++i) {
+				Platform p = GetPlatform(configs[i]);
+				if (!platforms.contains(p))
+					platforms.add(p);
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+
+		//  Monitor platforms  ---
+		DebugPlugin.getDefault().getLaunchManager().addLaunchConfigurationListener(new ILaunchConfigurationListener() {
+			
+			@Override
+			public void launchConfigurationRemoved(ILaunchConfiguration configuration) {
+				Platform p = GetPlatform(configuration);
+				if (platforms.contains(p)) {
+					platforms.remove(p);
+					setChanged();
+				}
+				notifyObservers();
+			}
+			
+			@Override
+			public void launchConfigurationChanged(ILaunchConfiguration configuration) {
+				//  GetPlatform will update config information
+				GetPlatform(configuration);
+			}
+			
+			@Override
+			public void launchConfigurationAdded(ILaunchConfiguration configuration) {
+				Platform p = GetPlatform(configuration);
+				if (!platforms.contains(p)) {
+					platforms.add(p);
+					setChanged();
+				}
+				notifyObservers();
+			}
+		});
+		
+		setChanged();
 	}
 
 	public static synchronized Data get() {
@@ -66,19 +107,6 @@ public class Data extends Observable {
 	}
 
 	public final Platform[] getPlatforms() {
-		platforms.clear();
-		ILaunchConfiguration[] configs;
-		try {
-			configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
-			for(int i = 0; i < configs.length; ++i) {
-				Platform p = GetPlatform(configs[i]);
-				if (!platforms.contains(p))
-					platforms.add(p);
-			}
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return platforms.toArray(new Platform[0]);
 	}
 
