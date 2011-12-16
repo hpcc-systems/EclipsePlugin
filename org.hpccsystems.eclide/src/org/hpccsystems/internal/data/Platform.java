@@ -191,7 +191,6 @@ public class Platform extends DataSingleton {
 		if (isEnabled()) {
 			try {
 				Workunit.All.pushTransaction("Platform.submit");
-				Eclipse.doSaveDirty(file.getProject());
 				ECLCompiler compiler = new ECLCompiler(file.getProject());
 				String archive = compiler.getArchive(file);
 				

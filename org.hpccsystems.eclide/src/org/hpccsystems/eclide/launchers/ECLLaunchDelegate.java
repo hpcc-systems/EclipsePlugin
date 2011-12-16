@@ -27,12 +27,13 @@ import org.hpccsystems.internal.data.Platform;
 public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements ILaunchConfigurationDelegate {
 	@Override
 	public boolean preLaunchCheck(ILaunchConfiguration configuration, String mode, IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
 		return super.preLaunchCheck(configuration, mode, monitor);
 	}
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
+		saveBeforeLaunch(configuration, mode, monitor);
+		
 		final String cluster = configuration.getAttribute(Platform.P_CLUSTER, ""); 
 		
 		IFile file = null;

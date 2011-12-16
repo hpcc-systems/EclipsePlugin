@@ -114,27 +114,21 @@ This Agreement is governed by the laws of the State of New York and the intellec
 
    <url>
       <update label="ECL Language Eclipse Plugin" url="https://gordon.homeserver.com/eclipse"/>
-      <discovery label="HPCC Systems" url="http://hpccsystems.com"/>
    </url>
 
    <requires>
       <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.ui.console"/>
-      <import plugin="org.eclipse.jdt.ui"/>
-      <import plugin="org.eclipse.ui.navigator"/>
-      <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.navigator"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.debug.ui"/>
-      <import plugin="org.apache.axis" version="1.4.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.commons.discovery" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="javax.xml.rpc" version="1.1.0" match="greaterOrEqual"/>
-      <import plugin="javax.xml.soap" version="1.3.0" match="greaterOrEqual"/>
-      <import plugin="javax.wsdl" version="1.5.1" match="greaterOrEqual"/>
-      <import plugin="org.apache.commons.logging" version="1.0.4" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.resources" version="3.7.100" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.apache.axis"/>
+      <import plugin="javax.xml.rpc"/>
    </requires>
 
    <plugin
