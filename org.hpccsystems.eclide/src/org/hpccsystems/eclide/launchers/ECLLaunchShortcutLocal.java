@@ -30,36 +30,6 @@ import org.hpccsystems.internal.data.Platform;
 
 public class ECLLaunchShortcutLocal implements ILaunchShortcut2 {
 	
-	public void launchXXX(ISelection selection, String mode) {
-		if (selection instanceof TreeSelection) {
-			TreeSelection treeSel = (TreeSelection) selection;
-			IFile file = null;
-			if (treeSel.size() >= 1) {
-				file = (IFile) treeSel.getFirstElement();
-			}
-			
-			if (file == null)
-				return;
-
-			Eclipse.doSaveDirty(file.getProject());
-			ECLCompiler compiler = new ECLCompiler(file.getProject());
-			compiler.buildAndRun(file);
-		}
-	}
-	
-	public void launchXXX(IEditorPart editor, String mode) {
-		//ProgressMonitor monitor = new ProgressMonitor((Component) editor, "Save All", "", 0, 0);
-		//editor.doSave(null);
-		IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
-		if (input != null) {
-			IFile file = input.getFile();
-			Eclipse.doSaveDirty(file.getProject());
-			ECLCompiler compiler = new ECLCompiler(file.getProject());
-			compiler.buildAndRun(file);
-		}
-		assert(input != null);
-	}
-
 	@Override
 	public void launch(ISelection selection, String mode) {
 	}
