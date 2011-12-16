@@ -1,27 +1,20 @@
-/*##############################################################################
-
-    Copyright (C) 2011 HPCC Systems.
-
-    All rights reserved. This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-############################################################################## */
-
+/*******************************************************************************
+ * Copyright (c) 2011 HPCC Systems.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     HPCC Systems - initial API and implementation
+ ******************************************************************************/
 package org.hpccsystems.eclide.preferences;
 
 import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.internal.ui.*;
 
 /**
  * This class represents a preference page that
@@ -37,9 +30,7 @@ import org.hpccsystems.eclide.Activator;
  * be accessed directly via the preference store.
  */
 
-public class ECLCompilerPreferencePage
-	extends FieldEditorPreferencePage
-	implements IWorkbenchPreferencePage {
+public class ECLCompilerPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public ECLCompilerPreferencePage() {
 		super(GRID);
@@ -54,10 +45,30 @@ public class ECLCompilerPreferencePage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_TOOLSPATH, "&HPCC Client Tools:", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_REMOTEEXECUTE, "&Execute On Server:", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_SERVERIP, "&Server IP:", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_SERVERCLUSTER, "&Server Cluster:", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Location:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(ECLPreferenceConstants.P_TOOLSPATH, "&HPCC Client Tools:", getFieldEditorParent()));
+
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Compiler Arguments:", getFieldEditorParent()));
+		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSCOMMON, "&Common:", getFieldEditorParent()));
+		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSSYNTAX, "&Syntax Check:", getFieldEditorParent()));
+		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSCOMPILE, "&Local Compile:", getFieldEditorParent()));
+		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSCOMPILEREMOTE, "&Remote Compile:", getFieldEditorParent()));
+		
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Workunit Arguments:", getFieldEditorParent()));
+		addField(new StringFieldEditor(ECLPreferenceConstants.P_ARGSWULOCAL, "&Local:", getFieldEditorParent()));
+
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Miscellaneous:", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_MONITORDEPENDEES, "&Monitor Dependees (requires manual \"Project/Clean...\")", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_SUPRESSSECONDERROR, "&Supress Subsequent Errors", getFieldEditorParent()));
+
+//		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_REMOTEEXECUTE, "&Execute On Server:", getFieldEditorParent()));
+//		addField(new StringFieldEditor(ECLPreferenceConstants.P_SERVERIP, "&Server IP:", getFieldEditorParent()));
+//		addField(new StringFieldEditor(ECLPreferenceConstants.P_SERVERCLUSTER, "&Server Cluster:", getFieldEditorParent()));
+		
 //		addField(
 //			new BooleanFieldEditor(
 //				PreferenceConstants.P_BOOLEAN,

@@ -1,47 +1,85 @@
-/*##############################################################################
-
-    Copyright (C) 2011 HPCC Systems.
-
-    All rights reserved. This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-############################################################################## */
-
+/*******************************************************************************
+ * Copyright (c) 2011 HPCC Systems.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     HPCC Systems - initial API and implementation
+ ******************************************************************************/
 package org.hpccsystems.eclide.editors;
 
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextDoubleClickStrategy;
+import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
+import org.eclipse.jface.text.quickassist.IQuickAssistAssistant;
+import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.hpccsystems.eclide.text.ECLPartitionScanner;
 import org.hpccsystems.eclide.text.ECLScanner;
 import org.hpccsystems.eclide.text.ECLTagScanner;
 import org.hpccsystems.eclide.text.IECLColorConstants;
 import org.hpccsystems.eclide.text.NonRuleBasedDamagerRepairer;
 
-public class ECLConfiguration extends SourceViewerConfiguration {
-	private ECLDoubleClickStrategy doubleClickStrategy;
+public class ECLConfiguration extends TextSourceViewerConfiguration {
+
+	@Override
+	public int[] getConfiguredTextHoverStateMasks(ISourceViewer sourceViewer, String contentType) {
+		// TODO Auto-generated method stub
+		return super.getConfiguredTextHoverStateMasks(sourceViewer, contentType);
+	}
+
+	@Override
+	public IContentAssistant getContentAssistant(ISourceViewer sv) {
+        ContentAssistant ca = new ContentAssistant();
+        ca.enableAutoActivation(true);
+        
+        IContentAssistProcessor cap = new ECLCompletionProcessor();
+        ca.setContentAssistProcessor(cap, IDocument.DEFAULT_CONTENT_TYPE);
+        ca.setContentAssistProcessor(cap, ECLPartitionScanner.ECL_BODY);
+        ca.setInformationControlCreator(getInformationControlCreator(sv));
+        return ca;
+     }
+	@Override
+	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
+		//if (contentType.equals(ECLPartitionScanner.ECL_BODY)) {
+			return new ECLTextHover(sourceViewer, contentType);
+		//}
+		//return super.getTextHover(sourceViewer, contentType);
+	}
+
+	@Override
+	public IReconciler getReconciler(ISourceViewer sourceViewer) {
+		// TODO Auto-generated method stub
+		return super.getReconciler(sourceViewer);
+	}
+
+	@Override
+	public IQuickAssistAssistant getQuickAssistAssistant(ISourceViewer sourceViewer) {
+		// TODO Auto-generated method stub
+		return super.getQuickAssistAssistant(sourceViewer);
+	}
+
+	//private ECLDoubleClickStrategy doubleClickStrategy;
 	private ECLTagScanner tagScanner;
 	private ECLScanner scanner;
-	private ColorManager colorManager;
+	private ECLColorManager colorManager;
 
-	public ECLConfiguration(ColorManager colorManager) {
+	public ECLConfiguration(ECLColorManager colorManager) {
 		this.colorManager = colorManager;
 	}
+
+	@Override
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return new String[] {
 			IDocument.DEFAULT_CONTENT_TYPE,
@@ -49,14 +87,20 @@ public class ECLConfiguration extends SourceViewerConfiguration {
 			ECLPartitionScanner.ECL_COMMENT,
 			ECLPartitionScanner.ECL_BODY };
 	}
-	public ITextDoubleClickStrategy getDoubleClickStrategy(
-		ISourceViewer sourceViewer,
-		String contentType) {
-		if (doubleClickStrategy == null)
-			doubleClickStrategy = new ECLDoubleClickStrategy();
-		return doubleClickStrategy;
-	}
+	
+//	public ITextDoubleClickStrategy getDoubleClickStrategy(
+//		ISourceViewer sourceViewer,
+//		String contentType) {
+//		if (doubleClickStrategy == null)
+//			doubleClickStrategy = new ECLDoubleClickStrategy();
+//		return doubleClickStrategy;
+//	}
 
+	@Override
+	public IAnnotationHover getAnnotationHover(ISourceViewer sourceViewer) {
+		return super.getAnnotationHover(sourceViewer);
+	}
+	
 	protected ECLScanner getECLScanner() {
 		if (scanner == null) {
 			scanner = new ECLScanner(colorManager);
@@ -67,6 +111,7 @@ public class ECLConfiguration extends SourceViewerConfiguration {
 		}
 		return scanner;
 	}
+	
 	protected ECLTagScanner getECLTagScanner() {
 		if (tagScanner == null) {
 			tagScanner = new ECLTagScanner(colorManager);
@@ -78,6 +123,7 @@ public class ECLConfiguration extends SourceViewerConfiguration {
 		return tagScanner;
 	}
 
+	@Override
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
 

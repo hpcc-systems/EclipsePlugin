@@ -9,6 +9,12 @@
             id="org.hpccsystems.eclide.perspectives.ECLPerspective"
             name="%perspective.name.0">
       </perspective>
+      <perspective
+            class="org.hpccsystems.eclide.perspectives.ECLWatch"
+            icon="icons/releng_gears.gif"
+            id="org.hpccsystems.eclide.perspectives.ECLWatch"
+            name="ECL Watch">
+      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -27,7 +33,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.hpccsystems.eclide.preferences.PreferenceInitializer">
+            class="org.hpccsystems.eclide.preferences.ECLPreferenceInitializer">
       </initializer>
    </extension>
    <extension
@@ -38,43 +44,56 @@
       </category>
       <view
             category="org.hpccsystems.eclide"
-            class="org.hpccsystems.eclide.ui.navigator.CommonNavigator"
-            icon="icons/sample.gif"
+            class="org.hpccsystems.eclide.ui.navigator.ECLNavigator"
+            icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.navigator"
             name="%view.name.0">
       </view>
       <view
             category="org.hpccsystems.eclide"
             class="org.hpccsystems.eclide.ui.viewer.HtmlViewer"
-            id="org.hpccsystems.eclide.html"
-            name="ECL Watch">
+            id="org.hpccsystems.eclide.htmlView"
+            name="%view.name.1">
+      </view>
+      <view
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.ui.viewer.ResultViewer"
+            id="org.hpccsystems.eclide.resultView"
+            name="Result View">
+      </view>
+      <view
+            allowMultiple="false"
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.ui.viewer.platform.PlatformViewer"
+            icon="icons/releng_gears.gif"
+            id="org.hpccsystems.eclide.viewPlatforms"
+            name="Servers"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="org.hpccsystems.eclide"
+            class="org.hpccsystems.eclide.ui.viewer.platform.WorkunitsViewer"
+            icon="icons/releng_gears.gif"
+            id="org.hpccsystems.eclide.viewWorkunits"
+            name="Workunits"
+            restorable="true">
       </view>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">
-      <viewerActionBinding
-            viewerId="org.hpccsystems.eclide.navigator">
+      <viewerActionBinding viewerId="org.hpccsystems.eclide.navigator">
          <includes>
-            <actionExtension
-                  pattern="org.eclipse.ui.navigator.resources.*">
-            </actionExtension>
+            <actionExtension pattern="org.eclipse.ui.navigator.resources.*" />
          </includes>
       </viewerActionBinding>
-      <viewerContentBinding
-            viewerId="org.hpccsystems.eclide.navigator">
+      <viewerContentBinding viewerId="org.hpccsystems.eclide.navigator">
          <includes>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resourceContent">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.filters.*">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.linkHelper">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.workingSets">
-            </contentExtension>
+            <contentExtension pattern="org.hpccsystems.eclide.navigator" />
+            <contentExtension pattern="org.eclipse.ui.navigator.resourceContent" />
+            <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*" />
+            <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper" />
+            <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets" />
 			<contentExtension pattern="org.eclipse.jdt.java.ui.javaContent" />
    <contentExtension
          isRoot="true"
@@ -98,11 +117,11 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.hpccsystems.eclide.editors.ECLEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="org.hpccsystems.eclide.editors.ECLWindow"
+            contributorClass="org.hpccsystems.eclide.editors.ECLEditorActionContributor"
             extensions="ecl"
-            icon="icons/sample.gif"
-            id="org.hpccsystems.eclide.editors.ECLEditor"
+            icon="icons/doc.png"
+            id="org.hpccsystems.eclide.editors.ECLWindow"
             name="%editor.name.0">
       </editor>
    </extension>
@@ -137,10 +156,10 @@
             nameFilter="*"
             objectClass="org.eclipse.core.resources.IProject">
          <action
-               class="org.hpccsystems.eclide.builder.ToggleNatureAction"
+               class="org.hpccsystems.eclide.builder.ECLProjectAction"
                enablesFor="+"
                id="org.hpccsystems.eclide.addRemoveNatureAction"
-               label="%action.label.0"
+               label="%action.label"
                menubarPath="additions">
          </action>
       </objectContribution>
@@ -166,7 +185,7 @@
              category="org.hpccsystems.eclide"
              class="org.hpccsystems.eclide.wizards.ECLNewProjectWizard"
              finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
-             icon="icons/sample.gif"
+             icon="icons/releng_gears.gif"
              id="org.hpccsystems.eclide.wizards.ECLNewProjectWizard"
              name="%wizard.name.1"
              preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective"
@@ -179,7 +198,7 @@
             category="org.hpccsystems.eclide"
             class="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
             finalPerspective="org.hpccsystems.eclide.perspectives.ECLPerspective"
-            icon="icons/sample.gif"
+            icon="icons/doc.png"
             id="org.hpccsystems.eclide.wizards.ECLNewFileWizard"
             name="%wizard.name.2"
             preferredPerspectives="org.hpccsystems.eclide.perspectives.ECLPerspective">
@@ -191,17 +210,25 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="org.hpccsystems.eclide.launchers.LaunchDelegate"
+            delegate="org.hpccsystems.eclide.launchers.ECLLaunchDelegate"
             id="org.hpccsystems.eclide.launching.ECLConfigurationType"
             modes="run"
-            name="%launchConfigurationType.name.0"
+            name="%launchConfigurationType.name"
             public="true">
       </launchConfigurationType>
    </extension>
    <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.hpccsystems.eclide.launching.ECLConfigurationType"
+            icon="icons/releng_gears.gif"
+            id="org.hpccsystems.eclide.launchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="org.hpccsystems.eclide.launchers.ECLConfigurationTabGroup"
+            class="org.hpccsystems.eclide.launchers.ECLLaunchTabGroup"
             id="org.hpccsystems.eclide.launching.ECLConfigurationType"
             type="org.hpccsystems.eclide.launching.ECLConfigurationType">
       </launchConfigurationTabGroup>
@@ -209,9 +236,10 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="org.hpccsystems.eclide.launchers.ECLShortcut"
+            class="org.hpccsystems.eclide.launchers.ECLLaunchShortcutLocal"
+            icon="icons/releng_gears.gif"
             id="org.hpccsystems.eclide.launchers.ECLShortcut"
-            label="%shortcut.label.0"
+            label="%shortcut.label"
             modes="run">
          <contextualLaunch>
 		 <enablement>
@@ -221,6 +249,30 @@
              </enablement>
          </contextualLaunch>
       </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            markerType="org.hpccsystems.eclide.eclProblem"
+            class="org.hpccsystems.eclide.problem.QuickFixer">
+      </markerResolutionGenerator>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.hpccsystems.eclide.importWizards.sampleCategory"
+            name="ECL Repository">
+      </category>
+      <wizard
+            category="org.hpccsystems.eclide.importWizards.sampleCategory"
+            class="org.hpccsystems.eclide.wizards.ImportWizard"
+            icon="icons/sample.gif"
+            id="org.hpccsystems.eclide.importWizards.ImportWizard"
+            name="Import Repository">
+         <description>
+            Import an entire Repository from a rmote legacy server into the workspace.
+         </description>
+      </wizard>
    </extension>
 
 </plugin>

@@ -1,149 +1,160 @@
-/*##############################################################################
-
-    Copyright (C) 2011 HPCC Systems.
-
-    All rights reserved. This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-############################################################################## */
+/*******************************************************************************
+ * Copyright (c) 2011 HPCC Systems.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     HPCC Systems - initial API and implementation
+ ******************************************************************************/
 package org.hpccsystems.eclide.builder;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
-
+import java.util.Set;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.eclide.preferences.PreferenceConstants;
-import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
+import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
+import org.hpccsystems.internal.CmdArgs;
+import org.hpccsystems.internal.CmdProcess;
+import org.hpccsystems.internal.ECLArchiveParser;
+import org.hpccsystems.internal.EclCCError;
+import org.hpccsystems.internal.EclCCErrorParser;
+import org.hpccsystems.internal.OS;
+import org.hpccsystems.internal.Eclipse;
+import org.hpccsystems.internal.CmdProcess.IProcessOutput;
 
 public class ECLCompiler {
 
-	private static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
-
+	final static String noCompiler = "Error:  Unable to locate eclcc.";
 	IProject project;
-	String compilerPath;
+	IProject[] referencedProjects;
+	
+	static String version = null;
+	
+	IPath binPath;
+	File eclccFile;
+	File eclplusFile;
 	String libraryPath;
 	IPath projectPath;
 	IPath workingPath;
 	IPath rootFolder;	
+
+	String argsCommon;
+	String argsSyntaxCheck;
+	String argsCompile;
+	String argsCompileRemote;
+
+	String argsWULocal;
+
+	boolean monitorDependees = false;
+	boolean supressSubsequentErrors = false;
 	
-	boolean executeRemotely;
+	boolean executeRemotely = false;
 	String serverIP;
 	String serverCluster;
 
-	MessageConsole console;
-	MessageConsoleStream consoleOut;
-	
-	HtmlViewer htmlViewer;
-	
+	MessageConsole eclccConsole;
+	MessageConsoleStream eclccConsoleWriter;
+
+	MessageConsole resultsConsole;
+	MessageConsoleStream resultsConsoleWriter;
+
 	public String wuid;
-	boolean hasError;
+	public Set<IFile> ancestors;
+	boolean hasError;	//TODO Has Error notification is all wrong.
 
-	interface IProcessOutput {
-		void ProcessOut(BufferedReader outReader);
-		void ProcessErr(IFile file, BufferedReader errReader);
-	}
-
-	class CmdProcess {
-		private IProcessOutput handler;
+	String QUOTE = "";
+	
+	class BasicHandler implements IProcessOutput {
+		protected StringBuilder sbOut;
+		protected StringBuilder sbErr;
 		
-		CmdProcess(IProcessOutput handler) {
-			this.handler = handler;
+		BasicHandler() {
+			sbOut = new StringBuilder();
+			sbErr = new StringBuilder();
 		}
-		
-		void exec(String command) {
-			Map<String, String> args = new TreeMap<String, String>();
-			exec(command, args, null, false);
-		}
-		
-		void exec(String command, Map<String, String> args, final IFile target, boolean eclplusArgs) {
-			List<String> argList = new Vector<String>();
-			consoleOut.print(command);
-			argList.add(command);
-			for(Map.Entry<String, String> entry : args.entrySet()) {
-				String arg;
-				if (eclplusArgs)
-					arg = entry.getKey() + "=" + entry.getValue();
-				else 
-					arg = "-" + entry.getKey() + entry.getValue();
-				consoleOut.print(" " + arg);
-				argList.add(arg);
-			}
-			if (target != null) {
-				consoleOut.print(" " + "..\\" + target.getProjectRelativePath().toOSString());
-				argList.add("..\\" + target.getProjectRelativePath().toOSString());
-			}
-			consoleOut.println();
 
+		@Override
+		public void ProcessOut(BufferedReader reader) {
+			final char[] buffer = new char[0x10000]; 
 			try {
-				ProcessBuilder pb = new ProcessBuilder(argList);
-				Map<String, String> env = pb.environment();
-				//env.put("VAR1", "myValue");
-				//env.remove("OTHERVAR");
-				//env.put("VAR2", env.get("VAR1") + "suffix");
-				pb.directory(workingPath.toFile());
-				Process p = pb.start();
-				//Process p = Runtime.getRuntime().exec(command);
-
-				final BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-				final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-				
-				Runnable readStdIn = new Runnable() {
-					public void run() {
-						handler.ProcessOut(stdInput);
-					}
-				};
-				Thread threadStdIn = new Thread(readStdIn, "read stdin");
-				threadStdIn.start();
-
-				Runnable readStdErr = new Runnable() {
-					public void run() {
-						handler.ProcessErr(target, stdError);
-					}
-				};
-				Thread threadStdErr = new Thread(readStdErr, "read stderr");
-				threadStdErr.start();
-
-				threadStdIn.join();
-				threadStdErr.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				int read; 
+				do { 
+					read = reader.read(buffer, 0, buffer.length);
+					if (read>0) { 
+						sbOut.append(buffer, 0, read); 
+					} 
+				} while (read>=0); 
 			} catch (IOException e) {
 				e.printStackTrace();
-			}	
+			} 
 		}
-	};
-	
-	class SyntaxHandler implements IProcessOutput {
-		IFile file;
 
-		public SyntaxHandler(IFile file) {
-			this.file = file;
+		@Override
+		public void ProcessErr(BufferedReader reader) {
+			String strLine = null;
+			try {
+				while ((strLine = reader.readLine()) != null) {
+					sbErr.append(strLine);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	class SyntaxHandler extends BasicHandler {
+		EclCCErrorParser errorParser;		
+
+		public SyntaxHandler() {
+			super();
+		}
+
+		@Override
+		public void ProcessErr(BufferedReader errReader) {
+			errorParser = new EclCCErrorParser(errReader, eclccConsoleWriter);
+			hasError = errorParser.errorCount > 0;
+			for(EclCCError e : errorParser.items) {
+				IResource resolvedFile = Eclipse.getWorkspaceRoot().getFileForLocation(e.errorPath);
+				if (resolvedFile != null) {
+					Eclipse.addMarker(resolvedFile, e.severity, e.code, e.message, e.lineNumber, e.colNumber, supressSubsequentErrors);
+				}
+			}
+		}
+	}
+
+	class ECLArchiveHandler extends SyntaxHandler {
+
+		public ECLArchiveHandler() {
+			super();
+		}
+		
+		Set<IFile> getAncestors(IFile file) {
+			ECLArchiveParser parser = new ECLArchiveParser(file, sbOut.toString());
+			assert(parser != null);
+			return parser.ancestors;
+		}
+		
+		@Override
+		public void ProcessOut(BufferedReader reader) {
+			super.ProcessOut(reader);
+		}
+	}
+
+	class LocalRunHandler extends ECLArchiveHandler {
+		LocalRunHandler() {
+			super();
 		}
 
 		@Override
@@ -151,78 +162,26 @@ public class ECLCompiler {
 			String stdIn = null;
 			try {
 				while ((stdIn = reader.readLine()) != null) {
-					consoleOut.print("Out: ");
-					consoleOut.println(stdIn);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		@Override
-		public void ProcessErr(IFile file, BufferedReader errReader) {
-			String stdErr = null;
-			try {
-				while ((stdErr = errReader.readLine()) != null) {
-					consoleOut.print("Err: ");
-					consoleOut.println(stdErr);
-					String[] parts = stdErr.split(":\\p{Blank}");
-					if (parts.length >= 3) {
-						String filePathAndLoc = parts[0];
-						String code = parts[1];
-						String message = parts[2];
-						String[] fileParts = filePathAndLoc.split("[\\(,\\)]");
-						if (fileParts.length >= 3) {
-							String errorPath = fileParts[0];
-							String line = fileParts[1];
-							String col = fileParts[2];
-
-							int lineNumber = 0;
-							try {
-								lineNumber = Integer.parseInt(line);
-							} catch (NumberFormatException e) {
-							}
-							int colNumber = 0;
-							try {
-								colNumber = Integer.parseInt(col);
-							} catch (NumberFormatException e) {
-							}
-
-							IResource resolvedFile = null;
-							if (file != null && file.getName().equalsIgnoreCase(errorPath))	//  Error is in the actual file being syntax checked.
-								resolvedFile = file;//project.findMember(file.getLocation());
-							else
-								resolvedFile = project.findMember(errorPath);
-							AddMarker(resolvedFile, code, message, lineNumber, colNumber);
-							/*
-							IMarker marker = AddMarker(filePath, code, message, lineNumber, colNumber);
-							try {
-								marker.getAttribute("Dependents");
-							} catch (CoreException e) {
-								e.printStackTrace();
-							}
-							*/
-						}
-					}
+					resultsConsoleWriter.println(stdIn);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
-	class EclPlusHandler extends SyntaxHandler {
-		EclPlusHandler(IFile file) {
-			super(file);
+
+	class EclPlusHandler extends ECLArchiveHandler {
+		EclPlusHandler() {
+			super();
 		}
-		
+
 		@Override
 		public void ProcessOut(BufferedReader reader) {
 			String stdIn = null;
 			try {
 				while ((stdIn = reader.readLine()) != null) {
-					consoleOut.print("Out: ");
-					consoleOut.println(stdIn);
+					eclccConsoleWriter.print("Out: ");
+					eclccConsoleWriter.println(stdIn);
 					int lastSpace = stdIn.lastIndexOf(' ');
 					if (lastSpace != -1)
 						wuid = stdIn.substring(lastSpace + 1, stdIn.length());
@@ -234,159 +193,156 @@ public class ECLCompiler {
 	}
 
 	public ECLCompiler(IProject project) {
+		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
+		
 		this.project = project;
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		compilerPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "eclcc.exe";
-		libraryPath = store.getString(PreferenceConstants.P_TOOLSPATH) + "plugins";
-		projectPath = project.getLocation();
-		workingPath = projectPath.append("tmp");
-		if (!workingPath.toFile().exists())
-			workingPath.toFile().mkdir();
-		rootFolder = project.getWorkspace().getRoot().getFullPath();
-		rootFolder = project.getWorkspace().getRoot().getFullPath();
-		
-		executeRemotely = store.getBoolean(PreferenceConstants.P_REMOTEEXECUTE);
-		serverIP = store.getString(PreferenceConstants.P_SERVERIP);
-		serverCluster = store.getString(PreferenceConstants.P_SERVERCLUSTER);
-		
-		console = findConsole("eclcc");
-		consoleOut = console.newMessageStream();
-
-		htmlViewer = findHtmlViewer();
-}
-
-	private MessageConsole findConsole(String name) {
-		ConsolePlugin plugin = ConsolePlugin.getDefault();
-		IConsoleManager conMan = plugin.getConsoleManager();
-		IConsole[] existing = conMan.getConsoles();
-		for (int i = 0; i < existing.length; i++)
-			if (name.equals(existing[i].getName()))
-				return (MessageConsole) existing[i];
-		//no console found, so create a new one
-		MessageConsole myConsole = new MessageConsole(name, null);
-		conMan.addConsoles(new IConsole[]{myConsole});
-		return myConsole;
-	}
-
-	private HtmlViewer findHtmlViewer() {
-		return HtmlViewer.getDefault();
-	}
-	
-	public void CheckSyntax(IFile file) {
-		deleteMarkers(file);
-		
-		Map<String, String> args = new TreeMap<String, String>();
-		args.put("f", "syntaxcheck=1");
-		//args.put("L", libraryPath);
-		//args.put("P", workingPath.toOSString());
-		//args.put("E", "");
-		
-		CmdProcess process = new CmdProcess(new SyntaxHandler(file));
-		process.exec(compilerPath, args, file, false);
-	}
-
-	public void BuildAndRun(IFile file) {
-		if (executeRemotely)
-			BuildAndRunRemote(file);
-		else
-			BuildAndRunLocal(file);
-	}
-
-	protected void BuildAndRunRemote(IFile file) {
-		deleteMarkers(file);
-
-		IPath xmlPath = file.getLocation().removeFileExtension();
-		xmlPath = xmlPath.addFileExtension("xml");
-		
-		Map<String, String> args = new TreeMap<String, String>();
-		//args.put("L", libraryPath);
-		//args.put("I", projectPath);
-		args.put("E", "");
-		args.put("o", xmlPath.toOSString());
-		
-		hasError = false;
-		CmdProcess process = new CmdProcess(new EclPlusHandler(file));
-		process.exec(compilerPath, args, file, false);
-		if (!hasError) {
-			args.clear();
-			//eclplus action=query server=192.168.241.131 cluster=thor @test.xml			
-			args.put("action", "query");
-			args.put("server", serverIP);
-			args.put("cluster", serverCluster);
-			args.put("timeout", "0");
-			//TODO process.exec("eclplus", args, "@" + xmlPath.toOSString(), true);
-			if (!wuid.isEmpty())
-				htmlViewer.showWuid(wuid);
-		}
-	}
-	
-	protected void BuildAndRunLocal(IFile file) {
-		deleteMarkers(file);
-
-		IPath exePath = workingPath.append("a.out.exe");
-		
-		Map<String, String> args = new TreeMap<String, String>();
-		//args.put("L", libraryPath);
-		//args.put("I", projectPath);
-		//args.put("P", workingPath.toOSString());
-		
-		hasError = false;
-		CmdProcess process = new CmdProcess(new SyntaxHandler(file));
-		process.exec(compilerPath, args, file, false);
-		if (!hasError)
-			process.exec(exePath.toOSString());
-	}
-
-	IMarker AddMarker(IResource resolvedFile, String code, String message, int lineNumber, int colNumber)
-	{
-		if (resolvedFile != null)
-		{
-			if (lineNumber <= 0) {
-				lineNumber = 1;
-			}
-			if (colNumber <= 0) {
-				colNumber = 1;
-			}
-			int severity = IMarker.SEVERITY_INFO;
-			if (code.startsWith("error")) {
-				hasError = true;
-				severity = IMarker.SEVERITY_ERROR;
-			}
-			else if (code.startsWith("warning"))
-				severity = IMarker.SEVERITY_WARNING;
-
-			if (resolvedFile.exists()) {
-				IMarker[] markers = null;
-				try {
-					markers = resolvedFile.findMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
-					for (int i = 0; i < markers.length; ++i) {
-						if (markers[i].getAttribute(IMarker.SEVERITY).equals(severity) && 
-								markers[i].getAttribute(IMarker.MESSAGE).equals(message) && 
-								markers[i].getAttribute(IMarker.LINE_NUMBER).equals(lineNumber)) {
-							return markers[i];
-						}
-					}
-		
-					IMarker marker = resolvedFile.createMarker(MARKER_TYPE);
-					marker.setAttribute(IMarker.SEVERITY, severity);
-					marker.setAttribute(IMarker.MESSAGE, message);
-					marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-					//marker.setAttribute(IMarker.CHAR_START, colNumber);
-					//marker.setAttribute(IMarker.CHAR_END, colNumber);
-					return marker;
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		return null;
-	}
-
-	private void deleteMarkers(IFile file) {
 		try {
-			file.deleteMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
-		} catch (CoreException ce) {
+			referencedProjects = project.getReferencedProjects();
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		binPath = new Path(store.getString(ECLPreferenceConstants.P_TOOLSPATH));
+		eclccFile = binPath.append("eclcc").toFile();
+		eclplusFile = binPath.append("eclplus").toFile();
+		
+		libraryPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "plugins";
+		projectPath = project.getLocation();
+		workingPath = project.getWorkingLocation(Activator.PLUGIN_ID);
+		//workingPath = projectPath.append("tmp");
+		//if (!workingPath.toFile().exists())
+		//	workingPath.toFile().mkdir();
+		rootFolder = project.getWorkspace().getRoot().getFullPath();
+		rootFolder = project.getWorkspace().getRoot().getFullPath();
+		
+		argsCommon = store.getString(ECLPreferenceConstants.P_ARGSCOMMON);
+		argsSyntaxCheck = store.getString(ECLPreferenceConstants.P_ARGSSYNTAX);
+		argsCompile = store.getString(ECLPreferenceConstants.P_ARGSCOMPILE);
+		argsCompileRemote = store.getString(ECLPreferenceConstants.P_ARGSCOMPILEREMOTE);
+
+		argsWULocal = store.getString(ECLPreferenceConstants.P_ARGSWULOCAL);
+
+		monitorDependees = store.getBoolean(ECLPreferenceConstants.P_MONITORDEPENDEES);
+		supressSubsequentErrors = store.getBoolean(ECLPreferenceConstants.P_SUPRESSSECONDERROR);
+		
+//		executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
+//		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
+//		serverCluster = store.getString(ECLPreferenceConstants.P_SERVERCLUSTER);
+
+		resultsConsole = Eclipse.findConsole("Results");
+		resultsConsoleWriter = resultsConsole.newMessageStream();
+		resultsConsoleWriter.setActivateOnWrite(true);
+
+		eclccConsole = Eclipse.findConsole("eclcc");
+		eclccConsoleWriter = eclccConsole.newMessageStream();
+		//eclccConsoleWriter.setActivateOnWrite(true);
+	}
+	
+	boolean HasCompiler() {
+		return !getVersion().isEmpty();
+	}
+	
+	void GetIncludeArgs(CmdArgs cmdArgs) {
+		for (int i = 0; i < referencedProjects.length; ++i) {
+			cmdArgs.Append("I",  referencedProjects[i].getLocation().toOSString());
+		}
+	}
+	
+	public String getVersion() {
+		if (version == null) {
+			version = new String();
+			CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "--version");
+			BasicHandler handler = new BasicHandler();
+			CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+			process.exec(cmdArgs);
+			version = handler.sbOut.toString();
+		}
+		return version;
+	}
+	
+	public void checkSyntax(IFile file) {
+		Eclipse.deleteMarkers(file);
+		
+		if (!HasCompiler()) {
+			eclccConsoleWriter.println(noCompiler);
+			return;
+		}
+
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsSyntaxCheck);
+		GetIncludeArgs(cmdArgs);
+
+		if (monitorDependees) 
+			cmdArgs.Append("E");
+		ECLArchiveHandler handler = new ECLArchiveHandler();
+		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+		process.exec(cmdArgs, file, false);
+		if (monitorDependees) {
+			ancestors = handler.getAncestors(file);
+		}
+	}
+
+	public String getArchive(IFile file) {
+		Eclipse.deleteMarkers(file);
+		
+		if (!HasCompiler()) {
+			eclccConsoleWriter.println(noCompiler);
+			return "";
+		}
+
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompileRemote);
+		GetIncludeArgs(cmdArgs);
+
+		if (!argsCompileRemote.contains("manifest=")) {
+			IPath manifestPath = file.getLocation().removeLastSegments(1);
+			manifestPath = manifestPath.append("files");
+			manifestPath = manifestPath.append("manifest.xml");
+			if (manifestPath.toFile().exists())
+				cmdArgs.Append("manifest=", manifestPath.toOSString());
+		}
+
+		hasError = false;
+		BasicHandler handler = new SyntaxHandler();
+		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+		process.exec(cmdArgs, file, false);
+		return handler.sbOut.toString();
+	}
+
+	public String getMeta(IFile file) {
+		if (!HasCompiler()) {
+			eclccConsoleWriter.println(noCompiler);
+			return "";
+		}
+
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "-M");
+		GetIncludeArgs(cmdArgs);
+
+		BasicHandler handler = new BasicHandler();
+		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+		process.exec(cmdArgs, file, false);
+		return handler.sbOut.toString();
+	}
+
+	public String buildAndRun(IFile file) {
+		Eclipse.deleteMarkers(file);
+
+		if (!HasCompiler()) {
+			eclccConsoleWriter.println(noCompiler);
+			return "";
+		}
+
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompile);
+		GetIncludeArgs(cmdArgs);
+
+		hasError = false;
+		CmdProcess process = new CmdProcess(workingPath, binPath, new LocalRunHandler(), eclccConsoleWriter);
+		process.exec(cmdArgs, file, false);
+		if (!hasError) {
+			resultsConsole.clearConsole();
+			IPath exePath = workingPath.append("a.out");
+			process.exec(exePath.toOSString(), argsWULocal);
+		}
+		return "";
 	}
 }
