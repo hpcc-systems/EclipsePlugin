@@ -19,6 +19,7 @@ import java.util.Observable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationListener;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.WUQuery;
 import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
@@ -49,20 +50,30 @@ public class Data extends Observable {
 	public Platform GetPlatform(ILaunchConfiguration launchConfiguration) {
 		Platform retVal = null;
 		String ip = "";
+		int port = 0;
 		try {
 			ip = launchConfiguration.getAttribute(Platform.P_IP, "");
 		} catch (CoreException e) {
 		} 
 		
-		if (!ip.isEmpty()) {
-			retVal = Platform.get(ip);
+		try {
+			port = launchConfiguration.getAttribute(Platform.P_PORT, 8010);
+		} catch (CoreException e) {
+		}
+		
+		if (port == 0) {
+			port = 8010;
+		}
+		
+		if (!ip.isEmpty() && port != 0) {
+			retVal = Platform.get(ip, port);
 			retVal.update(launchConfiguration);	
 		}
 		return retVal;
 	}
 
-	public Platform GetPlatformNoCreate(String ip) {
-		return Platform.getNoCreate(ip);
+	public Platform GetPlatformNoCreate(String ip, int port) {
+		return Platform.getNoCreate(ip, port);
 	}
 
 	public final Platform[] getPlatforms() {
@@ -72,7 +83,7 @@ public class Data extends Observable {
 			configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
 			for(int i = 0; i < configs.length; ++i) {
 				Platform p = GetPlatform(configs[i]);
-				if (!platforms.contains(p))
+				if (p != null && !platforms.contains(p))
 					platforms.add(p);
 			}
 		} catch (CoreException e) {
