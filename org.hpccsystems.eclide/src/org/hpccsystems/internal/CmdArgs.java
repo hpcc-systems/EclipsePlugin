@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.hpccsystems.internal;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +25,7 @@ import org.eclipse.ui.console.MessageConsoleStream;
 
 public class CmdArgs {
 	String cmd;
-	String baseArgs;
+	Collection<String> baseArgs;
 	String QUOTE = "";
 	protected Map<String, Set<String> > args;
 	
@@ -30,7 +33,7 @@ public class CmdArgs {
 		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 
 		this.cmd = cmd;
-		this.baseArgs = baseArgs;
+		this.baseArgs = Arrays.asList(baseArgs.split(" "));
 		args = new TreeMap<String, Set<String>>();
 	}
 	
@@ -49,7 +52,7 @@ public class CmdArgs {
 	public List<String> Get(boolean eclplusArgs) {
 		List<String> retVal = new Vector<String>();
 		retVal.add(cmd);
-		retVal.add(baseArgs);
+		retVal.addAll(baseArgs);
 		for(Map.Entry<String, Set<String> > entry : args.entrySet()) {
 			Set<String> values = entry.getValue();
 			if (values.isEmpty())

@@ -24,10 +24,12 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationListener;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
+import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
 import org.hpccsystems.ws.filespray.FileSprayLocator;
@@ -204,6 +206,13 @@ public class Platform extends DataSingleton {
 				appVals[0].setName("path");
 				appVals[0].setValue(file.getFullPath().toPortableString());
 				request.setApplicationValues(appVals);
+				
+				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+				int inlineResultLimit = store.getInt(ECLPreferenceConstants.P_INLINERESULTLIMIT);
+				if (inlineResultLimit > 0) {
+					request.setResultLimit(inlineResultLimit);
+				}
+				
 				try {
 					WUUpdateResponse response = service.WUCreateAndUpdate(request);
 					response.getWorkunit().setCluster(cluster);	//  WUSubmit does not return an updated ECLWorkunit, so set cluster here...  

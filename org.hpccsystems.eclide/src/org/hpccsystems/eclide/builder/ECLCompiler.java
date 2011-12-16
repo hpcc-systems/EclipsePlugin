@@ -211,9 +211,7 @@ public class ECLCompiler {
 		libraryPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "plugins";
 		projectPath = project.getLocation();
 		workingPath = project.getWorkingLocation(Activator.PLUGIN_ID);
-		//workingPath = projectPath.append("tmp");
-		//if (!workingPath.toFile().exists())
-		//	workingPath.toFile().mkdir();
+
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 		
@@ -221,16 +219,17 @@ public class ECLCompiler {
 		argsSyntaxCheck = store.getString(ECLPreferenceConstants.P_ARGSSYNTAX);
 		argsCompile = store.getString(ECLPreferenceConstants.P_ARGSCOMPILE);
 		argsCompileRemote = store.getString(ECLPreferenceConstants.P_ARGSCOMPILEREMOTE);
+		int inlineResultLimit = store.getInt(ECLPreferenceConstants.P_INLINERESULTLIMIT);
+		if (inlineResultLimit > 0) {
+			argsCompile += " -fapplyInstantEclTransformations=1 -fapplyInstantEclTransformationsLimit=" + inlineResultLimit;
+			argsCompileRemote += " -fapplyInstantEclTransformations=1 -fapplyInstantEclTransformationsLimit=" + inlineResultLimit;
+		}
 
 		argsWULocal = store.getString(ECLPreferenceConstants.P_ARGSWULOCAL);
 
 		monitorDependees = store.getBoolean(ECLPreferenceConstants.P_MONITORDEPENDEES);
 		supressSubsequentErrors = store.getBoolean(ECLPreferenceConstants.P_SUPRESSSECONDERROR);
 		
-//		executeRemotely = store.getBoolean(ECLPreferenceConstants.P_REMOTEEXECUTE);
-//		serverIP = store.getString(ECLPreferenceConstants.P_SERVERIP);
-//		serverCluster = store.getString(ECLPreferenceConstants.P_SERVERCLUSTER);
-
 		resultsConsole = Eclipse.findConsole("Results");
 		resultsConsoleWriter = resultsConsole.newMessageStream();
 		resultsConsoleWriter.setActivateOnWrite(true);
