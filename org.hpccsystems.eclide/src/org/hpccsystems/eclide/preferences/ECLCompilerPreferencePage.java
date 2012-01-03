@@ -62,28 +62,9 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Miscellaneous:", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(ECLPreferenceConstants.P_INLINERESULTLIMIT, "&Inline Result Limit:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_MONITORDEPENDEES, "&Monitor Dependees (requires manual \"Project/Clean...\")", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_SUPRESSSECONDERROR, "&Supress Subsequent Errors", getFieldEditorParent()));
-
-//		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_REMOTEEXECUTE, "&Execute On Server:", getFieldEditorParent()));
-//		addField(new StringFieldEditor(ECLPreferenceConstants.P_SERVERIP, "&Server IP:", getFieldEditorParent()));
-//		addField(new StringFieldEditor(ECLPreferenceConstants.P_SERVERCLUSTER, "&Server Cluster:", getFieldEditorParent()));
-		
-//		addField(
-//			new BooleanFieldEditor(
-//				PreferenceConstants.P_BOOLEAN,
-//				"&An example of a boolean preference",
-//				getFieldEditorParent()));
-//
-//		addField(new RadioGroupFieldEditor(
-//				PreferenceConstants.P_CHOICE,
-//			"An example of a multiple-choice preference",
-//			1,
-//			new String[][] { { "&Choice 1", "choice1" }, {
-//				"C&hoice 2", "choice2" }
-//		}, getFieldEditorParent()));
-//		addField(
-//			new StringFieldEditor(PreferenceConstants.P_STRING, "A &text preference:", getFieldEditorParent()));
 	}
 
 	/* (non-Javadoc)
@@ -91,5 +72,4 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	 */
 	public void init(IWorkbench workbench) {
 	}
-	
 }

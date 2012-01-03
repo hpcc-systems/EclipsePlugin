@@ -26,6 +26,7 @@ public class ECLPreferenceConstants {
 	//  Local command line options
 	public static final String P_ARGSWULOCAL = "argsWorkunitLocalPreference";
 
+	public static final String P_INLINERESULTLIMIT = "inlineResultLimit";
 	public static final String P_MONITORDEPENDEES = "monitorDependeesPreference";
 	public static final String P_SUPRESSSECONDERROR = "supressSecondErrorPreference";
 	
