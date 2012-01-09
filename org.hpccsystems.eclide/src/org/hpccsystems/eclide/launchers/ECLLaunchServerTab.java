@@ -56,7 +56,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			Object source= e.getSource();
 			if (source == testButton) {
 				refreshBrowser();
-			} else if (source == enableButton) {
+			} else if (source == disableButton) {
 				scheduleUpdateJob();
 			}
 		}
@@ -66,7 +66,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	
     Image image;
 
-	private Button enableButton;
+	private Button disableButton;
 	protected Text fIPText;
 	protected Text fPortText;
 	protected Text fClusterText;
@@ -84,8 +84,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	}
 
 	protected void createServerEditor(Composite parent) {
-		enableButton = SWTFactory.createCheckButton(parent, "Server Active (Will be disabled if unreachable)", null, true, 1);
-		enableButton.addSelectionListener(fListener);
+		disableButton = SWTFactory.createCheckButton(parent, "Disable Server", null, false, 1);
+		disableButton.addSelectionListener(fListener);
 
 		Group group = SWTFactory.createGroup(parent, "Server:", 2, 1, GridData.FILL_HORIZONTAL);
 		SWTFactory.createLabel(group, "IP Address:  ", 1);
@@ -158,7 +158,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			enableButton.setSelection(configuration.getAttribute(Platform.P_ENABLED, true));
+			disableButton.setSelection(configuration.getAttribute(Platform.P_DISABLED, false));
 
 			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
 			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, 8010)));
@@ -174,7 +174,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(Platform.P_ENABLED, enableButton.getSelection());
+		configuration.setAttribute(Platform.P_DISABLED, disableButton.getSelection());
 
 		configuration.setAttribute(Platform.P_IP, fIPText.getText());
 		try {
