@@ -11,15 +11,11 @@
 package org.hpccsystems.eclide.builder.meta;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jface.util.Assert;
 import org.xml.sax.Attributes;
 
 public class ECLDefinition extends ECLBase implements Serializable {

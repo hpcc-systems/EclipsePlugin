@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.ui.viewer.platform;
 
-import org.eclipse.swt.graphics.Font;
-
 public interface TreeItemOwner {
 	public void update(Object element, String[] properties);
 	public void refresh(Object element);

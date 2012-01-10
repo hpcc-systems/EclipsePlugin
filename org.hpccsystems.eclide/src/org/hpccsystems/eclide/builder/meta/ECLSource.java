@@ -11,13 +11,8 @@
 package org.hpccsystems.eclide.builder.meta;
 
 import java.io.Serializable;
-import java.util.Collection;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.hpccsystems.internal.data.DataSingletonCollection;
-import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.data.Workunit;
 import org.xml.sax.Attributes;
 
 public class ECLSource extends ECLDefinition implements Serializable {

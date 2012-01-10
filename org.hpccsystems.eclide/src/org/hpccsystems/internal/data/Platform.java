@@ -20,9 +20,7 @@ import javax.xml.rpc.ServiceException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Shell;
@@ -30,7 +28,6 @@ import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
-import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
 import org.hpccsystems.ws.filespray.FileSprayLocator;
 import org.hpccsystems.ws.filespray.FileSprayServiceSoap;

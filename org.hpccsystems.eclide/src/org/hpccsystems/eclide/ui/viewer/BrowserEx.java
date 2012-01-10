@@ -16,10 +16,8 @@ import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
-import org.eclipse.swt.browser.OpenWindowListener;
 import org.eclipse.swt.browser.ProgressAdapter;
 import org.eclipse.swt.browser.ProgressEvent;
-import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -28,18 +26,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
-import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 public class BrowserEx extends Composite {
 
 	private String user;
 	private String password;
 	private Browser browser;
-	private Workunit previousWU;
 	private ItemView previousTreeItem;
 	private ItemView nextTreeItem;
 	private String nextUrl;
@@ -146,7 +139,6 @@ public class BrowserEx extends Composite {
 	}	
 
 	public void setUrl(ItemView treeItem, String url, String user, String password) {
-		previousWU = null;
 		previousTreeItem = null;
 		this.user = user;
 		this.password = password;

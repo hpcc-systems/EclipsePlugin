@@ -46,7 +46,6 @@ public class CmdProcess {
 		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 	}
 	
-	@SuppressWarnings("unused")
 	private MessageConsole FindConsole(final String name) {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();

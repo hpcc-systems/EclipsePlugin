@@ -16,8 +16,6 @@ import java.util.Collection;
 
 public class CollectionDelta {
 	private ArrayList<DataSingleton> before;
-	private ArrayList<DataSingleton> after;
-	
 	protected String cause;
 	protected ArrayList<DataSingleton> added;
 	protected ArrayList<DataSingleton> unchanged;
@@ -38,7 +36,7 @@ public class CollectionDelta {
 	}
 	
 	public <T extends DataSingleton> CollectionDelta calcChanges(Collection<T> after) {
-		this.after = new ArrayList<DataSingleton>(after);
+		new ArrayList<DataSingleton>(after);
 		this.added = new ArrayList<DataSingleton>();
 		this.unchanged = new ArrayList<DataSingleton>();
 		this.removed = new ArrayList<DataSingleton>(before);

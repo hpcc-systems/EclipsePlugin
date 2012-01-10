@@ -16,16 +16,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.io.StringReader;
-import java.util.HashMap;
 import java.util.Stack;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.eclipse.core.runtime.QualifiedName;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.StackHandler;
 import org.xml.sax.Attributes;
@@ -79,7 +76,6 @@ public class ECLGlobalMeta {
 						def.update(attributes);
 						top.popDefinition(def);
 					} else {
-						ECLDefinition def22 = top.getDefinition(name);
 						itemToPush = new ECLDefinition(top, attributes);
 						top.addDefinition(itemToPush);
 					}

@@ -11,7 +11,6 @@
 package org.hpccsystems.eclide.editors;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;

@@ -16,7 +16,6 @@ import java.util.Observable;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.graphics.Font;
 import org.hpccsystems.internal.data.CollectionDelta;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.DataSingleton;

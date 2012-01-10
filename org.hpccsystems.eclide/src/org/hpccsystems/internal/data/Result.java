@@ -12,16 +12,12 @@ package org.hpccsystems.internal.data;
 
 import java.io.StringReader;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.hpccsystems.internal.DatasetParser;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLResult;
-import org.hpccsystems.ws.wsworkunits.ECLSchemaItem;
-import org.hpccsystems.ws.wsworkunits.WUQuery;
-import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
 import org.hpccsystems.ws.wsworkunits.WUResult;
 import org.hpccsystems.ws.wsworkunits.WUResultResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;

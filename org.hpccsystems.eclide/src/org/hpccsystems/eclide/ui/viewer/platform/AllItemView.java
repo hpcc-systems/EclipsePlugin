@@ -13,15 +13,12 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Observable;
 import java.util.Observer;
 
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ui.tree.ItemView;
-import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 import org.hpccsystems.internal.data.*;
 
 class PlatformBaseView extends ItemView {

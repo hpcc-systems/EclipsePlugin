@@ -10,19 +10,13 @@
  ******************************************************************************/
 package org.hpccsystems.internal;
 
-import java.io.BufferedReader; 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 

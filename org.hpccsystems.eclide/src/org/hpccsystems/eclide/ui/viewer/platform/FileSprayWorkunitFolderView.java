@@ -14,7 +14,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,7 +22,6 @@ import org.hpccsystems.internal.data.DataSingleton;
 import org.hpccsystems.internal.data.DataSingletonCollection;
 import org.hpccsystems.internal.data.FileSprayWorkunit;
 import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 public class FileSprayWorkunitFolderView extends FolderItemView implements Observer {

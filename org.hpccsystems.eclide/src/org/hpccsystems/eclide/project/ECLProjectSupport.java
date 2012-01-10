@@ -94,15 +94,7 @@ public class ECLProjectSupport {
         }
     }
 
-    /**
-     * Create a folder structure with a parent root, overlay, and a few child
-     * folders.
-     * 
-     * @param newProject
-     * @param paths
-     * @throws CoreException
-     */
-    private static void addToProjectStructure(IProject newProject, String[] paths) throws CoreException {
+	private static void addToProjectStructure(IProject newProject, String[] paths) throws CoreException {
         for (String path : paths) {
             IFolder etcFolders = newProject.getFolder(path);
             createFolder(etcFolders);

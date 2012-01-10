@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
@@ -60,14 +59,6 @@ import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 public class ECLWindow extends MultiPageEditorPart implements IResourceChangeListener, Observer, TreeItemOwner {
-
-	private final class SelectionChangedEventExtension extends
-			SelectionChangedEvent {
-		private SelectionChangedEventExtension(ISelectionProvider source,
-				ISelection selection) {
-			super(source, selection);
-		}
-	}
 
 	ECLContentOutlinePage eclOutlinePage;
 	

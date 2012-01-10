@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.launchers;
 
-import java.awt.Checkbox;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -35,7 +33,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
-import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
