@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -27,12 +28,12 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
 import org.hpccsystems.internal.CmdArgs;
 import org.hpccsystems.internal.CmdProcess;
+import org.hpccsystems.internal.CmdProcess.IProcessOutput;
 import org.hpccsystems.internal.ECLArchiveParser;
 import org.hpccsystems.internal.EclCCError;
 import org.hpccsystems.internal.EclCCErrorParser;
-import org.hpccsystems.internal.OS;
 import org.hpccsystems.internal.Eclipse;
-import org.hpccsystems.internal.CmdProcess.IProcessOutput;
+import org.hpccsystems.internal.OS;
 
 public class ECLCompiler {
 

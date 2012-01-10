@@ -15,8 +15,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-//import javax.xml.parsers.ParserConfigurationException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;

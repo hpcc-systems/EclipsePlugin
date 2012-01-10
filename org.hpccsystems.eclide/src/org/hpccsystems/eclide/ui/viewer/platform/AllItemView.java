@@ -18,8 +18,16 @@ import java.util.Observer;
 
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.internal.data.Cluster;
+import org.hpccsystems.internal.data.DataQuerySet;
+import org.hpccsystems.internal.data.DropZone;
+import org.hpccsystems.internal.data.FileSprayWorkunit;
+import org.hpccsystems.internal.data.Graph;
+import org.hpccsystems.internal.data.LogicalFile;
+import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.Result;
+import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
-import org.hpccsystems.internal.data.*;
 
 class PlatformBaseView extends ItemView {
 	Platform platform;

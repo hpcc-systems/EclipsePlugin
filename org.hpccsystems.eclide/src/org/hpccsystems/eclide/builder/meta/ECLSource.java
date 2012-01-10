@@ -11,6 +11,7 @@
 package org.hpccsystems.eclide.builder.meta;
 
 import java.io.Serializable;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.xml.sax.Attributes;

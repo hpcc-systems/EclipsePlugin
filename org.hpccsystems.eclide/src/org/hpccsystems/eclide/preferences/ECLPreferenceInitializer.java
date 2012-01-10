@@ -12,7 +12,6 @@ package org.hpccsystems.eclide.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-
 import org.hpccsystems.eclide.Activator;
 
 /**

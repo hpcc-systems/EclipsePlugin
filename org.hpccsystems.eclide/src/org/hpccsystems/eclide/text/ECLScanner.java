@@ -12,8 +12,14 @@ package org.hpccsystems.eclide.text;
 
 import java.util.ArrayList;
 
-import org.eclipse.jface.text.rules.*;
-import org.eclipse.jface.text.*;
+import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.rules.IRule;
+import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.NumberRule;
+import org.eclipse.jface.text.rules.RuleBasedScanner;
+import org.eclipse.jface.text.rules.SingleLineRule;
+import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.swt.SWT;
 import org.hpccsystems.eclide.editors.ECLColorManager;
 

@@ -54,8 +54,8 @@ import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.DataSingleton;
 import org.hpccsystems.internal.data.DataSingletonCollection;
 import org.hpccsystems.internal.data.Workunit;
-import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.ItemView;
+import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 public class ECLWindow extends MultiPageEditorPart implements IResourceChangeListener, Observer, TreeItemOwner {

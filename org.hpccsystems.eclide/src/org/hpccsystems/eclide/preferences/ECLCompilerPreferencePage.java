@@ -10,11 +10,16 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.preferences;
 
-import org.eclipse.jface.preference.*;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.ui.*;
+import org.hpccsystems.internal.ui.LabelFieldEditor;
+import org.hpccsystems.internal.ui.SpacerFieldEditor;
 
 /**
  * This class represents a preference page that

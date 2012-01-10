@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.wizards;
 
+import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
