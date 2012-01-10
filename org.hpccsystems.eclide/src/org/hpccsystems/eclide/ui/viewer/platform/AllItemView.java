@@ -39,10 +39,12 @@ class PlatformBaseView extends ItemView {
 		clusterName = parent != null ? parent.clusterName : "";
 	}
 
+	@Override
 	public String getUser() {
 		return platform.getUser();
 	}
 
+	@Override
 	public String getPassword() {
 		return platform.getPassword();
 	}
@@ -69,6 +71,7 @@ class TargetFolderView extends FolderItemView {
 		return super.getChildren();
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsTopology", "TpTargetClusterQuery");
 	}
@@ -102,6 +105,7 @@ class ClusterView extends PlatformBaseView {
 		return Activator.getImage("icons/cluster.png"); 
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		//http://192.168.2.68:8010/ws_machine/GetTargetClusterInfo?form
 		return platform.getURL("ws_machine", "GetTargetClusterInfo", "TargetClusters=" + clusterName);
@@ -129,6 +133,7 @@ class DropZoneFolderView extends FolderItemView {
 	}
 	
 	//  http://192.168.2.68:8010/FileSpray/DropZoneFiles?ver_=1.03
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("FileSpray", "DropZoneFiles");
 	}
@@ -162,6 +167,7 @@ class DropZoneView extends PlatformBaseView {
 		return Activator.getImage("icons/cluster.png"); 
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		//http://192.168.2.68:8010/FileSpray/FileList?Netaddr=192.168.2.68&OS=1&Path=/var/lib/HPCCSystems/mydropzone
 		return platform.getURL("FileSpray", "FileList", "Netaddr=" + dropZone.getIP() + "&OS=" + dropZone.getOS() + "&Path=" + dropZone.getDirectory());
@@ -189,6 +195,7 @@ class QuerySetFolderView extends FolderItemView {
 	}
 
 	//http://192.168.2.68:8010/WsWorkunits/WUQuerySets	
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUQuerySets");
 	}
@@ -222,6 +229,7 @@ class DataQuerySetView extends PlatformBaseView {
 	}
 
 	//http://192.168.2.68:8010/WsWorkunits/WUQuerysetDetails?QuerySetName=myroxie
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUQuerysetDetails", "QuerySetName=" + querySet.getName());
 }
@@ -262,6 +270,7 @@ class LogicalFileFolderView extends FolderItemView {
 	}
 
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		if (clusterName.isEmpty())
 			return platform.getURL("WsDfu", "DFUQuery");
@@ -293,6 +302,7 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 	}
 
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
@@ -336,6 +346,7 @@ class LogicalFileView extends PlatformBaseView {
 	}
 
 	//http://192.168.2.68:8010/WsDfu/DFUInfo?Name=tutorial::g::originalperson
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsDfu", "DFUInfo", "Name=" + file.getName());
 	}
@@ -387,6 +398,7 @@ class LogicalFileContentsView extends PlatformBaseView {
 		return Activator.getImage("icons/filecontent.png"); 
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUResult", "LogicalName=" + file.getName());
 	}
@@ -426,6 +438,7 @@ class ResultFolderView extends FolderItemView implements Observer {
 		return "Results";
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
@@ -471,6 +484,7 @@ class ResultView extends PlatformBaseView implements Observer {
 		return Activator.getImage("icons/result.png"); 
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUResult", "Wuid=" + result.getWuid() + "&Sequence=" + result.getSequence());
 	}
@@ -515,6 +529,7 @@ class ResultViewView extends PlatformBaseView {
 		return Activator.getImage("icons/chart.png"); 
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUResultView", "Wuid=" + result.getWuid() + "&ResultName=" + result.getResultName() + "&ViewName=" + viewName);
 	}
@@ -534,6 +549,7 @@ class GraphFolderView extends FolderItemView implements Observer  {
 		return "Graphs";
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
@@ -585,6 +601,7 @@ class GraphView extends PlatformBaseView implements Observer {
 		return Activator.getImage("icons/graph.png"); 
 	}
 	//http://192.168.2.68:8010/WsWorkunits/GVCAjaxGraph?Name=W20111103-233901&GraphName=graph1
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "GVCAjaxGraph", "Name=" + graph.getWuid() + "&GraphName=" + graph.getName());
 	}

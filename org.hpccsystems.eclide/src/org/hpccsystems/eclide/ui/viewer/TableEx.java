@@ -41,6 +41,7 @@ public class TableEx extends Composite {
 		tc.setWidth(30);
 		
 		table.addListener(SWT.SetData, new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				TableItem item = (TableItem) event.item;
 				int row = table.indexOf(item);
@@ -81,6 +82,7 @@ public class TableEx extends Composite {
 		table.setRedraw(true);
 	}
 
+	@Override
 	public boolean setFocus() {
 		return table.setFocus();		
 	}

@@ -34,6 +34,7 @@ public class ECLNewProjectWizard extends Wizard implements INewWizard, IExecutab
 	    setWindowTitle(WIZARD_NAME);
 	}
 
+	@Override
 	public void addPages() {
 		super.addPages();
 	    _pageOne = new WizardNewProjectCreationPage(PAGE_NAME);
@@ -42,6 +43,7 @@ public class ECLNewProjectWizard extends Wizard implements INewWizard, IExecutab
 		addPage(_pageOne);
 	}
 
+	@Override
 	public boolean performFinish() {
         String name = _pageOne.getProjectName();
         URI location = null;

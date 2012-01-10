@@ -125,6 +125,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		data = Data.get();
 		workunitFolder = (CTabFolder)getContainer(); 		
 		children.start(new Runnable() {
+			@Override
 			public void run() {
 				refreshChildren();
 				refresh();
@@ -132,6 +133,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		});
 	}
 
+	@Override
 	protected void createPages() {
 		createEditorPage();
 		createWorkunitPages();
@@ -141,6 +143,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	 * <code>IWorkbenchPart</code> method disposes all nested editors.
 	 * Subclasses may extend.
 	 */
+	@Override
 	public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		super.dispose();
@@ -148,6 +151,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	/**
 	 * Saves the multi-page editor's document.
 	 */
+	@Override
 	public void doSave(IProgressMonitor monitor) {
 		getEditor(0).doSave(monitor);
 	}
@@ -156,6 +160,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	 * Also updates the text for page 0's tab, and updates this multi-page editor's input
 	 * to correspond to the nested editor's.
 	 */
+	@Override
 	public void doSaveAs() {
 		IEditorPart editor = getEditor(0);
 		editor.doSaveAs();
@@ -173,6 +178,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	 * The <code>MultiPageEditorExample</code> implementation of this method
 	 * checks that the input is an instance of <code>IFileEditorInput</code>.
 	 */
+	@Override
 	public void init(IEditorSite site, IEditorInput editorInput)
 			throws PartInitException {
 		if (!(editorInput instanceof IFileEditorInput))
@@ -180,10 +186,12 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		super.init(site, editorInput);
 	}
 
+	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
 
+	@Override
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
 		CTabItem childItem = ((CTabFolder)getContainer()).getItem(newPageIndex);
@@ -192,9 +200,11 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 	}
 
+	@Override
 	public void resourceChanged(final IResourceChangeEvent event){
 		if(event.getType() == IResourceChangeEvent.PRE_CLOSE){
 			Display.getDefault().asyncExec(new Runnable(){
+				@Override
 				public void run(){
 					IWorkbenchPage[] pages = getSite().getWorkbenchWindow().getPages();
 					for (int i = 0; i<pages.length; i++){

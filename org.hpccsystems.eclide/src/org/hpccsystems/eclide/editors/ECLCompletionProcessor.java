@@ -148,7 +148,7 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 			}
 		});
 		
-		return (ICompletionProposal[]) result.toArray(new ICompletionProposal[result.size()]);
+		return result.toArray(new ICompletionProposal[result.size()]);
 	}
 
 	@Override

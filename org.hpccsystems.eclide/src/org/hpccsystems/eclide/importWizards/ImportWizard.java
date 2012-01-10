@@ -26,6 +26,7 @@ public class ImportWizard extends Wizard implements IImportWizard {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
+	@Override
 	public boolean performFinish() {
 		return mainPage.doImport();
 	}
@@ -33,6 +34,7 @@ public class ImportWizard extends Wizard implements IImportWizard {
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
 	 */
+	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle("File Import Wizard"); //NON-NLS-1
 		setNeedsProgressMonitor(true);
@@ -42,7 +44,8 @@ public class ImportWizard extends Wizard implements IImportWizard {
 	/* (non-Javadoc)
      * @see org.eclipse.jface.wizard.IWizard#addPages()
      */
-    public void addPages() {
+    @Override
+	public void addPages() {
         super.addPages(); 
         addPage(mainPage);        
     }

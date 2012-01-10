@@ -65,7 +65,7 @@ public class ECLGlobalMeta {
 				get().append((ECLSource)itemToPush);
 				assert(itemToPush != null);
 			} else if (e.tag.equals("Definition") || e.tag.equals("Field")) {
-				ECLDefinition top = (ECLDefinition)metaStack.peek();
+				ECLDefinition top = metaStack.peek();
 				if (top instanceof ECLSource && top.getName().equals(attributes.getValue("name"))) {
 					itemToPush = top;
 				} else {

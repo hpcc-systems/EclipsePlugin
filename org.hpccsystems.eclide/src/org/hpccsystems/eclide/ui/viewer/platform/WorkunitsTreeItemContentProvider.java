@@ -41,6 +41,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 			if (newInput instanceof Data) {
 				data = (Data)newInput;
 				children.start(new Runnable() {
+					@Override
 					public void run() {
 						refreshChildren();
 						refresh();
@@ -50,6 +51,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 		}
 	}
 
+	@Override
 	public Object[] getElements(Object inputElement) {
 		return children.get();
 	}
@@ -65,6 +67,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 		Workunit.All.addObserver(this);
 	}
 	
+	@Override
 	public void reloadChildren() {
 		children.clear();
 		refreshChildren();

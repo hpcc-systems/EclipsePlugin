@@ -47,10 +47,12 @@ public class BrowserEx extends Composite {
 		backButton.setImage(Activator.getImage("icons/left.png"));
 		backButton.setToolTipText("Back");
 		backButton.addSelectionListener(new SelectionListener() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				browser.back();
 			}
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
@@ -59,10 +61,12 @@ public class BrowserEx extends Composite {
 		forwardButton.setImage(Activator.getImage("icons/right.png"));
 		forwardButton.setToolTipText("Forward");
 		forwardButton.addSelectionListener(new SelectionListener() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				browser.forward();
 			}
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
@@ -75,11 +79,13 @@ public class BrowserEx extends Composite {
 		refreshButton.setImage(Activator.getImage("icons/refresh.png"));
 		refreshButton.setToolTipText("Refresh");
 		refreshButton.addSelectionListener(new SelectionListener() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 //				navigateTo(url, user, password);
 				browser.setUrl(comboUrl.getText());
 			}
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
@@ -118,6 +124,7 @@ public class BrowserEx extends Composite {
     	setUrl(null, "about:blank");
 
 		browser.addProgressListener(new ProgressAdapter() {
+			@Override
 			public void completed(ProgressEvent event) {
 				String url = browser.getUrl();
 				for (int i = 0; i < comboUrl.getItemCount(); ++i)

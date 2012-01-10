@@ -81,7 +81,8 @@ public class ArrayOfEspException  extends org.apache.axis.AxisFault  implements 
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ArrayOfEspException)) return false;
         ArrayOfEspException other = (ArrayOfEspException) obj;
         if (obj == null) return false;
@@ -103,7 +104,8 @@ public class ArrayOfEspException  extends org.apache.axis.AxisFault  implements 
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }
@@ -185,7 +187,8 @@ public class ArrayOfEspException  extends org.apache.axis.AxisFault  implements 
     /**
      * Writes the exception data to the faultDetails
      */
-    public void writeDetails(javax.xml.namespace.QName qname, org.apache.axis.encoding.SerializationContext context) throws java.io.IOException {
+    @Override
+	public void writeDetails(javax.xml.namespace.QName qname, org.apache.axis.encoding.SerializationContext context) throws java.io.IOException {
         context.serialize(qname, null, this);
     }
 }

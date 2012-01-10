@@ -49,6 +49,7 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	 * of preferences. Each field editor knows how to save and
 	 * restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Location:", getFieldEditorParent()));
@@ -75,6 +76,7 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 	}
 }

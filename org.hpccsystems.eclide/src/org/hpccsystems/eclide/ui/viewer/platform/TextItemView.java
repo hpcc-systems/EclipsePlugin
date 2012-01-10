@@ -40,6 +40,7 @@ public class TextItemView extends PlatformBaseView {
 		return Activator.getImage("icons/doc.png");
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}

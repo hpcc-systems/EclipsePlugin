@@ -56,6 +56,8 @@ public abstract class DataSingleton extends Observable {
 	abstract void fastRefresh();
 	abstract void fullRefresh();
 	
+	@Override
 	public abstract boolean equals(Object aThat);
+	@Override
 	public abstract int hashCode();
 }

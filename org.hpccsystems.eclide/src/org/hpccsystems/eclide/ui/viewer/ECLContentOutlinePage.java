@@ -50,6 +50,7 @@ public class ECLContentOutlinePage extends ContentOutlinePage {
 		meta = ECLGlobalMeta.get();
 	}
 
+	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		viewer = getTreeViewer();

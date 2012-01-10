@@ -34,7 +34,8 @@ public class WsTopologyLocator extends org.apache.axis.client.Service implements
     // Use to get a proxy class for WsTopologyServiceSoap
     private java.lang.String WsTopologyServiceSoap_address = "http://192.168.2.68:8010/WsTopology?ver_=1.17";
 
-    public java.lang.String getWsTopologyServiceSoapAddress() {
+    @Override
+	public java.lang.String getWsTopologyServiceSoapAddress() {
         return WsTopologyServiceSoap_address;
     }
 
@@ -49,7 +50,8 @@ public class WsTopologyLocator extends org.apache.axis.client.Service implements
         WsTopologyServiceSoapWSDDServiceName = name;
     }
 
-    public org.hpccsystems.ws.wstopology.WsTopologyServiceSoap getWsTopologyServiceSoap() throws javax.xml.rpc.ServiceException {
+    @Override
+	public org.hpccsystems.ws.wstopology.WsTopologyServiceSoap getWsTopologyServiceSoap() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(WsTopologyServiceSoap_address);
@@ -60,7 +62,8 @@ public class WsTopologyLocator extends org.apache.axis.client.Service implements
         return getWsTopologyServiceSoap(endpoint);
     }
 
-    public org.hpccsystems.ws.wstopology.WsTopologyServiceSoap getWsTopologyServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    @Override
+	public org.hpccsystems.ws.wstopology.WsTopologyServiceSoap getWsTopologyServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
             org.hpccsystems.ws.wstopology.WsTopologyServiceSoapStub _stub = new org.hpccsystems.ws.wstopology.WsTopologyServiceSoapStub(portAddress, this);
             _stub.setPortName(getWsTopologyServiceSoapWSDDServiceName());
@@ -80,7 +83,8 @@ public class WsTopologyLocator extends org.apache.axis.client.Service implements
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+    @Override
+	public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
             if (org.hpccsystems.ws.wstopology.WsTopologyServiceSoap.class.isAssignableFrom(serviceEndpointInterface)) {
                 org.hpccsystems.ws.wstopology.WsTopologyServiceSoapStub _stub = new org.hpccsystems.ws.wstopology.WsTopologyServiceSoapStub(new java.net.URL(WsTopologyServiceSoap_address), this);
@@ -99,7 +103,8 @@ public class WsTopologyLocator extends org.apache.axis.client.Service implements
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+    @Override
+	public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         if (portName == null) {
             return getPort(serviceEndpointInterface);
         }
@@ -114,13 +119,15 @@ public class WsTopologyLocator extends org.apache.axis.client.Service implements
         }
     }
 
-    public javax.xml.namespace.QName getServiceName() {
+    @Override
+	public javax.xml.namespace.QName getServiceName() {
         return new javax.xml.namespace.QName("urn:hpccsystems:ws:wstopology", "WsTopology");
     }
 
     private java.util.HashSet ports = null;
 
-    public java.util.Iterator getPorts() {
+    @Override
+	public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
             ports.add(new javax.xml.namespace.QName("urn:hpccsystems:ws:wstopology", "WsTopologyServiceSoap"));

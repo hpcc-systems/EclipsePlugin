@@ -206,7 +206,7 @@ public class Result extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( (Object)this == aThat ) 
+		if ( this == aThat ) 
 			return true;
 
 		if ( !(aThat instanceof Result) ) 
@@ -218,6 +218,7 @@ public class Result extends DataSingleton {
 				EqualsUtil.areEqual(this.info.getSequence(), that.info.getSequence());
 	}
 
+	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
 		result = HashCodeUtil.hash(result, workunit);

@@ -58,6 +58,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 			super(name, label, parent); 
 		} 
 
+		@Override
 		protected void doFillIntoGrid(Composite parent, int numColumns) 
 		{ 
 			// Creates the text control 
@@ -159,6 +160,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 											targetFile.getParentFile().mkdirs(); 
 											if (targetFile.createNewFile()) {
 												threadPool.execute(new Runnable() {
+													@Override
 													public void run() {
 														GetAttribute request3 = new GetAttribute();
 														request3.setModuleName(module.getName());

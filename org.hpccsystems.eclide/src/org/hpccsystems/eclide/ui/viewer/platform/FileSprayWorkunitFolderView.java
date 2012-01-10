@@ -35,6 +35,7 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 		return "File Sprays";
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		if (clusterName.isEmpty())
 			return platform.getURL("FileSpray", "GetDFUWorkunits");

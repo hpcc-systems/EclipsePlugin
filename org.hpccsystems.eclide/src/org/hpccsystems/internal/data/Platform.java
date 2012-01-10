@@ -141,7 +141,8 @@ public class Platform extends DataSingleton {
 
 	synchronized void confirmDisable() {
 		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
-		    public void run() {
+		    @Override
+			public void run() {
 				if (!isDisabled) {
 				    Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 		            if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {

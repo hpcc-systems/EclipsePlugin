@@ -66,7 +66,7 @@ public class DataQuerySet extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( (Object)this == aThat ) 
+		if ( this == aThat ) 
 			return true;
 
 		if ( !(aThat instanceof DataQuerySet) ) 
@@ -78,6 +78,7 @@ public class DataQuerySet extends DataSingleton {
 				EqualsUtil.areEqual(this.info.getQuerySetName(), that.info.getQuerySetName());
 	}
 
+	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
 		result = HashCodeUtil.hash(result, platform);

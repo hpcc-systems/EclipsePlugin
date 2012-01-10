@@ -100,6 +100,7 @@ public class Eclipse {
 			final IWorkbenchPage window = windows[i].getActivePage();
 			if (window != null) {
 				Display.getDefault().syncExec(new Runnable() {   
+					@Override
 					public void run() {
 						try {
 							window.showView(HtmlViewer.PI_UI_HTMLVIEW);
@@ -127,6 +128,7 @@ public class Eclipse {
 			final IWorkbenchPage window = windows[i].getActivePage();
 			if (window != null) {
 				Display.getDefault().syncExec(new Runnable() {   
+					@Override
 					public void run() {
 						try {
 							window.showView(ResultViewer.PI_UI_RESULTVIEW);
@@ -216,7 +218,7 @@ public class Eclipse {
 				}
 			}
 		}
-		return (IResource[]) dirtyres.toArray(new IResource[dirtyres.size()]);
+		return dirtyres.toArray(new IResource[dirtyres.size()]);
 	}
 	
 	public static void doSaveDirty(IProject project)

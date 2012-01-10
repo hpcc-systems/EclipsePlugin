@@ -34,7 +34,8 @@ public class WsDfuLocator extends org.apache.axis.client.Service implements org.
     // Use to get a proxy class for WsDfuServiceSoap
     private java.lang.String WsDfuServiceSoap_address = "http://192.168.2.68:8010/WsDfu?ver_=1.19";
 
-    public java.lang.String getWsDfuServiceSoapAddress() {
+    @Override
+	public java.lang.String getWsDfuServiceSoapAddress() {
         return WsDfuServiceSoap_address;
     }
 
@@ -49,7 +50,8 @@ public class WsDfuLocator extends org.apache.axis.client.Service implements org.
         WsDfuServiceSoapWSDDServiceName = name;
     }
 
-    public org.hpccsystems.ws.wsdfu.WsDfuServiceSoap getWsDfuServiceSoap() throws javax.xml.rpc.ServiceException {
+    @Override
+	public org.hpccsystems.ws.wsdfu.WsDfuServiceSoap getWsDfuServiceSoap() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(WsDfuServiceSoap_address);
@@ -60,7 +62,8 @@ public class WsDfuLocator extends org.apache.axis.client.Service implements org.
         return getWsDfuServiceSoap(endpoint);
     }
 
-    public org.hpccsystems.ws.wsdfu.WsDfuServiceSoap getWsDfuServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    @Override
+	public org.hpccsystems.ws.wsdfu.WsDfuServiceSoap getWsDfuServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
             org.hpccsystems.ws.wsdfu.WsDfuServiceSoapStub _stub = new org.hpccsystems.ws.wsdfu.WsDfuServiceSoapStub(portAddress, this);
             _stub.setPortName(getWsDfuServiceSoapWSDDServiceName());
@@ -80,7 +83,8 @@ public class WsDfuLocator extends org.apache.axis.client.Service implements org.
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+    @Override
+	public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
             if (org.hpccsystems.ws.wsdfu.WsDfuServiceSoap.class.isAssignableFrom(serviceEndpointInterface)) {
                 org.hpccsystems.ws.wsdfu.WsDfuServiceSoapStub _stub = new org.hpccsystems.ws.wsdfu.WsDfuServiceSoapStub(new java.net.URL(WsDfuServiceSoap_address), this);
@@ -99,7 +103,8 @@ public class WsDfuLocator extends org.apache.axis.client.Service implements org.
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+    @Override
+	public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         if (portName == null) {
             return getPort(serviceEndpointInterface);
         }
@@ -114,13 +119,15 @@ public class WsDfuLocator extends org.apache.axis.client.Service implements org.
         }
     }
 
-    public javax.xml.namespace.QName getServiceName() {
+    @Override
+	public javax.xml.namespace.QName getServiceName() {
         return new javax.xml.namespace.QName("urn:hpccsystems:ws:wsdfu", "WsDfu");
     }
 
     private java.util.HashSet ports = null;
 
-    public java.util.Iterator getPorts() {
+    @Override
+	public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
             ports.add(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsdfu", "WsDfuServiceSoap"));

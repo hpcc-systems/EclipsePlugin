@@ -82,6 +82,7 @@ public class Data extends Observable {
 		return singletonFactory;
 	}
 	
+	@Override
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}

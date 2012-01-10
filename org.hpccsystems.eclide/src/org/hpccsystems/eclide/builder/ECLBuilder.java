@@ -34,6 +34,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			this.monitor = monitor;
 		}
 		
+		@Override
 		public boolean visit(IResourceDelta delta) throws CoreException {
 			if (monitor.isCanceled()) {
 				return false;
@@ -64,6 +65,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			this.monitor = monitor;
 		}
 
+		@Override
 		public boolean visit(IResource resource) {
 			if (monitor.isCanceled()) {
 				return false;
@@ -77,6 +79,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	public static final String BUILDER_ID = "org.hpccsystems.eclide.eclBuilder";
 	Set<IFile> checkedFiles;
 
+	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		monitor.setTaskName("Checking Syntax");
 		checkedFiles = new HashSet<IFile>();

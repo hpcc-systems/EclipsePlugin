@@ -24,6 +24,7 @@ public class ECLWatch implements IPerspectiveFactory {
 		super();
 	}
 
+	@Override
 	public void createInitialLayout(IPageLayout layout) {
 		this.layout = layout;
 		addViews();

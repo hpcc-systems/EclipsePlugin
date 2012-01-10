@@ -418,7 +418,7 @@ public class Workunit extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( (Object)this == aThat ) 
+		if ( this == aThat ) 
 			return true;
 
 		if ( !(aThat instanceof Workunit) ) 
@@ -430,6 +430,7 @@ public class Workunit extends DataSingleton {
 				EqualsUtil.areEqual(this.info.getWuid(), that.info.getWuid());
 	}
 
+	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
 		result = HashCodeUtil.hash(result, platform);

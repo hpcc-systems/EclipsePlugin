@@ -126,6 +126,7 @@ public class PlatformViewer extends ViewPart {
 	
 	public void createActions() {
 		showWebItemAction = new Action("Show ECL Watch") {
+			@Override
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
 				Iterator<?> iter = sel.iterator();
@@ -140,6 +141,7 @@ public class PlatformViewer extends ViewPart {
 		};
 		
 		refreshItemAction = new Action("Refresh") {
+			@Override
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
 				if (sel.size() == 0) {	//  No selection == reload
@@ -156,6 +158,7 @@ public class PlatformViewer extends ViewPart {
 		};
 
 		updateItemAction = new Action("Update") {
+			@Override
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
 				Iterator<?> iter = sel.iterator();
@@ -168,12 +171,14 @@ public class PlatformViewer extends ViewPart {
 		};
 
 		reloadAction = new Action("Reload") {
+			@Override
 			public void run() {
 				contentProvider.reloadChildren();
 			}
 		};
 
 		refreshAction = new Action("Refresh") {
+			@Override
 			public void run() {
 				contentProvider.refreshChildren();
 			}
@@ -194,6 +199,7 @@ public class PlatformViewer extends ViewPart {
 		MenuManager menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
+			@Override
 			public void menuAboutToShow(IMenuManager mgr) {
 				fillContextMenu(mgr);
 			}
