@@ -21,7 +21,7 @@ public class ECLGlobalPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 
 	public ECLGlobalPreferencePage() {
-		setDescription("ECL Releated preferences.");
+		setDescription("ECL Related Preferences.");
 	}
 
 	public ECLGlobalPreferencePage(String title) {

@@ -81,7 +81,7 @@ public class Platform extends DataSingleton {
 		return (Platform)All.getNoCreate(new Platform(ip, port));
 	}
 	
-	public static final String P_ENABLED = "enabledConfig";
+	public static final String P_DISABLED = "disabledConfig";
 	public static final String P_IP = "ipLaunchConfig";
 	public static final String P_PORT = "portLaunchConfig";
 	public static final String P_USER = "userLaunchConfig";
@@ -89,7 +89,7 @@ public class Platform extends DataSingleton {
 	public static final String P_CLUSTER = "clusterLaunchConfig";
 	
 	private String name;
-	private boolean isEnabled;
+	private boolean isDisabled;
 	private String ip;
 	private int port;
 	private String user;
@@ -106,7 +106,7 @@ public class Platform extends DataSingleton {
 	Platform(String ip, int port) {
 		this.ip = ip;
 		this.port = port;
-		this.isEnabled = false;
+		this.isDisabled = true;
 		this.name = "";
 		this.user = "";
 		this.password = "";
@@ -121,7 +121,7 @@ public class Platform extends DataSingleton {
 	public void update(ILaunchConfiguration launchConfiguration) {
 		name = launchConfiguration.getName();
 		try {
-			isEnabled = launchConfiguration.getAttribute(P_ENABLED, false);
+			isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
 		} catch (CoreException e) {
 		} 
 		try {
@@ -145,18 +145,22 @@ public class Platform extends DataSingleton {
 	synchronized void confirmDisable() {
 		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 		    public void run() {
-				if (isEnabled) {
+				if (!isDisabled) {
 				    Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 		            if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {
-	            		isEnabled = false;
+	            		isDisabled = true;
 		            }
 	            }
 		    }
 		});
 	}
 	
+	public boolean isDisabled() {
+		return isDisabled;
+	}
+
 	public boolean isEnabled() {
-		return isEnabled;
+		return !isDisabled;
 	}
 
 	public String getIP() {
