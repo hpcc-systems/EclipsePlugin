@@ -39,6 +39,8 @@ public class PlatformView extends PlatformBaseView {
 
 	@Override
 	public Image getImage() {
+		if (platform.isDisabled())
+			return Activator.getImage("icons/platform_disabled.png"); 
 		return Activator.getImage("icons/platform.png"); 
 	}
 
@@ -49,12 +51,14 @@ public class PlatformView extends PlatformBaseView {
 	@Override
 	public void refreshChildren() {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
-		retVal.add(new TargetFolderView(treeViewer, this, platform));
-		retVal.add(new DropZoneFolderView(treeViewer, this, platform));
-		retVal.add(new WorkunitFolderView(treeViewer, this, platform));
-		retVal.add(new FileSprayWorkunitFolderView(treeViewer, this, platform));
-		retVal.add(new QuerySetFolderView(treeViewer, this, platform));
-		retVal.add(new LogicalFileFolderView(treeViewer, this, platform));
+		if (platform.isEnabled()) {
+			retVal.add(new TargetFolderView(treeViewer, this, platform));
+			retVal.add(new DropZoneFolderView(treeViewer, this, platform));
+			retVal.add(new WorkunitFolderView(treeViewer, this, platform));
+			retVal.add(new FileSprayWorkunitFolderView(treeViewer, this, platform));
+			retVal.add(new QuerySetFolderView(treeViewer, this, platform));
+			retVal.add(new LogicalFileFolderView(treeViewer, this, platform));
+		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
