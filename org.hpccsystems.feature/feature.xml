@@ -113,7 +113,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </license>
 
    <url>
-      <update label="ECL Language Eclipse Plugin" url="https://gordon.homeserver.com/eclipse"/>
+      <update label="ECL Language Eclipse Plugin" url="http://cdn.hpccsystems.com/install/eclipse/develop"/>
    </url>
 
    <requires>

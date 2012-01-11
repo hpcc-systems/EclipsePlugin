@@ -60,8 +60,8 @@ public class CmdProcess {
 		return myConsole;
 	}
 	
-	public void exec(String command, String args) {
-		CmdArgs cmdArgs = new CmdArgs(command, args);
+	public void exec(String command, String commonArgs, String baseArgs) {
+		CmdArgs cmdArgs = new CmdArgs(command, commonArgs, baseArgs);
 		exec(cmdArgs);
 	}
 	
