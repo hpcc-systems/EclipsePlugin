@@ -112,31 +112,32 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 		ArrayList<CompletionProposal> result = new ArrayList<CompletionProposal>();
 
 		IDocument doc = viewer.getDocument();
-		ECLSource source = null;
 		if (doc instanceof ECLDocument) {
 			IFile file = ((ECLDocument)doc).getFile();
-			source = ECLGlobalMeta.get().getSource(file.getLocation());
-		}
-		ECLDefinition context = source.getContext(offset);
-		String knownText = getAutoCKnownString(doc, offset);
-		String remainingText = getAutoCRemainingString(doc, offset);
-		int replacementPos = getFirstCharOffset(doc, offset, false);
-		int endReplacementPos = getLastCharOffset(doc, offset);
-		if (knownText.isEmpty()) {
-			for (int i = 0; i < 6; ++i) {
-				for (String s : ECLKeywords.getKeywords(i)) {
-					if (s.toLowerCase().startsWith(remainingText.toLowerCase()))
-						result.add(new CompletionProposal(s.toUpperCase(), replacementPos, endReplacementPos - replacementPos, s.length()));
+			ECLSource source = ECLGlobalMeta.get().getSource(file.getLocation());
+			if (source != null) {
+				ECLDefinition context = source.getContext(offset);
+				String knownText = getAutoCKnownString(doc, offset);
+				String remainingText = getAutoCRemainingString(doc, offset);
+				int replacementPos = getFirstCharOffset(doc, offset, false);
+				int endReplacementPos = getLastCharOffset(doc, offset);
+				if (knownText.isEmpty()) {
+					for (int i = 0; i < 6; ++i) {
+						for (String s : ECLKeywords.getKeywords(i)) {
+							if (s.toLowerCase().startsWith(remainingText.toLowerCase()))
+								result.add(new CompletionProposal(s.toUpperCase(), replacementPos, endReplacementPos - replacementPos, s.length()));
+						}
+					}
+					
+				} else {
+					ECLDefinition def = context.findDefinition(knownText);
+					if (def != null) {
+						for (ECLDefinition child_def : def.getDefinitions()) {
+							if (child_def.getName().toLowerCase().startsWith(remainingText.toLowerCase()))
+								result.add(new CompletionProposal(child_def.getName(), replacementPos, endReplacementPos - replacementPos, child_def.getName().length()));
+						}			
+					}
 				}
-			}
-			
-		} else {
-			ECLDefinition def = context.findDefinition(knownText);
-			if (def != null) {
-				for (ECLDefinition child_def : def.getDefinitions()) {
-					if (child_def.getName().toLowerCase().startsWith(remainingText.toLowerCase()))
-						result.add(new CompletionProposal(child_def.getName(), replacementPos, endReplacementPos - replacementPos, child_def.getName().length()));
-				}			
 			}
 		}
 		

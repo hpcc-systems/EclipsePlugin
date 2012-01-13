@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.hpccsystems.internal;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -29,11 +28,12 @@ public class CmdArgs {
 	String QUOTE = "";
 	protected Map<String, Set<String> > args;
 	
-	public CmdArgs(String cmd, String baseArgs) {
+	public CmdArgs(String cmd, String commonArgs, String baseArgs) {
 		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 
 		this.cmd = cmd;
-		this.baseArgs = Arrays.asList(baseArgs.split(" "));
+		String allArgs = commonArgs + " " + baseArgs;
+		this.baseArgs = Arrays.asList(allArgs.split(" "));
 		args = new TreeMap<String, Set<String>>();
 	}
 	

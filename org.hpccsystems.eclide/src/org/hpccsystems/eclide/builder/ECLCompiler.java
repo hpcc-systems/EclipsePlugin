@@ -45,7 +45,6 @@ public class ECLCompiler {
 	IPath binPath;
 	File eclccFile;
 	File eclplusFile;
-	String libraryPath;
 	IPath projectPath;
 	IPath workingPath;
 	IPath rootFolder;	
@@ -208,7 +207,6 @@ public class ECLCompiler {
 		eclccFile = binPath.append("eclcc").toFile();
 		eclplusFile = binPath.append("eclplus").toFile();
 		
-		libraryPath = store.getString(ECLPreferenceConstants.P_TOOLSPATH) + "plugins";
 		projectPath = project.getLocation();
 		workingPath = project.getWorkingLocation(Activator.PLUGIN_ID);
 
@@ -244,6 +242,7 @@ public class ECLCompiler {
 	}
 	
 	void GetIncludeArgs(CmdArgs cmdArgs) {
+		cmdArgs.Append("I",  projectPath.toOSString());
 		for (int i = 0; i < referencedProjects.length; ++i) {
 			cmdArgs.Append("I",  referencedProjects[i].getLocation().toOSString());
 		}
@@ -252,7 +251,7 @@ public class ECLCompiler {
 	public String getVersion() {
 		if (version == null) {
 			version = new String();
-			CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "--version");
+			CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "--version", "");
 			BasicHandler handler = new BasicHandler();
 			CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
 			process.exec(cmdArgs);
@@ -269,7 +268,7 @@ public class ECLCompiler {
 			return;
 		}
 
-		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsSyntaxCheck);
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCommon, argsSyntaxCheck);
 		GetIncludeArgs(cmdArgs);
 
 		if (monitorDependees) 
@@ -290,7 +289,7 @@ public class ECLCompiler {
 			return "";
 		}
 
-		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompileRemote);
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCommon, argsCompileRemote);
 		GetIncludeArgs(cmdArgs);
 
 		if (!argsCompileRemote.contains("manifest=")) {
@@ -314,7 +313,7 @@ public class ECLCompiler {
 			return "";
 		}
 
-		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "-M");
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCommon, "-M");
 		GetIncludeArgs(cmdArgs);
 
 		BasicHandler handler = new BasicHandler();
@@ -331,7 +330,7 @@ public class ECLCompiler {
 			return "";
 		}
 
-		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCompile);
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCommon, argsCompile);
 		GetIncludeArgs(cmdArgs);
 
 		hasError = false;
@@ -340,7 +339,7 @@ public class ECLCompiler {
 		if (!hasError) {
 			resultsConsole.clearConsole();
 			IPath exePath = workingPath.append("a.out");
-			process.exec(exePath.toOSString(), argsWULocal);
+			process.exec(exePath.toOSString(), "", argsWULocal);
 		}
 		return "";
 	}
