@@ -10,19 +10,17 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.wizards;
 
-import org.eclipse.jface.viewers.IStructuredSelection;
+import java.net.URI;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExecutableExtension;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
-import org.eclipse.core.runtime.*;
-
-import java.net.URI;
-
-import org.eclipse.core.runtime.CoreException;
-
 import org.hpccsystems.eclide.project.ECLProjectSupport;
 
 public class ECLNewProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
@@ -36,6 +34,7 @@ public class ECLNewProjectWizard extends Wizard implements INewWizard, IExecutab
 	    setWindowTitle(WIZARD_NAME);
 	}
 
+	@Override
 	public void addPages() {
 		super.addPages();
 	    _pageOne = new WizardNewProjectCreationPage(PAGE_NAME);
@@ -44,6 +43,7 @@ public class ECLNewProjectWizard extends Wizard implements INewWizard, IExecutab
 		addPage(_pageOne);
 	}
 
+	@Override
 	public boolean performFinish() {
         String name = _pageOne.getProjectName();
         URI location = null;

@@ -88,6 +88,7 @@ public class ItemView {
 		case UNKNOWN:
 			final ItemView self = this;
 			children.start(new Runnable() {
+				@Override
 				public void run() {
 					refreshChildren();
 					children.setState(CalcState.FINISHED);

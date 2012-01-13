@@ -10,25 +10,16 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.ui.viewer;
 
-import java.util.Observable;
-import java.util.Observer;
-
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaData;
-import org.hpccsystems.eclide.builder.meta.ECLSource;
 
 public class ECLContentOutlinePage extends ContentOutlinePage {
 	ECLMetaData meta;
@@ -59,6 +50,7 @@ public class ECLContentOutlinePage extends ContentOutlinePage {
 		meta = ECLGlobalMeta.get();
 	}
 
+	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		viewer = getTreeViewer();

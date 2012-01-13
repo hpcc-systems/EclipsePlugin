@@ -10,11 +10,12 @@
  ******************************************************************************/
 package org.hpccsystems.internal;
 
-import java.io.BufferedReader; 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;

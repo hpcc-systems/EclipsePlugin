@@ -10,11 +10,16 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.preferences;
 
-import org.eclipse.jface.preference.*;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.ui.*;
+import org.hpccsystems.internal.ui.LabelFieldEditor;
+import org.hpccsystems.internal.ui.SpacerFieldEditor;
 
 /**
  * This class represents a preference page that
@@ -44,6 +49,7 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	 * of preferences. Each field editor knows how to save and
 	 * restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Location:", getFieldEditorParent()));
@@ -70,6 +76,7 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 	}
 }

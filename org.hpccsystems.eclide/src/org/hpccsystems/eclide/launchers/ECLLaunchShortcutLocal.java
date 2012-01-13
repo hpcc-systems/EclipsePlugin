@@ -18,15 +18,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.debug.ui.ILaunchShortcut2;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
-import org.hpccsystems.eclide.builder.ECLCompiler;
-import org.hpccsystems.internal.Eclipse;
-import org.hpccsystems.internal.data.Platform;
 
 public class ECLLaunchShortcutLocal implements ILaunchShortcut2 {
 	

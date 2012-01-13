@@ -33,10 +33,12 @@ public class WorkunitViewer extends PlatformViewer {
 		this.wu = wu;
 	}
 	
+	@Override
 	TreeItemContentProvider getContentProvider() {
 		return new WorkunitTreeItemContentProvider(treeViewer, wu);
 	}
 	
+	@Override
 	ISelectionChangedListener getSelectionListener() {
 		return new ISelectionChangedListener() {
 			@Override
@@ -70,6 +72,7 @@ public class WorkunitViewer extends PlatformViewer {
 		}
 	}
 	
+	@Override
 	public boolean showResult(ItemView ti) {
 		if (owner == null) 
 			return false;
@@ -94,9 +97,11 @@ public class WorkunitViewer extends PlatformViewer {
 		return false;
 	}
 	
+	@Override
 	protected void createToolbar() {
 	}
 
+	@Override
 	protected void createContextMenu() {
 	}
 }

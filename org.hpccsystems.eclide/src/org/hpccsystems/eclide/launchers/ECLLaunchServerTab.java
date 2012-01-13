@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.launchers;
 
-import java.awt.Checkbox;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -35,12 +33,12 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
-import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
 
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
+		@Override
 		public void modifyText(ModifyEvent e) {
 			scheduleUpdateJob();
 			Object source= e.getSource();
@@ -52,6 +50,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			}
 		}
 		
+		@Override
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
 			if (source == testButton) {
@@ -136,6 +135,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		});
 	}
 
+	@Override
 	public final void createControl(Composite parent) {
 		Composite projComp = SWTFactory.createComposite(parent, parent.getFont(), 1, 1, GridData.FILL_BOTH); 
 		((GridLayout)projComp.getLayout()).verticalSpacing = 0;
@@ -206,6 +206,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	
 	void refreshBrowser() {
 		browser.addProgressListener(new ProgressAdapter() {
+			@Override
 			public void completed(ProgressEvent event) {
 				browser.removeProgressListener(this);
 				System.out.println(fAddressText.getText());
@@ -220,7 +221,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		return "HPCC Platform";
 	}
 
-    public Image getImage() {
+    @Override
+	public Image getImage() {
         if (image == null) {
         	image = Activator.getImage("icons/releng_gears.gif"); //$NON-NLS-1$
         }

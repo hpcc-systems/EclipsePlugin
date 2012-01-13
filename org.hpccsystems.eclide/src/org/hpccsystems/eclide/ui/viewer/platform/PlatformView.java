@@ -44,6 +44,7 @@ public class PlatformView extends PlatformBaseView {
 		return Activator.getImage("icons/platform.png"); 
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL();
 	}

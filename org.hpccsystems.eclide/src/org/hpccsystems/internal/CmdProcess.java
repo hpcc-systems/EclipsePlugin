@@ -46,7 +46,6 @@ public class CmdProcess {
 		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 	}
 	
-	@SuppressWarnings("unused")
 	private MessageConsole FindConsole(final String name) {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();
@@ -92,6 +91,7 @@ public class CmdProcess {
 			final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 			
 			Runnable readStdIn = new Runnable() {
+				@Override
 				public void run() {
 					handler.ProcessOut(stdInput);
 				}
@@ -100,6 +100,7 @@ public class CmdProcess {
 			threadStdIn.start();
 
 			Runnable readStdErr = new Runnable() {
+				@Override
 				public void run() {
 					handler.ProcessErr(stdError);
 				}

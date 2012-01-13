@@ -10,7 +10,9 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.text;
 
-import org.eclipse.jface.text.rules.*;
+import org.eclipse.jface.text.rules.ICharacterScanner;
+import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.MultiLineRule;
 
 public class ECLRule extends MultiLineRule {
 
@@ -18,6 +20,7 @@ public class ECLRule extends MultiLineRule {
 		super("<", ">", token);
 	}
 	
+	@Override
 	protected boolean sequenceDetected(ICharacterScanner scanner, char[] sequence, boolean eofAllowed) {
 		int c = scanner.read();
 		if (sequence[0] == '<') {

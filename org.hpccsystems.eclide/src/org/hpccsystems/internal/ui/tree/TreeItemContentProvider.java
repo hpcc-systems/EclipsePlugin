@@ -62,6 +62,7 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 	@Override
 	public void update(final Object element, final String[] properties) {
 		Display.getDefault().asyncExec(new Runnable() {   
+			@Override
 			public void run() {
 				treeViewer.update(element, properties);
 			}
@@ -71,6 +72,7 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 	@Override
 	public void refresh(final Object element) {
 		Display.getDefault().asyncExec(new Runnable() {   
+			@Override
 			public void run() {
 				treeViewer.refresh(element);
 			}
@@ -80,6 +82,7 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 	@Override
 	public void refresh() {
 		Display.getDefault().asyncExec(new Runnable() {   
+			@Override
 			public void run() {
 				treeViewer.refresh();
 			}

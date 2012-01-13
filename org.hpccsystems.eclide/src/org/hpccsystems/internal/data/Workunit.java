@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.data.DataSingletonCollection;
-import org.hpccsystems.ws.wsworkunits.EspException;
 import org.hpccsystems.ws.wsworkunits.ApplicationValue;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLGraph;
@@ -27,6 +25,7 @@ import org.hpccsystems.ws.wsworkunits.ECLQuery;
 import org.hpccsystems.ws.wsworkunits.ECLResult;
 import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
+import org.hpccsystems.ws.wsworkunits.EspException;
 import org.hpccsystems.ws.wsworkunits.WUInfo;
 import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
 import org.hpccsystems.ws.wsworkunits.WUQuery;
@@ -419,7 +418,7 @@ public class Workunit extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( (Object)this == aThat ) 
+		if ( this == aThat ) 
 			return true;
 
 		if ( !(aThat instanceof Workunit) ) 
@@ -431,6 +430,7 @@ public class Workunit extends DataSingleton {
 				EqualsUtil.areEqual(this.info.getWuid(), that.info.getWuid());
 	}
 
+	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
 		result = HashCodeUtil.hash(result, platform);

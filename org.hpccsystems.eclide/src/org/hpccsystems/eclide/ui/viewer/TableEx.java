@@ -13,7 +13,6 @@ package org.hpccsystems.eclide.ui.viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
@@ -42,6 +41,7 @@ public class TableEx extends Composite {
 		tc.setWidth(30);
 		
 		table.addListener(SWT.SetData, new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				TableItem item = (TableItem) event.item;
 				int row = table.indexOf(item);
@@ -82,6 +82,7 @@ public class TableEx extends Composite {
 		table.setRedraw(true);
 	}
 
+	@Override
 	public boolean setFocus() {
 		return table.setFocus();		
 	}

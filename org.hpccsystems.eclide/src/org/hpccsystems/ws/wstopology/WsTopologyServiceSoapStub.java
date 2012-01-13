@@ -897,7 +897,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
         }
     }
 
-    public org.hpccsystems.ws.wstopology.SystemLogResponse systemLog(org.hpccsystems.ws.wstopology.SystemLogRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.SystemLogResponse systemLog(org.hpccsystems.ws.wstopology.SystemLogRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -939,7 +940,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpClusterInfoResponse tpClusterInfo(org.hpccsystems.ws.wstopology.TpClusterInfoRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpClusterInfoResponse tpClusterInfo(org.hpccsystems.ws.wstopology.TpClusterInfoRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -981,7 +983,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpClusterQueryResponse tpClusterQuery(org.hpccsystems.ws.wstopology.TpClusterQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpClusterQueryResponse tpClusterQuery(org.hpccsystems.ws.wstopology.TpClusterQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1023,7 +1026,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpGetComponentFileResponse tpGetComponentFile(org.hpccsystems.ws.wstopology.TpGetComponentFileRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpGetComponentFileResponse tpGetComponentFile(org.hpccsystems.ws.wstopology.TpGetComponentFileRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1065,7 +1069,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpGroupQueryResponse tpGroupQuery(org.hpccsystems.ws.wstopology.TpGroupQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpGroupQueryResponse tpGroupQuery(org.hpccsystems.ws.wstopology.TpGroupQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1107,7 +1112,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpLogFileResponse tpLogFile(org.hpccsystems.ws.wstopology.TpLogFileRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpLogFileResponse tpLogFile(org.hpccsystems.ws.wstopology.TpLogFileRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1149,7 +1155,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpLogFileResponse tpLogFileDisplay(org.hpccsystems.ws.wstopology.TpLogFileRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpLogFileResponse tpLogFileDisplay(org.hpccsystems.ws.wstopology.TpLogFileRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1191,7 +1198,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpLogicalClusterQueryResponse tpLogicalClusterQuery(org.hpccsystems.ws.wstopology.TpLogicalClusterQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpLogicalClusterQueryResponse tpLogicalClusterQuery(org.hpccsystems.ws.wstopology.TpLogicalClusterQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1233,7 +1241,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpMachineQueryResponse tpMachineQuery(org.hpccsystems.ws.wstopology.TpMachineQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpMachineQueryResponse tpMachineQuery(org.hpccsystems.ws.wstopology.TpMachineQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1275,7 +1284,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpServiceQueryResponse tpServiceQuery(org.hpccsystems.ws.wstopology.TpServiceQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpServiceQueryResponse tpServiceQuery(org.hpccsystems.ws.wstopology.TpServiceQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1317,7 +1327,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpSetMachineStatusResponse tpSetMachineStatus(org.hpccsystems.ws.wstopology.TpSetMachineStatusRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpSetMachineStatusResponse tpSetMachineStatus(org.hpccsystems.ws.wstopology.TpSetMachineStatusRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1359,7 +1370,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpSwapNodeResponse tpSwapNode(org.hpccsystems.ws.wstopology.TpSwapNodeRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpSwapNodeResponse tpSwapNode(org.hpccsystems.ws.wstopology.TpSwapNodeRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1401,7 +1413,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpTargetClusterQueryResponse tpTargetClusterQuery(org.hpccsystems.ws.wstopology.TpTargetClusterQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpTargetClusterQueryResponse tpTargetClusterQuery(org.hpccsystems.ws.wstopology.TpTargetClusterQueryRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1443,7 +1456,8 @@ public class WsTopologyServiceSoapStub extends org.apache.axis.client.Stub imple
 }
     }
 
-    public org.hpccsystems.ws.wstopology.TpXMLFileResponse tpXMLFile(org.hpccsystems.ws.wstopology.TpXMLFileRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
+    @Override
+	public org.hpccsystems.ws.wstopology.TpXMLFileResponse tpXMLFile(org.hpccsystems.ws.wstopology.TpXMLFileRequest parameters) throws java.rmi.RemoteException, org.hpccsystems.ws.wstopology.ArrayOfEspException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }

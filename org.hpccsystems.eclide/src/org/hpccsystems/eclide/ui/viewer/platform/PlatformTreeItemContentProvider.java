@@ -16,7 +16,6 @@ import java.util.Observable;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.graphics.Font;
 import org.hpccsystems.internal.data.CollectionDelta;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.DataSingleton;
@@ -41,6 +40,7 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 			if (newInput instanceof Data) {
 				data = (Data)newInput;
 				children.start(new Runnable() {
+					@Override
 					public void run() {
 						refreshChildren();
 						refresh();
@@ -50,6 +50,7 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 		}
 	}
 
+	@Override
 	public Object[] getElements(Object inputElement) {
 		return children.get();
 	}
@@ -65,6 +66,7 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 		Platform.All.addObserver(this);
 	}
 	
+	@Override
 	public void reloadChildren() {
 		children.clear();
 		refreshChildren();

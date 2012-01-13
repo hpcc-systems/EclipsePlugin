@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Stack;
 
 public class DataSingletonCollection extends Observable {
 	Map<Integer, DataSingleton> items;

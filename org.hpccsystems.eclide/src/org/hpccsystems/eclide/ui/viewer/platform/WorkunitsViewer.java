@@ -18,6 +18,7 @@ public class WorkunitsViewer extends PlatformViewer {
 		contentProvider = null;
 	}
 
+	@Override
 	synchronized TreeItemContentProvider getContentProvider() {
 		return new WorkunitsTreeItemContentProvider(treeViewer);
 	}

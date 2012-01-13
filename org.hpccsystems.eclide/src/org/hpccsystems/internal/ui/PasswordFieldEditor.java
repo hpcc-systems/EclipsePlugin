@@ -19,6 +19,7 @@ public class PasswordFieldEditor extends StringFieldEditor {
 		super(name, label, parent); 
 	} 
 
+	@Override
 	protected void doFillIntoGrid(Composite parent, int numColumns) 
 	{ 
 		// Creates the text control 

@@ -103,6 +103,7 @@ public class ECLCompletion {
 		}		
 	}
 	
+	@Override
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}

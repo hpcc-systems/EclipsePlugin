@@ -206,7 +206,7 @@ public class FileSprayWorkunit extends DataSingleton {
 	
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( (Object)this == aThat ) 
+		if ( this == aThat ) 
 			return true;
 
 		if ( !(aThat instanceof FileSprayWorkunit) ) 
@@ -218,6 +218,7 @@ public class FileSprayWorkunit extends DataSingleton {
 				EqualsUtil.areEqual(this.info.getID(), that.info.getID());
 	}
 
+	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
 		result = HashCodeUtil.hash(result, platform);

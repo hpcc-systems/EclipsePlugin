@@ -34,7 +34,8 @@ public class WsAttributesLocator extends org.apache.axis.client.Service implemen
     // Use to get a proxy class for WsAttributesServiceSoap
     private java.lang.String WsAttributesServiceSoap_address = "http://10.173.84.202:8145/WsAttributes?ver_=1.2";
 
-    public java.lang.String getWsAttributesServiceSoapAddress() {
+    @Override
+	public java.lang.String getWsAttributesServiceSoapAddress() {
         return WsAttributesServiceSoap_address;
     }
 
@@ -49,7 +50,8 @@ public class WsAttributesLocator extends org.apache.axis.client.Service implemen
         WsAttributesServiceSoapWSDDServiceName = name;
     }
 
-    public org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap getWsAttributesServiceSoap() throws javax.xml.rpc.ServiceException {
+    @Override
+	public org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap getWsAttributesServiceSoap() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(WsAttributesServiceSoap_address);
@@ -60,7 +62,8 @@ public class WsAttributesLocator extends org.apache.axis.client.Service implemen
         return getWsAttributesServiceSoap(endpoint);
     }
 
-    public org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap getWsAttributesServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    @Override
+	public org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap getWsAttributesServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
             org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoapStub _stub = new org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoapStub(portAddress, this);
             _stub.setPortName(getWsAttributesServiceSoapWSDDServiceName());
@@ -80,7 +83,8 @@ public class WsAttributesLocator extends org.apache.axis.client.Service implemen
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+    @Override
+	public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
             if (org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap.class.isAssignableFrom(serviceEndpointInterface)) {
                 org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoapStub _stub = new org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoapStub(new java.net.URL(WsAttributesServiceSoap_address), this);
@@ -99,7 +103,8 @@ public class WsAttributesLocator extends org.apache.axis.client.Service implemen
      * If this service has no port for the given interface,
      * then ServiceException is thrown.
      */
-    public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+    @Override
+	public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         if (portName == null) {
             return getPort(serviceEndpointInterface);
         }
@@ -114,13 +119,15 @@ public class WsAttributesLocator extends org.apache.axis.client.Service implemen
         }
     }
 
-    public javax.xml.namespace.QName getServiceName() {
+    @Override
+	public javax.xml.namespace.QName getServiceName() {
         return new javax.xml.namespace.QName("http://webservices.seisint.com/WsAttributes", "WsAttributes");
     }
 
     private java.util.HashSet ports = null;
 
-    public java.util.Iterator getPorts() {
+    @Override
+	public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
             ports.add(new javax.xml.namespace.QName("http://webservices.seisint.com/WsAttributes", "WsAttributesServiceSoap"));

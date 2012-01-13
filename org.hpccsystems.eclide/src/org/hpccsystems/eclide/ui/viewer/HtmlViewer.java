@@ -11,7 +11,6 @@
 package org.hpccsystems.eclide.ui.viewer;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 import org.hpccsystems.internal.ui.tree.ItemView;
 

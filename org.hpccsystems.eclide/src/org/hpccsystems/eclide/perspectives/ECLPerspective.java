@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.perspectives;
 
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.console.IConsoleConstants;
-import org.eclipse.jdt.ui.JavaUI;
 
 
 /**
@@ -33,6 +33,7 @@ public class ECLPerspective implements IPerspectiveFactory {
 		super();
 	}
 
+	@Override
 	public void createInitialLayout(IPageLayout layout) {
 		this.layout = layout;
 		addViews();

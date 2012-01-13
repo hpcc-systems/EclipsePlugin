@@ -13,6 +13,7 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.hpccsystems.internal.data.CollectionDelta;
@@ -20,8 +21,8 @@ import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.DataSingleton;
 import org.hpccsystems.internal.data.DataSingletonCollection;
 import org.hpccsystems.internal.data.Workunit;
-import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.ItemView;
+import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
@@ -40,6 +41,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 			if (newInput instanceof Data) {
 				data = (Data)newInput;
 				children.start(new Runnable() {
+					@Override
 					public void run() {
 						refreshChildren();
 						refresh();
@@ -49,6 +51,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 		}
 	}
 
+	@Override
 	public Object[] getElements(Object inputElement) {
 		return children.get();
 	}
@@ -64,6 +67,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 		Workunit.All.addObserver(this);
 	}
 	
+	@Override
 	public void reloadChildren() {
 		children.clear();
 		refreshChildren();

@@ -135,7 +135,7 @@ public class DropZone extends DataSingleton  {
 	
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( (Object)this == aThat ) 
+		if ( this == aThat ) 
 			return true;
 
 		if ( !(aThat instanceof DropZone) ) 
@@ -147,6 +147,7 @@ public class DropZone extends DataSingleton  {
 				EqualsUtil.areEqual(this.info.getName(), that.info.getName());
 	}
 
+	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
 		result = HashCodeUtil.hash(result, platform);

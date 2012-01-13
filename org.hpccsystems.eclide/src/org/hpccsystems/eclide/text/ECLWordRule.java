@@ -123,6 +123,7 @@ public class ECLWordRule implements IRule {
 	/*
 	 * @see IRule#evaluate(ICharacterScanner)
 	 */
+	@Override
 	public IToken evaluate(ICharacterScanner scanner) {
 		int c= scanner.read();
 		if (c != ICharacterScanner.EOF && fDetector.isWordStart((char) c)) {
@@ -140,7 +141,7 @@ public class ECLWordRule implements IRule {
 				if (fIgnoreCase)
 					buffer= buffer.toLowerCase();
 				
-				IToken token= (IToken)fWords.get(buffer);
+				IToken token= fWords.get(buffer);
 
 				if (token != null)
 					return token;
@@ -150,7 +151,7 @@ public class ECLWordRule implements IRule {
 					--i;
 
 				String s2 = new String(buffer.getBytes(), 0, i + 1);
-				token = (IToken)fWords.get(s2);
+				token = fWords.get(s2);
 
 				if (token != null)
 					return token;

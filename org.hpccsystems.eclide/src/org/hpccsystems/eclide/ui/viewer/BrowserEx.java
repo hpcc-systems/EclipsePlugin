@@ -16,10 +16,8 @@ import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
-import org.eclipse.swt.browser.OpenWindowListener;
 import org.eclipse.swt.browser.ProgressAdapter;
 import org.eclipse.swt.browser.ProgressEvent;
-import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -28,18 +26,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
-import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 public class BrowserEx extends Composite {
 
 	private String user;
 	private String password;
 	private Browser browser;
-	private Workunit previousWU;
 	private ItemView previousTreeItem;
 	private ItemView nextTreeItem;
 	private String nextUrl;
@@ -54,10 +47,12 @@ public class BrowserEx extends Composite {
 		backButton.setImage(Activator.getImage("icons/left.png"));
 		backButton.setToolTipText("Back");
 		backButton.addSelectionListener(new SelectionListener() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				browser.back();
 			}
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
@@ -66,10 +61,12 @@ public class BrowserEx extends Composite {
 		forwardButton.setImage(Activator.getImage("icons/right.png"));
 		forwardButton.setToolTipText("Forward");
 		forwardButton.addSelectionListener(new SelectionListener() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				browser.forward();
 			}
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
@@ -82,11 +79,13 @@ public class BrowserEx extends Composite {
 		refreshButton.setImage(Activator.getImage("icons/refresh.png"));
 		refreshButton.setToolTipText("Refresh");
 		refreshButton.addSelectionListener(new SelectionListener() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 //				navigateTo(url, user, password);
 				browser.setUrl(comboUrl.getText());
 			}
 
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
@@ -125,6 +124,7 @@ public class BrowserEx extends Composite {
     	setUrl(null, "about:blank");
 
 		browser.addProgressListener(new ProgressAdapter() {
+			@Override
 			public void completed(ProgressEvent event) {
 				String url = browser.getUrl();
 				for (int i = 0; i < comboUrl.getItemCount(); ++i)
@@ -146,7 +146,6 @@ public class BrowserEx extends Composite {
 	}	
 
 	public void setUrl(ItemView treeItem, String url, String user, String password) {
-		previousWU = null;
 		previousTreeItem = null;
 		this.user = user;
 		this.password = password;

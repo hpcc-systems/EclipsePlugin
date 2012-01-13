@@ -38,7 +38,17 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.WizardResourceImportPage;
 import org.hpccsystems.internal.Eclipse;
-import org.hpccsystems.ws.WsAttributes.*;
+import org.hpccsystems.ws.WsAttributes.ArrayOfEspException;
+import org.hpccsystems.ws.WsAttributes.ECLAttribute;
+import org.hpccsystems.ws.WsAttributes.ECLModule;
+import org.hpccsystems.ws.WsAttributes.GetAttribute;
+import org.hpccsystems.ws.WsAttributes.GetAttributeResponse;
+import org.hpccsystems.ws.WsAttributes.GetAttributes;
+import org.hpccsystems.ws.WsAttributes.GetAttributesResponse;
+import org.hpccsystems.ws.WsAttributes.GetModules;
+import org.hpccsystems.ws.WsAttributes.GetModulesResponse;
+import org.hpccsystems.ws.WsAttributes.WsAttributesLocator;
+import org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap;
 
 public class ImportWizardPage extends WizardResourceImportPage {
 	
@@ -48,6 +58,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 			super(name, label, parent); 
 		} 
 
+		@Override
 		protected void doFillIntoGrid(Composite parent, int numColumns) 
 		{ 
 			// Creates the text control 
@@ -149,6 +160,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 											targetFile.getParentFile().mkdirs(); 
 											if (targetFile.createNewFile()) {
 												threadPool.execute(new Runnable() {
+													@Override
 													public void run() {
 														GetAttribute request3 = new GetAttribute();
 														request3.setModuleName(module.getName());

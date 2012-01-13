@@ -21,10 +21,12 @@ public class QuickFix implements IMarkerResolution {
 		this.label = label;
 	}
 	
+	@Override
 	public String getLabel() {
 		return label;
 	}
 	
+	@Override
 	public void run(IMarker marker) {
 		MessageDialog.openInformation(null, "QuickFix Demo",
 				"This quick-fix is not yet implemented");

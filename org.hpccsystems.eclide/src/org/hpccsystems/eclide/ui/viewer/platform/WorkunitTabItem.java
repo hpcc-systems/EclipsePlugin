@@ -107,6 +107,7 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		Display.getDefault().asyncExec(new Runnable() {   
+		@Override
 		public void run() {
 			setText(wuView.getText());
 			setImage(wuView.getImage());

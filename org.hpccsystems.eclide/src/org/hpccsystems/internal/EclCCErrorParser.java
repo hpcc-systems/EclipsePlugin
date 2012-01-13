@@ -13,7 +13,6 @@ package org.hpccsystems.internal;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.ui.console.MessageConsoleStream;

@@ -721,7 +721,8 @@ public class WUQueryResponse  implements java.io.Serializable {
     }
 
     private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    @Override
+	public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof WUQueryResponse)) return false;
         WUQueryResponse other = (WUQueryResponse) obj;
         if (obj == null) return false;
@@ -824,7 +825,8 @@ public class WUQueryResponse  implements java.io.Serializable {
     }
 
     private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
+    @Override
+	public synchronized int hashCode() {
         if (__hashCodeCalc) {
             return 0;
         }

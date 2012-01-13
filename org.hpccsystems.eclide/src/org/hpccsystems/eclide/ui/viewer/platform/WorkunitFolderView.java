@@ -35,6 +35,7 @@ public class WorkunitFolderView extends FolderItemView implements Observer {
 		return "Workunits";
 	}
 
+	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		if (clusterName.isEmpty())
 			return platform.getURL("WsWorkunits", "WUQuery");
