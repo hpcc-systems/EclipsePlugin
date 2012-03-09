@@ -59,6 +59,7 @@ public class ECLCompiler {
 
 	boolean monitorDependees = false;
 	boolean supressSubsequentErrors = false;
+	boolean enableMetaProcessing = true;
 	
 	boolean executeRemotely = false;
 	String serverIP;
@@ -228,6 +229,7 @@ public class ECLCompiler {
 
 		monitorDependees = store.getBoolean(ECLPreferenceConstants.P_MONITORDEPENDEES);
 		supressSubsequentErrors = store.getBoolean(ECLPreferenceConstants.P_SUPRESSSECONDERROR);
+		enableMetaProcessing = store.getBoolean(ECLPreferenceConstants.P_ENABLEMETAPROCESSING);
 		
 		resultsConsole = Eclipse.findConsole("Results");
 		resultsConsoleWriter = resultsConsole.newMessageStream();
@@ -309,6 +311,9 @@ public class ECLCompiler {
 	}
 
 	public String getMeta(IFile file) {
+		if (!enableMetaProcessing)
+			return "";
+		
 		if (!HasCompiler()) {
 			eclccConsoleWriter.println(noCompiler);
 			return "";

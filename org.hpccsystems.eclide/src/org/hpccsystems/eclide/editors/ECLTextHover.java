@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.editors;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -20,16 +18,15 @@ import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
-import org.hpccsystems.eclide.builder.meta.ECLMetaData;
-import org.hpccsystems.eclide.builder.meta.ECLSource;
+import org.hpccsystems.eclide.builder.meta.ECLMetaTree;
+import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 
 public class ECLTextHover implements ITextHover {
 	ISourceViewer sourceViewer;
 	String contentType;
-	ECLMetaData meta;
-	ECLSource source;
+	ECLMetaTree meta;
+	ECLMetaNode source;
 
 	ECLTextHover(ISourceViewer sourceViewer, String contentType) {
 		this.sourceViewer = sourceViewer;
@@ -95,16 +92,17 @@ public class ECLTextHover implements ITextHover {
 		StringBuilder hover = new StringBuilder("---  SEARCH INFO  ---");
 		hover.append("\nSearch For:  " + text);
 		
-		ECLDefinition context = source.getContext(hoverRegion.getOffset());
+		ECLMetaNode context = source.getContext(hoverRegion.getOffset());
 		hover.append("\nContext:  " + context.getName());
 		
-		ECLDefinition def = context.findDefinition(text);
-		if (def != null) {
+		ECLMetaNode found = context.findDefinition(text, false);
+		if (found != null) {
 			hover.append("\n---  MATCH  ---");
-			hover.append("\nFound in:  " + def.getSource().getPathString());
-			hover.append("\nDefinition:  " + def.getName() + " (" + def.getOffset() + ", " + def.getLength() + ")");
+			//hover.append("\nFound in:  " + def.getSource().getPathString());
+			hover.append("\nDefinition:  " + found.getQualifiedName());// + " (" + def.getOffset() + ", " + def.getLength() + ")");
 		}
 
+		/*
 		ArrayList<ECLDefinition> matchedDef = new ArrayList<ECLDefinition>();
 		context.findDefinitionList(text, matchedDef);
 		if (!matchedDef.isEmpty()) {
@@ -118,6 +116,7 @@ public class ECLTextHover implements ITextHover {
 				hover.append("\nDefinition:  " + mdef.getName() + " (" + mdef.getOffset() + ", " + mdef.getLength() + ")");
 			}
 		}
+		*/
 		
 		return hover.toString();
 	}

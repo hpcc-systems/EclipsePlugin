@@ -19,16 +19,21 @@ import org.xml.sax.Attributes;
 public class ECLBase extends Observable implements Serializable {
 	private static final long serialVersionUID = 6777457786109500872L;
 	private static final String DOLLAR = "_local_directory_";
-	
+
 	HashMap<String, String> attributes;
 
-	public ECLBase(Attributes attributes) {
+	public ECLBase() {
 		this.attributes = new HashMap<String, String>();
+	}
+
+	public ECLBase(Attributes attributes) {
+		this();
 		update(attributes);
 	}
 
 	public void update(Attributes attributes) {
-		for(int i = 0; i < attributes.getLength(); ++i) {
+		assert attributes != null;
+		for (int i = 0; i < attributes.getLength(); ++i) {
 			this.attributes.put(attributes.getQName(i), attributes.getValue(i));
 			if (attributes.getQName(i).equals("name")) {
 				int pos = attributes.getValue(i).indexOf(DOLLAR);
@@ -37,6 +42,8 @@ public class ECLBase extends Observable implements Serializable {
 					this.attributes.put(attributes.getQName(i), newName);
 				}
 			}
+			setChanged();
 		}
+		notifyObservers();
 	}
 }

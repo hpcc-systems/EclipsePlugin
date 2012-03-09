@@ -24,6 +24,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 import org.hpccsystems.internal.StackHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -31,73 +32,59 @@ import org.xml.sax.SAXException;
 
 public class ECLGlobalMeta {
 	static ECLGlobalMeta self;
-	synchronized static public ECLMetaData get() {
+
+	synchronized static public ECLMetaTree get() {
 		if (self == null)
 			self = new ECLGlobalMeta();
-		return self.data;		
+		return self.tree;
 	}
 
-	//  Parser  ---
-	static class ECLMetaHandler extends StackHandler {
+	// Parser ---
+	static class ECLMetaTreeHandler extends StackHandler {
 
-		Stack<ECLDefinition> metaStack;
+		Stack<ECLMetaNode> metaStack;
 
-		ECLMetaHandler() {
+		ECLMetaTreeHandler() {
 			super();
-			metaStack = new Stack<ECLDefinition>();
+			metaStack = new Stack<ECLMetaNode>();
 		}
 
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 			super.startElement(uri, localName, qName, attributes);
 			Element e = elementStack.peek();
-			ECLDefinition itemToPush = null;
 			if (e.tag.equals("Source")) {
-				String path = attributes.getValue("sourcePath");
-				ECLSource source = get().getSource(path);
-				if (source != null) {
-					itemToPush = source;
-					source.update(attributes);
-				}
-				else {
-					itemToPush = new ECLSource(attributes);
-				}
-				get().append((ECLSource)itemToPush);
-				assert(itemToPush != null);
-			} else if (e.tag.equals("Definition") || e.tag.equals("Field")) {
-				ECLDefinition top = metaStack.peek();
-				if (top instanceof ECLSource && top.getName().equals(attributes.getValue("name"))) {
-					itemToPush = top;
+				ECLSource eclSource = new ECLSource(attributes);
+				ECLMetaNode node = get().createNode(eclSource.getQualifiedName(), eclSource);
+				metaStack.push(node);
+			} else if (e.tag.equals("Definition")) {
+				ECLDefinition eclDefinition = new ECLDefinition(metaStack.peek().getData(), attributes);
+				ECLMetaNode node;
+				if (metaStack.peek().getName().equals(eclDefinition.getName())) {
+					node = metaStack.peek();
+					node.getData().update(attributes);
 				} else {
-					String name = attributes.getValue("name");
-					ECLDefinition def = top.getDefinition(name);
-					if (def != null) {
-						itemToPush = def;
-						def.update(attributes);
-						top.popDefinition(def);
-					} else {
-						itemToPush = new ECLDefinition(top, attributes);
-						top.addDefinition(itemToPush);
-					}
+					node = metaStack.peek().addChild(eclDefinition.getName(), eclDefinition);
 				}
-				assert(itemToPush != null);
+				metaStack.push(node);
+			} else if (e.tag.equals("Field")) {
+				ECLField eclField = new ECLField(metaStack.peek().getData(), attributes);
+				metaStack.push(metaStack.peek().addChild(eclField.getName(), eclField));
 			} else if (e.tag.equals("Import")) {
-				ECLSource top = (ECLSource)metaStack.peek();
-				top.setImport(new ECLImport(attributes));
-			}
-			
-			if (itemToPush != null) {
-				metaStack.push(itemToPush);
-				itemToPush.pushDefinitions();
+				assert (metaStack.peek().getData() instanceof ECLSource);
+				ECLImport eclImport = new ECLImport(metaStack.peek().getData(), attributes);
+				metaStack.peek().addChild(eclImport.getName(), eclImport);
 			}
 		}
 
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			Element e = elementStack.peek();
-			if (e.tag.equals("Source") || e.tag.equals("Definition") || e.tag.equals("Field")) {
-				metaStack.peek().popDefinitions(true);
-				metaStack.peek().notifyObservers();
+			if (e.tag.equals("Source")) {
+				metaStack.pop();
+			} else if (e.tag.equals("Definition")) {
+				metaStack.pop();
+			} else if (e.tag.equals("Field")) {
 				metaStack.pop();
 			} else if (e.tag.equals("Import")) {
 			}
@@ -105,34 +92,32 @@ public class ECLGlobalMeta {
 		}
 	}
 
-	//  At some point we may have project and global meta containers...
-	ECLMetaData data; 
-	
+	// At some point we may have project and global meta containers...
+	ECLMetaTree tree;
+
 	static String getPersistFile() {
 		return Activator.getDefault().getStateLocation().append("meta.dat").toOSString();
 	}
 
 	private ECLGlobalMeta() {
-		try
-		{
+		try {
 			FileInputStream fis = new FileInputStream(getPersistFile());
 			ObjectInputStream in = new ObjectInputStream(fis);
-			data = (ECLMetaData)in.readObject();
+			tree = (ECLMetaTree) in.readObject();
 			in.close();
 		} catch (IOException e) {
 		} catch (ClassNotFoundException e) {
 		} catch (ClassCastException e) {
 		}
-		
-		if (data == null)
-			data = new ECLMetaData();		
 
+		if (tree == null)
+			tree = new ECLMetaTree();
 	}
-	
+
 	static public void clear() {
 		get().clear();
 	}
-	
+
 	public static void parse(String xml) {
 		if (xml.isEmpty())
 			return;
@@ -149,11 +134,11 @@ public class ECLGlobalMeta {
 			e.printStackTrace();
 		}
 
-		ECLMetaHandler handler = new ECLMetaHandler(); 
+		ECLMetaTreeHandler handler = new ECLMetaTreeHandler();
 		try {
 			parser.parse(new InputSource(new StringReader(xml)), handler);
 		} catch (SAXException e) {
-			//  If there is an error we may end up here. 
+			// If there is an error we may end up here.
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -166,7 +151,7 @@ public class ECLGlobalMeta {
 			FileOutputStream fos = new FileOutputStream(getPersistFile());
 			ObjectOutputStream out = new ObjectOutputStream(fos);
 			out.writeObject(get());
-			out.close();		
+			out.close();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e) {

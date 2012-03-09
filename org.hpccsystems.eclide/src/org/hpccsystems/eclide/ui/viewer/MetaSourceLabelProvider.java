@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.meta.ECLDefinition;
+import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 
 public class MetaSourceLabelProvider implements ILabelProvider {
 
@@ -39,11 +40,12 @@ public class MetaSourceLabelProvider implements ILabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof ECLDefinition) {
-			if (((ECLDefinition)element).isExported()) {
+		if (element instanceof ECLMetaNode) {
+			ECLMetaNode node = (ECLMetaNode)element;			
+			if (node.getData().isExported()) {
 				return Activator.getImage("icons/attr_exported.png"); 
 			}
-			return Activator.getImage("icons/attr.png"); 
+			return Activator.getImage("icons/attr.png");
 		}
 		
 		return null;
@@ -51,9 +53,10 @@ public class MetaSourceLabelProvider implements ILabelProvider {
 
 	@Override
 	public String getText(Object element) {
-		if (element instanceof ECLDefinition) {
-			String type = ((ECLDefinition)element).getType();
-			return ((ECLDefinition)element).getName() + (type.isEmpty() ? "" : " (" + type.toUpperCase() + ")");
+		if (element instanceof ECLMetaNode) {
+			ECLMetaNode node = (ECLMetaNode)element;			
+			String type = (node.getData()).getType();
+			return (node.getData()).getName() + (type.isEmpty() ? "" : " (" + type.toUpperCase() + ")");
 		}
 		return null;
 	}

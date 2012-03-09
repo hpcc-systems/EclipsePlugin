@@ -21,12 +21,13 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
+import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 import org.hpccsystems.eclide.builder.meta.ECLSource;
 
 class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observer{
 	TreeViewer viewer;
 	IPath path;
-	ECLSource source;
+	ECLMetaNode source;
 
 	MetaSourceTreeItemContentProvider() {
 		source = null;
@@ -51,14 +52,11 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		ArrayList<ECLDefinition> defs = new ArrayList<ECLDefinition>(); 
+		ArrayList<ECLMetaNode> nodes = new ArrayList<ECLMetaNode>(); 
 		if (source != null) {
-			defs.add(source);
-			/*for (ECLDefinition def : source.getDefinitions()) {
-				defs.add(def);
-			}*/
+			nodes.add(source);
 		}
-		return defs.toArray();
+		return nodes.toArray();
 	}
 
 	@Override
@@ -67,14 +65,14 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		ArrayList<ECLDefinition> defs = new ArrayList<ECLDefinition>(); 
-		if (parentElement instanceof ECLDefinition)
-			for (ECLDefinition def : ((ECLDefinition)parentElement).getDefinitions()) {
-				if (!(def.getName().startsWith("__") && def.getName().endsWith("__"))) {
-					defs.add(def);
+		ArrayList<ECLMetaNode> nodes = new ArrayList<ECLMetaNode>(); 
+		if (parentElement instanceof ECLMetaNode)
+			for (ECLMetaNode node : ((ECLMetaNode)parentElement).getChildren()) {
+				if (!(node.getData().getName().startsWith("__") && node.getData().getName().endsWith("__"))) {
+					nodes.add(node);
 				}
 			}
-		return defs.toArray();
+		return nodes.toArray();
 	}
 
 	@Override
@@ -84,8 +82,8 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if (element instanceof ECLDefinition)
-			return ((ECLDefinition)element).getDefinitions().size() > 0;
+		if (element instanceof ECLMetaNode)
+			return ((ECLMetaNode)element).getChildren().size() > 0;
 		return false;
 	}
 

@@ -25,6 +25,7 @@ import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
+import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 import org.hpccsystems.eclide.builder.meta.ECLSource;
 import org.hpccsystems.eclide.text.ECLKeywords;
 
@@ -114,9 +115,10 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 		IDocument doc = viewer.getDocument();
 		if (doc instanceof ECLDocument) {
 			IFile file = ((ECLDocument)doc).getFile();
-			ECLSource source = ECLGlobalMeta.get().getSource(file.getLocation());
+			ECLMetaNode source = ECLGlobalMeta.get().getSource(file.getLocation());
 			if (source != null) {
-				ECLDefinition context = source.getContext(offset);
+				ECLMetaNode context = source.getContext(offset);
+				
 				String knownText = getAutoCKnownString(doc, offset);
 				String remainingText = getAutoCRemainingString(doc, offset);
 				int replacementPos = getFirstCharOffset(doc, offset, false);
@@ -130,9 +132,9 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 					}
 					
 				} else {
-					ECLDefinition def = context.findDefinition(knownText);
+					ECLMetaNode def = context.findDefinition(knownText, false);
 					if (def != null) {
-						for (ECLDefinition child_def : def.getDefinitions()) {
+						for (ECLMetaNode child_def : def.getChildren()) {
 							if (child_def.getName().toLowerCase().startsWith(remainingText.toLowerCase()))
 								result.add(new CompletionProposal(child_def.getName(), replacementPos, endReplacementPos - replacementPos, child_def.getName().length()));
 						}			

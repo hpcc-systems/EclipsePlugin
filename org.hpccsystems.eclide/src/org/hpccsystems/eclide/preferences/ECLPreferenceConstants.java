@@ -29,6 +29,7 @@ public class ECLPreferenceConstants {
 	public static final String P_INLINERESULTLIMIT = "inlineResultLimit";
 	public static final String P_MONITORDEPENDEES = "monitorDependeesPreference";
 	public static final String P_SUPRESSSECONDERROR = "supressSecondErrorPreference";
+	public static final String P_ENABLEMETAPROCESSING = "enableMetaProcessing";
 	
 	//  Should not be global  ---
 	//public static final String P_REMOTEEXECUTE = "remoteExecutePreference";
