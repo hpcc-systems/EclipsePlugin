@@ -91,20 +91,30 @@ public class Data extends Observable {
 	public Platform GetPlatform(ILaunchConfiguration launchConfiguration) {
 		Platform retVal = null;
 		String ip = "";
+		int port = 0;
 		try {
 			ip = launchConfiguration.getAttribute(Platform.P_IP, "");
 		} catch (CoreException e) {
 		} 
 		
-		if (!ip.isEmpty()) {
-			retVal = Platform.get(ip);
+		try {
+			port = launchConfiguration.getAttribute(Platform.P_PORT, 8010);
+		} catch (CoreException e) {
+		}
+		
+		if (port == 0) {
+			port = 8010;
+		}
+		
+		if (!ip.isEmpty() && port != 0) {
+			retVal = Platform.get(ip, port);
 			retVal.update(launchConfiguration);	
 		}
 		return retVal;
 	}
 
-	public Platform GetPlatformNoCreate(String ip) {
-		return Platform.getNoCreate(ip);
+	public Platform GetPlatformNoCreate(String ip, int port) {
+		return Platform.getNoCreate(ip, port);
 	}
 
 	public final Platform[] getPlatforms() {
