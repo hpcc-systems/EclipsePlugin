@@ -13,12 +13,14 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Vector;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -29,6 +31,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.part.ViewPart;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.eclide.ui.viewer.ResultViewer;
+import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions.IPlatformUI;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Result;
@@ -43,13 +46,36 @@ public class PlatformViewer extends ViewPart {
 	private ResultViewer resultViewer;
 	
 	Action showWebItemAction;
-	Action refreshItemAction;
 	Action updateItemAction;
 	Action reloadAction;
 	Action refreshAction;
+	
+	PlatformActions actions;	
 
 	public PlatformViewer() {
 		contentProvider = null;
+
+		actions = new PlatformActions(new IPlatformUI() {
+			
+			@Override
+			public void refresh() {
+				treeViewer.refresh();
+			}
+			
+			@Override
+			public Vector<ItemView> getSelection() {
+				Vector<ItemView> retVal = new Vector<ItemView>(); 
+				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
+				Iterator<?> iter = sel.iterator();
+				while (iter.hasNext()) {
+					Object o = iter.next();
+					if (o instanceof ItemView) {
+						retVal.add((ItemView)o);
+					}
+				}
+				return retVal;
+			}
+		});
 	}
 	
 	synchronized TreeItemContentProvider getContentProvider() {
@@ -140,23 +166,6 @@ public class PlatformViewer extends ViewPart {
 			}
 		};
 		
-		refreshItemAction = new Action("Refresh") {
-			@Override
-			public void run() { 
-				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				if (sel.size() == 0) {	//  No selection == reload
-					treeViewer.refresh();
-				} else {
-					Iterator<?> iter = sel.iterator();
-					while (iter.hasNext()) {
-						Object o = iter.next();
-						if (o instanceof ItemView)
-							((ItemView)o).refresh();
-					}
-				}
-			}
-		};
-
 		updateItemAction = new Action("Update") {
 			@Override
 			public void run() { 
@@ -176,6 +185,7 @@ public class PlatformViewer extends ViewPart {
 				contentProvider.reloadChildren();
 			}
 		};
+		
 
 		refreshAction = new Action("Refresh") {
 			@Override
@@ -214,8 +224,15 @@ public class PlatformViewer extends ViewPart {
 	}	
 	
 	private void fillContextMenu(IMenuManager mgr) {
-		//mgr.add(showWebItemAction);
-		mgr.add(refreshItemAction);
-		//mgr.add(updateItemAction);
-	}	
+		mgr.add(actions.abortItemAction);
+		mgr.add(actions.resubmitItemAction);
+		mgr.add(actions.restartItemAction);
+		mgr.add(actions.publishItemAction);
+		mgr.add(new Separator());
+		mgr.add(actions.cloneItemAction);
+		mgr.add(actions.deleteItemAction);
+		mgr.add(new Separator());
+		mgr.add(actions.refreshItemAction);
+		actions.setState();
+	}
 }

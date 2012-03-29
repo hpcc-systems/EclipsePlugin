@@ -18,12 +18,24 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.internal.data.Result;
+import org.hpccsystems.internal.ui.tree.ItemView.ACTION;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader.CalcState;
 
 public class ItemView {
 	protected TreeItemOwner treeViewer;
 	protected ItemView parent;
 	public LazyChildLoader<ItemView> children;
+	
+	public static enum ACTION {
+		UNKNOWN,
+		ABORT,
+		DELETE,
+		RESUBMIT,
+		RESTART,
+		CLONE,
+		PUBLISH,
+		LAST
+	}
 
 	protected ItemView(TreeItemOwner treeViewer, ItemView parent) {
 		this.treeViewer = treeViewer;
@@ -113,5 +125,12 @@ public class ItemView {
 
 	public void refreshChildren() {
 		children.set(new ItemView[0]);
+	}
+	
+	public boolean canPerform(ACTION action) {
+		return false;
+	}
+
+	public void perform(ACTION action) {
 	}
 }

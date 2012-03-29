@@ -19,13 +19,11 @@ public class ECLNavigator extends CommonNavigator {
 
 	public ECLNavigator() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void init(IViewSite aSite, IMemento aMemento) throws PartInitException {
 		super.init(aSite, aMemento);
-		
 	}
 
 }

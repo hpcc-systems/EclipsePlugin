@@ -88,6 +88,10 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 		return workunit;
 	}
 
+	public WorkunitView getWorkunitView() {
+		return wuView;
+	}
+
 	void navigateTo(String url, String user, String password) {
 		browser.setUrl(null, url, user, password);
 		resultContainer.setSelection(browserTab);

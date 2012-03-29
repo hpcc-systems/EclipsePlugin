@@ -26,10 +26,18 @@ import org.hpccsystems.ws.wsworkunits.ECLResult;
 import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
 import org.hpccsystems.ws.wsworkunits.EspException;
+import org.hpccsystems.ws.wsworkunits.WUAbort;
+import org.hpccsystems.ws.wsworkunits.WUAbortResponse;
+import org.hpccsystems.ws.wsworkunits.WUDelete;
+import org.hpccsystems.ws.wsworkunits.WUDeleteResponse;
 import org.hpccsystems.ws.wsworkunits.WUInfo;
 import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
+import org.hpccsystems.ws.wsworkunits.WUPublishWorkunit;
+import org.hpccsystems.ws.wsworkunits.WUPublishWorkunitResponse;
 import org.hpccsystems.ws.wsworkunits.WUQuery;
 import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
+import org.hpccsystems.ws.wsworkunits.WUResubmit;
+import org.hpccsystems.ws.wsworkunits.WUResubmitResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 public class Workunit extends DataSingleton {
@@ -57,7 +65,8 @@ public class Workunit extends DataSingleton {
 		APPLICATIONVALUES,
 		RESULTS,
 		GRAPHS,
-		SOURCEFILES
+		SOURCEFILES, 
+		JOBNAME
 	}
 
 	private Workunit(Platform platform, String wuid) {
@@ -83,7 +92,9 @@ public class Workunit extends DataSingleton {
 	public String getQueryText() {
 		if (info.getQuery() == null)
 			fullRefresh(false, false, false, false);
-		return info.getQuery().getText();
+		if (info.getQuery() != null)
+			return info.getQuery().getText();
+		return "";
 	}
 	
 	public Object getClusterName() {
@@ -211,6 +222,102 @@ public class Workunit extends DataSingleton {
 		return StateHelper.isCompleted(getStateID());
 	}
 	
+	public String getJobname() {
+		String retVal = info.getJobname();
+		if (retVal == null)
+			return "";
+		return retVal;
+	}
+	//  Actions  ---
+	public void abort() {
+		WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
+		if (service != null) {
+			WUAbort request = new WUAbort();
+			String[] wuids = new String[1];
+			wuids[0] = info.getWuid();
+			request.setWuids(wuids);
+			try {
+				WUAbortResponse response = service.WUAbort(request);
+				refreshState();
+			} catch (ArrayOfEspException e) {
+				assert false;
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void delete() {
+		WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
+		if (service != null) {
+			WUDelete request = new WUDelete();
+			String[] wuids = new String[1];
+			wuids[0] = info.getWuid();
+			request.setWuids(wuids);
+			try {
+				WUDeleteResponse response = service.WUDelete(request);
+				refreshState();
+			} catch (ArrayOfEspException e) {
+				assert false;
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+
+	public void resubmit(boolean restart, boolean clone) {
+		WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
+		if (service != null) {
+			WUResubmit request = new WUResubmit();
+			request.setResetWorkflow(restart);
+			request.setCloneWorkunit(clone);
+			String[] wuids = new String[1];
+			wuids[0] = info.getWuid();
+			request.setWuids(wuids);
+			try {
+				WUResubmitResponse response = service.WUResubmit(request);
+				refreshState();
+			} catch (ArrayOfEspException e) {
+				assert false;
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void resubmit() {
+		resubmit(false, false);
+	}
+	
+	public void restart() {
+		resubmit(true, false);
+	}
+
+	public void _clone() {
+		resubmit(false, true);
+	}
+
+	public void publish() {
+		WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
+		if (service != null) {
+			WUPublishWorkunit request = new WUPublishWorkunit();
+			request.setWuid(info.getWuid());
+			try {
+				WUPublishWorkunitResponse response = service.WUPublishWorkunit(request);
+				refreshState();
+			} catch (ArrayOfEspException e) {
+				assert false;
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	//  Refresh  ---
 	public void refreshState() {
 		fullRefresh(false, false, false, false);
 	}
@@ -273,10 +380,9 @@ public class Workunit extends DataSingleton {
 				if (response.getResultViews() != null)
 					resultViews = Arrays.asList(response.getResultViews()); 
 			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
+				assert false;
 				e.printStackTrace();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -289,6 +395,10 @@ public class Workunit extends DataSingleton {
 			if (updateState(wu)) {
 				retVal = true;
 				notifyObservers(Notification.WORKUNIT);
+			}
+			if (updateJobname(wu.getJobname())) {
+				retVal = true;
+				notifyObservers(Notification.JOBNAME);
 			}
 			if (updateCluster(wu.getCluster())) {
 				retVal = true;
@@ -320,21 +430,30 @@ public class Workunit extends DataSingleton {
 	}
 
 	synchronized boolean updateState(ECLWorkunit wu) {
-		if (wu != null && info.getWuid().equals(wu.getWuid()) && 
-				EqualsUtil.hasChanged(info.getStateID(), wu.getStateID())) {
+		boolean retVal = false;
+		if (wu != null && info.getWuid().equals(wu.getWuid())
+				&& EqualsUtil.hasChanged(info.getStateID(), wu.getStateID())) {
 			info.setStateID(wu.getStateID());
 			info.setStateEx(wu.getStateEx());
 			info.setState(wu.getState());
-			info.setCluster(wu.getCluster());
 			setChanged();
-			return true;
+			retVal = true;
 		}
-		return false;
+		return retVal;
 	}
 
 	synchronized boolean updateCluster(String cluster) {
 		if (cluster != null && EqualsUtil.hasChanged(info.getCluster(), cluster)) {
 			info.setCluster(cluster);
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+	
+	synchronized boolean updateJobname(String jobname) {
+		if (jobname != null && EqualsUtil.hasChanged(info.getJobname(), jobname)) {
+			info.setJobname(jobname);
 			setChanged();
 			return true;
 		}
