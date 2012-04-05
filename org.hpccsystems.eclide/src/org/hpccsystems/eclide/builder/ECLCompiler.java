@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -36,7 +37,6 @@ import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.OS;
 
 public class ECLCompiler {
-
 	final static String noCompiler = "Error:  Unable to locate eclcc.";
 	IProject project;
 	IProject[] referencedProjects;
@@ -257,6 +257,9 @@ public class ECLCompiler {
 			CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
 			process.exec(cmdArgs);
 			version = handler.sbOut.toString();
+			version = version.replaceAll("\r", "");
+			version = version.replaceAll("\n", "");
+			
 		}
 		return version;
 	}
@@ -343,5 +346,23 @@ public class ECLCompiler {
 			process.exec(exePath.toOSString(), "", argsWULocal);
 		}
 		return "";
+	}
+
+	public IFolder getLibraryFolder() {
+		IFolder retVal = project.getFolder("ECL Library");
+		if (!retVal.exists()) {
+			try {
+				if (OS.isWindowsPlatform())
+					retVal.createLink(binPath.append("ecllibrary"), IResource.HIDDEN, null);
+				else
+					retVal.createLink(binPath.append("../share/ecllibrary"), IResource.HIDDEN, null);
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		/*
+		*/
+		return retVal;
 	}
 }
