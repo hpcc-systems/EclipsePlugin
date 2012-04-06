@@ -18,18 +18,9 @@ public class ECLLaunchTabGroup extends AbstractLaunchConfigurationTabGroup {
 	
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-//		ECLMainLaunchConfigurationTab main = new ECLMainLaunchConfigurationTab(mode);
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
-//				main,
-				//new OctaveInterpreterTab(main),
 				new ECLLaunchServerTab(),
-//				new AppletMainTab()
-//				new AppletParametersTab(),
-//				new JavaArgumentsTab(),
-//				new JavaJRETab(),
-//				new JavaClasspathTab(), 
-//				new CommonTab()
-				//new WorkingDirectoryBlock()
+				//new ECLLaunchCompilerTab(),
 		};
 		setTabs(tabs);
 	}

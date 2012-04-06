@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -38,6 +39,9 @@ import org.hpccsystems.internal.OS;
 
 public class ECLCompiler {
 	final static String noCompiler = "Error:  Unable to locate eclcc.";
+	final static String badConfigurationCode = "1004";
+	final static String badConfiguration = "Error:  Invalid compiler configuration (eclcc)";
+
 	IProject project;
 	IProject[] referencedProjects;
 	
@@ -270,6 +274,7 @@ public class ECLCompiler {
 		Eclipse.deleteMarkers(file);
 		
 		if (!HasCompiler()) {
+			Eclipse.addMarker(file, IMarker.SEVERITY_ERROR, badConfigurationCode, badConfiguration, 0, 0, true);
 			eclccConsoleWriter.println(noCompiler);
 			return;
 		}
@@ -291,6 +296,7 @@ public class ECLCompiler {
 		Eclipse.deleteMarkers(file);
 		
 		if (!HasCompiler()) {
+			Eclipse.addMarker(file, IMarker.SEVERITY_ERROR, badConfigurationCode, badConfiguration, 0, 0, true);
 			eclccConsoleWriter.println(noCompiler);
 			return "";
 		}
@@ -335,6 +341,7 @@ public class ECLCompiler {
 		Eclipse.deleteMarkers(file);
 
 		if (!HasCompiler()) {
+			Eclipse.addMarker(file, IMarker.SEVERITY_ERROR, badConfigurationCode, badConfiguration, 0, 0, true);
 			eclccConsoleWriter.println(noCompiler);
 			return "";
 		}
