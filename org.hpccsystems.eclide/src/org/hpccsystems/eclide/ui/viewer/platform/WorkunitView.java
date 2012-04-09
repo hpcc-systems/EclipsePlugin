@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
+import org.hpccsystems.internal.ui.tree.ItemView.ACTION;
 
 public class WorkunitView extends PlatformBaseView implements Observer {
 	Workunit workunit;
@@ -96,6 +97,49 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 		workunit.refreshState();		
 	}
 	
+	@Override
+	public boolean canPerform(ACTION action) {
+		switch (action) {
+		case ABORT:
+			return !workunit.isComplete();
+		case DELETE:
+			return true;
+		case RESUBMIT:
+			return true;
+		case RESTART:
+			return true;
+		case CLONE:
+			return true;
+		case PUBLISH:
+			return !workunit.getJobname().isEmpty();
+		}
+		return false;
+	}
+
+	@Override
+	public void perform(ACTION action) {
+		switch (action) {
+		case ABORT:
+			workunit.abort();
+			break;
+		case DELETE:
+			workunit.delete();
+			break;
+		case RESUBMIT:
+			workunit.resubmit();
+			break;
+		case RESTART:
+			workunit.restart();
+			break;
+		case CLONE:
+			workunit._clone();
+			break;
+		case PUBLISH:
+			workunit.publish();
+			break;
+		}
+	}
+
 	@Override
 	public void refreshChildren() {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();

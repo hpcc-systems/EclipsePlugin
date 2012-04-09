@@ -193,50 +193,52 @@ public class Platform extends DataSingleton {
 */	
 	public Workunit submit(IFile file, String cluster) {
 		if (isEnabled()) {
-			try {
-				Workunit.All.pushTransaction("Platform.submit");
-				ECLCompiler compiler = new ECLCompiler(file.getProject());
-				String archive = compiler.getArchive(file);
-				
-				WsWorkunitsServiceSoap service = getWsWorkunitsService();
-				WUCreateAndUpdate request = new WUCreateAndUpdate();
-				request.setQueryText(archive);
-				request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
-				ApplicationValue[] appVals = new ApplicationValue[1];
-				appVals[0] = new ApplicationValue();
-				appVals[0].setApplication(Activator.PLUGIN_ID);
-				appVals[0].setName("path");
-				appVals[0].setValue(file.getFullPath().toPortableString());
-				request.setApplicationValues(appVals);
-				
-				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-				int inlineResultLimit = store.getInt(ECLPreferenceConstants.P_INLINERESULTLIMIT);
-				if (inlineResultLimit > 0) {
-					request.setResultLimit(inlineResultLimit);
-				}
-				
+			ECLCompiler compiler = new ECLCompiler(file.getProject());
+			String archive = compiler.getArchive(file);
+			if (!archive.isEmpty())
+			{
 				try {
-					WUUpdateResponse response = service.WUCreateAndUpdate(request);
-					response.getWorkunit().setCluster(cluster);	//  WUSubmit does not return an updated ECLWorkunit, so set cluster here...  
-					Workunit wu = getWorkunit(response.getWorkunit());
-					if (wu != null) {
-						workunits.add(wu);
-	
-						WUSubmit submitRequest = new WUSubmit();
-						submitRequest.setWuid(response.getWorkunit().getWuid());
-						submitRequest.setCluster(cluster);
-						WUSubmitResponse submitResponse = service.WUSubmit(submitRequest);
+					Workunit.All.pushTransaction("Platform.submit");
+					WsWorkunitsServiceSoap service = getWsWorkunitsService();
+					WUCreateAndUpdate request = new WUCreateAndUpdate();
+					request.setQueryText(archive);
+					request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
+					ApplicationValue[] appVals = new ApplicationValue[1];
+					appVals[0] = new ApplicationValue();
+					appVals[0].setApplication(Activator.PLUGIN_ID);
+					appVals[0].setName("path");
+					appVals[0].setValue(file.getFullPath().toPortableString());
+					request.setApplicationValues(appVals);
+					
+					IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+					int inlineResultLimit = store.getInt(ECLPreferenceConstants.P_INLINERESULTLIMIT);
+					if (inlineResultLimit > 0) {
+						request.setResultLimit(inlineResultLimit);
 					}
-					return wu;
-				} catch (ArrayOfEspException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					
+					try {
+						WUUpdateResponse response = service.WUCreateAndUpdate(request);
+						response.getWorkunit().setCluster(cluster);	//  WUSubmit does not return an updated ECLWorkunit, so set cluster here...  
+						Workunit wu = getWorkunit(response.getWorkunit());
+						if (wu != null) {
+							workunits.add(wu);
+		
+							WUSubmit submitRequest = new WUSubmit();
+							submitRequest.setWuid(response.getWorkunit().getWuid());
+							submitRequest.setCluster(cluster);
+							WUSubmitResponse submitResponse = service.WUSubmit(submitRequest);
+						}
+						return wu;
+					} catch (ArrayOfEspException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} finally {
+					Workunit.All.popTransaction();
 				}
-			} finally {
-				Workunit.All.popTransaction();
 			}
 		}
 		return null;
@@ -550,6 +552,9 @@ public class Platform extends DataSingleton {
 	}
 	
 	void latencyTest() {
+		if (LATENCY_TEST == 0)
+			return;
+		
 		try {
 			Thread.sleep(LATENCY_TEST);
 		} catch (InterruptedException e) {

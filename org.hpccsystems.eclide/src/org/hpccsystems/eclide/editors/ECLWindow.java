@@ -13,9 +13,11 @@ package org.hpccsystems.eclide.editors;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -23,9 +25,14 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
@@ -33,6 +40,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -47,9 +55,11 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 import org.hpccsystems.eclide.ui.viewer.ECLContentOutlinePage;
+import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTabItem;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitView;
+import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions.IPlatformUI;
 import org.hpccsystems.internal.data.CollectionDelta;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.DataSingleton;
@@ -71,6 +81,8 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	
 	Map<WorkunitView, WorkunitTabItem> workunitViewTabMap;
 
+	PlatformActions actions;	
+
 	public ECLWindow() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
@@ -78,6 +90,24 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		this.workunitFolder = null;
 		this.children = new LazyChildLoader<ItemView>();
 		this.workunitViewTabMap = new HashMap<WorkunitView, WorkunitTabItem>();
+		
+		actions = new PlatformActions(new IPlatformUI() {
+			
+			@Override
+			public void refresh() {
+			}
+			
+			@Override
+			public Vector<ItemView> getSelection() {
+				Vector<ItemView> retVal = new Vector<ItemView>(); 
+				CTabItem childItem = getTabItem(getActivePage());
+				if (childItem != null && childItem instanceof WorkunitTabItem) {
+					WorkunitTabItem treeItemTabItem = (WorkunitTabItem)childItem;
+					retVal.add(treeItemTabItem.getWorkunitView());
+				}
+				return retVal;
+			}
+		});
 	}
 
 	WorkunitTabItem createItem(Control control, WorkunitView wuti) {
@@ -117,7 +147,8 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
     	}
     	
     	if (!found) {
-    		return addToEnd ? createItem(getContainer(), wuti) : createItem(1, getContainer(), wuti);
+    		WorkunitTabItem retVal =  addToEnd ? createItem(getContainer(), wuti) : createItem(1, getContainer(), wuti);
+    		return retVal;
     	}
     	return null;
 	}
@@ -138,6 +169,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	protected void createPages() {
 		createEditorPage();
 		createWorkunitPages();
+		createContextMenu();
 	}
 	/**
 	 * The <code>MultiPageEditorPart</code> implementation of this 
@@ -191,14 +223,15 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
+	
+	CTabItem getTabItem(int index){
+		CTabItem childItem = ((CTabFolder)getContainer()).getItem(index);
+		return childItem;
+	}
 
 	@Override
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
-		CTabItem childItem = ((CTabFolder)getContainer()).getItem(newPageIndex);
-		if (childItem != null && childItem instanceof WorkunitTabItem) {
-			WorkunitTabItem treeItemTabItem = (WorkunitTabItem)childItem;
-		}
 	}
 
 	@Override
@@ -349,5 +382,35 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				}
 			}
 		});
+	}
+	
+	protected void createContextMenu() {
+		// Create menu manager.
+		MenuManager menuMgr = new MenuManager();
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			@Override
+			public void menuAboutToShow(IMenuManager mgr) {
+				fillContextMenu(mgr);
+			}
+		});
+		
+		// Create menu.
+		Menu menu = menuMgr.createContextMenu(getContainer());
+		getContainer().setMenu(menu);
+		
+		// Register menu for extension.
+		//getSite().registerContextMenu(menuMgr, getContainer());
+	}	
+
+	private void fillContextMenu(IMenuManager mgr) {
+		mgr.add(actions.abortItemAction);
+		mgr.add(actions.resubmitItemAction);
+		mgr.add(actions.restartItemAction);
+		mgr.add(actions.publishItemAction);
+		mgr.add(new Separator());
+		mgr.add(actions.cloneItemAction);
+		mgr.add(actions.deleteItemAction);
+		actions.setState();
 	}
 }
