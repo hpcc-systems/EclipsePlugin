@@ -71,6 +71,7 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 		addField(new IntegerFieldEditor(ECLPreferenceConstants.P_INLINERESULTLIMIT, "&Inline Result Limit:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_MONITORDEPENDEES, "&Monitor Dependees (requires manual \"Project/Clean...\")", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_SUPRESSSECONDERROR, "&Supress Subsequent Errors", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(ECLPreferenceConstants.P_ENABLEMETAPROCESSING, "&Enable Meta Processing", getFieldEditorParent()));
 	}
 
 	/* (non-Javadoc)

@@ -44,6 +44,10 @@ public class Eclipse {
 		return ResourcesPlugin.getWorkspace().getRoot();
 	}
 	
+	static public IResource findResource(IPath path) {
+		return getWorkspaceRoot().getFileForLocation(path);
+	}
+
 	static public IResource findResource(String absolutePath) {
 		if (absolutePath == null || absolutePath.isEmpty()) {
 			return null;

@@ -60,10 +60,8 @@ public class ECLPerspective implements IPerspectiveFactory {
 		bottom.addView("org.hpccsystems.eclide.htmlView");
 		bottom.addView("org.hpccsystems.eclide.resultView");
 
-		/*  TODO:  Outline not ready yet
 		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, 0.75f, editorArea);
 		right.addView(IPageLayout.ID_OUTLINE);
-		*/
 }
 
 	private void addActionSets() {

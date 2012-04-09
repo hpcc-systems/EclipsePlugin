@@ -45,5 +45,6 @@ public class ECLPreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(ECLPreferenceConstants.P_INLINERESULTLIMIT, 0);
 		store.setDefault(ECLPreferenceConstants.P_MONITORDEPENDEES, true);
 		store.setDefault(ECLPreferenceConstants.P_SUPRESSSECONDERROR, false);
+		store.setDefault(ECLPreferenceConstants.P_ENABLEMETAPROCESSING, true);
 	}
 }

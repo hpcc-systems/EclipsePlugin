@@ -14,17 +14,17 @@ import java.io.Serializable;
 
 import org.xml.sax.Attributes;
 
-public class ECLImport extends ECLDefinition implements Serializable {
-	private static final long serialVersionUID = -5720495962909839717L;
+public class ECLField extends ECLDefinition implements Serializable {
+	private static final long serialVersionUID = -3666553429928978289L;
+	ECLFolder container;
 
-	public ECLImport(ECLDefinition parent, Attributes attributes) {
-		super(parent, attributes);
+	public ECLField(ECLDefinition parent) {
+		super(parent);
+		setChanged();
 	}
 
-	public String getRef() {
-		if (attributes.containsKey("ref")) {
-			return attributes.get("ref");
-		}
-		return getName();
+	public ECLField(ECLDefinition parent, Attributes attributes) {
+		super(parent, attributes);
+		setChanged();
 	}
 }

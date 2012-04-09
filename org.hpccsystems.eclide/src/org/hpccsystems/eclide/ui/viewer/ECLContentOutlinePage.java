@@ -19,10 +19,10 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
-import org.hpccsystems.eclide.builder.meta.ECLMetaData;
+import org.hpccsystems.eclide.builder.meta.ECLMetaTree;
 
 public class ECLContentOutlinePage extends ContentOutlinePage {
-	ECLMetaData meta;
+	ECLMetaTree meta;
 	TreeViewer viewer;
 	IEditorInput editorInput;
 	

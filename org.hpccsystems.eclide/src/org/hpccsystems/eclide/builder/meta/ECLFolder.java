@@ -12,19 +12,15 @@ package org.hpccsystems.eclide.builder.meta;
 
 import java.io.Serializable;
 
-import org.xml.sax.Attributes;
+import org.eclipse.core.runtime.IPath;
 
-public class ECLImport extends ECLDefinition implements Serializable {
-	private static final long serialVersionUID = -5720495962909839717L;
+public class ECLFolder extends ECLPath implements Serializable {
+	private static final long serialVersionUID = 1078062313896533557L;
 
-	public ECLImport(ECLDefinition parent, Attributes attributes) {
-		super(parent, attributes);
-	}
-
-	public String getRef() {
-		if (attributes.containsKey("ref")) {
-			return attributes.get("ref");
-		}
-		return getName();
+	public ECLFolder(String _containerName, IPath _containerPath) {
+		super();
+		attributes.put("name", _containerName);
+		attributes.put("sourcePath", _containerPath.toOSString());
+		setChanged();
 	}
 }
