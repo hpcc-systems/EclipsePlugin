@@ -35,7 +35,7 @@ public class Data extends Observable {
 			configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
 			for(int i = 0; i < configs.length; ++i) {
 				Platform p = GetPlatform(configs[i]);
-				if (!platforms.contains(p))
+				if (p != null && !platforms.contains(p))
 					platforms.add(p);
 			}
 		} catch (CoreException e) {
@@ -126,6 +126,7 @@ public class Data extends Observable {
 		try {
 			Workunit.All.pushTransaction("Data.getWorkunits");
 			for (Platform p : getPlatforms()) {
+				assert p != null;
 				if (platform == null || platform.equals(p)) {
 					workunits.addAll(p.getWorkunits(cluster, startDate, endDate));
 				}

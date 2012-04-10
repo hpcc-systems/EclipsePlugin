@@ -111,9 +111,9 @@ public class CmdProcess {
 			threadStdIn.join();
 			threadStdErr.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			consoleOut.println(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			consoleOut.println(e.getMessage());
 		}	
 	}
 };
