@@ -10,13 +10,10 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.ui.navigator;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.navigator.CommonNavigator;
-import org.eclipse.ui.navigator.CommonViewer;
 
 public class ECLNavigator extends CommonNavigator {
 

@@ -70,7 +70,13 @@ public class CmdArgs {
 	}
 	
 	public void Print(MessageConsoleStream console, boolean eclplusArgs) {
+		if (console == null) 
+			return;
+
 		List<String> cmd = Get(eclplusArgs);
+		if (cmd == null)
+			return;
+		
 		for (int i = 0; i < cmd.size(); ++i) {
 			if (i> 0)
 				console.print(" ");

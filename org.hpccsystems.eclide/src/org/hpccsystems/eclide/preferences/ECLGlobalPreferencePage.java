@@ -10,40 +10,24 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.preferences;
 
-import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.hpccsystems.eclide.Activator;
 
-public class ECLGlobalPreferencePage extends PreferencePage implements
-		IWorkbenchPreferencePage {
+public class ECLGlobalPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public ECLGlobalPreferencePage() {
-		setDescription("ECL Related Preferences.");
-	}
-
-	public ECLGlobalPreferencePage(String title) {
-		super(title);
-		// TODO Auto-generated constructor stub
-	}
-
-	public ECLGlobalPreferencePage(String title, ImageDescriptor image) {
-		super(title, image);
-		// TODO Auto-generated constructor stub
+		super(GRID);
 	}
 
 	@Override
 	public void init(IWorkbench workbench) {
-		// TODO Auto-generated method stub
-
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		//setDescription("ECL Related Preferences.");
 	}
 
 	@Override
-	protected Control createContents(Composite parent) {
-		// TODO Auto-generated method stub
-		return null;
+	protected void createFieldEditors() {
 	}
-
 }

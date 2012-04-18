@@ -13,7 +13,6 @@ package org.hpccsystems.eclide.editors;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -32,7 +31,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
@@ -52,7 +50,6 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 import org.hpccsystems.eclide.ui.viewer.ECLContentOutlinePage;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions;
@@ -124,7 +121,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		try {
 			editor = new ECLEditor();
 			int index = addPage(editor, getEditorInput());
-			this.setTitle(editor.getTitle());
+			this.setPartName(editor.getTitle());
 			setPageText(index, "ECL");
 			setPageImage(index, Activator.getImage("icons/doc.png"));
 		} catch (PartInitException e) {

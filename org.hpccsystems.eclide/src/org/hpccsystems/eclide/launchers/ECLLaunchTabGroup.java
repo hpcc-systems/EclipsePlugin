@@ -20,7 +20,7 @@ public class ECLLaunchTabGroup extends AbstractLaunchConfigurationTabGroup {
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
 				new ECLLaunchServerTab(),
-				//new ECLLaunchCompilerTab(),
+				new ECLLaunchCompilerTab(),
 		};
 		setTabs(tabs);
 	}

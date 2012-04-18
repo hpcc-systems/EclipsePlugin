@@ -25,6 +25,8 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
+import org.hpccsystems.internal.data.ClientTools;
+import org.hpccsystems.internal.data.Data;
 
 public class ECLBuilder extends IncrementalProjectBuilder {
 	class ECLDeltaVisitor implements IResourceDeltaVisitor {
@@ -105,7 +107,9 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			
 			checkedFiles.add(file);
 			monitor.subTask(file.getName());
-			ECLCompiler compiler = new ECLCompiler(getProject());
+			ClientTools ct = Data.get().GetClientTools(file);
+			IProject project = getProject();
+			ECLCompiler compiler = ct.getCompiler(project);
 
 			ECLGlobalMeta.parse(compiler.getMeta(file));
 

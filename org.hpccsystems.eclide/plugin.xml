@@ -29,12 +29,6 @@
             id="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
             name="%page.name.1">
       </page>
-      <page
-            category="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
-            class="org.hpccsystems.eclide.preferences.ECLCompilerPreferencePage"
-            id="org.hpccsystems.eclide.preferences.ECLPreferencePage"
-            name="%page.name.2">
-      </page>
    </extension>
    <extension
          id="eclBuilder"
