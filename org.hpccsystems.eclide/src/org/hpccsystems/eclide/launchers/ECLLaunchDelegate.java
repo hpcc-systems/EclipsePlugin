@@ -58,7 +58,7 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 
 		if (file != null) {
 			Platform platform = Data.get().GetPlatform(configuration);
-			platform.submit(file, cluster);
+			platform.submit(configuration, file, cluster);
 		}
 	}
 }

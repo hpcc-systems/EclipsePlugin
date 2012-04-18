@@ -23,16 +23,13 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
-import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
-import org.hpccsystems.eclide.builder.meta.ECLSource;
 import org.hpccsystems.eclide.text.ECLKeywords;
 
 public class ECLCompletionProcessor implements IContentAssistProcessor {
     private final IContextInformation[] NO_CONTEXTS = { };
     private final char[] PROPOSAL_ACTIVATION_CHARS = { '.' };
-    private ICompletionProposal[] NO_COMPLETIONS = { };
 	
     private int getFirstCharOffset(IDocument doc, int offset, boolean includePeriod) {
     	try {
@@ -58,17 +55,6 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 			// ... log the exception ...
 		}
 		return offset;
-	}
-
-	private String getAutoCString(IDocument doc, int offset) {
-		int firstOffset = getFirstCharOffset(doc, offset, true);
-		try {
-			return doc.get(firstOffset,  offset - firstOffset);
-			
-		} catch (BadLocationException e) {
-			// ... log the exception ...
-		}
-		return "";
 	}
 
 	private String getAutoCKnownString(IDocument doc, int offset) {
@@ -97,17 +83,6 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 		return "";
 	}
 	
-	private String getAutoCWordToReplace(IDocument doc, int offset) {
-		int firstOffset = getFirstCharOffset(doc, offset, false);
-		try {
-			return doc.get(firstOffset,  offset - firstOffset);
-
-		} catch (BadLocationException e) {
-			// ... log the exception ...
-		}
-		return "";
-	}
-
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
 		ArrayList<CompletionProposal> result = new ArrayList<CompletionProposal>();

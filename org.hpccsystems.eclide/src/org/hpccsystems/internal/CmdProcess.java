@@ -39,6 +39,8 @@ public class CmdProcess {
 	String QUOTE = "";
 	
 	public CmdProcess(IPath workingPath, IPath additionalPath, IProcessOutput handler, MessageConsoleStream consoleOut) {
+		if (workingPath == null)
+			workingPath = additionalPath;
 		this.workingPath = workingPath;
 		this.additionalPath = additionalPath;
 		this.handler = handler;

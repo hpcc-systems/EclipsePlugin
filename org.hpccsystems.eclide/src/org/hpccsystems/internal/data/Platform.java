@@ -19,15 +19,13 @@ import java.util.HashSet;
 import javax.xml.rpc.ServiceException;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
-import org.hpccsystems.eclide.preferences.ECLPreferenceConstants;
+import org.hpccsystems.internal.ConfigurationPreferenceStore;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
 import org.hpccsystems.ws.filespray.FileSprayLocator;
 import org.hpccsystems.ws.filespray.FileSprayServiceSoap;
@@ -85,12 +83,11 @@ public class Platform extends DataSingleton {
 	public static final String P_PASSWORD = "passwordLaunchConfig";
 	public static final String P_CLUSTER = "clusterLaunchConfig";
 	
+	private ConfigurationPreferenceStore launchConfiguration;	
 	private String name;
 	private boolean isDisabled;
 	private String ip;
 	private int port;
-	private String user;
-	private String password;
 	private Collection<Cluster> clusters;
 	private Collection<DropZone> dropZones;
 	private Collection<Workunit> workunits;	
@@ -105,8 +102,7 @@ public class Platform extends DataSingleton {
 		this.port = port;
 		this.isDisabled = true;
 		this.name = "";
-		this.user = "";
-		this.password = "";
+
 		this.clusters = new HashSet<Cluster>();
 		this.dropZones = new HashSet<DropZone>();
 		this.workunits = new HashSet<Workunit>();	
@@ -115,28 +111,12 @@ public class Platform extends DataSingleton {
 		this.logicalFiles = new HashSet<LogicalFile>();
 	}
 	
-	public void update(ILaunchConfiguration launchConfiguration) {
-		name = launchConfiguration.getName();
-		try {
-			isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
-		} catch (CoreException e) {
-		} 
-		try {
-			ip = launchConfiguration.getAttribute(P_IP, "");
-		} catch (CoreException e) {
-		} 
-		try {
-			port = launchConfiguration.getAttribute(P_PORT, 8010);
-		} catch (CoreException e) {
-		} 
-		try {
-			user = launchConfiguration.getAttribute(P_USER, "");
-		} catch (CoreException e) {
-		} 
-		try {
-			password = launchConfiguration.getAttribute(P_PASSWORD, "");
-		} catch (CoreException e) {
-		}
+	public void update(ILaunchConfiguration _launchConfiguration) {
+		this.launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
+		name = _launchConfiguration.getName();
+		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
+		ip = launchConfiguration.getAttribute(P_IP, "");
+		port = launchConfiguration.getAttribute(P_PORT, 8010);
 	}
 
 	synchronized void confirmDisable() {
@@ -170,11 +150,11 @@ public class Platform extends DataSingleton {
 	}
 
 	public String getUser() {
-		return user;
+		return launchConfiguration.getAttribute(P_USER, "");
 	}
 	
 	public String getPassword() {
-		return password;
+		return launchConfiguration.getAttribute(P_PASSWORD, "");
 	}
 	
 /*
@@ -191,9 +171,9 @@ public class Platform extends DataSingleton {
     WUActionSize = 8
 };
 */	
-	public Workunit submit(IFile file, String cluster) {
+	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
 		if (isEnabled()) {
-			ECLCompiler compiler = new ECLCompiler(file.getProject());
+			ECLCompiler compiler = new ECLCompiler(new ConfigurationPreferenceStore(configuration), file.getProject());
 			String archive = compiler.getArchive(file);
 			if (!archive.isEmpty())
 			{
@@ -210,8 +190,7 @@ public class Platform extends DataSingleton {
 					appVals[0].setValue(file.getFullPath().toPortableString());
 					request.setApplicationValues(appVals);
 					
-					IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-					int inlineResultLimit = store.getInt(ECLPreferenceConstants.P_INLINERESULTLIMIT);
+				int inlineResultLimit = launchConfiguration.getInt(ClientTools.P_INLINERESULTLIMIT);
 					if (inlineResultLimit > 0) {
 						request.setResultLimit(inlineResultLimit);
 					}

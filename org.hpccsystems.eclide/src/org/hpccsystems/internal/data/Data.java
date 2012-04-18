@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Observable;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -24,10 +25,12 @@ public class Data extends Observable {
 	private static Data singletonFactory;
 	
 	private Collection<Platform> platforms;	
+	private Collection<ClientTools> clientTools;	
 	
 	//  Singleton Pattern
 	private Data() {
 		this.platforms = new ArrayList<Platform>();
+		this.clientTools = new ArrayList<ClientTools>();
 
 		//  Load platforms  ---
 		ILaunchConfiguration[] configs;
@@ -37,6 +40,10 @@ public class Data extends Observable {
 				Platform p = GetPlatform(configs[i]);
 				if (p != null && !platforms.contains(p))
 					platforms.add(p);
+
+				ClientTools ct = GetClientTools(configs[i]);
+				if (!clientTools.contains(ct))
+					clientTools.add(ct);
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -136,5 +143,46 @@ public class Data extends Observable {
 			Workunit.All.popTransaction();
 		}
 		return workunits;
+	}
+	
+	//  ClientTools  ---
+	public ClientTools[] GetClientTools() {
+		return clientTools.toArray(new ClientTools[0]);
+	}
+
+	public ClientTools GetClientTools(ILaunchConfiguration launchConfiguration) {
+		ClientTools retVal = null;
+		String path = "";
+		try {
+			path = launchConfiguration.getAttribute(ClientTools.P_TOOLSPATH, "");
+		} catch (CoreException e) {
+		} 
+		if (!path.isEmpty()) {
+			retVal = ClientTools.get(path);
+			retVal.update(launchConfiguration);	
+		}
+		return retVal;
+	}
+	
+	public ClientTools GetClientTools(IFile file) {
+		ClientTools retVal = null;
+		ILaunchConfiguration launchConfiguration = DebugPlugin.getDefault().getLaunchManager().getLaunchConfiguration(file);
+		if (launchConfiguration != null) {
+			retVal = GetClientTools(launchConfiguration);
+		}
+
+		if (retVal != null)
+			return retVal;
+
+		for(ClientTools ct : clientTools) {
+			if (retVal == null) {
+				retVal = ct;
+			} else {
+				if (ct.isNewerThan(retVal)) {
+					retVal = ct;
+				}
+			}
+		}
+		return retVal;
 	}
 }

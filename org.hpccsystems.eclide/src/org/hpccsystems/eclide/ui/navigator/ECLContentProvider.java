@@ -1,32 +1,38 @@
 package org.hpccsystems.eclide.ui.navigator;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import org.eclipse.core.internal.resources.Folder;
-import org.eclipse.core.internal.resources.Workspace;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IPathVariableManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.hpccsystems.eclide.builder.ECLCompiler;
-import org.hpccsystems.eclide.builder.meta.ECLDefinition;
-import org.hpccsystems.internal.Eclipse;
+import org.hpccsystems.internal.data.ClientTools;
+import org.hpccsystems.internal.data.Data;
 
 public class ECLContentProvider implements ITreeContentProvider {
-	class ECLLibrary extends org.eclipse.core.internal.resources.Folder {
-		IProject parent;
+	Viewer viewer;
+	
+	class ProjectClientToolsElement {
+		IProject project;
+		ClientTools clientTools;
 
-		protected ECLLibrary(IPath path, Workspace workspace) {
-			super(path, workspace);
+		protected ProjectClientToolsElement(IProject project, ClientTools clientTools) {
+			this.project = project;
+			this.clientTools = clientTools;
+		}
+		
+		IFolder getEclLibraryFolder() {
+			IFolder hiddenLibFolder = project.getFolder("ECL Library (" + clientTools.getVersion() + ")");
+			if (!hiddenLibFolder.exists()) {
+				try {
+					hiddenLibFolder.createLink(clientTools.getEclLibraryPath(), IResource.HIDDEN, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+			return hiddenLibFolder;
 		}
 	}
 	
@@ -36,6 +42,7 @@ public class ECLContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		this.viewer = viewer;
 	}
 
 	@Override
@@ -47,20 +54,23 @@ public class ECLContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		if (parentElement instanceof IProject) {
-			IProject project = (IProject)parentElement;
-			ECLCompiler compiler = new ECLCompiler(project);
-			retVal.add(compiler);
-		} else if (parentElement instanceof ECLCompiler) {
-			ECLCompiler compiler = (ECLCompiler)parentElement;
-			retVal.add(compiler.getLibraryFolder());
+			for (ClientTools ct : Data.get().GetClientTools()) {
+				retVal.add(new ProjectClientToolsElement((IProject)parentElement, ct));
+			}
+		} else if (parentElement instanceof ProjectClientToolsElement) {
+			ProjectClientToolsElement pct = (ProjectClientToolsElement)parentElement;
+			retVal.add(pct.getEclLibraryFolder());
 		}
 		return retVal.toArray();
 	}
 
 	@Override
 	public Object getParent(Object element) {
-		if (element instanceof ECLLibrary) {
-			return ((ECLLibrary)element).parent;
+		if (element instanceof ProjectClientToolsElement) {
+			return ((ProjectClientToolsElement)element).project;
+		}
+		else if (element instanceof IFolder) {
+			//return ((ECLLibrary)element).parent;
 		}
 		return null;
 	}
@@ -69,7 +79,7 @@ public class ECLContentProvider implements ITreeContentProvider {
 	public boolean hasChildren(Object element) {
 		if (element instanceof IProject) {
 			return true;
-		} else if (element instanceof ECLCompiler) {
+		} else if (element instanceof ProjectClientToolsElement) {
 			return true;
 		}
 		return false;
