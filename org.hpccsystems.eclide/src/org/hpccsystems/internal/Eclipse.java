@@ -34,6 +34,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.ide.IDE;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.eclide.ui.viewer.ResultViewer;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitsViewer;
 
 public class Eclipse {
 	
@@ -84,6 +85,13 @@ public class Eclipse {
         return null;
 	}
 
+	static public IFile findFile(IPath path) {
+		if (path.isEmpty())
+			return null;
+
+		return getWorkspaceRoot().getFile(path);
+	}
+
 	//  Viewer Helpers  ---
 	static public MessageConsole findConsole(String name) {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
@@ -119,10 +127,17 @@ public class Eclipse {
 
 	static public HtmlViewer findHtmlViewer() {
 		HtmlViewer retVal = HtmlViewer.getDefault();
+		/*
 		if (retVal == null) {
 			showHtmlViewer();
 		}
 		retVal = HtmlViewer.getDefault();
+		*/
+		return retVal;
+	}
+	
+	static public WorkunitsViewer findWorkunitsViewer() {
+		WorkunitsViewer retVal = WorkunitsViewer.getDefault();
 		return retVal;
 	}
 	
@@ -147,10 +162,12 @@ public class Eclipse {
 
 	static public ResultViewer findResultViewer() {
 		ResultViewer retVal = ResultViewer.getDefault();
+		/*
 		if (retVal == null) {
 			showResultViewer();
 		}
 		retVal = ResultViewer.getDefault();
+		*/
 		return retVal;
 	}
 	

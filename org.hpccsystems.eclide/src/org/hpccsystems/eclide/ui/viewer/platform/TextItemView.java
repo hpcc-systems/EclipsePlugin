@@ -26,9 +26,13 @@ public class TextItemView extends PlatformBaseView {
 		refreshChildren();
 	}
 
+	public Workunit getWorkunit() {
+		return workunit;
+	}
+	
 	@Override
 	public String getText() {
-		return "Query";
+		return "Submitted ECL";
 	}
 	
 	public String getQueryText() {

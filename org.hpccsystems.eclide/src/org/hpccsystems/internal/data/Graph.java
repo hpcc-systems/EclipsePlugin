@@ -40,6 +40,10 @@ public class Graph extends DataSingleton {
 		info.setName(name);
 	}
 
+	public Workunit getWorkunit() {
+		return workunit;
+	}
+
 	public String getWuid() {
 		return workunit.getWuid();
 	}

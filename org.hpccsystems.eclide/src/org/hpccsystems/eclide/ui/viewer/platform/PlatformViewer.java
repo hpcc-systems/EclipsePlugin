@@ -12,23 +12,37 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.ide.IDE;
+
+import org.hpccsystems.eclide.editors.ECLWindow;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.eclide.ui.viewer.ResultViewer;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions.IPlatformUI;
@@ -40,7 +54,26 @@ import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class PlatformViewer extends ViewPart {
 
-	TreeViewer treeViewer;
+	class MyTreeViewer extends TreeViewer {
+
+		public MyTreeViewer(Composite parent) {
+			super(parent);
+		}
+
+		List<Object> getElements() {
+			Item[] items = getChildren(getControl());
+			ArrayList<Object> result = new ArrayList<Object>(items.length);
+			for (Item item : items) {
+				Object data = item.getData();
+				if (data != null) {
+					result.add(data);
+				}
+			}
+			return result;
+		}
+	}
+	
+	MyTreeViewer treeViewer;
 	TreeItemContentProvider contentProvider;
 	private HtmlViewer htmlViewer;
 	private ResultViewer resultViewer;
@@ -82,27 +115,9 @@ public class PlatformViewer extends ViewPart {
 		return new PlatformTreeItemContentProvider(treeViewer);
 	}
 	
-	ISelectionChangedListener getSelectionListener() {
-		return new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
-				Iterator<?> iter = sel.iterator();
-				while (iter.hasNext()) {
-					Object o = iter.next();
-					if (o instanceof ItemView) {
-						boolean resultShown = showResult((ItemView)o);
-						showWebPage((ItemView)o, !resultShown);
-						break;
-					}
-				}
-			}
-		};
-	}
-
 	@Override
 	public void createPartControl(Composite parent) {
-	    treeViewer = new TreeViewer(parent);
+	    treeViewer = new MyTreeViewer(parent);
 	    treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 	    contentProvider = getContentProvider();
 	    treeViewer.setContentProvider(contentProvider);
@@ -112,10 +127,75 @@ public class PlatformViewer extends ViewPart {
         createActions();
         createToolbar();
         createContextMenu();
+		
+		addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (event.getSelection() instanceof IStructuredSelection) {
+					IStructuredSelection sel = (IStructuredSelection)event.getSelection();
+					Iterator<?> iter = sel.iterator();
+					while (iter.hasNext()) {
+						Object next = iter.next();
+						if (next instanceof ItemView) {
+							ItemView item  = (ItemView)next;
+							
+							//  Editor View  ---
+							WorkunitView wuView = item.getWorkunitAncestor();
+							if (wuView != null) {
+								String workunitPath = wuView.getWorkunit().getApplicationValue("path");
 
-		treeViewer.addSelectionChangedListener(getSelectionListener());
+								IEditorPart ep = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+								if (ep != null) {
+									IFileEditorInput input = (IFileEditorInput) ep.getEditorInput(); 
+									IFile file = input.getFile();
+									String editorPath = file.getFullPath().toPortableString();
+									if (editorPath.compareTo(workunitPath) == 0) {
+										PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(ep);
+										((ECLWindow) ep).showItemView((ItemView)next);
+									}
+								}
+							}
+
+							//  ECL Watch View  ---
+							boolean resultShown = showResult(item);
+							showWebPage(item, !resultShown);
+						}
+					}
+				}
+			}
+		});
+		
+		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				if (event.getSelection() instanceof IStructuredSelection) {
+					IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+					if (selection.size() >= 1) {
+						if (selection.getFirstElement() instanceof ItemView) {
+							ItemView item = (ItemView) selection.getFirstElement();
+							WorkunitView wuView = item.getWorkunitAncestor();
+							
+							if (wuView != null) {
+								IFile file = Eclipse.findFile(new Path(wuView.getWorkunit().getApplicationValue("path")));
+								
+								try {
+									IEditorPart ep = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file, true);
+									((ECLWindow) ep).showItemView(item);											
+								} catch (PartInitException e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+				}
+			}
+		});
 	}
-
+	
+	public void addSelectionChangedListener(ISelectionChangedListener selectionChangedListener) {
+		treeViewer.addSelectionChangedListener(selectionChangedListener);
+	}
+	
 	@Override
 	public void setFocus() {
 		treeViewer.getControl().setFocus();

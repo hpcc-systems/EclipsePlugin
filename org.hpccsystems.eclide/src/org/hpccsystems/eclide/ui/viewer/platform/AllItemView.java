@@ -424,90 +424,6 @@ class LandingZoneFileView extends PlatformBaseView {
 	}
 }
 
-class ResultFolderView extends FolderItemView implements Observer {
-	Workunit workunit;
-
-	ResultFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
-		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
-	}
-
-	@Override
-	public String getText() {
-		return "Results";
-	}
-
-	@Override
-	public URL getWebPageURL() throws MalformedURLException {
-		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
-	}
-
-	@Override
-	public void refreshChildren() {
-		ArrayList<Object> retVal = new ArrayList<Object>();
-		for(Result r : workunit.getResults())
-			retVal.add(new ResultView(treeViewer, this, platform, r));
-		children.set(retVal.toArray(new ItemView[0]));
-	}
-	
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		if (arg1 instanceof Workunit.Notification) {
-			switch ((Workunit.Notification)arg1){
-			case RESULTS:
-				refresh();
-			}
-		}
-	}
-}
-
-class ResultView extends PlatformBaseView implements Observer {
-	Result result;
-
-	ResultView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, Result result) {
-		super(treeViewer, parent, platform);
-		this.result = result; 
-		this.result.addObserver(this);
-		refreshChildren();
-	}
-
-	@Override
-	public String getText() {
-		if (!result.getValue().isEmpty())
-			return result.getName() + " " + result.getValue();
-		return result.getName();
-	}
-
-	@Override
-	public Image getImage() {
-		return Activator.getImage("icons/result.png"); 
-	}
-
-	@Override
-	public URL getWebPageURL() throws MalformedURLException {
-		return platform.getURL("WsWorkunits", "WUResult", "Wuid=" + result.getWuid() + "&Sequence=" + result.getSequence());
-	}
-	
-	@Override
-	public Result getResult() {
-		return result;
-	}
-
-	@Override
-	public void refreshChildren() {
-		ArrayList<Object> retVal = new ArrayList<Object>();
-		for(String s : result.getResultViews())
-			retVal.add(new ResultViewView(treeViewer, this, platform, result, s));
-		children.set(retVal.toArray(new ItemView[0]));
-	}
-
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		update(null);
-	}
-}
-
 class ResultViewView extends PlatformBaseView {
 	Result result;
 	String viewName;
@@ -570,45 +486,6 @@ class GraphFolderView extends FolderItemView implements Observer  {
 				refresh();
 			}
 		}
-	}
-}
-
-class GraphView extends PlatformBaseView implements Observer {
-	Graph graph;
-
-	GraphView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, Graph graph) {
-		super(treeViewer, parent, platform);
-		this.graph = graph; 
-		this.graph.addObserver(this);
-		refreshChildren();
-	}
-
-	@Override
-	public String getText() {
-		return graph.getName();
-	}
-
-	@Override
-	public Image getImage() {
-		switch (graph.getStateID()) {
-		case RUNNING:
-			return Activator.getImage("icons/graph_running.png");
-		case COMPLETED:
-			return Activator.getImage("icons/graph_completed.png");
-		case FAILED:
-			return Activator.getImage("icons/graph_failed.png");
-		}
-		return Activator.getImage("icons/graph.png"); 
-	}
-	//http://192.168.2.68:8010/WsWorkunits/GVCAjaxGraph?Name=W20111103-233901&GraphName=graph1
-	@Override
-	public URL getWebPageURL() throws MalformedURLException {
-		return platform.getURL("WsWorkunits", "GVCAjaxGraph", "Name=" + graph.getWuid() + "&GraphName=" + graph.getName());
-	}
-	
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		update(null);
 	}
 }
 

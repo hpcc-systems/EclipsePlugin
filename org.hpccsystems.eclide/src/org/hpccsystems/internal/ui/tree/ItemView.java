@@ -17,11 +17,15 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitView;
 import org.hpccsystems.internal.data.Result;
-import org.hpccsystems.internal.ui.tree.ItemView.ACTION;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader.CalcState;
 
 public class ItemView {
+	public interface IVisitor {
+		public boolean visit(ItemView item);		
+	}
+	
 	protected TreeItemOwner treeViewer;
 	protected ItemView parent;
 	public LazyChildLoader<ItemView> children;
@@ -41,6 +45,30 @@ public class ItemView {
 		this.treeViewer = treeViewer;
 		this.parent = parent;
 		this.children = new LazyChildLoader<ItemView>();
+	}
+	
+	public ItemView walkAncestors(IVisitor visitor) {
+		ItemView item = this;
+		while (item != null) {
+			if (visitor.visit(item))
+				return item;
+			item = item.getParent();
+		}
+		
+		return null; 
+	}
+	
+	public WorkunitView getWorkunitAncestor() {
+		WorkunitView wuView = (WorkunitView)walkAncestors(new ItemView.IVisitor() {
+			@Override
+			public boolean visit(ItemView item) {
+				if (item instanceof WorkunitView) {
+					return true;
+				}
+				return false;
+			}
+		});
+		return wuView; 
 	}
 	
 	public ItemView getParent() {
