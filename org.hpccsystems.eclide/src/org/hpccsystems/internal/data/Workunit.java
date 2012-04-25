@@ -246,7 +246,7 @@ public class Workunit extends DataSingleton {
 			wuids[0] = info.getWuid();
 			request.setWuids(wuids);
 			try {
-				WUAbortResponse response = service.WUAbort(request);
+				service.WUAbort(request);
 				refreshState();
 			} catch (ArrayOfEspException e) {
 				assert false;
@@ -265,7 +265,7 @@ public class Workunit extends DataSingleton {
 			wuids[0] = info.getWuid();
 			request.setWuids(wuids);
 			try {
-				WUDeleteResponse response = service.WUDelete(request);
+				service.WUDelete(request);
 				refreshState();
 			} catch (ArrayOfEspException e) {
 				assert false;
@@ -287,7 +287,7 @@ public class Workunit extends DataSingleton {
 			wuids[0] = info.getWuid();
 			request.setWuids(wuids);
 			try {
-				WUResubmitResponse response = service.WUResubmit(request);
+				service.WUResubmit(request);
 				refreshState();
 			} catch (ArrayOfEspException e) {
 				assert false;
@@ -316,7 +316,7 @@ public class Workunit extends DataSingleton {
 			WUPublishWorkunit request = new WUPublishWorkunit();
 			request.setWuid(info.getWuid());
 			try {
-				WUPublishWorkunitResponse response = service.WUPublishWorkunit(request);
+				service.WUPublishWorkunit(request);
 				refreshState();
 			} catch (ArrayOfEspException e) {
 				assert false;

@@ -207,7 +207,7 @@ public class Platform extends DataSingleton {
 							WUSubmit submitRequest = new WUSubmit();
 							submitRequest.setWuid(response.getWorkunit().getWuid());
 							submitRequest.setCluster(cluster);
-							WUSubmitResponse submitResponse = service.WUSubmit(submitRequest);
+							service.WUSubmit(submitRequest);
 						}
 						return wu;
 					} catch (ArrayOfEspException e) {

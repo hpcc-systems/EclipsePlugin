@@ -94,13 +94,6 @@ public class ECLProjectSupport {
 		}
 	}
 
-	private static void addToProjectStructure(IProject newProject, String[] paths) throws CoreException {
-		for (String path : paths) {
-			IFolder etcFolders = newProject.getFolder(path);
-			createFolder(etcFolders);
-		}
-	}
-
 	private static void addNature(IProject project) throws CoreException {
 		if (!project.hasNature(ECLNature.NATURE_ID)) {
 			IProjectDescription description = project.getDescription();

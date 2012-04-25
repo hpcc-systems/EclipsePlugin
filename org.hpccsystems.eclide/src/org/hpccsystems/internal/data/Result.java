@@ -90,7 +90,7 @@ public class Result extends DataSingleton {
 					if (resultString != null) {
 						int offset = resultString.indexOf("<Dataset");
 						resultString = resultString.substring(offset);
-						DatasetParser dp = new DatasetParser(response.getStart(), new InputSource(new StringReader(resultString)), data);
+						new DatasetParser(response.getStart(), new InputSource(new StringReader(resultString)), data);
 						return data.get(row).get(col);
 					}
 				} catch (ArrayOfEspException e) {
