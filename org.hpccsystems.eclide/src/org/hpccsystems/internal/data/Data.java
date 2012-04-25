@@ -29,8 +29,8 @@ public class Data extends Observable {
 
 	//  Singleton Pattern
 	private Data() {
-		this.platforms = new ArrayList<Platform>();
-		this.clientTools = new ArrayList<ClientTools>();
+		platforms = new ArrayList<Platform>();
+		clientTools = new ArrayList<ClientTools>();
 
 		//  Load platforms  ---
 		ILaunchConfiguration[] configs;

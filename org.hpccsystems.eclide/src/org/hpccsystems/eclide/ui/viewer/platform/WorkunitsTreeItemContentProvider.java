@@ -32,7 +32,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 
 	WorkunitsTreeItemContentProvider(TreeViewer treeViewer) {
 		super(treeViewer);
-		this.children = new LazyChildLoader<ItemView>();
+		children = new LazyChildLoader<ItemView>();
 	}
 
 	@Override

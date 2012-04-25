@@ -92,7 +92,7 @@ class ClusterView extends PlatformBaseView {
 	ClusterView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, Cluster cluster) {
 		super(treeViewer, parent, platform);
 		this.cluster = cluster;
-		this.clusterName = cluster.getName();
+		clusterName = cluster.getName();
 		refreshChildren();
 	}
 
@@ -295,8 +295,8 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 
 	WorkunitLogicalFileFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 	}
 
 	@Override
@@ -460,8 +460,8 @@ class GraphFolderView extends FolderItemView implements Observer  {
 
 	GraphFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 	}
 
 	@Override

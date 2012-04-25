@@ -31,7 +31,7 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 
 	PlatformTreeItemContentProvider(TreeViewer treeViewer) {
 		super(treeViewer);
-		this.children = new LazyChildLoader<ItemView>();
+		children = new LazyChildLoader<ItemView>();
 	}
 
 	@Override

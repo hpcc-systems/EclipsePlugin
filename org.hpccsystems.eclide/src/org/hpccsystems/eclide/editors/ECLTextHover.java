@@ -31,7 +31,7 @@ public class ECLTextHover implements ITextHover {
 	ECLTextHover(ISourceViewer sourceViewer, String contentType) {
 		this.sourceViewer = sourceViewer;
 		this.contentType = contentType;
-		this.meta = ECLGlobalMeta.get();
+		meta = ECLGlobalMeta.get();
 	}
 
 	@Override

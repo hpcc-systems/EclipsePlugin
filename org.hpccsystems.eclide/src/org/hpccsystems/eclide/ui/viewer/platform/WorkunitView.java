@@ -29,8 +29,8 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 
 	public WorkunitView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 		refreshChildren();
 	}
 

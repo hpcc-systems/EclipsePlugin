@@ -23,7 +23,7 @@ public class CollectionDelta {
 
 	public CollectionDelta(String cause) {
 		this.cause = cause;
-		this.before = new ArrayList<DataSingleton>();
+		before = new ArrayList<DataSingleton>();
 	}
 
 	public <T extends DataSingleton> CollectionDelta(String cause, Collection<T> before) {
@@ -37,9 +37,9 @@ public class CollectionDelta {
 
 	public <T extends DataSingleton> CollectionDelta calcChanges(Collection<T> after) {
 		new ArrayList<DataSingleton>(after);
-		this.added = new ArrayList<DataSingleton>();
-		this.unchanged = new ArrayList<DataSingleton>();
-		this.removed = new ArrayList<DataSingleton>(before);
+		added = new ArrayList<DataSingleton>();
+		unchanged = new ArrayList<DataSingleton>();
+		removed = new ArrayList<DataSingleton>(before);
 		for (T item : after) {
 			if (removed.contains(item)) {
 				unchanged.add(item);

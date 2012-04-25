@@ -105,8 +105,8 @@ public class Cluster extends DataSingleton  {
 		Cluster that = (Cluster)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return EqualsUtil.areEqual(this.platform, that.platform) &&
-				EqualsUtil.areEqual(this.info.getName(), that.info.getName());
+		return EqualsUtil.areEqual(platform, that.platform) &&
+				EqualsUtil.areEqual(info.getName(), that.info.getName());
 	}
 
 	@Override

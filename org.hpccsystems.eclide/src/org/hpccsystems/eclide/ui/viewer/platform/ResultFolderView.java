@@ -15,8 +15,8 @@ public class ResultFolderView extends FolderItemView implements Observer {
 
 	ResultFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public class ItemView {
 	protected ItemView(TreeItemOwner treeViewer, ItemView parent) {
 		this.treeViewer = treeViewer;
 		this.parent = parent;
-		this.children = new LazyChildLoader<ItemView>();
+		children = new LazyChildLoader<ItemView>();
 	}
 
 	public ItemView walkAncestors(IVisitor visitor) {

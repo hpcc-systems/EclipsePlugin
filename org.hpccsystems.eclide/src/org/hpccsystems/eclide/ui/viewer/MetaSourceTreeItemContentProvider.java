@@ -37,7 +37,7 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 		source = null;
 		if (newInput != null && !newInput.equals(oldInput)) {
 			if (newInput instanceof IPath) {
-				this.path = (IPath)newInput;
+				path = (IPath)newInput;
 				if (source == null) {
 					source = ECLGlobalMeta.get().getSource(path);
 					if (source != null) {

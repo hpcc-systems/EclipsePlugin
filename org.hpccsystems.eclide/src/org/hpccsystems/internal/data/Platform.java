@@ -102,19 +102,19 @@ public class Platform extends DataSingleton {
 	Platform(String ip, int port) {
 		this.ip = ip;
 		this.port = port;
-		this.isDisabled = true;
-		this.name = "";
+		isDisabled = true;
+		name = "";
 
-		this.clusters = new HashSet<Cluster>();
-		this.dropZones = new HashSet<DropZone>();
-		this.workunits = new HashSet<Workunit>();	
-		this.fileSprayWorkunits = new HashSet<FileSprayWorkunit>();
-		this.dataQuerySets = new HashSet<DataQuerySet>();
-		this.logicalFiles = new HashSet<LogicalFile>();
+		clusters = new HashSet<Cluster>();
+		dropZones = new HashSet<DropZone>();
+		workunits = new HashSet<Workunit>();	
+		fileSprayWorkunits = new HashSet<FileSprayWorkunit>();
+		dataQuerySets = new HashSet<DataQuerySet>();
+		logicalFiles = new HashSet<LogicalFile>();
 	}
 
 	public void update(ILaunchConfiguration _launchConfiguration) {
-		this.launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
+		launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
 		name = _launchConfiguration.getName();
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
 		ip = launchConfiguration.getAttribute(P_IP, "");
@@ -625,8 +625,8 @@ public class Platform extends DataSingleton {
 		Platform that = (Platform)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(this.getIP(), that.getIP()) &&
-				EqualsUtil.areEqual(this.getPort(), that.getPort());
+		return 	EqualsUtil.areEqual(getIP(), that.getIP()) &&
+				EqualsUtil.areEqual(getPort(), that.getPort());
 	}
 
 	@Override

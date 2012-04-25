@@ -31,7 +31,7 @@ public class RelationshipHelper{
 
 		FileBucket(IProject project) {
 			this.project = project;
-			this.files = new HashSet<IFile>();
+			files = new HashSet<IFile>();
 		}
 
 		void load(String files) {

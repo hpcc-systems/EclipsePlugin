@@ -64,7 +64,7 @@ public class ClientTools extends DataSingleton {
 	}
 
 	public void update(ILaunchConfiguration _launchConfiguration) {
-		this.launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
+		launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
 	}
 
 	public String getPath() {
@@ -157,7 +157,7 @@ public class ClientTools extends DataSingleton {
 		ClientTools that = (ClientTools)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(this.path, that.path);
+		return 	EqualsUtil.areEqual(path, that.path);
 	}
 
 	@Override

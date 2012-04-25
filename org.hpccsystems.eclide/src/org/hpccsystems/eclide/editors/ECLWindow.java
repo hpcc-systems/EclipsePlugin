@@ -95,10 +95,10 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	public ECLWindow() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
-		this.data = null;
-		this.workunitFolder = null;
-		this.children = new LazyChildLoader<ItemView>();
-		this.workunitTabMap = new HashMap<Workunit, WorkunitTabItem>();
+		data = null;
+		workunitFolder = null;
+		children = new LazyChildLoader<ItemView>();
+		workunitTabMap = new HashMap<Workunit, WorkunitTabItem>();
 
 		actions = new PlatformActions(new IPlatformUI() {
 
@@ -133,7 +133,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		try {
 			editor = new ECLEditor();
 			int index = addPage(editor, getEditorInput());
-			this.setPartName(editor.getTitle());
+			setPartName(editor.getTitle());
 			setPageText(index, "ECL");
 			setPageImage(index, Activator.getImage("icons/doc.png"));
 		} catch (PartInitException e) {
@@ -155,7 +155,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	WorkunitTabItem selectTab(Workunit workunit) {
 		if (workunitTabMap.containsKey(workunit)) {
 			WorkunitTabItem tabItem = workunitTabMap.get(workunit);
-			Composite container = this.getContainer();
+			Composite container = getContainer();
 			if (container instanceof CTabFolder) {
 			}
 			workunitFolder.setSelection(tabItem);

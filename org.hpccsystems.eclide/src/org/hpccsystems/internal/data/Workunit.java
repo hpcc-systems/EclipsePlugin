@@ -74,11 +74,11 @@ public class Workunit extends DataSingleton {
 		this.platform = platform;
 		info = new ECLWorkunit();
 		info.setWuid(wuid); 		
-		this.resultViews = new ArrayList<String>(); 		
-		this.results = new ArrayList<Result>(); 		
-		this.graphs = new ArrayList<Graph>(); 		
-		this.sourceFiles = new ArrayList<LogicalFile>(); 		
-		this.applicationValues = new HashMap<String, String>();
+		resultViews = new ArrayList<String>(); 		
+		results = new ArrayList<Result>(); 		
+		graphs = new ArrayList<Graph>(); 		
+		sourceFiles = new ArrayList<LogicalFile>(); 		
+		applicationValues = new HashMap<String, String>();
 		setChanged();
 	}
 
@@ -559,8 +559,8 @@ public class Workunit extends DataSingleton {
 		Workunit that = (Workunit)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return EqualsUtil.areEqual(this.platform, that.platform) &&
-				EqualsUtil.areEqual(this.info.getWuid(), that.info.getWuid());
+		return EqualsUtil.areEqual(platform, that.platform) &&
+				EqualsUtil.areEqual(info.getWuid(), that.info.getWuid());
 	}
 
 	@Override

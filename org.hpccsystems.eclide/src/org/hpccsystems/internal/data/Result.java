@@ -226,8 +226,8 @@ public class Result extends DataSingleton {
 		Result that = (Result)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(this.workunit, that.workunit) &&
-				EqualsUtil.areEqual(this.info.getSequence(), that.info.getSequence());
+		return 	EqualsUtil.areEqual(workunit, that.workunit) &&
+				EqualsUtil.areEqual(info.getSequence(), that.info.getSequence());
 	}
 
 	@Override

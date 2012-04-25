@@ -113,8 +113,8 @@ public class Graph extends DataSingleton {
 		Graph that = (Graph)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(this.workunit, that.workunit) &&
-				EqualsUtil.areEqual(this.info.getName(), that.info.getName());
+		return 	EqualsUtil.areEqual(workunit, that.workunit) &&
+				EqualsUtil.areEqual(info.getName(), that.info.getName());
 	}
 
 	@Override

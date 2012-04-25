@@ -34,7 +34,7 @@ public class DatasetParser {
 		DatasetHandler(long row, Map<Long, Map<Integer, String>> data) {
 			super();
 			this.row = row;
-			this.col = 0;
+			col = 0;
 			this.data = data;
 		}
 

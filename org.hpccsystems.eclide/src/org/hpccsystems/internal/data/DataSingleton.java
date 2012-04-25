@@ -18,7 +18,7 @@ public abstract class DataSingleton extends Observable {
 	Thread monitorThread;
 
 	DataSingleton() {
-		this.monitorThread = null;
+		monitorThread = null;
 	}
 
 	void monitor() {

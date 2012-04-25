@@ -31,8 +31,8 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 
 	FileSprayWorkunitView(TreeItemOwner treeViewer, PlatformBaseView parent, FileSprayWorkunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 		refreshChildren();
 	}
 

@@ -37,8 +37,8 @@ public class FileSprayWorkunit extends DataSingleton {
 
 	FileSprayWorkunit(Platform platform, String id) {
 		this.platform = platform;
-		this.info = new DFUWorkunit();
-		this.info.setID(id);
+		info = new DFUWorkunit();
+		info.setID(id);
 		setChanged();
 	}
 
@@ -225,8 +225,8 @@ public class FileSprayWorkunit extends DataSingleton {
 		FileSprayWorkunit that = (FileSprayWorkunit)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return EqualsUtil.areEqual(this.platform, that.platform) &&
-				EqualsUtil.areEqual(this.info.getID(), that.info.getID());
+		return EqualsUtil.areEqual(platform, that.platform) &&
+				EqualsUtil.areEqual(info.getID(), that.info.getID());
 	}
 
 	@Override

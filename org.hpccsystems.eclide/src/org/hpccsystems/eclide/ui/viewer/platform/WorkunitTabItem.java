@@ -40,7 +40,7 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 
 	public WorkunitTabItem(CTabFolder parent, int style, int index, WorkunitView wuti) {
 		super(parent, style, index);
-		this.workunit = wuti.getWorkunit();
+		workunit = wuti.getWorkunit();
 
 		wuView = wuti;
 		wuView.getWorkunit().addObserver(this);

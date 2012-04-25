@@ -37,9 +37,9 @@ public class DropZone extends DataSingleton  {
 
 	DropZone(Platform platform, String name) {
 		this.platform = platform;
-		this.info = new TpDropZone();
-		this.info.setName(name);
-		this.files = new HashSet<LogicalFile>(); 		
+		info = new TpDropZone();
+		info.setName(name);
+		files = new HashSet<LogicalFile>(); 		
 	}
 
 	public String getName() {
@@ -146,8 +146,8 @@ public class DropZone extends DataSingleton  {
 		DropZone that = (DropZone)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return EqualsUtil.areEqual(this.platform, that.platform) &&
-				EqualsUtil.areEqual(this.info.getName(), that.info.getName());
+		return EqualsUtil.areEqual(platform, that.platform) &&
+				EqualsUtil.areEqual(info.getName(), that.info.getName());
 	}
 
 	@Override
