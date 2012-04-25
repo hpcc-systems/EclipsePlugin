@@ -44,7 +44,7 @@ public class LogicalFile extends DataSingleton {
 	public enum Notification {
 		LOGICALFILE
 	}
-	
+
 	private LogicalFile(Platform platform, String name) {
 		this.platform = platform;
 		info = new DFULogicalFile();
@@ -56,7 +56,7 @@ public class LogicalFile extends DataSingleton {
 		info4 = new PhysicalFileStruct();
 		info4.setName(name);
 	}
-	
+
 	public String getName() {
 		return info.getName();
 	}
@@ -123,7 +123,7 @@ public class LogicalFile extends DataSingleton {
 		if (fd != null && info2.getName().equals(fd.getName()))
 			info2 = fd;
 	}
-	
+
 	void Update(ECLSourceFile sf) {
 		if (info3.getName().equals(sf.getName()))
 			info3 = sf;
@@ -133,7 +133,7 @@ public class LogicalFile extends DataSingleton {
 		if (info4.getName().equals(fileStruct.getName()))
 			info4 = fileStruct;
 	}
-	
+
 	@Override 
 	public boolean equals(Object aThat) {
 		if ( this == aThat ) 

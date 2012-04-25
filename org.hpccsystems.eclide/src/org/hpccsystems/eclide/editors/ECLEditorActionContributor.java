@@ -13,7 +13,7 @@ package org.hpccsystems.eclide.editors;
 import org.eclipse.ui.editors.text.TextEditorActionContributor;
 
 public class ECLEditorActionContributor extends
-	TextEditorActionContributor {
+TextEditorActionContributor {
 
 	public ECLEditorActionContributor() {
 		super();

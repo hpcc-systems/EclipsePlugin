@@ -25,11 +25,11 @@ public class ItemView {
 	public interface IVisitor {
 		public boolean visit(ItemView item);		
 	}
-	
+
 	protected TreeItemOwner treeViewer;
 	protected ItemView parent;
 	public LazyChildLoader<ItemView> children;
-	
+
 	public static enum ACTION {
 		UNKNOWN,
 		ABORT,
@@ -46,7 +46,7 @@ public class ItemView {
 		this.parent = parent;
 		this.children = new LazyChildLoader<ItemView>();
 	}
-	
+
 	public ItemView walkAncestors(IVisitor visitor) {
 		ItemView item = this;
 		while (item != null) {
@@ -54,10 +54,10 @@ public class ItemView {
 				return item;
 			item = item.getParent();
 		}
-		
+
 		return null; 
 	}
-	
+
 	public WorkunitView getWorkunitAncestor() {
 		WorkunitView wuView = (WorkunitView)walkAncestors(new ItemView.IVisitor() {
 			@Override
@@ -70,7 +70,7 @@ public class ItemView {
 		});
 		return wuView; 
 	}
-	
+
 	public ItemView getParent() {
 		return parent;
 	}
@@ -78,9 +78,9 @@ public class ItemView {
 	public String getText() {
 		return "TODO";
 	}
-	
+
 	public Image getImage() {
-        return null;
+		return null;
 	}
 
 	public Font getFont() {
@@ -98,11 +98,11 @@ public class ItemView {
 	public URL getWebPageURL() throws MalformedURLException {
 		return new URL ("about:blank");
 	}
-	
+
 	public Result getResult() {
 		return null;
 	}
-	
+
 	public String getUser() {
 		return "";
 	}
@@ -122,7 +122,7 @@ public class ItemView {
 		if (treeViewer != null)
 			treeViewer.refresh(this);
 	}
-	
+
 	public boolean hasChildren() {
 		switch (children.getState()) {
 		case UNKNOWN:
@@ -143,7 +143,7 @@ public class ItemView {
 		}
 		return children.get() == null ? false : children.get().length > 0;
 	}
-	
+
 	public Object[] getChildren() {
 		return children.get();
 	}
@@ -154,7 +154,7 @@ public class ItemView {
 	public void refreshChildren() {
 		children.set(new ItemView[0]);
 	}
-	
+
 	public boolean canPerform(ACTION action) {
 		return false;
 	}

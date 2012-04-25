@@ -86,7 +86,7 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
@@ -96,7 +96,7 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 	public void refreshItem() {
 		workunit.refreshState();		
 	}
-	
+
 	@Override
 	public boolean canPerform(ACTION action) {
 		switch (action) {

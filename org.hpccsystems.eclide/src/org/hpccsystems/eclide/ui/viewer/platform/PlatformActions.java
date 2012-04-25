@@ -17,14 +17,14 @@ import org.eclipse.jface.action.Action;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
 public class PlatformActions {
-	
+
 	public interface IPlatformUI {
 		Vector<ItemView> getSelection();
 		void refresh();
 	}
-	
+
 	IPlatformUI owner;
-	
+
 	//  Workunit Actions  ---
 	public Action abortItemAction;
 	public Action deleteItemAction;
@@ -33,12 +33,12 @@ public class PlatformActions {
 	public Action cloneItemAction;
 	public Action publishItemAction;
 	public Action refreshItemAction;
-	
+
 	public PlatformActions(IPlatformUI owner) {
 		this.owner = owner;
 		createActions();
 	}
-	
+
 	public void setState() {
 		abortItemAction.setEnabled(canPerform(ItemView.ACTION.ABORT));
 		deleteItemAction.setEnabled(canPerform(ItemView.ACTION.DELETE));
@@ -48,7 +48,7 @@ public class PlatformActions {
 		publishItemAction.setEnabled(canPerform(ItemView.ACTION.PUBLISH));
 		refreshItemAction.setEnabled(true);
 	}
-	
+
 	public boolean canPerform(ItemView.ACTION action) {
 		Iterator<ItemView> iter = owner.getSelection().iterator();
 		while (iter.hasNext()) {
@@ -58,7 +58,7 @@ public class PlatformActions {
 		}
 		return false;
 	}
-	
+
 	public void perform(ItemView.ACTION action) {
 		Iterator<ItemView> iter = owner.getSelection().iterator();
 		while (iter.hasNext()) {

@@ -24,10 +24,10 @@ import org.xml.sax.SAXException;
 public class DatasetParser {
 
 	private SAXParserFactory parserFactory;
-	
+
 	class DatasetHandler extends StackHandler {
 		Map<Long, Map<Integer, String>> data;
-		
+
 		long row;
 		int col;
 
@@ -50,7 +50,7 @@ public class DatasetParser {
 				Element e = elementStack.peek();
 				if (col == 0)
 					data.put(row, new HashMap<Integer, String>());
-				
+
 				data.get(row).put(col, e.content.toString());
 				++col;
 				break;
@@ -87,4 +87,4 @@ public class DatasetParser {
 		}
 	}		
 }
-	
+

@@ -32,7 +32,7 @@ public class StackHandler extends DefaultHandler {
 			content.append(new String(ch, start, length));		
 		}
 	}
-	
+
 	protected Stack<Element> elementStack;
 
 	public StackHandler() {

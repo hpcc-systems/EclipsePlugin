@@ -18,9 +18,9 @@
 package org.hpccsystems.ws.wsdfu;
 
 public interface WsDfu extends javax.xml.rpc.Service {
-    public java.lang.String getWsDfuServiceSoapAddress();
+	public java.lang.String getWsDfuServiceSoapAddress();
 
-    public org.hpccsystems.ws.wsdfu.WsDfuServiceSoap getWsDfuServiceSoap() throws javax.xml.rpc.ServiceException;
+	public org.hpccsystems.ws.wsdfu.WsDfuServiceSoap getWsDfuServiceSoap() throws javax.xml.rpc.ServiceException;
 
-    public org.hpccsystems.ws.wsdfu.WsDfuServiceSoap getWsDfuServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+	public org.hpccsystems.ws.wsdfu.WsDfuServiceSoap getWsDfuServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
 }

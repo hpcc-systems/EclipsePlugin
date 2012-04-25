@@ -33,13 +33,13 @@ public class DataQuerySet extends DataSingleton {
 	public enum Notification {
 		QUERYSET
 	}
-	
+
 	private DataQuerySet(Platform platform, String name) {
 		this.platform = platform;
 		info = new QuerySet();
 		info.setQuerySetName(name);
 	}
-	
+
 	public String getName() {
 		return info.getQuerySetName();
 	}

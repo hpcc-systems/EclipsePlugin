@@ -25,7 +25,7 @@ public class ECLContentOutlinePage extends ContentOutlinePage {
 	ECLMetaTree meta;
 	TreeViewer viewer;
 	IEditorInput editorInput;
-	
+
 	class MySorter extends ViewerSorter {
 		@Override
 		public int compare(Viewer viewer, Object e1, Object e2) {
@@ -45,7 +45,7 @@ public class ECLContentOutlinePage extends ContentOutlinePage {
 			return 0;
 		}
 	}
-	
+
 	public ECLContentOutlinePage() {
 		meta = ECLGlobalMeta.get();
 	}
@@ -61,7 +61,7 @@ public class ECLContentOutlinePage extends ContentOutlinePage {
 			viewer.setInput(((FileEditorInput)editorInput).getPath());
 		}
 		viewer.expandAll();
-		
+
 	}
 
 	public void setInput(IEditorInput editorInput) {

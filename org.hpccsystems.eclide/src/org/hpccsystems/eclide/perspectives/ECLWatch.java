@@ -53,7 +53,7 @@ public class ECLWatch implements IPerspectiveFactory {
 		right.addView("org.hpccsystems.eclide.resultView");
 		layout.getViewLayout("org.hpccsystems.eclide.resultView").setCloseable(false);
 		layout.getViewLayout("org.hpccsystems.eclide.resultView").setMoveable(false);
-}
+	}
 
 	private void addActionSets() {
 	}

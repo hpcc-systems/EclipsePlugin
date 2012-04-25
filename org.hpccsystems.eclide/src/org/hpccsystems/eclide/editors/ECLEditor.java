@@ -22,7 +22,7 @@ public class ECLEditor extends TextEditor {
 		setSourceViewerConfiguration(new ECLConfiguration(colorManager));
 		setDocumentProvider(new ECLDocumentProvider());
 	}
-	
+
 	@Override
 	public void dispose() {
 		colorManager.dispose();

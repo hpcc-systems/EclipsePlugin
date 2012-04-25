@@ -21,10 +21,10 @@ public class ECLAnnotationHover implements IAnnotationHover {
 	@Override
 	public String getHoverInfo(ISourceViewer sourceViewer, int lineNumber) {
 		Iterator<Annotation> itr = sourceViewer.getAnnotationModel().getAnnotationIterator();
-//		while(itr.hasNext()) {
-//			Annotation annotation = itr.next();
-//			int i = annotation.hashCode();
-//		}
+		//		while(itr.hasNext()) {
+		//			Annotation annotation = itr.next();
+		//			int i = annotation.hashCode();
+		//		}
 		return "Nothing to see move along...";
 	}
 

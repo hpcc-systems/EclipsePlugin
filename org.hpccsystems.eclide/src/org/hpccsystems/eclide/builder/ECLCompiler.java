@@ -44,9 +44,9 @@ public class ECLCompiler {
 
 	IProject project;
 	IProject[] referencedProjects;
-	
+
 	String version = null;
-	
+
 	ConfigurationPreferenceStore launchConfiguration;
 	IPath binPath;
 	File eclccFile;
@@ -65,7 +65,7 @@ public class ECLCompiler {
 	boolean monitorDependees = false;
 	boolean supressSubsequentErrors = false;
 	boolean enableMetaProcessing = true;
-	
+
 	boolean executeRemotely = false;
 	String serverIP;
 	String serverCluster;
@@ -81,11 +81,11 @@ public class ECLCompiler {
 	boolean hasError;	//TODO Has Error notification is all wrong.
 
 	String QUOTE = "";
-	
+
 	class BasicHandler implements IProcessOutput {
 		protected StringBuilder sbOut;
 		protected StringBuilder sbErr;
-		
+
 		BasicHandler() {
 			sbOut = new StringBuilder();
 			sbErr = new StringBuilder();
@@ -145,13 +145,13 @@ public class ECLCompiler {
 		public ECLArchiveHandler() {
 			super();
 		}
-		
+
 		Set<IFile> getAncestors(IFile file) {
 			ECLArchiveParser parser = new ECLArchiveParser(file, sbOut.toString());
 			assert(parser != null);
 			return parser.ancestors;
 		}
-		
+
 		@Override
 		public void ProcessOut(BufferedReader reader) {
 			super.ProcessOut(reader);
@@ -204,7 +204,7 @@ public class ECLCompiler {
 		binPath = new Path(launchConfiguration.getAttribute(ClientTools.P_TOOLSPATH, ClientTools.P_TOOLSPATH_DEFAULT));
 		eclccFile = binPath.append("eclcc").toFile();
 		eclplusFile = binPath.append("eclplus").toFile();
-		
+
 		argsCommon = launchConfiguration.getAttribute(ClientTools.P_ARGSCOMMON, ClientTools.P_ARGSCOMMON_DEFAULT);
 		argsSyntaxCheck = launchConfiguration.getAttribute(ClientTools.P_ARGSSYNTAX, ClientTools.P_ARGSSYNTAX_DEFAULT);
 		argsCompile = launchConfiguration.getAttribute(ClientTools.P_ARGSCOMPILE, ClientTools.P_ARGSCOMPILE_DEFAULT);
@@ -229,10 +229,10 @@ public class ECLCompiler {
 		eclccConsoleWriter = eclccConsole.newMessageStream();
 		//eclccConsoleWriter.setActivateOnWrite(true);
 	}
-	
+
 	public ECLCompiler(ConfigurationPreferenceStore launchConfiguration, IProject project) {
 		this(launchConfiguration);
-		
+
 		this.project = project;
 		try {
 			referencedProjects = project.getReferencedProjects();
@@ -240,24 +240,24 @@ public class ECLCompiler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		projectPath = project.getLocation();
 		workingPath = project.getWorkingLocation(Activator.PLUGIN_ID);
 
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 	}
-	
+
 	boolean HasCompiler() {
 		return !getVersion().isEmpty();
 	}
-	
+
 	void GetIncludeArgs(CmdArgs cmdArgs) {
 		cmdArgs.Append("I",  projectPath.toOSString());
 		for (int i = 0; i < referencedProjects.length; ++i) {
 			cmdArgs.Append("I",  referencedProjects[i].getLocation().toOSString());
 		}
 	}
-	
+
 	public String getVersion() {
 		if (version == null) {
 			version = new String();
@@ -271,7 +271,7 @@ public class ECLCompiler {
 		}
 		return version;
 	}
-	
+
 	public String getBuildVersion() {
 		String version = getVersion();
 		String[] versions = version.split(" ");
@@ -279,7 +279,7 @@ public class ECLCompiler {
 			return versions[1];
 		return "";
 	}
-	
+
 	public String getLanguageVersion() {
 		String version = getVersion();
 		String[] versions = version.split(" ");
@@ -287,10 +287,10 @@ public class ECLCompiler {
 			return versions[0];
 		return "";
 	}
-	
+
 	public void checkSyntax(IFile file) {
 		Eclipse.deleteMarkers(file);
-		
+
 		if (!HasCompiler()) {
 			Eclipse.addMarker(file, IMarker.SEVERITY_ERROR, badConfigurationCode, badConfiguration, 0, 0, true);
 			eclccConsoleWriter.println(noCompiler);
@@ -312,7 +312,7 @@ public class ECLCompiler {
 
 	public String getArchive(IFile file) {
 		Eclipse.deleteMarkers(file);
-		
+
 		if (!HasCompiler()) {
 			Eclipse.addMarker(file, IMarker.SEVERITY_ERROR, badConfigurationCode, badConfiguration, 0, 0, true);
 			eclccConsoleWriter.println(noCompiler);
@@ -340,7 +340,7 @@ public class ECLCompiler {
 	public String getMeta(IFile file) {
 		if (!enableMetaProcessing)
 			return "";
-		
+
 		if (!HasCompiler()) {
 			eclccConsoleWriter.println(noCompiler);
 			return "";

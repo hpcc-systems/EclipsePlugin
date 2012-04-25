@@ -36,7 +36,7 @@ public class Cluster extends DataSingleton  {
 	private Platform platform;
 	private TpTargetCluster info;
 	private TpClusterInfoResponse info2;
-	
+
 	Cluster(Platform platform, String name) {
 		this.platform = platform;
 		info = new TpTargetCluster();
@@ -44,7 +44,7 @@ public class Cluster extends DataSingleton  {
 		info2 = new TpClusterInfoResponse();
 		info2.setName(name);
 	}
-	
+
 	public String getName() {
 		return info.getName();
 	}
@@ -78,7 +78,7 @@ public class Cluster extends DataSingleton  {
 			}
 		}
 	}
-	
+
 	void Update(TpTargetCluster tc) {
 		if (info.getName().equals(tc.getName())) {
 			info = tc;

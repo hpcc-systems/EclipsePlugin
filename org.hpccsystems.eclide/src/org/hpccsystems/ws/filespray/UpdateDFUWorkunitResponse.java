@@ -18,115 +18,115 @@
 package org.hpccsystems.ws.filespray;
 
 public class UpdateDFUWorkunitResponse  implements java.io.Serializable {
-    private org.hpccsystems.ws.filespray.ArrayOfEspException exceptions;
+	private org.hpccsystems.ws.filespray.ArrayOfEspException exceptions;
 
-    public UpdateDFUWorkunitResponse() {
-    }
+	public UpdateDFUWorkunitResponse() {
+	}
 
-    public UpdateDFUWorkunitResponse(
-           org.hpccsystems.ws.filespray.ArrayOfEspException exceptions) {
-           this.exceptions = exceptions;
-    }
-
-
-    /**
-     * Gets the exceptions value for this UpdateDFUWorkunitResponse.
-     * 
-     * @return exceptions
-     */
-    public org.hpccsystems.ws.filespray.ArrayOfEspException getExceptions() {
-        return exceptions;
-    }
+	public UpdateDFUWorkunitResponse(
+			org.hpccsystems.ws.filespray.ArrayOfEspException exceptions) {
+		this.exceptions = exceptions;
+	}
 
 
-    /**
-     * Sets the exceptions value for this UpdateDFUWorkunitResponse.
-     * 
-     * @param exceptions
-     */
-    public void setExceptions(org.hpccsystems.ws.filespray.ArrayOfEspException exceptions) {
-        this.exceptions = exceptions;
-    }
+	/**
+	 * Gets the exceptions value for this UpdateDFUWorkunitResponse.
+	 * 
+	 * @return exceptions
+	 */
+	public org.hpccsystems.ws.filespray.ArrayOfEspException getExceptions() {
+		return exceptions;
+	}
 
-    private java.lang.Object __equalsCalc = null;
-    @Override
+
+	/**
+	 * Sets the exceptions value for this UpdateDFUWorkunitResponse.
+	 * 
+	 * @param exceptions
+	 */
+	public void setExceptions(org.hpccsystems.ws.filespray.ArrayOfEspException exceptions) {
+		this.exceptions = exceptions;
+	}
+
+	private java.lang.Object __equalsCalc = null;
+	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof UpdateDFUWorkunitResponse)) return false;
-        UpdateDFUWorkunitResponse other = (UpdateDFUWorkunitResponse) obj;
-        if (obj == null) return false;
-        if (this == obj) return true;
-        if (__equalsCalc != null) {
-            return (__equalsCalc == obj);
-        }
-        __equalsCalc = obj;
-        boolean _equals;
-        _equals = true && 
-            ((this.exceptions==null && other.getExceptions()==null) || 
-             (this.exceptions!=null &&
-              this.exceptions.equals(other.getExceptions())));
-        __equalsCalc = null;
-        return _equals;
-    }
+		if (!(obj instanceof UpdateDFUWorkunitResponse)) return false;
+		UpdateDFUWorkunitResponse other = (UpdateDFUWorkunitResponse) obj;
+		if (obj == null) return false;
+		if (this == obj) return true;
+		if (__equalsCalc != null) {
+			return (__equalsCalc == obj);
+		}
+		__equalsCalc = obj;
+		boolean _equals;
+		_equals = true && 
+				((this.exceptions==null && other.getExceptions()==null) || 
+						(this.exceptions!=null &&
+						this.exceptions.equals(other.getExceptions())));
+		__equalsCalc = null;
+		return _equals;
+	}
 
-    private boolean __hashCodeCalc = false;
-    @Override
+	private boolean __hashCodeCalc = false;
+	@Override
 	public synchronized int hashCode() {
-        if (__hashCodeCalc) {
-            return 0;
-        }
-        __hashCodeCalc = true;
-        int _hashCode = 1;
-        if (getExceptions() != null) {
-            _hashCode += getExceptions().hashCode();
-        }
-        __hashCodeCalc = false;
-        return _hashCode;
-    }
+		if (__hashCodeCalc) {
+			return 0;
+		}
+		__hashCodeCalc = true;
+		int _hashCode = 1;
+		if (getExceptions() != null) {
+			_hashCode += getExceptions().hashCode();
+		}
+		__hashCodeCalc = false;
+		return _hashCode;
+	}
 
-    // Type metadata
-    private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(UpdateDFUWorkunitResponse.class, true);
+	// Type metadata
+	private static org.apache.axis.description.TypeDesc typeDesc =
+	new org.apache.axis.description.TypeDesc(UpdateDFUWorkunitResponse.class, true);
 
-    static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", ">UpdateDFUWorkunitResponse"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("exceptions");
-        elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "Exceptions"));
-        elemField.setXmlType(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "ArrayOfEspException"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-    }
+	static {
+		typeDesc.setXmlType(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", ">UpdateDFUWorkunitResponse"));
+		org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+		elemField.setFieldName("exceptions");
+		elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "Exceptions"));
+		elemField.setXmlType(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "ArrayOfEspException"));
+		elemField.setMinOccurs(0);
+		elemField.setNillable(false);
+		typeDesc.addFieldDesc(elemField);
+	}
 
-    /**
-     * Return type metadata object
-     */
-    public static org.apache.axis.description.TypeDesc getTypeDesc() {
-        return typeDesc;
-    }
+	/**
+	 * Return type metadata object
+	 */
+	public static org.apache.axis.description.TypeDesc getTypeDesc() {
+		return typeDesc;
+	}
 
-    /**
-     * Get Custom Serializer
-     */
-    public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanSerializer(
-            _javaType, _xmlType, typeDesc);
-    }
+	/**
+	 * Get Custom Serializer
+	 */
+	public static org.apache.axis.encoding.Serializer getSerializer(
+			java.lang.String mechType, 
+			java.lang.Class _javaType,  
+			javax.xml.namespace.QName _xmlType) {
+		return 
+				new  org.apache.axis.encoding.ser.BeanSerializer(
+						_javaType, _xmlType, typeDesc);
+	}
 
-    /**
-     * Get Custom Deserializer
-     */
-    public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanDeserializer(
-            _javaType, _xmlType, typeDesc);
-    }
+	/**
+	 * Get Custom Deserializer
+	 */
+	public static org.apache.axis.encoding.Deserializer getDeserializer(
+			java.lang.String mechType, 
+			java.lang.Class _javaType,  
+			javax.xml.namespace.QName _xmlType) {
+		return 
+				new  org.apache.axis.encoding.ser.BeanDeserializer(
+						_javaType, _xmlType, typeDesc);
+	}
 
 }

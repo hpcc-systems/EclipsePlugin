@@ -25,12 +25,12 @@ import org.hpccsystems.internal.data.Result;
 import org.hpccsystems.internal.data.Workunit;
 
 public class WorkunitTabItem extends CTabItem implements Observer {
-	
+
 	Workunit workunit;
 	WorkunitView wuView;
 
 	CTabFolder detailsContainer;
-	
+
 	CTabItem browserTab;
 	private BrowserEx browser;
 	CTabItem tableTab;
@@ -41,7 +41,7 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 	public WorkunitTabItem(CTabFolder parent, int style, int index, WorkunitView wuti) {
 		super(parent, style, index);
 		this.workunit = wuti.getWorkunit();
-		
+
 		wuView = wuti;
 		wuView.getWorkunit().addObserver(this);
 
@@ -53,7 +53,7 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 		browser = new BrowserEx(detailsContainer);
 		browserTab.setControl(browser);
 		browserTab.setText("ECL Watch");
-					
+
 		tableTab = new CTabItem(detailsContainer, SWT.NONE);
 		table = new TableEx(detailsContainer);
 		tableTab.setControl(table);
@@ -67,11 +67,11 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 		setText(wuView.getText());
 		setImage(wuView.getImage());
 
-	    setControl(detailsContainer);
-	    
-	    detailsContainer.setTabHeight(0);
+		setControl(detailsContainer);
+
+		detailsContainer.setTabHeight(0);
 	}
-	
+
 	public Workunit getWorkunit() {
 		return workunit;
 	}
@@ -99,12 +99,12 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		Display.getDefault().asyncExec(new Runnable() {   
-		@Override
-		public void run() {
-			setText(wuView.getText());
-			setImage(wuView.getImage());
-		}
-	});
+			@Override
+			public void run() {
+				setText(wuView.getText());
+				setImage(wuView.getImage());
+			}
+		});
 	}
 }
 

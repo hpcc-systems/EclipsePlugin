@@ -27,7 +27,7 @@ public class CmdArgs {
 	Collection<String> baseArgs;
 	String QUOTE = "";
 	protected Map<String, Set<String> > args;
-	
+
 	public CmdArgs(String cmd, String commonArgs, String baseArgs) {
 		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 
@@ -36,7 +36,7 @@ public class CmdArgs {
 		this.baseArgs = Arrays.asList(allArgs.split(" "));
 		args = new TreeMap<String, Set<String>>();
 	}
-	
+
 	public void Append(String key) {
 		if (!args.containsKey(key))
 			args.put(key, new HashSet<String>());
@@ -45,10 +45,10 @@ public class CmdArgs {
 	public void Append(String key, String value) {
 		if (!args.containsKey(key))
 			args.put(key, new HashSet<String>());
-		
+
 		args.get(key).add(value);
 	}
-	
+
 	public List<String> Get(boolean eclplusArgs) {
 		List<String> retVal = new Vector<String>();
 		retVal.add(cmd);
@@ -59,8 +59,8 @@ public class CmdArgs {
 				retVal.add(eclplusArgs ? entry.getKey() : "-" + entry.getKey());
 			else {
 				Iterator<String> iter = values.iterator();
-			    while (iter.hasNext()) {
-			    	String value = QUOTE + iter.next() + QUOTE;
+				while (iter.hasNext()) {
+					String value = QUOTE + iter.next() + QUOTE;
 					retVal.add(eclplusArgs ? entry.getKey() + "=" + value : "-" + entry.getKey() + value);
 				}
 			}
@@ -68,7 +68,7 @@ public class CmdArgs {
 
 		return retVal;
 	}
-	
+
 	public void Print(MessageConsoleStream console, boolean eclplusArgs) {
 		if (console == null) 
 			return;
@@ -76,7 +76,7 @@ public class CmdArgs {
 		List<String> cmd = Get(eclplusArgs);
 		if (cmd == null)
 			return;
-		
+
 		for (int i = 0; i < cmd.size(); ++i) {
 			if (i> 0)
 				console.print(" ");

@@ -27,14 +27,14 @@ public abstract class ECLLaunchConfigurationTab extends AbstractLaunchConfigurat
 		}
 		return fRereshJob;
 	}
-	
+
 	@Override
 	protected void scheduleUpdateJob() {
 		Job job = getUpdateJob();
 		job.cancel(); // cancel existing job
 		job.schedule(getUpdateJobDelay());
 	}
-	
+
 	@Override
 	protected Job createUpdateJob() {
 		return  new WorkbenchJob(getControl().getDisplay(), "Update LCD") { //$NON-NLS-1$
@@ -51,7 +51,7 @@ public abstract class ECLLaunchConfigurationTab extends AbstractLaunchConfigurat
 			}
 		};
 	}
-	
+
 	@Override
 	protected long getUpdateJobDelay() {
 		return 200;

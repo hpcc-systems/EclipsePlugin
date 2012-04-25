@@ -70,7 +70,7 @@ public class ECLTextHover implements ITextHover {
 		int lastOffset = getLastCharOffset(doc, offset);
 		try {
 			return doc.get(firstOffset,  lastOffset - firstOffset);
-			
+
 		} catch (BadLocationException e) {
 			// ... log the exception ...
 		}
@@ -91,10 +91,10 @@ public class ECLTextHover implements ITextHover {
 		String text = getHoverWord(doc, hoverRegion.getOffset());
 		StringBuilder hover = new StringBuilder("---  SEARCH INFO  ---");
 		hover.append("\nSearch For:  " + text);
-		
+
 		ECLMetaNode context = source.getContext(hoverRegion.getOffset());
 		hover.append("\nContext:  " + context.getName());
-		
+
 		ECLMetaNode found = context.findDefinition(text, false);
 		if (found != null) {
 			hover.append("\n---  MATCH  ---");
@@ -116,8 +116,8 @@ public class ECLTextHover implements ITextHover {
 				hover.append("\nDefinition:  " + mdef.getName() + " (" + mdef.getOffset() + ", " + mdef.getLength() + ")");
 			}
 		}
-		*/
-		
+		 */
+
 		return hover.toString();
 	}
 

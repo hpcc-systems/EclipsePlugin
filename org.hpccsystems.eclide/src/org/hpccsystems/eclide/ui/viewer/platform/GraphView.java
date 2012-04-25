@@ -23,7 +23,7 @@ public class GraphView extends PlatformBaseView implements Observer {
 	public Graph getGraph() {
 		return graph;
 	}
-	
+
 	@Override
 	public String getText() {
 		return graph.getName();
@@ -46,7 +46,7 @@ public class GraphView extends PlatformBaseView implements Observer {
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "GVCAjaxGraph", "Name=" + graph.getWuid() + "&GraphName=" + graph.getName());
 	}
-	
+
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		update(null);

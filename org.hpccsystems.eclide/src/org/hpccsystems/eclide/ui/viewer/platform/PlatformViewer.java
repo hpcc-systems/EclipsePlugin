@@ -72,29 +72,29 @@ public class PlatformViewer extends ViewPart {
 			return result;
 		}
 	}
-	
+
 	MyTreeViewer treeViewer;
 	TreeItemContentProvider contentProvider;
 	private HtmlViewer htmlViewer;
 	private ResultViewer resultViewer;
-	
+
 	Action showWebItemAction;
 	Action updateItemAction;
 	Action reloadAction;
 	Action refreshAction;
-	
+
 	PlatformActions actions;	
 
 	public PlatformViewer() {
 		contentProvider = null;
 
 		actions = new PlatformActions(new IPlatformUI() {
-			
+
 			@Override
 			public void refresh() {
 				treeViewer.refresh();
 			}
-			
+
 			@Override
 			public Vector<ItemView> getSelection() {
 				Vector<ItemView> retVal = new Vector<ItemView>(); 
@@ -110,24 +110,24 @@ public class PlatformViewer extends ViewPart {
 			}
 		});
 	}
-	
+
 	synchronized TreeItemContentProvider getContentProvider() {
 		return new PlatformTreeItemContentProvider(treeViewer);
 	}
-	
+
 	@Override
 	public void createPartControl(Composite parent) {
-	    treeViewer = new MyTreeViewer(parent);
-	    treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-	    contentProvider = getContentProvider();
-	    treeViewer.setContentProvider(contentProvider);
-	    treeViewer.setLabelProvider(new PlatformTreeItemLabelProvider(treeViewer));
-	    treeViewer.setInput(Data.get());
-	    
-        createActions();
-        createToolbar();
-        createContextMenu();
-		
+		treeViewer = new MyTreeViewer(parent);
+		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		contentProvider = getContentProvider();
+		treeViewer.setContentProvider(contentProvider);
+		treeViewer.setLabelProvider(new PlatformTreeItemLabelProvider(treeViewer));
+		treeViewer.setInput(Data.get());
+
+		createActions();
+		createToolbar();
+		createContextMenu();
+
 		addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -138,7 +138,7 @@ public class PlatformViewer extends ViewPart {
 						Object next = iter.next();
 						if (next instanceof ItemView) {
 							ItemView item  = (ItemView)next;
-							
+
 							//  Editor View  ---
 							WorkunitView wuView = item.getWorkunitAncestor();
 							if (wuView != null) {
@@ -164,7 +164,7 @@ public class PlatformViewer extends ViewPart {
 				}
 			}
 		});
-		
+
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
@@ -174,10 +174,10 @@ public class PlatformViewer extends ViewPart {
 						if (selection.getFirstElement() instanceof ItemView) {
 							ItemView item = (ItemView) selection.getFirstElement();
 							WorkunitView wuView = item.getWorkunitAncestor();
-							
+
 							if (wuView != null) {
 								IFile file = Eclipse.findFile(new Path(wuView.getWorkunit().getApplicationValue("path")));
-								
+
 								try {
 									IEditorPart ep = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file, true);
 									((ECLWindow) ep).showItemView(item);											
@@ -191,11 +191,11 @@ public class PlatformViewer extends ViewPart {
 			}
 		});
 	}
-	
+
 	public void addSelectionChangedListener(ISelectionChangedListener selectionChangedListener) {
 		treeViewer.addSelectionChangedListener(selectionChangedListener);
 	}
-	
+
 	@Override
 	public void setFocus() {
 		treeViewer.getControl().setFocus();
@@ -204,7 +204,7 @@ public class PlatformViewer extends ViewPart {
 	public void showWebPage(ItemView ti, boolean bringToTop) {
 		if (htmlViewer == null)
 			htmlViewer = Eclipse.findHtmlViewer();
-		
+
 		try {
 			URL webPageURL = ti.getWebPageURL();
 			if (htmlViewer != null && webPageURL != null) {
@@ -214,22 +214,22 @@ public class PlatformViewer extends ViewPart {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public boolean showResult(ItemView ti) {
 		Result result = ti.getResult();
 		if (result == null)
 			return false;
-		
+
 		if (resultViewer == null)
 			resultViewer = Eclipse.findResultViewer();
-		
+
 		if (resultViewer == null) 
 			return false;
 
 		resultViewer.showResult(result);
 		return true;
 	}
-	
+
 	public void createActions() {
 		showWebItemAction = new Action("Show ECL Watch") {
 			@Override
@@ -245,7 +245,7 @@ public class PlatformViewer extends ViewPart {
 				}
 			}
 		};
-		
+
 		updateItemAction = new Action("Update") {
 			@Override
 			public void run() { 
@@ -265,7 +265,7 @@ public class PlatformViewer extends ViewPart {
 				contentProvider.reloadChildren();
 			}
 		};
-		
+
 
 		refreshAction = new Action("Refresh") {
 			@Override
@@ -274,7 +274,7 @@ public class PlatformViewer extends ViewPart {
 			}
 		};
 	}
-	
+
 	/**
 	 * Create toolbar.
 	 */
@@ -294,15 +294,15 @@ public class PlatformViewer extends ViewPart {
 				fillContextMenu(mgr);
 			}
 		});
-		
+
 		// Create menu.
 		Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
 		treeViewer.getControl().setMenu(menu);
-		
+
 		// Register menu for extension.
 		getSite().registerContextMenu(menuMgr, treeViewer);
 	}	
-	
+
 	private void fillContextMenu(IMenuManager mgr) {
 		mgr.add(actions.abortItemAction);
 		mgr.add(actions.resubmitItemAction);

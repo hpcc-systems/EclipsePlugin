@@ -26,7 +26,7 @@ public class ClientTools extends DataSingleton {
 	public static ClientTools getNoCreate(String path) {
 		return (ClientTools)All.getNoCreate(new ClientTools(path));
 	}
-	
+
 	public static final String P_TOOLSPATH = "toolsPathPreference";
 	public static final String P_TOOLSPATH_DEFAULT = "";
 
@@ -38,7 +38,7 @@ public class ClientTools extends DataSingleton {
 	public static final String P_ARGSCOMPILE_DEFAULT = "";
 	public static final String P_ARGSCOMPILEREMOTE = "argsCompileRemotePreference";
 	public static final String P_ARGSCOMPILEREMOTE_DEFAULT = "-E";
-	
+
 	//  Local command line options
 	public static final String P_ARGSWULOCAL = "argsWorkunitLocalPreference";
 	public static final String P_ARGSWULOCAL_DEFAULT = "";
@@ -51,26 +51,26 @@ public class ClientTools extends DataSingleton {
 	public static final boolean P_SUPRESSSECONDERROR_DEFAULT = false;
 	public static final String P_ENABLEMETAPROCESSING = "enableMetaProcessing";
 	public static final boolean P_ENABLEMETAPROCESSING_DEFAULT = true;
-	
+
 	private ConfigurationPreferenceStore launchConfiguration;	
 	private Path path;
 	private String version; 
 	private int version_major = 0; 
 	private int version_minor = 0; 
 	private int version_point = 0; 
-	
+
 	ClientTools(String path) {
 		this.path = new Path(path);
 	}
-	
+
 	public void update(ILaunchConfiguration _launchConfiguration) {
 		this.launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
 	}
-	
+
 	public String getPath() {
 		return path.toOSString();
 	}
-	
+
 	public IPath getEclLibraryPath() {
 		if (OS.isWindowsPlatform())
 			return path.append("ecllibrary");
@@ -81,7 +81,7 @@ public class ClientTools extends DataSingleton {
 	public ECLCompiler getCompiler(IProject project) {
 		return new ECLCompiler(launchConfiguration, project);
 	}
-	
+
 	public void calcVersion() {
 		if (version == null) {
 			version = new String();
@@ -106,7 +106,7 @@ public class ClientTools extends DataSingleton {
 		calcVersion();
 		return version_major;
 	}
-	
+
 	public int getMinor() {
 		calcVersion();
 		return version_minor;
@@ -116,7 +116,7 @@ public class ClientTools extends DataSingleton {
 		calcVersion();
 		return version_point;
 	}
-	
+
 	public boolean isNewerThan(ClientTools other) {
 		if (other.getMajor() > getMajor()) {
 			return false;
@@ -132,15 +132,15 @@ public class ClientTools extends DataSingleton {
 	boolean isComplete() {
 		return true;
 	}
-	
+
 	@Override
 	void fastRefresh() {
 	}
-	
+
 	@Override
 	void fullRefresh() {
 	}
-	
+
 	@Override 
 	public boolean equals(Object aThat) {
 		if ( this == aThat ) 

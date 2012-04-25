@@ -24,7 +24,7 @@ import org.eclipse.swt.SWT;
 import org.hpccsystems.eclide.editors.ECLColorManager;
 
 public class ECLScanner extends RuleBasedScanner {
-	
+
 	IToken variable;
 	IToken constant;
 	IToken comment;
@@ -34,10 +34,10 @@ public class ECLScanner extends RuleBasedScanner {
 	IToken mcomment;
 
 	public ECLScanner(ECLColorManager colorManager) {
-		
-//		variable = getToken(ECLColorConstants.ECL_VARIABLE);
-//		constant = getToken(ECLColorConstants.ECL_CONSTANT);
-//		function = getToken(ECLColorConstants.ECL_FUNCTION);
+
+		//		variable = getToken(ECLColorConstants.ECL_VARIABLE);
+		//		constant = getToken(ECLColorConstants.ECL_CONSTANT);
+		//		function = getToken(ECLColorConstants.ECL_FUNCTION);
 		string = new Token( new TextAttribute(colorManager.getColor(IECLColorConstants.ECL_STRING)));
 		keyword = new IToken[6];
 		keyword[0] = new Token(new TextAttribute(colorManager.getColor(IECLColorConstants.ECL_KEYWORD1)));;
@@ -47,7 +47,7 @@ public class ECLScanner extends RuleBasedScanner {
 		keyword[4] = new Token(new TextAttribute(colorManager.getColor(IECLColorConstants.ECL_KEYWORD5)));;
 		keyword[5] = new Token(new TextAttribute(colorManager.getColor(IECLColorConstants.ECL_KEYWORD6)));;
 		other = new Token(new TextAttribute(colorManager.getColor(IECLColorConstants.DEFAULT)));
-		
+
 		ArrayList<IRule> rules= new ArrayList<IRule>();
 		rules.add(new SingleLineRule("'", "'", string, '\\'));
 
@@ -60,7 +60,7 @@ public class ECLScanner extends RuleBasedScanner {
 			}
 		}
 		rules.add(wordRule);
-		
+
 		rules.add(new NumberRule(number));
 		rules.add(new WhitespaceRule(new ECLWhitespaceDetector()));
 

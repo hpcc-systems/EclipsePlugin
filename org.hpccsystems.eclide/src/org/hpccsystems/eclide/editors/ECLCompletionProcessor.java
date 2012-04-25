@@ -28,21 +28,21 @@ import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 import org.hpccsystems.eclide.text.ECLKeywords;
 
 public class ECLCompletionProcessor implements IContentAssistProcessor {
-    private final IContextInformation[] NO_CONTEXTS = { };
-    private final char[] PROPOSAL_ACTIVATION_CHARS = { '.' };
-	
-    private int getFirstCharOffset(IDocument doc, int offset, boolean includePeriod) {
-    	try {
-    		for (int n = offset-1; n >= 0; n--) {
-    			char c = doc.getChar(n);
-    			if (!(Character.isJavaIdentifierPart(c) || (c == '.' && includePeriod) || c == '#'))
-    				return n + 1;
-    		}
-    	} catch (BadLocationException e) {
-    		// ... log the exception ...
-    	}
-    	return offset;
-    }
+	private final IContextInformation[] NO_CONTEXTS = { };
+	private final char[] PROPOSAL_ACTIVATION_CHARS = { '.' };
+
+	private int getFirstCharOffset(IDocument doc, int offset, boolean includePeriod) {
+		try {
+			for (int n = offset-1; n >= 0; n--) {
+				char c = doc.getChar(n);
+				if (!(Character.isJavaIdentifierPart(c) || (c == '.' && includePeriod) || c == '#'))
+					return n + 1;
+			}
+		} catch (BadLocationException e) {
+			// ... log the exception ...
+		}
+		return offset;
+	}
 
 	private int getLastCharOffset(IDocument doc, int offset) {
 		try {
@@ -65,7 +65,7 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 			if (retVal.endsWith("."))
 				return retVal.substring(0, retVal.length() - 1);
 			return retVal;
-			
+
 		} catch (BadLocationException e) {
 			// ... log the exception ...
 		}
@@ -76,13 +76,13 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 		int replacementPos = getFirstCharOffset(doc, offset, false);
 		try {
 			return doc.get(replacementPos,  offset - replacementPos);
-			
+
 		} catch (BadLocationException e) {
 			// ... log the exception ...
 		}
 		return "";
 	}
-	
+
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
 		ArrayList<CompletionProposal> result = new ArrayList<CompletionProposal>();
@@ -93,7 +93,7 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 			ECLMetaNode source = ECLGlobalMeta.get().getSource(file.getLocation());
 			if (source != null) {
 				ECLMetaNode context = source.getContext(offset);
-				
+
 				String knownText = getAutoCKnownString(doc, offset);
 				String remainingText = getAutoCRemainingString(doc, offset);
 				int replacementPos = getFirstCharOffset(doc, offset, false);
@@ -105,7 +105,7 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 								result.add(new CompletionProposal(s.toUpperCase(), replacementPos, endReplacementPos - replacementPos, s.length()));
 						}
 					}
-					
+
 				} else {
 					ECLMetaNode def = context.findDefinition(knownText, false);
 					if (def != null) {
@@ -117,7 +117,7 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 				}
 			}
 		}
-		
+
 		Collections.sort(result, new Comparator<CompletionProposal>() {
 
 			@Override
@@ -125,7 +125,7 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 				return o1.getDisplayString().compareTo(o2.getDisplayString());
 			}
 		});
-		
+
 		return result.toArray(new ICompletionProposal[result.size()]);
 	}
 

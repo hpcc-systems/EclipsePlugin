@@ -45,7 +45,7 @@ public class Workunit extends DataSingleton {
 	public static Workunit get(Platform platform, String wuid) {
 		if (wuid == null || wuid.isEmpty())
 			return null;
-		
+
 		return (Workunit)All.get(new Workunit(platform, wuid));
 	}
 
@@ -57,7 +57,7 @@ public class Workunit extends DataSingleton {
 	private Collection<Graph> graphs;
 	private Collection<LogicalFile> sourceFiles;
 	private Map<String, String> applicationValues;
-	
+
 	public enum Notification {
 		WORKUNIT,
 		CLUSTER,
@@ -80,7 +80,7 @@ public class Workunit extends DataSingleton {
 		this.applicationValues = new HashMap<String, String>();
 		setChanged();
 	}
-	
+
 	public Platform getPlatform() {
 		return platform;
 	}
@@ -96,7 +96,7 @@ public class Workunit extends DataSingleton {
 			return info.getQuery().getText();
 		return "";
 	}
-	
+
 	public Object getClusterName() {
 		if (info.getCluster() == null)
 			fullRefresh(false, false, false, false);
@@ -121,7 +121,7 @@ public class Workunit extends DataSingleton {
 	WUStateDebugPaused,14
 	WUStateDebugRunning,15
 	WUStateSize
-	
+
 	WUStateNoLongerOnServer 999
 	 */
 
@@ -155,7 +155,7 @@ public class Workunit extends DataSingleton {
 		return info.getState() != null ? info.getState() : "Unknown";
 
 	}
-	
+
 	public String[] getResultViews() {
 		if (resultViews == null)
 			fullRefresh(false, true, false, false);
@@ -221,7 +221,7 @@ public class Workunit extends DataSingleton {
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID());
 	}
-	
+
 	public String getJobname() {
 		String retVal = info.getJobname();
 		if (retVal == null)
@@ -266,7 +266,7 @@ public class Workunit extends DataSingleton {
 			}
 		}
 	}
-	
+
 
 	public void resubmit(boolean restart, boolean clone) {
 		WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
@@ -292,7 +292,7 @@ public class Workunit extends DataSingleton {
 	public void resubmit() {
 		resubmit(false, false);
 	}
-	
+
 	public void restart() {
 		resubmit(true, false);
 	}
@@ -373,7 +373,7 @@ public class Workunit extends DataSingleton {
 							break;
 						}
 					}
-					
+
 				} else {
 					update(response.getWorkunit());
 				}
@@ -450,7 +450,7 @@ public class Workunit extends DataSingleton {
 		}
 		return false;
 	}
-	
+
 	synchronized boolean updateJobname(String jobname) {
 		if (jobname != null && EqualsUtil.hasChanged(info.getJobname(), jobname)) {
 			info.setJobname(jobname);
@@ -459,7 +459,7 @@ public class Workunit extends DataSingleton {
 		}
 		return false;
 	}
-	
+
 	synchronized boolean updateQuery(ECLQuery q) {
 		if (q != null && EqualsUtil.hasChanged(info.getQuery(), q)) {
 			info.setQuery(q);

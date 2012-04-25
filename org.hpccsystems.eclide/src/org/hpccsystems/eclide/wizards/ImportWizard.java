@@ -16,7 +16,7 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 public class ImportWizard extends Wizard implements IImportWizard {
-	
+
 	ImportWizardPage mainPage;
 
 	public ImportWizard() {
@@ -30,7 +30,7 @@ public class ImportWizard extends Wizard implements IImportWizard {
 	public boolean performFinish() {
 		return mainPage.doImport();
 	}
-	 
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
 	 */
@@ -40,13 +40,13 @@ public class ImportWizard extends Wizard implements IImportWizard {
 		setNeedsProgressMonitor(true);
 		mainPage = new ImportWizardPage("Import Repository", selection); //NON-NLS-1
 	}
-	
+
 	/* (non-Javadoc)
-     * @see org.eclipse.jface.wizard.IWizard#addPages()
-     */
-    @Override
+	 * @see org.eclipse.jface.wizard.IWizard#addPages()
+	 */
+	@Override
 	public void addPages() {
-        super.addPages(); 
-        addPage(mainPage);        
-    }
+		super.addPages(); 
+		addPage(mainPage);        
+	}
 }

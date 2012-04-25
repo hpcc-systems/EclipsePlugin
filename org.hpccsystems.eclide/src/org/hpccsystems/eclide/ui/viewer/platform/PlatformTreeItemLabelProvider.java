@@ -32,8 +32,8 @@ public class PlatformTreeItemLabelProvider extends TreeItemLabelFontProvider {
 			case FINISHED:
 				if (treeItem instanceof FolderItemView) {
 					//if (!treeViewer.getExpandedState(element)) {
-						if (treeItem.children.getCount() > 0)
-							return treeItem.getText() + " (" + treeItem.children.get().length + ")";
+					if (treeItem.children.getCount() > 0)
+						return treeItem.getText() + " (" + treeItem.children.get().length + ")";
 					//}
 				}
 				break;

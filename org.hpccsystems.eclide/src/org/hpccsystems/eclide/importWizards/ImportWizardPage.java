@@ -51,7 +51,7 @@ import org.hpccsystems.ws.WsAttributes.WsAttributesLocator;
 import org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap;
 
 public class ImportWizardPage extends WizardResourceImportPage {
-	
+
 	public class PasswordFieldEditor extends StringFieldEditor { 
 
 		public PasswordFieldEditor(String name, String label, Composite parent) { 
@@ -69,7 +69,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 		} 
 	} 
 
-	
+
 	protected StringFieldEditor fIPText;
 	protected StringFieldEditor fUserText;
 	protected PasswordFieldEditor fPasswordText;
@@ -98,7 +98,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 		fileSelectionLayout.marginWidth = 0;
 		fileSelectionLayout.marginHeight = 0;
 		fileSelectionArea.setLayout(fileSelectionLayout);
-		
+
 		fIPText = new StringFieldEditor("IPSelect", "Server IP:  ", fileSelectionArea);
 		fIPText.setStringValue("10.173.84.202");
 		fUserText = new StringFieldEditor("User", "User:  ", fileSelectionArea);
@@ -118,10 +118,10 @@ public class ImportWizardPage extends WizardResourceImportPage {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	boolean doImport() {
 		final IFolder targetFolder = Eclipse.getWorkspaceRoot().getFolder(getContainerFullPath());
-		
+
 		WsAttributesLocator locator = new WsAttributesLocator();
 		try {
 			final WsAttributesServiceSoap service = locator.getWsAttributesServiceSoap(new URL("http", fIPText.getStringValue(), 8145, "/WsAttributes"));
@@ -155,7 +155,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 										IPath targetPath = targetFolder.getLocation();
 										IPath fullPath = targetPath.append(modPath + "/" + attrPath).makeAbsolute();
 										final File targetFile = new File(fullPath.toOSString());
-										
+
 										try {
 											targetFile.getParentFile().mkdirs(); 
 											if (targetFile.createNewFile()) {

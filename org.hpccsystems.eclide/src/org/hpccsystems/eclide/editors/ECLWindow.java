@@ -78,7 +78,7 @@ import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 public class ECLWindow extends MultiPageEditorPart implements IResourceChangeListener, Observer, TreeItemOwner {
 
 	ECLContentOutlinePage eclOutlinePage;
-	
+
 	private ECLEditor editor;
 
 	Data data;
@@ -86,7 +86,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	LazyChildLoader<ItemView> children;
 	boolean workunitsLoaded = false;	
 	private ItemView delayedShowItemView;	
-	
+
 	Map<Workunit, WorkunitTabItem> workunitTabMap;
 
 	PlatformActions actions;
@@ -99,13 +99,13 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		this.workunitFolder = null;
 		this.children = new LazyChildLoader<ItemView>();
 		this.workunitTabMap = new HashMap<Workunit, WorkunitTabItem>();
-		
+
 		actions = new PlatformActions(new IPlatformUI() {
-			
+
 			@Override
 			public void refresh() {
 			}
-			
+
 			@Override
 			public Vector<ItemView> getSelection() {
 				Vector<ItemView> retVal = new Vector<ItemView>(); 
@@ -128,7 +128,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		WorkunitTabItem item = new WorkunitTabItem(workunitFolder, SWT.NONE, index, wuView);
 		return item;
 	}
-	
+
 	void createEditorPage() {
 		try {
 			editor = new ECLEditor();
@@ -144,14 +144,14 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 					e.getStatus());
 		}
 	}
-	
+
 	WorkunitTabItem createWorkunitPage(WorkunitView wuti, boolean addToEnd) {
 		if (workunitTabMap.containsKey(wuti.getWorkunit())) {
 			return workunitTabMap.get(wuti.getWorkunit());
 		}
-   		return addToEnd ? createItem(getContainer(), wuti) : createItem(1, getContainer(), wuti);
+		return addToEnd ? createItem(getContainer(), wuti) : createItem(1, getContainer(), wuti);
 	}
-	
+
 	WorkunitTabItem selectTab(Workunit workunit) {
 		if (workunitTabMap.containsKey(workunit)) {
 			WorkunitTabItem tabItem = workunitTabMap.get(workunit);
@@ -163,15 +163,15 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 		return null;
 	}
-	
+
 	public void showItemView(ItemView item) {
 		if (!workunitsLoaded) {
 			delayedShowItemView = item;
 			return;
 		}
-		
+
 		delayedShowItemView = null;
- 		if (item instanceof WorkunitView) {
+		if (item instanceof WorkunitView) {
 			showEclWatch((WorkunitView)item); 
 			return;
 		} else if (item instanceof ResultView) {
@@ -190,7 +190,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			showEclWatch(wuView);
 		}
 	}
-	
+
 	void showEclWatch(WorkunitView wuView) {
 		WorkunitTabItem tabItem = selectTab(wuView.getWorkunit());
 		if (tabItem != null) {
@@ -208,7 +208,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			tabItem.setResult(resultView.getResult());
 		}
 	}
-	
+
 	void showGraph(GraphView graphView) {
 		WorkunitTabItem tabItem = selectTab(graphView.getGraph().getWorkunit());
 		if (tabItem != null) {
@@ -226,7 +226,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			tabItem.setQuery(textItemView.getQueryText());
 		}
 	}
-	
+
 	void createWorkunitPages() {
 		data = Data.get();
 		workunitFolder = (CTabFolder)getContainer(); 		
@@ -239,7 +239,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		});
 
 		workunitFolder.addSelectionListener(new SelectionListener() {
-				
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (e.item instanceof WorkunitTabItem) {
@@ -249,7 +249,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 					}
 				}
 			}
-				
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
@@ -314,7 +314,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
-	
+
 	CTabItem getTabItem(int index){
 		CTabItem childItem = ((CTabFolder)getContainer()).getItem(index);
 		return childItem;
@@ -342,7 +342,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			});
 		}
 	}
-	
+
 	@Override
 	public Object getAdapter(Class required) {
 		if (IContentOutlinePage.class.equals(required)) {
@@ -363,7 +363,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 						}
 					}
 				});
-				
+
 			}
 			return eclOutlinePage;
 		}
@@ -372,14 +372,14 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 	public void refreshChildren() {
 		Workunit.All.deleteObserver(this);
-			
+
 		CollectionDelta delta = new CollectionDelta("primeChildren", getCurrentWorkunits());
 		delta.calcChanges(data.getWorkunits(null, "", "", ""));
 		mergeChanges(delta);
 
 		Workunit.All.addObserver(this);
 	}
-	
+
 	public void reloadChildren() {
 		children.clear();
 		refreshChildren();
@@ -410,7 +410,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				}
 			}
 		}
-		
+
 		//  Add new workunits  ---
 		IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
 		IFile file = input.getFile();
@@ -418,20 +418,20 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		for (DataSingleton ds : delta.getAdded()) {
 			if (ds instanceof Workunit) {
 				Workunit wu = (Workunit)ds;
-				
+
 				if (filePath.compareTo(wu.getApplicationValue("path")) == 0) {
 					children.add(new WorkunitView(this, null, wu));
 					changed = true;
 				}
 			}
 		}
-		
+
 		if (changed)
 			children.sort(new WorkunitComparator());
 
 		return changed;
 	}
-	
+
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof DataSingletonCollection) {
@@ -454,7 +454,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	@Override
 	public void refresh() {
 		Display.getDefault().asyncExec(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				int pos = 1;
@@ -471,11 +471,11 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				if (delayedShowItemView != null) {
 					showItemView(delayedShowItemView);
 				}
-				
+
 			}
 		});
 	}
-	
+
 	protected void createContextMenu() {
 		// Create menu manager.
 		MenuManager menuMgr = new MenuManager();
@@ -486,11 +486,11 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				fillContextMenu(mgr);
 			}
 		});
-		
+
 		// Create menu.
 		Menu menu = menuMgr.createContextMenu(getContainer());
 		getContainer().setMenu(menu);
-		
+
 		// Register menu for extension.
 		//getSite().registerContextMenu(menuMgr, getContainer());
 	}	

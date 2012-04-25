@@ -18,189 +18,189 @@
 package org.hpccsystems.ws.filespray;
 
 public class Rename  implements java.io.Serializable {
-    private java.lang.String srcname;
+	private java.lang.String srcname;
 
-    private java.lang.String dstname;
+	private java.lang.String dstname;
 
-    private java.lang.Boolean overwrite;
+	private java.lang.Boolean overwrite;
 
-    public Rename() {
-    }
+	public Rename() {
+	}
 
-    public Rename(
-           java.lang.String srcname,
-           java.lang.String dstname,
-           java.lang.Boolean overwrite) {
-           this.srcname = srcname;
-           this.dstname = dstname;
-           this.overwrite = overwrite;
-    }
-
-
-    /**
-     * Gets the srcname value for this Rename.
-     * 
-     * @return srcname
-     */
-    public java.lang.String getSrcname() {
-        return srcname;
-    }
+	public Rename(
+			java.lang.String srcname,
+			java.lang.String dstname,
+			java.lang.Boolean overwrite) {
+		this.srcname = srcname;
+		this.dstname = dstname;
+		this.overwrite = overwrite;
+	}
 
 
-    /**
-     * Sets the srcname value for this Rename.
-     * 
-     * @param srcname
-     */
-    public void setSrcname(java.lang.String srcname) {
-        this.srcname = srcname;
-    }
+	/**
+	 * Gets the srcname value for this Rename.
+	 * 
+	 * @return srcname
+	 */
+	public java.lang.String getSrcname() {
+		return srcname;
+	}
 
 
-    /**
-     * Gets the dstname value for this Rename.
-     * 
-     * @return dstname
-     */
-    public java.lang.String getDstname() {
-        return dstname;
-    }
+	/**
+	 * Sets the srcname value for this Rename.
+	 * 
+	 * @param srcname
+	 */
+	public void setSrcname(java.lang.String srcname) {
+		this.srcname = srcname;
+	}
 
 
-    /**
-     * Sets the dstname value for this Rename.
-     * 
-     * @param dstname
-     */
-    public void setDstname(java.lang.String dstname) {
-        this.dstname = dstname;
-    }
+	/**
+	 * Gets the dstname value for this Rename.
+	 * 
+	 * @return dstname
+	 */
+	public java.lang.String getDstname() {
+		return dstname;
+	}
 
 
-    /**
-     * Gets the overwrite value for this Rename.
-     * 
-     * @return overwrite
-     */
-    public java.lang.Boolean getOverwrite() {
-        return overwrite;
-    }
+	/**
+	 * Sets the dstname value for this Rename.
+	 * 
+	 * @param dstname
+	 */
+	public void setDstname(java.lang.String dstname) {
+		this.dstname = dstname;
+	}
 
 
-    /**
-     * Sets the overwrite value for this Rename.
-     * 
-     * @param overwrite
-     */
-    public void setOverwrite(java.lang.Boolean overwrite) {
-        this.overwrite = overwrite;
-    }
+	/**
+	 * Gets the overwrite value for this Rename.
+	 * 
+	 * @return overwrite
+	 */
+	public java.lang.Boolean getOverwrite() {
+		return overwrite;
+	}
 
-    private java.lang.Object __equalsCalc = null;
-    @Override
+
+	/**
+	 * Sets the overwrite value for this Rename.
+	 * 
+	 * @param overwrite
+	 */
+	public void setOverwrite(java.lang.Boolean overwrite) {
+		this.overwrite = overwrite;
+	}
+
+	private java.lang.Object __equalsCalc = null;
+	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof Rename)) return false;
-        Rename other = (Rename) obj;
-        if (obj == null) return false;
-        if (this == obj) return true;
-        if (__equalsCalc != null) {
-            return (__equalsCalc == obj);
-        }
-        __equalsCalc = obj;
-        boolean _equals;
-        _equals = true && 
-            ((this.srcname==null && other.getSrcname()==null) || 
-             (this.srcname!=null &&
-              this.srcname.equals(other.getSrcname()))) &&
-            ((this.dstname==null && other.getDstname()==null) || 
-             (this.dstname!=null &&
-              this.dstname.equals(other.getDstname()))) &&
-            ((this.overwrite==null && other.getOverwrite()==null) || 
-             (this.overwrite!=null &&
-              this.overwrite.equals(other.getOverwrite())));
-        __equalsCalc = null;
-        return _equals;
-    }
+		if (!(obj instanceof Rename)) return false;
+		Rename other = (Rename) obj;
+		if (obj == null) return false;
+		if (this == obj) return true;
+		if (__equalsCalc != null) {
+			return (__equalsCalc == obj);
+		}
+		__equalsCalc = obj;
+		boolean _equals;
+		_equals = true && 
+				((this.srcname==null && other.getSrcname()==null) || 
+						(this.srcname!=null &&
+						this.srcname.equals(other.getSrcname()))) &&
+						((this.dstname==null && other.getDstname()==null) || 
+								(this.dstname!=null &&
+								this.dstname.equals(other.getDstname()))) &&
+								((this.overwrite==null && other.getOverwrite()==null) || 
+										(this.overwrite!=null &&
+										this.overwrite.equals(other.getOverwrite())));
+		__equalsCalc = null;
+		return _equals;
+	}
 
-    private boolean __hashCodeCalc = false;
-    @Override
+	private boolean __hashCodeCalc = false;
+	@Override
 	public synchronized int hashCode() {
-        if (__hashCodeCalc) {
-            return 0;
-        }
-        __hashCodeCalc = true;
-        int _hashCode = 1;
-        if (getSrcname() != null) {
-            _hashCode += getSrcname().hashCode();
-        }
-        if (getDstname() != null) {
-            _hashCode += getDstname().hashCode();
-        }
-        if (getOverwrite() != null) {
-            _hashCode += getOverwrite().hashCode();
-        }
-        __hashCodeCalc = false;
-        return _hashCode;
-    }
+		if (__hashCodeCalc) {
+			return 0;
+		}
+		__hashCodeCalc = true;
+		int _hashCode = 1;
+		if (getSrcname() != null) {
+			_hashCode += getSrcname().hashCode();
+		}
+		if (getDstname() != null) {
+			_hashCode += getDstname().hashCode();
+		}
+		if (getOverwrite() != null) {
+			_hashCode += getOverwrite().hashCode();
+		}
+		__hashCodeCalc = false;
+		return _hashCode;
+	}
 
-    // Type metadata
-    private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(Rename.class, true);
+	// Type metadata
+	private static org.apache.axis.description.TypeDesc typeDesc =
+	new org.apache.axis.description.TypeDesc(Rename.class, true);
 
-    static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", ">Rename"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("srcname");
-        elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "srcname"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("dstname");
-        elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "dstname"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("overwrite");
-        elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "overwrite"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-    }
+	static {
+		typeDesc.setXmlType(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", ">Rename"));
+		org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+		elemField.setFieldName("srcname");
+		elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "srcname"));
+		elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+		elemField.setMinOccurs(0);
+		elemField.setNillable(false);
+		typeDesc.addFieldDesc(elemField);
+		elemField = new org.apache.axis.description.ElementDesc();
+		elemField.setFieldName("dstname");
+		elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "dstname"));
+		elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+		elemField.setMinOccurs(0);
+		elemField.setNillable(false);
+		typeDesc.addFieldDesc(elemField);
+		elemField = new org.apache.axis.description.ElementDesc();
+		elemField.setFieldName("overwrite");
+		elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:filespray", "overwrite"));
+		elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+		elemField.setMinOccurs(0);
+		elemField.setNillable(false);
+		typeDesc.addFieldDesc(elemField);
+	}
 
-    /**
-     * Return type metadata object
-     */
-    public static org.apache.axis.description.TypeDesc getTypeDesc() {
-        return typeDesc;
-    }
+	/**
+	 * Return type metadata object
+	 */
+	public static org.apache.axis.description.TypeDesc getTypeDesc() {
+		return typeDesc;
+	}
 
-    /**
-     * Get Custom Serializer
-     */
-    public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanSerializer(
-            _javaType, _xmlType, typeDesc);
-    }
+	/**
+	 * Get Custom Serializer
+	 */
+	public static org.apache.axis.encoding.Serializer getSerializer(
+			java.lang.String mechType, 
+			java.lang.Class _javaType,  
+			javax.xml.namespace.QName _xmlType) {
+		return 
+				new  org.apache.axis.encoding.ser.BeanSerializer(
+						_javaType, _xmlType, typeDesc);
+	}
 
-    /**
-     * Get Custom Deserializer
-     */
-    public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanDeserializer(
-            _javaType, _xmlType, typeDesc);
-    }
+	/**
+	 * Get Custom Deserializer
+	 */
+	public static org.apache.axis.encoding.Deserializer getDeserializer(
+			java.lang.String mechType, 
+			java.lang.Class _javaType,  
+			javax.xml.namespace.QName _xmlType) {
+		return 
+				new  org.apache.axis.encoding.ser.BeanDeserializer(
+						_javaType, _xmlType, typeDesc);
+	}
 
 }

@@ -25,7 +25,7 @@ public class MetaSourceLabelProvider implements ILabelProvider {
 
 	@Override
 	public void dispose() {
-		
+
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class MetaSourceLabelProvider implements ILabelProvider {
 
 	@Override
 	public void removeListener(ILabelProviderListener listener) {
-		
+
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class MetaSourceLabelProvider implements ILabelProvider {
 			}
 			return Activator.getImage("icons/attr.png");
 		}
-		
+
 		return null;
 	}
 

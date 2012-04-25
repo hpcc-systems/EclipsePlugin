@@ -36,7 +36,7 @@ public class ResultFolderView extends FolderItemView implements Observer {
 			retVal.add(new ResultView(treeViewer, this, platform, r));
 		children.set(retVal.toArray(new ItemView[0]));
 	}
-	
+
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 instanceof Workunit.Notification) {

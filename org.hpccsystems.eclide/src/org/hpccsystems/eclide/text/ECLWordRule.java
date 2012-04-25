@@ -119,7 +119,7 @@ public class ECLWordRule implements IRule {
 			column= UNDEFINED;
 		fColumn= column;
 	}
-	
+
 	/*
 	 * @see IRule#evaluate(ICharacterScanner)
 	 */
@@ -140,7 +140,7 @@ public class ECLWordRule implements IRule {
 				// If case-insensitive, convert to lower case before accessing the map
 				if (fIgnoreCase)
 					buffer= buffer.toLowerCase();
-				
+
 				IToken token= fWords.get(buffer);
 
 				if (token != null)

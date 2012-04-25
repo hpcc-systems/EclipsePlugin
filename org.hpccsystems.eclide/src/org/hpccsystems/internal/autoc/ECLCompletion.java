@@ -28,17 +28,17 @@ import org.xml.sax.SAXException;
 
 public class ECLCompletion {
 	private static ECLCompletion self = null;
-	
+
 	private ECLCompletion() {
 	}
-	
+
 	public static ECLCompletion getECLCompletion() {
 		if (self == null) {
 			self = new ECLCompletion();
 		}
 		return self;
 	}
-	
+
 	public class ECLArchiveParser {
 
 		private SAXParserFactory parserFactory;
@@ -67,7 +67,7 @@ public class ECLCompletion {
 						if (resource instanceof IFile && !resource.equals(file) && resource.getName().endsWith(".ecl")) 
 							ancestors.add((IFile) resource);
 					}
-					
+
 					break;
 				default:
 					break;
@@ -102,12 +102,12 @@ public class ECLCompletion {
 			}
 		}		
 	}
-	
+
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}
-	
+
 	void Load(IFile file, String xml) {
 	}
 }

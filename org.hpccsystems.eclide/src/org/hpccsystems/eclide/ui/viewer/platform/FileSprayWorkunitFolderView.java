@@ -45,7 +45,7 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 	@Override
 	public void refreshChildren() {
 		FileSprayWorkunit.All.deleteObserver(this);
-		
+
 		CollectionDelta monitor = new CollectionDelta("primeChildren", getCurrentWorkunits());
 		monitor.calcChanges(platform.getFileSprayWorkunits(clusterName));
 		mergeChanges(monitor);
@@ -63,7 +63,7 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 		}
 		return retVal;
 	}
-	
+
 	boolean mergeChanges(CollectionDelta delta) {
 		boolean changed = false;
 		for (Object item : children.get().clone()) {
@@ -77,7 +77,7 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 				}
 			}
 		}
-		
+
 		//  Add new workunits  ---
 		for (DataSingleton ds : delta.getAdded()) {
 			if (ds instanceof FileSprayWorkunit) {
@@ -86,7 +86,7 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 				changed = true;
 			}
 		}
-		
+
 		if (changed)
 			children.sort(new WorkunitComparator());
 

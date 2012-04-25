@@ -14,4 +14,4 @@ package org.hpccsystems.eclide.launchers;
  * Constant definitions for plug-in preferences
  */
 public class ECLLaunchConstants {
-	}
+}

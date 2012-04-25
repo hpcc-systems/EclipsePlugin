@@ -101,7 +101,7 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 		}
 		return null;
 	}
-	
+
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("FileSpray", "GetDFUWorkunit", "wuid=" + workunit.getID());
@@ -111,7 +111,7 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 	public void refreshItem() {
 		workunit.refreshState();		
 	}
-	
+
 	@Override
 	public void refreshChildren() {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();

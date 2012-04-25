@@ -26,21 +26,21 @@ public class DropZone extends DataSingleton  {
 	public static DropZone get(Platform platform, String name) {
 		if (name == null || name.isEmpty())
 			return null;
-		
+
 		return (DropZone)All.get(new DropZone(platform, name));
 	}
 
 	private Platform platform;
 	private TpDropZone info;
 	private Collection<LogicalFile> files;
-	
+
 	DropZone(Platform platform, String name) {
 		this.platform = platform;
 		this.info = new TpDropZone();
 		this.info.setName(name);
 		this.files = new HashSet<LogicalFile>(); 		
 	}
-	
+
 	public String getName() {
 		return info.getName();
 	}
@@ -68,7 +68,7 @@ public class DropZone extends DataSingleton  {
 		}
 		return null;
 	}
-	
+
 	//  Files  ---
 	synchronized LogicalFile getFile(String name) {
 		return LogicalFile.get(platform, name);
@@ -115,7 +115,7 @@ public class DropZone extends DataSingleton  {
 			}
 		}
 	}
-	
+
 	void update(TpDropZone dz) {
 		if (info.getName().equals(dz.getName())) {
 			info = dz;
@@ -132,7 +132,7 @@ public class DropZone extends DataSingleton  {
 		}
 		return false;
 	}
-	
+
 	@Override 
 	public boolean equals(Object aThat) {
 		if ( this == aThat ) 

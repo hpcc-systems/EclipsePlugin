@@ -21,7 +21,7 @@ public class EclCCError {
 	public IPath errorPath;
 	public int lineNumber;
 	public int colNumber;
-	
+
 	EclCCError(String errorLine) {
 		severity = IMarker.SEVERITY_INFO;
 		errorPath = null;

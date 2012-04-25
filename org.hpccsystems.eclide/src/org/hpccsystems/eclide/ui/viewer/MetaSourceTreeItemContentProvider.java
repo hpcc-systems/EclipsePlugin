@@ -32,7 +32,7 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 	MetaSourceTreeItemContentProvider() {
 		source = null;
 	}
-	
+
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		this.viewer = (TreeViewer)viewer;
@@ -84,7 +84,7 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 	public boolean hasChildren(Object element) {
 		if (element instanceof ECLMetaNode)
 			return ((ECLMetaNode)element).getChildren().size() > 0;
-		return false;
+			return false;
 	}
 
 	@Override

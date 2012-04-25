@@ -28,14 +28,14 @@ public class ECLPreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		
+
 		try{
 			String hpccBinFolder = System.getenv("HPCCBIN");
 			store.setDefault(ClientTools.P_TOOLSPATH, hpccBinFolder);
 		} catch (Exception e) {
 			store.setDefault(ClientTools.P_TOOLSPATH, "");
 		}
-		
+
 		store.setDefault(ClientTools.P_ARGSCOMMON, "");
 		store.setDefault(ClientTools.P_ARGSSYNTAX, "-fsyntaxcheck=1");
 		store.setDefault(ClientTools.P_ARGSCOMPILE, "");

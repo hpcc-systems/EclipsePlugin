@@ -25,23 +25,23 @@ public class ECLDocumentProvider extends FileDocumentProvider {
 		IDocument document = super.createDocument(element);
 		if (document != null) {
 			IDocumentPartitioner partitioner =
-				new FastPartitioner(
-					new ECLPartitionScanner(),
-					new String[] {
-						ECLPartitionScanner.ECL_BODY,
-						ECLPartitionScanner.ECL_COMMENT,
-						ECLPartitionScanner.ECL_JAVADOC });
+					new FastPartitioner(
+							new ECLPartitionScanner(),
+							new String[] {
+								ECLPartitionScanner.ECL_BODY,
+								ECLPartitionScanner.ECL_COMMENT,
+								ECLPartitionScanner.ECL_JAVADOC });
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);
 		}
 		return document;
 	}
-	
+
 	@Override
 	protected IDocument createEmptyDocument() {
 		return new ECLDocument();
 	}
-	
+
 	@Override
 	protected boolean setDocumentContent(IDocument document, IEditorInput editorInput, String encoding) throws CoreException {
 		if (document instanceof ECLDocument) {
@@ -49,5 +49,5 @@ public class ECLDocumentProvider extends FileDocumentProvider {
 		}
 		return super.setDocumentContent(document, editorInput, encoding);
 	}
-	
+
 }

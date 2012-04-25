@@ -20,15 +20,15 @@ public abstract class DataSingleton extends Observable {
 	DataSingleton() {
 		this.monitorThread = null;
 	}
-	
+
 	void monitor() {
 		monitor(MONITOR_SLEEP);
 	}
-	
+
 	synchronized void monitor(final int sleepTime) {
 		if (isComplete()) 
 			return;
-		
+
 		if (monitorThread == null || !monitorThread.isAlive()) {
 			monitorThread = new Thread(new Runnable() {
 				@Override
@@ -55,7 +55,7 @@ public abstract class DataSingleton extends Observable {
 	abstract boolean isComplete();
 	abstract void fastRefresh();
 	abstract void fullRefresh();
-	
+
 	@Override
 	public abstract boolean equals(Object aThat);
 	@Override

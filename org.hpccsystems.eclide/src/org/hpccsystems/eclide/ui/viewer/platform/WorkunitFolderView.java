@@ -45,7 +45,7 @@ public class WorkunitFolderView extends FolderItemView implements Observer {
 	@Override
 	public void refreshChildren() {
 		Workunit.All.deleteObserver(this);
-		
+
 		CollectionDelta monitor = new CollectionDelta("primeChildren", getCurrentWorkunits());
 		monitor.calcChanges(platform.getWorkunits(clusterName));
 		mergeChanges(monitor);
@@ -63,7 +63,7 @@ public class WorkunitFolderView extends FolderItemView implements Observer {
 		}
 		return retVal;
 	}
-	
+
 	boolean mergeChanges(CollectionDelta delta) {
 		boolean changed = false;
 		for (Object item : children.get().clone()) {
@@ -77,7 +77,7 @@ public class WorkunitFolderView extends FolderItemView implements Observer {
 				}
 			}
 		}
-		
+
 		//  Add new workunits  ---
 		for (DataSingleton ds : delta.getAdded()) {
 			if (ds instanceof Workunit) {
@@ -88,7 +88,7 @@ public class WorkunitFolderView extends FolderItemView implements Observer {
 				}
 			}
 		}
-		
+
 		if (changed)
 			children.sort(new WorkunitComparator());
 

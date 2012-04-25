@@ -33,7 +33,7 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 		super(treeViewer);
 		this.children = new LazyChildLoader<ItemView>();
 	}
-	
+
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		if (newInput != null && !newInput.equals(oldInput)) {
@@ -54,18 +54,18 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 	public Object[] getElements(Object inputElement) {
 		return children.get();
 	}
-	
+
 	@Override 
 	public void refreshChildren() {
 		Platform.All.deleteObserver(this);
-			
+
 		CollectionDelta delta = new CollectionDelta("PlatformTreeItemContentProvider.refreshChildren", getCurrentPlatforms());
 		delta.calcChanges(data.getPlatforms());
 		mergeChanges(delta);
 
 		Platform.All.addObserver(this);
 	}
-	
+
 	@Override
 	public void reloadChildren() {
 		children.clear();
@@ -83,7 +83,7 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 		}
 		return retVal;
 	}
-	
+
 	boolean mergeChanges(CollectionDelta delta) {
 		boolean changed = false;
 		for (Object item : children.get().clone()) {
@@ -97,7 +97,7 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 				}
 			}
 		}
-		
+
 		//  Add new platforms  ---
 		for (DataSingleton ds : delta.getAdded()) {
 			if (ds instanceof Platform) {
@@ -107,13 +107,13 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 				changed = true;
 			}
 		}
-		
+
 		//if (changed)
 		//	children.sort(new WorkunitComparator());
 
 		return changed;
 	}
-	
+
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof DataSingletonCollection) {

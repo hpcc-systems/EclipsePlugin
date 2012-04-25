@@ -27,13 +27,13 @@ public class Graph extends DataSingleton {
 		}
 		return graph;
 	}
-	
+
 	private Workunit workunit;
 	private ECLGraph info;
 	public enum Notification {
 		GRAPH
 	}
-	
+
 	private Graph(Workunit workunit, String name) {
 		this.workunit = workunit;
 		info = new ECLGraph();
@@ -61,7 +61,7 @@ public class Graph extends DataSingleton {
 			return State.FAILED;
 		return State.UNKNOWN;
 	}
-	
+
 	@Override
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID()) || workunit.isComplete();

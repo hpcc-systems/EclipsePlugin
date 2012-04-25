@@ -28,43 +28,43 @@ public class ECLNewProjectWizard extends Wizard implements INewWizard, IExecutab
 	private static final String PAGE_NAME = "ECL Plug-in Project Wizard"; //$NON-NLS-1$
 	private WizardNewProjectCreationPage _pageOne;
 	private IConfigurationElement _configurationElement;
-	
+
 	public ECLNewProjectWizard() {
 		super();
-	    setWindowTitle(WIZARD_NAME);
+		setWindowTitle(WIZARD_NAME);
 	}
 
 	@Override
 	public void addPages() {
 		super.addPages();
-	    _pageOne = new WizardNewProjectCreationPage(PAGE_NAME);
-	    _pageOne.setTitle(WIZARD_NAME);
-	    _pageOne.setDescription(PAGE_NAME);
+		_pageOne = new WizardNewProjectCreationPage(PAGE_NAME);
+		_pageOne.setTitle(WIZARD_NAME);
+		_pageOne.setDescription(PAGE_NAME);
 		addPage(_pageOne);
 	}
 
 	@Override
 	public boolean performFinish() {
-        String name = _pageOne.getProjectName();
-        URI location = null;
-        if (!_pageOne.useDefaults()) {
-            location = _pageOne.getLocationURI();
-        } // else location == null
+		String name = _pageOne.getProjectName();
+		URI location = null;
+		if (!_pageOne.useDefaults()) {
+			location = _pageOne.getLocationURI();
+		} // else location == null
 
-        ECLProjectSupport.createProject(name, location);
-        BasicNewProjectResourceWizard.updatePerspective(_configurationElement);
+		ECLProjectSupport.createProject(name, location);
+		BasicNewProjectResourceWizard.updatePerspective(_configurationElement);
 
-        return true;
+		return true;
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-    public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
-        _configurationElement = config;
+	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
+		_configurationElement = config;
 	}
 }

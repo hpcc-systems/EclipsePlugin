@@ -25,7 +25,7 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -71,11 +71,11 @@ public class Activator extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
-	
-    public static Image getImage(String imagePath) {
-        ImageDescriptor imageDescriptor = getImageDescriptor(imagePath);
-        Image image = imageDescriptor.createImage();
-        return image;
-    }
-	
+
+	public static Image getImage(String imagePath) {
+		ImageDescriptor imageDescriptor = getImageDescriptor(imagePath);
+		Image image = imageDescriptor.createImage();
+		return image;
+	}
+
 }

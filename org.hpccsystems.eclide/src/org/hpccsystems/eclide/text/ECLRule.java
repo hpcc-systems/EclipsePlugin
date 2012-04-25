@@ -19,7 +19,7 @@ public class ECLRule extends MultiLineRule {
 	public ECLRule(IToken token) {
 		super("<", ">", token);
 	}
-	
+
 	@Override
 	protected boolean sequenceDetected(ICharacterScanner scanner, char[] sequence, boolean eofAllowed) {
 		int c = scanner.read();

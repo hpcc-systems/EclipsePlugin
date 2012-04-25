@@ -24,10 +24,10 @@ public class FileSprayWorkunit extends DataSingleton {
 	public static FileSprayWorkunit get(Platform platform, String wuid) {
 		if (wuid == null || wuid.isEmpty())
 			return null;
-		
+
 		return (FileSprayWorkunit)All.get(new FileSprayWorkunit(platform, wuid));
 	}
-	
+
 	private Platform platform;
 	private DFUWorkunit info;
 	public enum Notification {
@@ -40,7 +40,7 @@ public class FileSprayWorkunit extends DataSingleton {
 		this.info.setID(id);
 		setChanged();
 	}
-	
+
 	public Platform getPlatform() {
 		return platform;
 	}
@@ -60,7 +60,7 @@ public class FileSprayWorkunit extends DataSingleton {
 6    DFUstate_finished,
 7    DFUstate_monitoring,
 8    DFUstate_aborting
-	
+
 	WUStateNoLongerOnServer 999
 	 */	
 	public State getStateID() {
@@ -88,14 +88,14 @@ public class FileSprayWorkunit extends DataSingleton {
 	public LogicalFile getLogicalFile() {
 		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
 			fullRefresh();
-		
+
 		String logicalFileName = info.getSourceLogicalName();
 		if (logicalFileName == null || logicalFileName.isEmpty())
 			logicalFileName = info.getDestLogicalName();
 
 		if (logicalFileName == null || logicalFileName.isEmpty())
 			return null;
-		
+
 		return getLogicalFile(logicalFileName);
 	}
 
@@ -109,10 +109,10 @@ public class FileSprayWorkunit extends DataSingleton {
 
 		if (filePath == null || filePath.isEmpty())
 			return null;
-		
+
 		return filePath;
 	}
-	
+
 	public boolean isDespray() {
 		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
 			fullRefresh();
@@ -125,7 +125,7 @@ public class FileSprayWorkunit extends DataSingleton {
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID());
 	}
-	
+
 	public void refreshState() {
 		fullRefresh();
 	}
@@ -191,11 +191,11 @@ public class FileSprayWorkunit extends DataSingleton {
 		}
 		return false;
 	}
-	
+
 	synchronized boolean updateLogicalFiles(DFUWorkunit wu) {
 		if (wu != null && info.getID().equals(wu.getID()) && (
-					EqualsUtil.hasChanged(info.getSourceLogicalName(), wu.getSourceLogicalName()) ||
-					EqualsUtil.hasChanged(info.getDestLogicalName(), wu.getDestLogicalName()) 
+				EqualsUtil.hasChanged(info.getSourceLogicalName(), wu.getSourceLogicalName()) ||
+				EqualsUtil.hasChanged(info.getDestLogicalName(), wu.getDestLogicalName()) 
 				)) {
 			info = wu;
 			setChanged();
@@ -203,7 +203,7 @@ public class FileSprayWorkunit extends DataSingleton {
 		}
 		return false;
 	}
-	
+
 	@Override 
 	public boolean equals(Object aThat) {
 		if ( this == aThat ) 

@@ -23,17 +23,17 @@ public class LazyChildLoader<T> {
 
 	private CalcState state;
 	private ArrayList<T> children;
-	
+
 	public LazyChildLoader() {
 		this.state = CalcState.UNKNOWN;
 		this.children = new ArrayList<T>();
 	}
-	
+
 	public synchronized void clear() {
 		state = CalcState.UNKNOWN;
 		this.children.clear();
 	}
-	
+
 	public synchronized void setState(CalcState state) {
 		this.state = state;
 	}
@@ -41,7 +41,7 @@ public class LazyChildLoader<T> {
 	public synchronized CalcState getState() {
 		return state;
 	}
-	
+
 	public synchronized void set(T[] children) {
 		this.children.clear();
 		if (children != null) {
@@ -50,7 +50,7 @@ public class LazyChildLoader<T> {
 		}
 		state = CalcState.FINISHED;
 	}
-	
+
 	public synchronized Object[] get() {
 		return children.toArray().clone();
 	}

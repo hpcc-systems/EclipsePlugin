@@ -41,38 +41,38 @@ public class Result extends DataSingleton {
 	public enum Notification {
 		RESULT
 	}
-	
+
 	class ResultData {
 		final int PAGE_SIZE = 180;
 		final int PAGE_BEFORE = 60;
 		Map<Long, Map<Integer, String>> data;
-		
+
 		ResultData() {
 			data = new HashMap<Long, Map<Integer, String>>();
 		}
-		
+
 		String GetCell(long row, int col) {
 			if (data.containsKey(row))
 				return data.get(row).get(col);
-			
+
 			Long start = row;
 			for (int i = 0; i < PAGE_BEFORE; ++i) {
 				if (start -1 < 0)
 					break;
-				
+
 				if (data.containsKey(start - 1))
 					break;
-				
+
 				--start;
 			}
-			
+
 			int count = (int)(row - start);
 			for (int i = count; i < PAGE_SIZE; ++i) {
 				if (data.containsKey(start + count))
 					break;
 				++count;
 			}
-			
+
 			WsWorkunitsServiceSoap service = workunit.getPlatform().getWsWorkunitsService();
 			if (service != null) {
 				WUResult request = new WUResult();
@@ -97,13 +97,13 @@ public class Result extends DataSingleton {
 					e.printStackTrace();
 				}
 			}
-			
+
 			return data.get(row).get(col);
 		}
 	}
-	
+
 	ResultData data;
-	
+
 	private Result(Workunit workunit, Integer sequence) {
 		this.workunit = workunit;
 		info = new ECLResult();
@@ -111,7 +111,7 @@ public class Result extends DataSingleton {
 		data = new ResultData();
 		setChanged();
 	}
-	
+
 	public Workunit getWorkunit() {
 		return workunit;
 	}
@@ -142,15 +142,15 @@ public class Result extends DataSingleton {
 		}
 		return State.UNKNOWN;
 	}
-	
+
 	public Long getTotal() {
 		return info.getTotal();
 	}
-	
+
 	public String[] getResultViews() {
 		return workunit.getResultViews();
 	}
-	
+
 	@Override
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID()) || workunit.isComplete();
@@ -171,7 +171,7 @@ public class Result extends DataSingleton {
 	public String getCell(int row, int col) {
 		return data.GetCell(row, col);
 	}
-	
+
 	//  Refresh + Update  ---
 	@Override
 	void fastRefresh() {
@@ -199,7 +199,7 @@ public class Result extends DataSingleton {
 	synchronized boolean UpdateState(ECLResult result) {
 		if (result != null && info.getSequence().equals(result.getSequence()) &&
 				EqualsUtil.hasChanged(info, result)) {
-			
+
 			assert(result.getECLSchemas() != null);
 			info = result;
 			setChanged();

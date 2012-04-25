@@ -36,10 +36,10 @@ public class BrowserEx extends Composite {
 	private ItemView previousTreeItem;
 	private ItemView nextTreeItem;
 	private String nextUrl;
-	
+
 	public BrowserEx(Composite parent) {
 		super(parent, SWT.NONE);
-		
+
 		GridLayout layout = new GridLayout(4, false);
 		setLayout(layout);
 
@@ -81,7 +81,7 @@ public class BrowserEx extends Composite {
 		refreshButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-//				navigateTo(url, user, password);
+				//				navigateTo(url, user, password);
 				browser.setUrl(comboUrl.getText());
 			}
 
@@ -95,8 +95,8 @@ public class BrowserEx extends Composite {
 		layoutData.horizontalSpan = 4;
 		layoutData.verticalSpan = 1;
 		browser.setLayoutData(layoutData);
-    	browser.addAuthenticationListener(new AuthenticationListener() {
-			
+		browser.addAuthenticationListener(new AuthenticationListener() {
+
 			@Override
 			public void authenticate(AuthenticationEvent event) {
 				// TODO Auto-generated method stub
@@ -121,7 +121,7 @@ public class BrowserEx extends Composite {
 			}
 		});
 
-    	setUrl(null, "about:blank");
+		setUrl(null, "about:blank");
 
 		browser.addProgressListener(new ProgressAdapter() {
 			@Override
@@ -138,7 +138,7 @@ public class BrowserEx extends Composite {
 				comboUrl.select(0);
 			}
 		});
-	
+
 	}
 
 	void setUrl(ItemView treeItem, String url) {
@@ -149,7 +149,7 @@ public class BrowserEx extends Composite {
 		previousTreeItem = null;
 		this.user = user;
 		this.password = password;
-		
+
 		nextUrl = url;
 		nextTreeItem = treeItem;
 		browser.setUrl(url);
@@ -187,6 +187,6 @@ public class BrowserEx extends Composite {
 				}
 			}
 		}
-		*/
+		 */
 	}	
 }
