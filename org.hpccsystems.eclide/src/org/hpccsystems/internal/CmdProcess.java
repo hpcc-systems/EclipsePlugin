@@ -39,8 +39,9 @@ public class CmdProcess {
 	String QUOTE = "";
 
 	public CmdProcess(IPath workingPath, IPath additionalPath, IProcessOutput handler, MessageConsoleStream consoleOut) {
-		if (workingPath == null)
+		if (workingPath == null) {
 			workingPath = additionalPath;
+		}
 		this.workingPath = workingPath;
 		this.additionalPath = additionalPath;
 		this.handler = handler;
@@ -52,9 +53,11 @@ public class CmdProcess {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();
 		IConsole[] existing = conMan.getConsoles();
-		for (int i = 0; i < existing.length; i++)
-			if (name.equals(existing[i].getName()))
+		for (int i = 0; i < existing.length; i++) {
+			if (name.equals(existing[i].getName())) {
 				return (MessageConsole) existing[i];
+			}
+		}
 		//no console found, so create a new one
 		MessageConsole myConsole = new MessageConsole(name, null);
 		conMan.addConsoles(new IConsole[]{myConsole});

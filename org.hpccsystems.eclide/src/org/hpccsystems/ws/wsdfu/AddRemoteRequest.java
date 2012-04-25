@@ -147,10 +147,16 @@ public class AddRemoteRequest  implements java.io.Serializable {
 	 private java.lang.Object __equalsCalc = null;
 	 @Override
 	 public synchronized boolean equals(java.lang.Object obj) {
-		 if (!(obj instanceof AddRemoteRequest)) return false;
+		 if (!(obj instanceof AddRemoteRequest)) {
+			return false;
+		}
 		 AddRemoteRequest other = (AddRemoteRequest) obj;
-		 if (obj == null) return false;
-		 if (this == obj) return true;
+		 if (obj == null) {
+			return false;
+		}
+		 if (this == obj) {
+			return true;
+		}
 		 if (__equalsCalc != null) {
 			 return (__equalsCalc == obj);
 		 }

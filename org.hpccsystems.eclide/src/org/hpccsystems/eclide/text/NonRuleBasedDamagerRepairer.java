@@ -59,8 +59,9 @@ implements IPresentationDamager, IPresentationRepairer {
 	protected int endOfLineOf(int offset) throws BadLocationException {
 
 		IRegion info = fDocument.getLineInformationOfOffset(offset);
-		if (offset <= info.getOffset() + info.getLength())
+		if (offset <= info.getOffset() + info.getLength()) {
 			return info.getOffset() + info.getLength();
+		}
 
 		int line = fDocument.getLineOfOffset(offset);
 		try {
@@ -96,8 +97,9 @@ implements IPresentationDamager, IPresentationRepairer {
 						&& end <= info.getOffset() + info.getLength()) {
 					// optimize the case of the same line
 					end = info.getOffset() + info.getLength();
-				} else
+				} else {
 					end = endOfLineOf(end);
+				}
 
 				end =
 						Math.min(
@@ -139,7 +141,7 @@ implements IPresentationDamager, IPresentationRepairer {
 			int offset,
 			int length,
 			TextAttribute attr) {
-		if (attr != null)
+		if (attr != null) {
 			presentation.addStyleRange(
 					new StyleRange(
 							offset,
@@ -147,5 +149,6 @@ implements IPresentationDamager, IPresentationRepairer {
 							attr.getForeground(),
 							attr.getBackground(),
 							attr.getStyle()));
+		}
 	}
 }

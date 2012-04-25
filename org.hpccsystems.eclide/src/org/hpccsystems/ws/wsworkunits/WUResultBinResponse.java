@@ -267,10 +267,16 @@ public class WUResultBinResponse  implements java.io.Serializable {
 	 private java.lang.Object __equalsCalc = null;
 	 @Override
 	 public synchronized boolean equals(java.lang.Object obj) {
-		 if (!(obj instanceof WUResultBinResponse)) return false;
+		 if (!(obj instanceof WUResultBinResponse)) {
+			return false;
+		}
 		 WUResultBinResponse other = (WUResultBinResponse) obj;
-		 if (obj == null) return false;
-		 if (this == obj) return true;
+		 if (obj == null) {
+			return false;
+		}
+		 if (this == obj) {
+			return true;
+		}
 		 if (__equalsCalc != null) {
 			 return (__equalsCalc == obj);
 		 }

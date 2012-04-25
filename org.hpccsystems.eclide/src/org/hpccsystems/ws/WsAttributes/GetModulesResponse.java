@@ -75,10 +75,16 @@ public class GetModulesResponse  implements java.io.Serializable {
 	private java.lang.Object __equalsCalc = null;
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof GetModulesResponse)) return false;
+		if (!(obj instanceof GetModulesResponse)) {
+			return false;
+		}
 		GetModulesResponse other = (GetModulesResponse) obj;
-		if (obj == null) return false;
-		if (this == obj) return true;
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

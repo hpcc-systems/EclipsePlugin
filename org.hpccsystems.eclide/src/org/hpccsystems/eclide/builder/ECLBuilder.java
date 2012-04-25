@@ -102,8 +102,9 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	void checkItem(IResource resource, IProgressMonitor monitor) {
 		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
 			IFile file = (IFile) resource;
-			if (checkedFiles.contains(file))
+			if (checkedFiles.contains(file)) {
 				return;
+			}
 
 			checkedFiles.add(file);
 			monitor.subTask(file.getName());

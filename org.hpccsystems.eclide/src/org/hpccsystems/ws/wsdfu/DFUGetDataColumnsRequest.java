@@ -243,10 +243,16 @@ public class DFUGetDataColumnsRequest  implements java.io.Serializable {
 	 private java.lang.Object __equalsCalc = null;
 	 @Override
 	 public synchronized boolean equals(java.lang.Object obj) {
-		 if (!(obj instanceof DFUGetDataColumnsRequest)) return false;
+		 if (!(obj instanceof DFUGetDataColumnsRequest)) {
+			return false;
+		}
 		 DFUGetDataColumnsRequest other = (DFUGetDataColumnsRequest) obj;
-		 if (obj == null) return false;
-		 if (this == obj) return true;
+		 if (obj == null) {
+			return false;
+		}
+		 if (this == obj) {
+			return true;
+		}
 		 if (__equalsCalc != null) {
 			 return (__equalsCalc == obj);
 		 }

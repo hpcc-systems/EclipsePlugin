@@ -305,8 +305,9 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	@Override
 	public void init(IEditorSite site, IEditorInput editorInput)
 			throws PartInitException {
-		if (!(editorInput instanceof IFileEditorInput))
+		if (!(editorInput instanceof IFileEditorInput)) {
 			throw new PartInitException("Invalid Input: Must be IFileEditorInput");
+		}
 		super.init(site, editorInput);
 	}
 
@@ -426,8 +427,9 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			}
 		}
 
-		if (changed)
+		if (changed) {
 			children.sort(new WorkunitComparator());
+		}
 
 		return changed;
 	}

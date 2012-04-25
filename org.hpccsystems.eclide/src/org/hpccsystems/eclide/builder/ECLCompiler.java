@@ -189,8 +189,9 @@ public class ECLCompiler {
 					eclccConsoleWriter.print("Out: ");
 					eclccConsoleWriter.println(stdIn);
 					int lastSpace = stdIn.lastIndexOf(' ');
-					if (lastSpace != -1)
+					if (lastSpace != -1) {
 						wuid = stdIn.substring(lastSpace + 1, stdIn.length());
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -275,16 +276,18 @@ public class ECLCompiler {
 	public String getBuildVersion() {
 		String version = getVersion();
 		String[] versions = version.split(" ");
-		if (versions.length >= 2)
+		if (versions.length >= 2) {
 			return versions[1];
+		}
 		return "";
 	}
 
 	public String getLanguageVersion() {
 		String version = getVersion();
 		String[] versions = version.split(" ");
-		if (versions.length >= 1)
+		if (versions.length >= 1) {
 			return versions[0];
+		}
 		return "";
 	}
 
@@ -300,8 +303,9 @@ public class ECLCompiler {
 		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCommon, argsSyntaxCheck);
 		GetIncludeArgs(cmdArgs);
 
-		if (monitorDependees) 
+		if (monitorDependees) {
 			cmdArgs.Append("E");
+		}
 		ECLArchiveHandler handler = new ECLArchiveHandler();
 		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
@@ -326,8 +330,9 @@ public class ECLCompiler {
 			IPath manifestPath = file.getLocation().removeLastSegments(1);
 			manifestPath = manifestPath.append("files");
 			manifestPath = manifestPath.append("manifest.xml");
-			if (manifestPath.toFile().exists())
+			if (manifestPath.toFile().exists()) {
 				cmdArgs.Append("manifest=", manifestPath.toOSString());
+			}
 		}
 
 		hasError = false;
@@ -338,8 +343,9 @@ public class ECLCompiler {
 	}
 
 	public String getMeta(IFile file) {
-		if (!enableMetaProcessing)
+		if (!enableMetaProcessing) {
 			return "";
+		}
 
 		if (!HasCompiler()) {
 			eclccConsoleWriter.println(noCompiler);
@@ -382,10 +388,11 @@ public class ECLCompiler {
 		IFolder retVal = project.getFolder("ECL Library (" + getLanguageVersion() + ")");
 		if (!retVal.exists()) {
 			try {
-				if (OS.isWindowsPlatform())
+				if (OS.isWindowsPlatform()) {
 					retVal.createLink(binPath.append("ecllibrary"), IResource.HIDDEN, null);
-				else
+				} else {
 					retVal.createLink(binPath.append("../share/ecllibrary"), IResource.HIDDEN, null);
+				}
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

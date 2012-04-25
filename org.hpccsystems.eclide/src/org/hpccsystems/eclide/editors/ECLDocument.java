@@ -21,8 +21,9 @@ public class ECLDocument extends Document {
 	FileEditorInput editorInput;
 
 	public void setEditorInput(IEditorInput editorInput) {
-		if (editorInput instanceof FileEditorInput)
+		if (editorInput instanceof FileEditorInput) {
 			this.editorInput = (FileEditorInput)editorInput;
+		}
 	}
 
 	IFile getFile() {

@@ -38,13 +38,15 @@ public class CmdArgs {
 	}
 
 	public void Append(String key) {
-		if (!args.containsKey(key))
+		if (!args.containsKey(key)) {
 			args.put(key, new HashSet<String>());
+		}
 	}
 
 	public void Append(String key, String value) {
-		if (!args.containsKey(key))
+		if (!args.containsKey(key)) {
 			args.put(key, new HashSet<String>());
+		}
 
 		args.get(key).add(value);
 	}
@@ -55,9 +57,9 @@ public class CmdArgs {
 		retVal.addAll(baseArgs);
 		for(Map.Entry<String, Set<String> > entry : args.entrySet()) {
 			Set<String> values = entry.getValue();
-			if (values.isEmpty())
+			if (values.isEmpty()) {
 				retVal.add(eclplusArgs ? entry.getKey() : "-" + entry.getKey());
-			else {
+			} else {
 				Iterator<String> iter = values.iterator();
 				while (iter.hasNext()) {
 					String value = QUOTE + iter.next() + QUOTE;
@@ -70,16 +72,19 @@ public class CmdArgs {
 	}
 
 	public void Print(MessageConsoleStream console, boolean eclplusArgs) {
-		if (console == null) 
+		if (console == null) {
 			return;
+		}
 
 		List<String> cmd = Get(eclplusArgs);
-		if (cmd == null)
+		if (cmd == null) {
 			return;
+		}
 
 		for (int i = 0; i < cmd.size(); ++i) {
-			if (i> 0)
+			if (i> 0) {
 				console.print(" ");
+			}
 			console.print(cmd.get(i));
 		}
 	}

@@ -24,8 +24,9 @@ public class ECLColorManager {
 
 	public void dispose() {
 		Iterator<Color> e = fColorTable.values().iterator();
-		while (e.hasNext())
+		while (e.hasNext()) {
 			e.next().dispose();
+		}
 	}
 	public Color getColor(RGB rgb) {
 		Color color = fColorTable.get(rgb);

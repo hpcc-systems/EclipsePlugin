@@ -64,8 +64,9 @@ public class ECLCompletion {
 					if (sourcePath != null) {
 						IPath path = fileFolder.append(sourcePath);	//  Paths are relative to item being checked.
 						IResource resource = file.getProject().findMember(path);
-						if (resource instanceof IFile && !resource.equals(file) && resource.getName().endsWith(".ecl")) 
+						if (resource instanceof IFile && !resource.equals(file) && resource.getName().endsWith(".ecl")) {
 							ancestors.add((IFile) resource);
+						}
 					}
 
 					break;

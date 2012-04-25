@@ -79,8 +79,9 @@ class TargetFolderView extends FolderItemView {
 	@Override
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		for(Cluster c : platform.getClusters())
+		for(Cluster c : platform.getClusters()) {
 			retVal.add(new ClusterView(treeViewer, this, platform, c));
+		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
@@ -239,11 +240,12 @@ class DataQuerySetView extends PlatformBaseView {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof DataQuerySetView)
+			if (parent instanceof DataQuerySetView) {
 				if (querySet == ((DataQuerySetView)parent).querySet) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
+			}
 			parent = parent.getParent();
 		}
 
@@ -272,8 +274,9 @@ class LogicalFileFolderView extends FolderItemView {
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
-		if (clusterName.isEmpty())
+		if (clusterName.isEmpty()) {
 			return platform.getURL("WsDfu", "DFUQuery");
+		}
 		return platform.getURL("WsDfu", "DFUQuery", "ClusterName=" + clusterName);
 	}
 
@@ -356,11 +359,12 @@ class LogicalFileView extends PlatformBaseView {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof LogicalFileView)
+			if (parent instanceof LogicalFileView) {
 				if (file == ((LogicalFileView)parent).file) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
+			}
 			parent = parent.getParent();
 		}
 
@@ -473,8 +477,9 @@ class GraphFolderView extends FolderItemView implements Observer  {
 	@Override
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		for(Graph g : workunit.getGraphs())
+		for(Graph g : workunit.getGraphs()) {
 			retVal.add(new GraphView(treeViewer, this, platform, g));
+		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 

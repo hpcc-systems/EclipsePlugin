@@ -123,10 +123,16 @@ public class WUCompileECLResponse  implements java.io.Serializable {
 	private java.lang.Object __equalsCalc = null;
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof WUCompileECLResponse)) return false;
+		if (!(obj instanceof WUCompileECLResponse)) {
+			return false;
+		}
 		WUCompileECLResponse other = (WUCompileECLResponse) obj;
-		if (obj == null) return false;
-		if (this == obj) return true;
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

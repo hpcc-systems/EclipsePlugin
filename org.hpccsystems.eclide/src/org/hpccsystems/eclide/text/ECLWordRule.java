@@ -101,8 +101,9 @@ public class ECLWordRule implements IRule {
 		Assert.isNotNull(token);
 
 		// If case-insensitive, convert to lower case before adding to the map
-		if (fIgnoreCase)
+		if (fIgnoreCase) {
 			word= word.toLowerCase();
+		}
 		fWords.put(word, token);
 	}
 
@@ -115,8 +116,9 @@ public class ECLWordRule implements IRule {
 	 * @param column the column in which the pattern starts
 	 */
 	public void setColumnConstraint(int column) {
-		if (column < 0)
+		if (column < 0) {
 			column= UNDEFINED;
+		}
 		fColumn= column;
 	}
 
@@ -138,26 +140,31 @@ public class ECLWordRule implements IRule {
 
 				String buffer= fBuffer.toString();
 				// If case-insensitive, convert to lower case before accessing the map
-				if (fIgnoreCase)
+				if (fIgnoreCase) {
 					buffer= buffer.toLowerCase();
+				}
 
 				IToken token= fWords.get(buffer);
 
-				if (token != null)
+				if (token != null) {
 					return token;
+				}
 
 				int i = buffer.length() - 1;
-				while(i >= 0 && (Character.isDigit(buffer.charAt(i)) || buffer.charAt(i) == '_'))
+				while(i >= 0 && (Character.isDigit(buffer.charAt(i)) || buffer.charAt(i) == '_')) {
 					--i;
+				}
 
 				String s2 = new String(buffer.getBytes(), 0, i + 1);
 				token = fWords.get(s2);
 
-				if (token != null)
+				if (token != null) {
 					return token;
+				}
 
-				if (fDefaultToken.isUndefined())
+				if (fDefaultToken.isUndefined()) {
 					unreadBuffer(scanner);
+				}
 
 				return fDefaultToken;
 			}
@@ -173,8 +180,9 @@ public class ECLWordRule implements IRule {
 	 * @param scanner the scanner to be used
 	 */
 	protected void unreadBuffer(ICharacterScanner scanner) {
-		for (int i= fBuffer.length() - 1; i >= 0; i--)
+		for (int i= fBuffer.length() - 1; i >= 0; i--) {
 			scanner.unread();
+		}
 	}
 
 }

@@ -59,35 +59,40 @@ public class Eclipse {
 	}
 
 	static public IProject findProject(String name) {
-		if (name.isEmpty())
+		if (name.isEmpty()) {
 			return null;
+		}
 
 		return getWorkspaceRoot().getProject(name);
 	}
 
 	static public IFile findFile(IProject project, String name) {
-		if (name.isEmpty())
+		if (name.isEmpty()) {
 			return null;
+		}
 
 		return project.getFile(name);
 	}
 
 	static public IFile findFile(String name) {
-		if (name.isEmpty())
+		if (name.isEmpty()) {
 			return null;
+		}
 
 		IProject[] projects = getWorkspaceRoot().getProjects();
 		for (int i = 0; i < projects.length; i++) {
 			IFile retVal = findFile(projects[i], name);
-			if (retVal != null)
+			if (retVal != null) {
 				return retVal;
+			}
 		}
 		return null;
 	}
 
 	static public IFile findFile(IPath path) {
-		if (path.isEmpty())
+		if (path.isEmpty()) {
 			return null;
+		}
 
 		return getWorkspaceRoot().getFile(path);
 	}
@@ -97,9 +102,11 @@ public class Eclipse {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();
 		IConsole[] existing = conMan.getConsoles();
-		for (int i = 0; i < existing.length; i++)
-			if (name.equals(existing[i].getName()))
+		for (int i = 0; i < existing.length; i++) {
+			if (name.equals(existing[i].getName())) {
 				return (MessageConsole) existing[i];
+			}
+		}
 		//no console found, so create a new one
 		MessageConsole myConsole = new MessageConsole(name, null);
 		conMan.addConsoles(new IConsole[]{myConsole});
@@ -187,8 +194,9 @@ public class Eclipse {
 				try {
 					IMarker[] markers = resolvedFile.findMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
 					for (int i = 0; i < markers.length; ++i) {
-						if (oneErrorOnly && markers[i].getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR))
+						if (oneErrorOnly && markers[i].getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR)) {
 							return;
+						}
 
 						if (markers[i].getAttribute(IMarker.SEVERITY).equals(severity) && 
 								markers[i].getAttribute(IMarker.MESSAGE).equals(message) && 

@@ -35,10 +35,11 @@ public class ECLContentOutlinePage extends ContentOutlinePage {
 					ECLDefinition def2 = (ECLDefinition)e2;
 					int i1 = def1.getOffset();
 					int i2 = def2.getOffset();
-					if (i1 == i2)
+					if (i1 == i2) {
 						return 0;
-					else if (i1 < i2)
+					} else if (i1 < i2) {
 						return -1;
+					}
 					return 1;
 				}
 			}

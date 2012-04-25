@@ -53,8 +53,9 @@ public class PlatformActions {
 		Iterator<ItemView> iter = owner.getSelection().iterator();
 		while (iter.hasNext()) {
 			ItemView iv = iter.next();
-			if (iv.canPerform(action))
+			if (iv.canPerform(action)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -120,8 +121,9 @@ public class PlatformActions {
 					Iterator<?> iter = sel.iterator();
 					while (iter.hasNext()) {
 						Object o = iter.next();
-						if (o instanceof ItemView)
+						if (o instanceof ItemView) {
 							((ItemView)o).refresh();
+						}
 					}
 				}
 			}

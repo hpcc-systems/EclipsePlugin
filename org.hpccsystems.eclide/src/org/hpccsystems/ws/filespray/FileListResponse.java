@@ -195,10 +195,16 @@ public class FileListResponse  implements java.io.Serializable {
 	 private java.lang.Object __equalsCalc = null;
 	 @Override
 	 public synchronized boolean equals(java.lang.Object obj) {
-		 if (!(obj instanceof FileListResponse)) return false;
+		 if (!(obj instanceof FileListResponse)) {
+			return false;
+		}
 		 FileListResponse other = (FileListResponse) obj;
-		 if (obj == null) return false;
-		 if (this == obj) return true;
+		 if (obj == null) {
+			return false;
+		}
+		 if (this == obj) {
+			return true;
+		}
 		 if (__equalsCalc != null) {
 			 return (__equalsCalc == obj);
 		 }

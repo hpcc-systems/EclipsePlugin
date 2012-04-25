@@ -26,8 +26,9 @@ public abstract class DataSingleton extends Observable {
 	}
 
 	synchronized void monitor(final int sleepTime) {
-		if (isComplete()) 
+		if (isComplete()) {
 			return;
+		}
 
 		if (monitorThread == null || !monitorThread.isAlive()) {
 			monitorThread = new Thread(new Runnable() {
@@ -41,8 +42,9 @@ public abstract class DataSingleton extends Observable {
 						}
 						if (countObservers() > 0) {
 							fastRefresh();
-							if (isComplete())
+							if (isComplete()) {
 								fullRefresh();
+							}
 						}
 					}
 					monitorThread = null;

@@ -33,15 +33,18 @@ public class PlatformTreeItemLabelProvider extends TreeItemLabelFontProvider {
 				if (treeItem instanceof FolderItemView) {
 					//if (!treeViewer.getExpandedState(element)) {
 					if (treeItem.children.getCount() > 0)
+					 {
 						return treeItem.getText() + " (" + treeItem.children.get().length + ")";
 					//}
+					}
 				}
 				break;
 			}
 			return super.getText(element);
 		}
-		if (element instanceof PlatformView) 
+		if (element instanceof PlatformView) {
 			return "PTODO";
+		}
 		return "TODO";
 	}
 }	

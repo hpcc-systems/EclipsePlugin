@@ -27,8 +27,9 @@ public class ECLMetaTree implements Serializable {
 		ECLMetaNode node = root;
 		for (int i = 0; i < segments.length; ++i) {
 			node = node.getChild(segments[i]);
-			if (node == null)
+			if (node == null) {
 				break;
+			}
 		}
 		return node;
 	}
@@ -39,8 +40,9 @@ public class ECLMetaTree implements Serializable {
 		ECLMetaNode parentNode = root;
 		for (int i = 0; i < segments.length - 1; ++i) {
 			parentNode = parentNode.getChild(segments[i]);
-			if (parentNode == null)
+			if (parentNode == null) {
 				break;
+			}
 		}
 		if (parentNode != null) {
 			return parentNode.addChild(segments[segments.length - 1], data);
@@ -85,13 +87,15 @@ public class ECLMetaTree implements Serializable {
 
 	ECLMetaNode walkTree(ECLMetaNode node, IVisitor visitor) {
 		ECLMetaNode retVal = visitor.processNode(node);
-		if (retVal != null)
+		if (retVal != null) {
 			return retVal;
+		}
 
 		for (ECLMetaNode n : node.getChildren()) {
 			retVal = walkTree(n, visitor);
-			if (retVal != null)
+			if (retVal != null) {
 				return retVal;
+			}
 		}
 		return null;
 	}
@@ -99,8 +103,9 @@ public class ECLMetaTree implements Serializable {
 	ECLMetaNode depthFirst(ECLMetaNode node, IVisitor visitor) {
 		for (ECLMetaNode n : node.getChildren()) {
 			ECLMetaNode retVal = walkTree(n, visitor);
-			if (retVal != null)
+			if (retVal != null) {
 				return retVal;
+			}
 		}
 		return visitor.processNode(node);
 	}
@@ -126,8 +131,9 @@ public class ECLMetaTree implements Serializable {
 				relPath = relPath.removeFileExtension();
 				String qualifiedName = "";
 				for (int i = 0; i < relPath.segmentCount(); ++i) {
-					if (!qualifiedName.isEmpty())
+					if (!qualifiedName.isEmpty()) {
 						qualifiedName += ".";
+					}
 					qualifiedName += relPath.segment(i);
 				}
 				AttributesImpl attributes = new AttributesImpl();
@@ -181,17 +187,20 @@ public class ECLMetaTree implements Serializable {
 		}
 
 		public ECLMetaNode getChild(String name) {
-			if (hasChild(name))
+			if (hasChild(name)) {
 				return children.get(name.toLowerCase());
+			}
 			return null;
 		}
 
 		public String getQualifiedName() {
 			String retVal = "";
-			if (parent != null)
+			if (parent != null) {
 				retVal = parent.getQualifiedName();
-			if (!retVal.isEmpty())
+			}
+			if (!retVal.isEmpty()) {
 				retVal += ".";
+			}
 			retVal += name;
 			return retVal;
 		}
@@ -218,24 +227,27 @@ public class ECLMetaTree implements Serializable {
 			ECLMetaNode retVal = null;
 			for (ECLMetaNode node : getChildren()) {
 				retVal = node.getContext(offset);
-				if (retVal != null)
+				if (retVal != null) {
 					return retVal;
+				}
 			}
 
 			if (offset >= getData().getOffset() && offset <= getData().getEndOffset()) {
 				return this;
 			}
 
-			if (getData() instanceof ECLSource)
+			if (getData() instanceof ECLSource) {
 				return this;
+			}
 
 			return null;
 		}
 
 		public ECLMetaNode findDefinition(String text, boolean downOnly) {
 			text = text.toLowerCase();
-			if (getName().equalsIgnoreCase(text))
+			if (getName().equalsIgnoreCase(text)) {
 				return this;
+			}
 
 			for (ECLMetaNode node : getChildren()) {
 				if (node.getName().equalsIgnoreCase(text)) {
@@ -255,8 +267,9 @@ public class ECLMetaTree implements Serializable {
 				}
 			}
 
-			if (downOnly)
+			if (downOnly) {
 				return null;
+			}
 
 			// Find stops walking up up at the source level ---
 			if (getData() instanceof ECLSource) {

@@ -45,8 +45,9 @@ public class LazyChildLoader<T> {
 	public synchronized void set(T[] children) {
 		this.children.clear();
 		if (children != null) {
-			for (T o : children)
+			for (T o : children) {
 				this.children.add(o);
+			}
 		}
 		state = CalcState.FINISHED;
 	}
@@ -62,16 +63,18 @@ public class LazyChildLoader<T> {
 
 	public synchronized void add(T[] newChildren) {
 		if (newChildren != null) {
-			for (T o : newChildren)
+			for (T o : newChildren) {
 				this.children.add(o);
+			}
 		}
 		state = CalcState.FINISHED;
 	}
 
 	public synchronized void remove(T[] oldChildren) {
 		if (oldChildren != null) {
-			for (T o : oldChildren)
+			for (T o : oldChildren) {
 				this.children.remove(o);
+			}
 		}
 	}
 

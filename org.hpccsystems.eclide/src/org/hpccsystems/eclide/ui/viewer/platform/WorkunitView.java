@@ -39,8 +39,9 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 	}
 	@Override
 	public String getText() {
-		if (workunit.isComplete()) 
+		if (workunit.isComplete()) {
 			return workunit.getWuid();
+		}
 		return workunit.getWuid() + " (" + workunit.getState() + ")";
 	}
 
@@ -144,11 +145,12 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof WorkunitView)
+			if (parent instanceof WorkunitView) {
 				if (workunit == ((WorkunitView)parent).workunit) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
+			}
 			parent = parent.getParent();
 		}
 		if (retVal.isEmpty()) {

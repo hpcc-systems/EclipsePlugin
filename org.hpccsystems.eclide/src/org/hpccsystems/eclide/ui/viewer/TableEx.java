@@ -53,8 +53,9 @@ public class TableEx extends Composite {
 				}
 				table.setRedraw(false);
 				if (row == 0) {
-					for (TableColumn tc : table.getColumns()) 
-						tc.pack(); 
+					for (TableColumn tc : table.getColumns()) {
+						tc.pack();
+					} 
 				}
 				table.setRedraw(true);
 			}
@@ -62,8 +63,9 @@ public class TableEx extends Composite {
 	}
 
 	public void setResult(Result _result) {
-		if (_result == null)
+		if (_result == null) {
 			return;
+		}
 
 		table.setRedraw(false);
 		table.setItemCount(0);

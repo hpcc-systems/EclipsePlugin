@@ -83,10 +83,16 @@ public class ArrayOfEspException  extends org.apache.axis.AxisFault  implements 
 	private java.lang.Object __equalsCalc = null;
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof ArrayOfEspException)) return false;
+		if (!(obj instanceof ArrayOfEspException)) {
+			return false;
+		}
 		ArrayOfEspException other = (ArrayOfEspException) obj;
-		if (obj == null) return false;
-		if (this == obj) return true;
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

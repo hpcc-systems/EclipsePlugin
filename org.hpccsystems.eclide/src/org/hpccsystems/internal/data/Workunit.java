@@ -43,8 +43,9 @@ import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 public class Workunit extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
 	public static Workunit get(Platform platform, String wuid) {
-		if (wuid == null || wuid.isEmpty())
+		if (wuid == null || wuid.isEmpty()) {
 			return null;
+		}
 
 		return (Workunit)All.get(new Workunit(platform, wuid));
 	}
@@ -90,16 +91,19 @@ public class Workunit extends DataSingleton {
 	}
 
 	public String getQueryText() {
-		if (info.getQuery() == null)
+		if (info.getQuery() == null) {
 			fullRefresh(false, false, false, false);
-		if (info.getQuery() != null)
+		}
+		if (info.getQuery() != null) {
 			return info.getQuery().getText();
+		}
 		return "";
 	}
 
 	public Object getClusterName() {
-		if (info.getCluster() == null)
+		if (info.getCluster() == null) {
 			fullRefresh(false, false, false, false);
+		}
 		return info.getCluster();
 	}
 
@@ -150,23 +154,27 @@ public class Workunit extends DataSingleton {
 	}
 
 	public String getState() {
-		if (info.getState() == null)
+		if (info.getState() == null) {
 			fastRefresh();
+		}
 		return info.getState() != null ? info.getState() : "Unknown";
 
 	}
 
 	public String[] getResultViews() {
-		if (resultViews == null)
+		if (resultViews == null) {
 			fullRefresh(false, true, false, false);
+		}
 		return resultViews.toArray(new String[0]);
 	}
 
 	public String getApplicationValue(String key) {
-		if (applicationValues.isEmpty())
+		if (applicationValues.isEmpty()) {
 			fullRefresh(false, false, false, true);
-		if (applicationValues.containsKey(key))
+		}
+		if (applicationValues.containsKey(key)) {
 			return applicationValues.get(key);
+		}
 		return "";
 	}
 	//  Results  ---
@@ -224,8 +232,9 @@ public class Workunit extends DataSingleton {
 
 	public String getJobname() {
 		String retVal = info.getJobname();
-		if (retVal == null)
+		if (retVal == null) {
 			return "";
+		}
 		return retVal;
 	}
 	//  Actions  ---
@@ -332,8 +341,9 @@ public class Workunit extends DataSingleton {
 			request.setCount(1);
 			try {
 				WUQueryResponse response = service.WUQuery(request);
-				if (response.getWorkunits() != null && response.getWorkunits().length == 1)
-					update(response.getWorkunits()[0]);		
+				if (response.getWorkunits() != null && response.getWorkunits().length == 1) {
+					update(response.getWorkunits()[0]);
+				}		
 			} catch (ArrayOfEspException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -342,8 +352,9 @@ public class Workunit extends DataSingleton {
 				e.printStackTrace();
 			}
 		}
-		if (previousState != getStateID())
+		if (previousState != getStateID()) {
 			fullRefresh();
+		}
 	}
 
 	@Override
@@ -377,8 +388,9 @@ public class Workunit extends DataSingleton {
 				} else {
 					update(response.getWorkunit());
 				}
-				if (response.getResultViews() != null)
-					resultViews = Arrays.asList(response.getResultViews()); 
+				if (response.getResultViews() != null) {
+					resultViews = Arrays.asList(response.getResultViews());
+				} 
 			} catch (ArrayOfEspException e) {
 				assert false;
 				e.printStackTrace();
@@ -537,11 +549,13 @@ public class Workunit extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Workunit) ) 
+		if ( !(aThat instanceof Workunit) ) {
 			return false;
+		}
 		Workunit that = (Workunit)aThat;
 
 		//now a proper field-by-field evaluation can be made

@@ -37,8 +37,9 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
-		if (clusterName.isEmpty())
+		if (clusterName.isEmpty()) {
 			return platform.getURL("FileSpray", "GetDFUWorkunits");
+		}
 		return platform.getURL("FileSpray", "GetDFUWorkunits", "Cluster=" + clusterName);
 	}
 
@@ -87,8 +88,9 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 			}
 		}
 
-		if (changed)
+		if (changed) {
 			children.sort(new WorkunitComparator());
+		}
 
 		return changed;
 	}

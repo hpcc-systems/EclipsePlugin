@@ -75,10 +75,16 @@ public class DebugValue  implements java.io.Serializable {
 	private java.lang.Object __equalsCalc = null;
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof DebugValue)) return false;
+		if (!(obj instanceof DebugValue)) {
+			return false;
+		}
 		DebugValue other = (DebugValue) obj;
-		if (obj == null) return false;
-		if (this == obj) return true;
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

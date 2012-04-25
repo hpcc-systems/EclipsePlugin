@@ -171,10 +171,16 @@ public class DropZoneFilesResponse  implements java.io.Serializable {
 	 private java.lang.Object __equalsCalc = null;
 	 @Override
 	 public synchronized boolean equals(java.lang.Object obj) {
-		 if (!(obj instanceof DropZoneFilesResponse)) return false;
+		 if (!(obj instanceof DropZoneFilesResponse)) {
+			return false;
+		}
 		 DropZoneFilesResponse other = (DropZoneFilesResponse) obj;
-		 if (obj == null) return false;
-		 if (this == obj) return true;
+		 if (obj == null) {
+			return false;
+		}
+		 if (this == obj) {
+			return true;
+		}
 		 if (__equalsCalc != null) {
 			 return (__equalsCalc == obj);
 		 }

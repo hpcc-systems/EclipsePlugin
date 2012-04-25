@@ -109,8 +109,9 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 			}
 		}
 
-		if (changed)
+		if (changed) {
 			children.sort(new WorkunitComparator());
+		}
 
 		return changed;
 	}

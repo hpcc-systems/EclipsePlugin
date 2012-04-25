@@ -53,12 +53,13 @@ public class Graph extends DataSingleton {
 	}
 
 	public State getStateID() {
-		if (info.getRunning() != null && info.getRunning()) 
+		if (info.getRunning() != null && info.getRunning()) {
 			return State.RUNNING;
-		else if (info.getComplete() != null && info.getComplete())
+		} else if (info.getComplete() != null && info.getComplete()) {
 			return State.COMPLETED;
-		else if (info.getFailed() != null && info.getFailed())
+		} else if (info.getFailed() != null && info.getFailed()) {
 			return State.FAILED;
+		}
 		return State.UNKNOWN;
 	}
 
@@ -102,11 +103,13 @@ public class Graph extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Graph) ) 
+		if ( !(aThat instanceof Graph) ) {
 			return false;
+		}
 		Graph that = (Graph)aThat;
 
 		//now a proper field-by-field evaluation can be made

@@ -34,8 +34,9 @@ public class ECLGlobalMeta {
 	static ECLGlobalMeta self;
 
 	synchronized static public ECLMetaTree get() {
-		if (self == null)
+		if (self == null) {
 			self = new ECLGlobalMeta();
+		}
 		return self.tree;
 	}
 
@@ -110,8 +111,9 @@ public class ECLGlobalMeta {
 		} catch (ClassCastException e) {
 		}
 
-		if (tree == null)
+		if (tree == null) {
 			tree = new ECLMetaTree();
+		}
 	}
 
 	static public void clear() {
@@ -119,8 +121,9 @@ public class ECLGlobalMeta {
 	}
 
 	public static void parse(String xml) {
-		if (xml.isEmpty())
+		if (xml.isEmpty()) {
 			return;
+		}
 		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 
 		SAXParser parser = null;

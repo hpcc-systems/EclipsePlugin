@@ -13,8 +13,9 @@ package org.hpccsystems.internal.data;
 public final class EqualsUtil {
 
 	static public boolean hasChanged(Object target, Object source) {
-		if (source == null)
+		if (source == null) {
 			return false;
+		}
 
 		return !EqualsUtil.areEqual(target, source);		
 	}

@@ -72,10 +72,11 @@ public class ClientTools extends DataSingleton {
 	}
 
 	public IPath getEclLibraryPath() {
-		if (OS.isWindowsPlatform())
+		if (OS.isWindowsPlatform()) {
 			return path.append("ecllibrary");
-		else
+		} else {
 			return path.append("../share/ecllibrary");
+		}
 	}
 
 	public ECLCompiler getCompiler(IProject project) {
@@ -88,12 +89,15 @@ public class ClientTools extends DataSingleton {
 			ECLCompiler compiler = new ECLCompiler(launchConfiguration);
 			version = compiler.getLanguageVersion();
 			String[] parts = version.split(".");
-			if (parts.length >= 1)
+			if (parts.length >= 1) {
 				version_major = Integer.parseInt(parts[0]);
-			if (parts.length >= 2)
+			}
+			if (parts.length >= 2) {
 				version_minor = Integer.parseInt(parts[1]);
-			if (parts.length >= 3)
+			}
+			if (parts.length >= 3) {
 				version_point = Integer.parseInt(parts[3]);
+			}
 		}
 	}
 
@@ -143,11 +147,13 @@ public class ClientTools extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof ClientTools) ) 
+		if ( !(aThat instanceof ClientTools) ) {
 			return false;
+		}
 		ClientTools that = (ClientTools)aThat;
 
 		//now a proper field-by-field evaluation can be made

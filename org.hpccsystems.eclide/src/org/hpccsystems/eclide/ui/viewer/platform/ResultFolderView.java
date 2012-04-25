@@ -32,8 +32,9 @@ public class ResultFolderView extends FolderItemView implements Observer {
 	@Override
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		for(Result r : workunit.getResults())
+		for(Result r : workunit.getResults()) {
 			retVal.add(new ResultView(treeViewer, this, platform, r));
+		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 

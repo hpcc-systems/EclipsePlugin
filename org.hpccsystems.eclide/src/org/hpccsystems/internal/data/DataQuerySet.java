@@ -60,17 +60,20 @@ public class DataQuerySet extends DataSingleton {
 
 	//  Updates  ---
 	void Update(QuerySet qs) {
-		if (info.getQuerySetName().equals(qs.getQuerySetName()))
+		if (info.getQuerySetName().equals(qs.getQuerySetName())) {
 			info = qs;
+		}
 	}
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof DataQuerySet) ) 
+		if ( !(aThat instanceof DataQuerySet) ) {
 			return false;
+		}
 		DataQuerySet that = (DataQuerySet)aThat;
 
 		//now a proper field-by-field evaluation can be made

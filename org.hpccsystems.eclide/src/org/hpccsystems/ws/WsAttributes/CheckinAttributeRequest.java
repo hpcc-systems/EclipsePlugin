@@ -99,10 +99,16 @@ public class CheckinAttributeRequest  implements java.io.Serializable {
 	private java.lang.Object __equalsCalc = null;
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof CheckinAttributeRequest)) return false;
+		if (!(obj instanceof CheckinAttributeRequest)) {
+			return false;
+		}
 		CheckinAttributeRequest other = (CheckinAttributeRequest) obj;
-		if (obj == null) return false;
-		if (this == obj) return true;
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

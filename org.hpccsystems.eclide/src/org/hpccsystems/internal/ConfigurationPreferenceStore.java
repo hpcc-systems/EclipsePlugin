@@ -82,10 +82,12 @@ public class ConfigurationPreferenceStore extends PreferenceStore {
 			} catch (CoreException e) {
 			}
 		}
-		if (this.contains(key))
+		if (this.contains(key)) {
 			return this.getString(key);
-		if (globalStore.contains(key))
+		}
+		if (globalStore.contains(key)) {
 			return globalStore.getString(key);
+		}
 		return defaultValue;
 	}
 
@@ -96,10 +98,12 @@ public class ConfigurationPreferenceStore extends PreferenceStore {
 			} catch (CoreException e) {
 			}
 		}
-		if (this.contains(key))
+		if (this.contains(key)) {
 			return this.getBoolean(key);
-		if (globalStore.contains(key))
+		}
+		if (globalStore.contains(key)) {
 			return globalStore.getBoolean(key);
+		}
 		return defaultValue;
 	}
 
@@ -110,10 +114,12 @@ public class ConfigurationPreferenceStore extends PreferenceStore {
 			} catch (CoreException e) {
 			}
 		}
-		if (this.contains(key))
+		if (this.contains(key)) {
 			return this.getInt(key);
-		if (globalStore.contains(key))
+		}
+		if (globalStore.contains(key)) {
 			return globalStore.getInt(key);
+		}
 		return defaultValue;
 	}
 }

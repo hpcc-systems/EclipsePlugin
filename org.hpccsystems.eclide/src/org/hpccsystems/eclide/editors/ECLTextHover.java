@@ -43,8 +43,9 @@ public class ECLTextHover implements ITextHover {
 		try {
 			for (int n = offset-1; n >= 0; n--) {
 				char c = doc.getChar(n);
-				if (!Character.isJavaIdentifierPart(c) && c != '.' && c != '#')
+				if (!Character.isJavaIdentifierPart(c) && c != '.' && c != '#') {
 					return n + 1;
+				}
 			}
 		} catch (BadLocationException e) {
 			// ... log the exception ...
@@ -56,8 +57,9 @@ public class ECLTextHover implements ITextHover {
 		try {
 			for (int n = offset; n < doc.getLength(); ++n) {
 				char c = doc.getChar(n);
-				if (!Character.isJavaIdentifierPart(c) && c != '.')
+				if (!Character.isJavaIdentifierPart(c) && c != '.') {
 					return n;
+				}
 			}
 		} catch (BadLocationException e) {
 			// ... log the exception ...
@@ -84,8 +86,9 @@ public class ECLTextHover implements ITextHover {
 		if (doc instanceof ECLDocument) {
 			IFile file = ((ECLDocument)doc).getFile();
 			source = meta.getSource(file.getLocation());
-			if (source == null)
+			if (source == null) {
 				return "---  NO META  ---";
+			}
 		}
 
 		String text = getHoverWord(doc, hoverRegion.getOffset());

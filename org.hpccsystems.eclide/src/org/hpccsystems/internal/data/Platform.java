@@ -64,14 +64,16 @@ import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 public class Platform extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
 	public static Platform get(String ip, int port) {
-		if (ip == null || ip.isEmpty())
+		if (ip == null || ip.isEmpty()) {
 			return null;
+		}
 
 		return (Platform)All.get(new Platform(ip, port));
 	}
 	public static Platform getNoCreate(String ip, int port) {
-		if (ip == null || ip.isEmpty())
+		if (ip == null || ip.isEmpty()) {
 			return null;
+		}
 
 		return (Platform)All.getNoCreate(new Platform(ip, port));
 	}
@@ -531,8 +533,9 @@ public class Platform extends DataSingleton {
 	}
 
 	void latencyTest() {
-		if (LATENCY_TEST == 0)
+		if (LATENCY_TEST == 0) {
 			return;
+		}
 
 		try {
 			Thread.sleep(LATENCY_TEST);
@@ -612,11 +615,13 @@ public class Platform extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Platform) ) 
+		if ( !(aThat instanceof Platform) ) {
 			return false;
+		}
 		Platform that = (Platform)aThat;
 
 		//now a proper field-by-field evaluation can be made

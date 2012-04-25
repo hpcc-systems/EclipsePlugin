@@ -47,9 +47,11 @@ public class HtmlViewer extends ViewPart {
 		//public void run() {
 		browser.setUrl(treeItem, url, user, password);
 		if (bringToTop)
+		 {
 			htmlViewer.getSite().getPage().bringToTop(htmlViewer);
 		//}   
 		//});
+		}
 	}
 
 	public static String stringToHTMLString(String string) {
@@ -80,23 +82,23 @@ public class HtmlViewer extends ViewPart {
 				lastWasBlankChar = false;
 				//
 				// HTML Special Chars
-				if (c == '"')
+				if (c == '"') {
 					sb.append("&quot;");
-				else if (c == '&')
+				} else if (c == '&') {
 					sb.append("&amp;");
-				else if (c == '<')
+				} else if (c == '<') {
 					sb.append("&lt;");
-				else if (c == '>')
+				} else if (c == '>') {
 					sb.append("&gt;");
-				else if (c == '\n')
+				} else if (c == '\n') {
 					// Handle Newline
 					sb.append("&lt;br/&gt;");
-				else {
+				} else {
 					int ci = 0xffff & c;
-					if (ci < 160 )
+					if (ci < 160 ) {
 						// nothing special only 7 Bit
 						sb.append(c);
-					else {
+					} else {
 						// Not 7 Bit use the unicode system
 						sb.append("&#");
 						sb.append(new Integer(ci).toString());

@@ -24,8 +24,9 @@ import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 public class DropZone extends DataSingleton  {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
 	public static DropZone get(Platform platform, String name) {
-		if (name == null || name.isEmpty())
+		if (name == null || name.isEmpty()) {
 			return null;
+		}
 
 		return (DropZone)All.get(new DropZone(platform, name));
 	}
@@ -135,11 +136,13 @@ public class DropZone extends DataSingleton  {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof DropZone) ) 
+		if ( !(aThat instanceof DropZone) ) {
 			return false;
+		}
 		DropZone that = (DropZone)aThat;
 
 		//now a proper field-by-field evaluation can be made

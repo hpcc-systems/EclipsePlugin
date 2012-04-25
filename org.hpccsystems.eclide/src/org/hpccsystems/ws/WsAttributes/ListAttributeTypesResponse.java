@@ -51,10 +51,16 @@ public class ListAttributeTypesResponse  implements java.io.Serializable {
 	private java.lang.Object __equalsCalc = null;
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof ListAttributeTypesResponse)) return false;
+		if (!(obj instanceof ListAttributeTypesResponse)) {
+			return false;
+		}
 		ListAttributeTypesResponse other = (ListAttributeTypesResponse) obj;
-		if (obj == null) return false;
-		if (this == obj) return true;
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

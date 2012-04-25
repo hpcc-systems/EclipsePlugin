@@ -24,10 +24,16 @@ public class ListAttributeTypes  implements java.io.Serializable {
 	private java.lang.Object __equalsCalc = null;
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof ListAttributeTypes)) return false;
+		if (!(obj instanceof ListAttributeTypes)) {
+			return false;
+		}
 		ListAttributeTypes other = (ListAttributeTypes) obj;
-		if (obj == null) return false;
-		if (this == obj) return true;
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

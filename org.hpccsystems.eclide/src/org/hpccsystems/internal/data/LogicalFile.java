@@ -62,24 +62,29 @@ public class LogicalFile extends DataSingleton {
 	}
 
 	public Workunit getWorkunit() {
-		if (info2.getWuid() == null)
+		if (info2.getWuid() == null) {
 			fullRefresh();
-		if (info2.getWuid() == null || !info2.getWuid().startsWith("W"))
+		}
+		if (info2.getWuid() == null || !info2.getWuid().startsWith("W")) {
 			return null;
+		}
 		return platform.getWorkunit(info2.getWuid());
 	}
 
 	public FileSprayWorkunit getFileSprayWorkunit() {
-		if (info2.getWuid() == null)
+		if (info2.getWuid() == null) {
 			fullRefresh();
-		if (info2.getWuid() == null || !info2.getWuid().startsWith("D"))
+		}
+		if (info2.getWuid() == null || !info2.getWuid().startsWith("D")) {
 			return null;
+		}
 		return platform.getFileSprayWorkunit(info2.getWuid());
 	}
 
 	public String getDir() {
-		if (info2.getDir() == null)
+		if (info2.getDir() == null) {
 			fullRefresh();
+		}
 		return info2.getDir();
 	}
 
@@ -115,32 +120,38 @@ public class LogicalFile extends DataSingleton {
 
 	//  Updates  ---
 	void Update(DFULogicalFile lf) {
-		if (info.getName().equals(lf.getName()))
+		if (info.getName().equals(lf.getName())) {
 			info = lf;
+		}
 	}
 
 	void Update(DFUFileDetail fd) {
-		if (fd != null && info2.getName().equals(fd.getName()))
+		if (fd != null && info2.getName().equals(fd.getName())) {
 			info2 = fd;
+		}
 	}
 
 	void Update(ECLSourceFile sf) {
-		if (info3.getName().equals(sf.getName()))
+		if (info3.getName().equals(sf.getName())) {
 			info3 = sf;
+		}
 	}
 
 	public void Update(PhysicalFileStruct fileStruct) {
-		if (info4.getName().equals(fileStruct.getName()))
+		if (info4.getName().equals(fileStruct.getName())) {
 			info4 = fileStruct;
+		}
 	}
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof LogicalFile) ) 
+		if ( !(aThat instanceof LogicalFile) ) {
 			return false;
+		}
 		LogicalFile that = (LogicalFile)aThat;
 
 		//now a proper field-by-field evaluation can be made

@@ -52,24 +52,28 @@ public class Result extends DataSingleton {
 		}
 
 		String GetCell(long row, int col) {
-			if (data.containsKey(row))
+			if (data.containsKey(row)) {
 				return data.get(row).get(col);
+			}
 
 			Long start = row;
 			for (int i = 0; i < PAGE_BEFORE; ++i) {
-				if (start -1 < 0)
+				if (start -1 < 0) {
 					break;
+				}
 
-				if (data.containsKey(start - 1))
+				if (data.containsKey(start - 1)) {
 					break;
+				}
 
 				--start;
 			}
 
 			int count = (int)(row - start);
 			for (int i = count; i < PAGE_SIZE; ++i) {
-				if (data.containsKey(start + count))
+				if (data.containsKey(start + count)) {
 					break;
+				}
 				++count;
 			}
 
@@ -157,14 +161,16 @@ public class Result extends DataSingleton {
 	}
 
 	public int getColumnCount() {
-		if (info.getECLSchemas() == null)
+		if (info.getECLSchemas() == null) {
 			return 0;
+		}
 		return info.getECLSchemas().length;
 	}
 
 	public String getColumnName(int i) {
-		if (info.getECLSchemas() == null)
+		if (info.getECLSchemas() == null) {
 			return "";
+		}
 		return info.getECLSchemas()[i].getColumnName();
 	}
 
@@ -210,11 +216,13 @@ public class Result extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Result) ) 
+		if ( !(aThat instanceof Result) ) {
 			return false;
+		}
 		Result that = (Result)aThat;
 
 		//now a proper field-by-field evaluation can be made

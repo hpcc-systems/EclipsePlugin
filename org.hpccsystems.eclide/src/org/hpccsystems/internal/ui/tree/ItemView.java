@@ -50,8 +50,9 @@ public class ItemView {
 	public ItemView walkAncestors(IVisitor visitor) {
 		ItemView item = this;
 		while (item != null) {
-			if (visitor.visit(item))
+			if (visitor.visit(item)) {
 				return item;
+			}
 			item = item.getParent();
 		}
 
@@ -112,15 +113,17 @@ public class ItemView {
 	}
 
 	public void update(final String[] properties) {
-		if (treeViewer != null)
+		if (treeViewer != null) {
 			treeViewer.update(this, properties);
+		}
 	}
 
 	public void refresh() {
 		refreshItem();
 		refreshChildren();
-		if (treeViewer != null)
+		if (treeViewer != null) {
 			treeViewer.refresh(this);
+		}
 	}
 
 	public boolean hasChildren() {

@@ -37,8 +37,9 @@ public class WorkunitFolderView extends FolderItemView implements Observer {
 
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
-		if (clusterName.isEmpty())
+		if (clusterName.isEmpty()) {
 			return platform.getURL("WsWorkunits", "WUQuery");
+		}
 		return platform.getURL("WsWorkunits", "WUQuery", "Cluster=" + clusterName);
 	}
 
@@ -89,8 +90,9 @@ public class WorkunitFolderView extends FolderItemView implements Observer {
 			}
 		}
 
-		if (changed)
+		if (changed) {
 			children.sort(new WorkunitComparator());
+		}
 
 		return changed;
 	}

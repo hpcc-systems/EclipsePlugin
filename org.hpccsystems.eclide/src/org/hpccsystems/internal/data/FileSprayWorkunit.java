@@ -22,8 +22,9 @@ import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 public class FileSprayWorkunit extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
 	public static FileSprayWorkunit get(Platform platform, String wuid) {
-		if (wuid == null || wuid.isEmpty())
+		if (wuid == null || wuid.isEmpty()) {
 			return null;
+		}
 
 		return (FileSprayWorkunit)All.get(new FileSprayWorkunit(platform, wuid));
 	}
@@ -86,38 +87,46 @@ public class FileSprayWorkunit extends DataSingleton {
 	}
 
 	public LogicalFile getLogicalFile() {
-		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
+		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null) {
 			fullRefresh();
+		}
 
 		String logicalFileName = info.getSourceLogicalName();
-		if (logicalFileName == null || logicalFileName.isEmpty())
+		if (logicalFileName == null || logicalFileName.isEmpty()) {
 			logicalFileName = info.getDestLogicalName();
+		}
 
-		if (logicalFileName == null || logicalFileName.isEmpty())
+		if (logicalFileName == null || logicalFileName.isEmpty()) {
 			return null;
+		}
 
 		return getLogicalFile(logicalFileName);
 	}
 
 	public String getFilePath() {
-		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
+		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null) {
 			fullRefresh();
+		}
 
 		String filePath = info.getSourceFilePath();
-		if (filePath == null || filePath.isEmpty())
+		if (filePath == null || filePath.isEmpty()) {
 			filePath = info.getDestFilePath();
+		}
 
-		if (filePath == null || filePath.isEmpty())
+		if (filePath == null || filePath.isEmpty()) {
 			return null;
+		}
 
 		return filePath;
 	}
 
 	public boolean isDespray() {
-		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
+		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null) {
 			fullRefresh();
-		if (info.getSourceLogicalName() != null && info.getDestFilePath() != null)
+		}
+		if (info.getSourceLogicalName() != null && info.getDestFilePath() != null) {
 			return true;
+		}
 		return false;
 	}
 
@@ -206,11 +215,13 @@ public class FileSprayWorkunit extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof FileSprayWorkunit) ) 
+		if ( !(aThat instanceof FileSprayWorkunit) ) {
 			return false;
+		}
 		FileSprayWorkunit that = (FileSprayWorkunit)aThat;
 
 		//now a proper field-by-field evaluation can be made

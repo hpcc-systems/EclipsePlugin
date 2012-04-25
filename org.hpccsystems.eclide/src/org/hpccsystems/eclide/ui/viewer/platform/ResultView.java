@@ -24,8 +24,9 @@ public class ResultView extends PlatformBaseView implements Observer {
 
 	@Override
 	public String getText() {
-		if (!result.getValue().isEmpty())
+		if (!result.getValue().isEmpty()) {
 			return result.getName() + " " + result.getValue();
+		}
 		return result.getName();
 	}
 
@@ -47,8 +48,9 @@ public class ResultView extends PlatformBaseView implements Observer {
 	@Override
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		for(String s : result.getResultViews())
+		for(String s : result.getResultViews()) {
 			retVal.add(new ResultViewView(treeViewer, this, platform, result, s));
+		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 

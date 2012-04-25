@@ -16,9 +16,10 @@ public class OS {
 	public static boolean isWindowsPlatform()
 	{
 		String os = System.getProperty("os.name");
-		if ( os != null && os.startsWith(WIN_ID))
+		if ( os != null && os.startsWith(WIN_ID)) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 }

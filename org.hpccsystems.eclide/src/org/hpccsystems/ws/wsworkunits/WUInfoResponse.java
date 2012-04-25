@@ -171,10 +171,16 @@ public class WUInfoResponse  implements java.io.Serializable {
 	 private java.lang.Object __equalsCalc = null;
 	 @Override
 	 public synchronized boolean equals(java.lang.Object obj) {
-		 if (!(obj instanceof WUInfoResponse)) return false;
+		 if (!(obj instanceof WUInfoResponse)) {
+			return false;
+		}
 		 WUInfoResponse other = (WUInfoResponse) obj;
-		 if (obj == null) return false;
-		 if (this == obj) return true;
+		 if (obj == null) {
+			return false;
+		}
+		 if (this == obj) {
+			return true;
+		}
 		 if (__equalsCalc != null) {
 			 return (__equalsCalc == obj);
 		 }

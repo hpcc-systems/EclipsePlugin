@@ -48,8 +48,9 @@ public class DatasetParser {
 				break;
 			case 3:
 				Element e = elementStack.peek();
-				if (col == 0)
+				if (col == 0) {
 					data.put(row, new HashMap<Integer, String>());
+				}
 
 				data.get(row).put(col, e.content.toString());
 				++col;

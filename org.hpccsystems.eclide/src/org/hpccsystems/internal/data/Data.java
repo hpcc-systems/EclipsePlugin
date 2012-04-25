@@ -38,12 +38,14 @@ public class Data extends Observable {
 			configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
 			for(int i = 0; i < configs.length; ++i) {
 				Platform p = GetPlatform(configs[i]);
-				if (p != null && !platforms.contains(p))
+				if (p != null && !platforms.contains(p)) {
 					platforms.add(p);
+				}
 
 				ClientTools ct = GetClientTools(configs[i]);
-				if (!clientTools.contains(ct))
+				if (!clientTools.contains(ct)) {
 					clientTools.add(ct);
+				}
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -171,8 +173,9 @@ public class Data extends Observable {
 			retVal = GetClientTools(launchConfiguration);
 		}
 
-		if (retVal != null)
+		if (retVal != null) {
 			return retVal;
+		}
 
 		for(ClientTools ct : clientTools) {
 			if (retVal == null) {

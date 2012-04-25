@@ -137,12 +137,14 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 	}
 
 	static String stripExtension(String str) { 
-		if (str == null) 
-			return null; 
+		if (str == null) {
+			return null;
+		} 
 
 		int pos = str.lastIndexOf("."); 
-		if (pos == -1) 
-			return str; 
+		if (pos == -1) {
+			return str;
+		} 
 
 		return str.substring(0, pos); 
 	} 

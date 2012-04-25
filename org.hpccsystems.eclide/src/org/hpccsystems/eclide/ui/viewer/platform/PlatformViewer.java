@@ -201,8 +201,9 @@ public class PlatformViewer extends ViewPart {
 	}
 
 	public void showWebPage(ItemView ti, boolean bringToTop) {
-		if (htmlViewer == null)
+		if (htmlViewer == null) {
 			htmlViewer = Eclipse.findHtmlViewer();
+		}
 
 		try {
 			URL webPageURL = ti.getWebPageURL();
@@ -216,14 +217,17 @@ public class PlatformViewer extends ViewPart {
 
 	public boolean showResult(ItemView ti) {
 		Result result = ti.getResult();
-		if (result == null)
+		if (result == null) {
 			return false;
+		}
 
-		if (resultViewer == null)
+		if (resultViewer == null) {
 			resultViewer = Eclipse.findResultViewer();
+		}
 
-		if (resultViewer == null) 
+		if (resultViewer == null) {
 			return false;
+		}
 
 		resultViewer.showResult(result);
 		return true;
@@ -252,8 +256,9 @@ public class PlatformViewer extends ViewPart {
 				Iterator<?> iter = sel.iterator();
 				while (iter.hasNext()) {
 					Object o = iter.next();
-					if (o instanceof ItemView)
+					if (o instanceof ItemView) {
 						((ItemView)o).update(null);
+					}
 				}
 			}
 		};

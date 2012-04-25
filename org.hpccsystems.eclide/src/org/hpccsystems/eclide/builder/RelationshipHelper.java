@@ -35,16 +35,18 @@ public class RelationshipHelper{
 		}
 
 		void load(String files) {
-			if (files == null)
+			if (files == null) {
 				return;
+			}
 
 			String[] partialPaths = files.split(";");
 			for(int i = 0; i < partialPaths.length; ++i) {
 				IResource resource = project.findMember(partialPaths[i]);
 				if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
 					IFile file = (IFile) resource;
-					if (file != null) 
+					if (file != null) {
 						this.files.add(file);
+					}
 				}
 			}
 		}
@@ -53,8 +55,9 @@ public class RelationshipHelper{
 			StringBuilder retVal = new StringBuilder();
 			for(Iterator<IFile> itr = files.iterator(); itr.hasNext();) {
 				IFile file = itr.next();
-				if (retVal.length() > 0)
+				if (retVal.length() > 0) {
 					retVal.append(";");
+				}
 				retVal.append(file.getProjectRelativePath().toOSString());
 			}
 			return retVal.toString();

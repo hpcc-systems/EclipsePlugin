@@ -147,10 +147,16 @@ public class WUCopyLogicalClusterFileSections  implements java.io.Serializable {
 	private java.lang.Object __equalsCalc = null;
 	@Override
 	public synchronized boolean equals(java.lang.Object obj) {
-		if (!(obj instanceof WUCopyLogicalClusterFileSections)) return false;
+		if (!(obj instanceof WUCopyLogicalClusterFileSections)) {
+			return false;
+		}
 		WUCopyLogicalClusterFileSections other = (WUCopyLogicalClusterFileSections) obj;
-		if (obj == null) return false;
-		if (this == obj) return true;
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (__equalsCalc != null) {
 			return (__equalsCalc == obj);
 		}

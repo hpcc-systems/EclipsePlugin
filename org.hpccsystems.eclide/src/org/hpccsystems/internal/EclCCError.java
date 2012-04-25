@@ -51,12 +51,13 @@ public class EclCCError {
 				errorPath = new Path(filePathAndLoc);
 			}
 			String code = parts[1];
-			if (code.startsWith("error"))
+			if (code.startsWith("error")) {
 				severity = IMarker.SEVERITY_ERROR;
-			else if (code.startsWith("warning")) 
+			} else if (code.startsWith("warning")) {
 				severity = IMarker.SEVERITY_WARNING;
-			else
+			} else {
 				severity = IMarker.SEVERITY_INFO;
+			}
 			message = parts[2];
 		}
 	}

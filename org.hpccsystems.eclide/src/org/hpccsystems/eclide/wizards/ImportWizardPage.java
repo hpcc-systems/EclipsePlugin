@@ -120,8 +120,9 @@ public class ImportWizardPage extends WizardResourceImportPage {
 					protected IStatus run(IProgressMonitor monitor) {
 						monitor.beginTask("Importing", response.getOutModules().length);
 						for (final ECLModule module : response.getOutModules()) {
-							if (module.getName().equalsIgnoreCase("Trash"))
+							if (module.getName().equalsIgnoreCase("Trash")) {
 								continue;
+							}
 							monitor.subTask(module.getName());
 
 							GetAttributes request2 = new GetAttributes();

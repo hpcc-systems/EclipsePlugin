@@ -95,11 +95,13 @@ public class Cluster extends DataSingleton  {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Cluster) ) 
+		if ( !(aThat instanceof Cluster) ) {
 			return false;
+		}
 		Cluster that = (Cluster)aThat;
 
 		//now a proper field-by-field evaluation can be made
