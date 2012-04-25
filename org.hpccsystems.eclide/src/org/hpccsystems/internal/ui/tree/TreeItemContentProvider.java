@@ -25,7 +25,7 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 		this.treeViewer = treeViewer;
 		//loadingState = new HashMap<Object, LoadingState>();
 	}
-	
+
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
@@ -68,7 +68,7 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 			}
 		});
 	}
-	
+
 	@Override
 	public void refresh(final Object element) {
 		Display.getDefault().asyncExec(new Runnable() {   
@@ -88,7 +88,7 @@ abstract public class TreeItemContentProvider implements ITreeContentProvider, O
 			}
 		});
 	}
-	
+
 	abstract public void refreshChildren();
 	abstract public void reloadChildren();
 }

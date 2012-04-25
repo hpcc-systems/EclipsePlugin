@@ -64,25 +64,27 @@ import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 public class Platform extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
 	public static Platform get(String ip, int port) {
-		if (ip == null || ip.isEmpty())
+		if (ip == null || ip.isEmpty()) {
 			return null;
-		
+		}
+
 		return (Platform)All.get(new Platform(ip, port));
 	}
 	public static Platform getNoCreate(String ip, int port) {
-		if (ip == null || ip.isEmpty())
+		if (ip == null || ip.isEmpty()) {
 			return null;
-		
+		}
+
 		return (Platform)All.getNoCreate(new Platform(ip, port));
 	}
-	
+
 	public static final String P_DISABLED = "disabledConfig";
 	public static final String P_IP = "ipLaunchConfig";
 	public static final String P_PORT = "portLaunchConfig";
 	public static final String P_USER = "userLaunchConfig";
 	public static final String P_PASSWORD = "passwordLaunchConfig";
 	public static final String P_CLUSTER = "clusterLaunchConfig";
-	
+
 	private ConfigurationPreferenceStore launchConfiguration;	
 	private String name;
 	private boolean isDisabled;
@@ -94,25 +96,25 @@ public class Platform extends DataSingleton {
 	private Collection<FileSprayWorkunit> fileSprayWorkunits;
 	private Collection<DataQuerySet> dataQuerySets;
 	private Collection<LogicalFile> logicalFiles;
-	
+
 	static int LATENCY_TEST = 0;
-	
+
 	Platform(String ip, int port) {
 		this.ip = ip;
 		this.port = port;
-		this.isDisabled = true;
-		this.name = "";
+		isDisabled = true;
+		name = "";
 
-		this.clusters = new HashSet<Cluster>();
-		this.dropZones = new HashSet<DropZone>();
-		this.workunits = new HashSet<Workunit>();	
-		this.fileSprayWorkunits = new HashSet<FileSprayWorkunit>();
-		this.dataQuerySets = new HashSet<DataQuerySet>();
-		this.logicalFiles = new HashSet<LogicalFile>();
+		clusters = new HashSet<Cluster>();
+		dropZones = new HashSet<DropZone>();
+		workunits = new HashSet<Workunit>();	
+		fileSprayWorkunits = new HashSet<FileSprayWorkunit>();
+		dataQuerySets = new HashSet<DataQuerySet>();
+		logicalFiles = new HashSet<LogicalFile>();
 	}
-	
+
 	public void update(ILaunchConfiguration _launchConfiguration) {
-		this.launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
+		launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
 		name = _launchConfiguration.getName();
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
 		ip = launchConfiguration.getAttribute(P_IP, "");
@@ -121,18 +123,18 @@ public class Platform extends DataSingleton {
 
 	synchronized void confirmDisable() {
 		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
-		    @Override
+			@Override
 			public void run() {
 				if (!isDisabled) {
-				    Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		            if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {
-	            		isDisabled = true;
-		            }
-	            }
-		    }
+					Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {
+						isDisabled = true;
+					}
+				}
+			}
 		});
 	}
-	
+
 	public boolean isDisabled() {
 		return isDisabled;
 	}
@@ -152,12 +154,12 @@ public class Platform extends DataSingleton {
 	public String getUser() {
 		return launchConfiguration.getAttribute(P_USER, "");
 	}
-	
+
 	public String getPassword() {
 		return launchConfiguration.getAttribute(P_PASSWORD, "");
 	}
-	
-/*
+
+	/*
  enum WUAction
 {
     WUActionUnknown = 0,
@@ -170,7 +172,7 @@ public class Platform extends DataSingleton {
     WUActionResume = 7, 
     WUActionSize = 8
 };
-*/	
+	 */	
 	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
 		if (isEnabled()) {
 			ECLCompiler compiler = new ECLCompiler(new ConfigurationPreferenceStore(configuration), file.getProject());
@@ -189,23 +191,23 @@ public class Platform extends DataSingleton {
 					appVals[0].setName("path");
 					appVals[0].setValue(file.getFullPath().toPortableString());
 					request.setApplicationValues(appVals);
-					
-				int inlineResultLimit = launchConfiguration.getInt(ClientTools.P_INLINERESULTLIMIT);
+
+					int inlineResultLimit = launchConfiguration.getInt(ClientTools.P_INLINERESULTLIMIT);
 					if (inlineResultLimit > 0) {
 						request.setResultLimit(inlineResultLimit);
 					}
-					
+
 					try {
 						WUUpdateResponse response = service.WUCreateAndUpdate(request);
 						response.getWorkunit().setCluster(cluster);	//  WUSubmit does not return an updated ECLWorkunit, so set cluster here...  
 						Workunit wu = getWorkunit(response.getWorkunit());
 						if (wu != null) {
 							workunits.add(wu);
-		
+
 							WUSubmit submitRequest = new WUSubmit();
 							submitRequest.setWuid(response.getWorkunit().getWuid());
 							submitRequest.setCluster(cluster);
-							WUSubmitResponse submitResponse = service.WUSubmit(submitRequest);
+							service.WUSubmit(submitRequest);
 						}
 						return wu;
 					} catch (ArrayOfEspException e) {
@@ -277,7 +279,7 @@ public class Platform extends DataSingleton {
 	public Collection<Workunit> getWorkunits() {
 		return getWorkunits("", "", "");
 	}
-	
+
 	synchronized void updateWorkunits(ECLWorkunit[] rawWorkunits) {
 		workunits.clear();
 		if (rawWorkunits != null) {
@@ -413,7 +415,7 @@ public class Platform extends DataSingleton {
 	public LogicalFile[] getLogicalFiles() {
 		return getLogicalFiles("");
 	}
-	
+
 	synchronized void updateLogicalFiles(DFULogicalFile[] rawLogicalFiles) {
 		logicalFiles.clear();
 		if (rawLogicalFiles != null) {
@@ -461,7 +463,7 @@ public class Platform extends DataSingleton {
 			}
 		}
 	}
-	
+
 	//  Drop Zones  ---
 	public DropZone getDropZone(String name) {
 		return DropZone.get(this, name);
@@ -498,7 +500,7 @@ public class Platform extends DataSingleton {
 		if (serviceList != null) {
 			updateDropZones(serviceList.getTpDropZones());
 		}
-		
+
 	}
 	private void updateDropZones(TpDropZone[] rawDropZones) {
 		if (rawDropZones != null) {
@@ -507,7 +509,7 @@ public class Platform extends DataSingleton {
 			}
 		}
 	}
-	
+
 	//  SOAP Stub Helpers  ---
 	public URL getURL() throws MalformedURLException {
 		return getURL("");
@@ -524,16 +526,17 @@ public class Platform extends DataSingleton {
 	public URL getURL(String service, String method, String params) throws MalformedURLException {
 		return getURL(service + "/" + method + "?" + params);
 	}
-	
+
 	void initStub(org.apache.axis.client.Stub stub) {
 		stub.setUsername(getUser());
 		stub.setPassword(getPassword());
 	}
-	
+
 	void latencyTest() {
-		if (LATENCY_TEST == 0)
+		if (LATENCY_TEST == 0) {
 			return;
-		
+		}
+
 		try {
 			Thread.sleep(LATENCY_TEST);
 		} catch (InterruptedException e) {
@@ -612,16 +615,18 @@ public class Platform extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Platform) ) 
+		if ( !(aThat instanceof Platform) ) {
 			return false;
+		}
 		Platform that = (Platform)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(this.getIP(), that.getIP()) &&
-				EqualsUtil.areEqual(this.getPort(), that.getPort());
+		return 	EqualsUtil.areEqual(getIP(), that.getIP()) &&
+				EqualsUtil.areEqual(getPort(), that.getPort());
 	}
 
 	@Override

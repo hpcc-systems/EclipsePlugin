@@ -16,16 +16,16 @@ import org.eclipse.ui.IMarkerResolution;
 
 public class QuickFix implements IMarkerResolution {
 	String label;
-	
+
 	QuickFix(String label) {
 		this.label = label;
 	}
-	
+
 	@Override
 	public String getLabel() {
 		return label;
 	}
-	
+
 	@Override
 	public void run(IMarker marker) {
 		MessageDialog.openInformation(null, "QuickFix Demo",

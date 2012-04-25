@@ -60,7 +60,7 @@ class TargetFolderView extends FolderItemView {
 	public String getText() {
 		return "Targets";
 	}
-	
+
 	@Override
 	public boolean hasChildren() {
 		return super.hasChildren();
@@ -79,8 +79,9 @@ class TargetFolderView extends FolderItemView {
 	@Override
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		for(Cluster c : platform.getClusters())
+		for(Cluster c : platform.getClusters()) {
 			retVal.add(new ClusterView(treeViewer, this, platform, c));
+		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
 }
@@ -91,7 +92,7 @@ class ClusterView extends PlatformBaseView {
 	ClusterView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, Cluster cluster) {
 		super(treeViewer, parent, platform);
 		this.cluster = cluster;
-		this.clusterName = cluster.getName();
+		clusterName = cluster.getName();
 		refreshChildren();
 	}
 
@@ -131,7 +132,7 @@ class DropZoneFolderView extends FolderItemView {
 	public String getText() {
 		return "Drop Zones";
 	}
-	
+
 	//  http://192.168.2.68:8010/FileSpray/DropZoneFiles?ver_=1.03
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
@@ -232,27 +233,28 @@ class DataQuerySetView extends PlatformBaseView {
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUQuerysetDetails", "QuerySetName=" + querySet.getName());
-}
+	}
 
 	@Override
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof DataQuerySetView)
+			if (parent instanceof DataQuerySetView) {
 				if (querySet == ((DataQuerySetView)parent).querySet) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
+			}
 			parent = parent.getParent();
 		}
 
 		if (retVal.isEmpty()) {
-//			retVal.add(new LogicalFileContentsTreeItem(treeViewer, this, platform, querySet));
-//			Workunit wu = querySet.getWorkunit();
-//			if (wu != null) {
-//				retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
-//			}
+			//			retVal.add(new LogicalFileContentsTreeItem(treeViewer, this, platform, querySet));
+			//			Workunit wu = querySet.getWorkunit();
+			//			if (wu != null) {
+			//				retVal.add(new WorkunitTreeItem(treeViewer, this, platform, wu));				
+			//			}
 		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
@@ -272,8 +274,9 @@ class LogicalFileFolderView extends FolderItemView {
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
-		if (clusterName.isEmpty())
+		if (clusterName.isEmpty()) {
 			return platform.getURL("WsDfu", "DFUQuery");
+		}
 		return platform.getURL("WsDfu", "DFUQuery", "ClusterName=" + clusterName);
 	}
 
@@ -292,8 +295,8 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 
 	WorkunitLogicalFileFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 	}
 
 	@Override
@@ -356,11 +359,12 @@ class LogicalFileView extends PlatformBaseView {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof LogicalFileView)
+			if (parent instanceof LogicalFileView) {
 				if (file == ((LogicalFileView)parent).file) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
+			}
 			parent = parent.getParent();
 		}
 
@@ -456,8 +460,8 @@ class GraphFolderView extends FolderItemView implements Observer  {
 
 	GraphFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 	}
 
 	@Override
@@ -473,11 +477,12 @@ class GraphFolderView extends FolderItemView implements Observer  {
 	@Override
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		for(Graph g : workunit.getGraphs())
+		for(Graph g : workunit.getGraphs()) {
 			retVal.add(new GraphView(treeViewer, this, platform, g));
+		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
-	
+
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 instanceof Workunit.Notification) {

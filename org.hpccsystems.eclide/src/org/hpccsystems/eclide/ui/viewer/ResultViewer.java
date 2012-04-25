@@ -16,9 +16,9 @@ import org.hpccsystems.internal.data.Result;
 
 public class ResultViewer extends ViewPart {
 	public static final String PI_UI_RESULTVIEW = "org.hpccsystems.eclide.resultView";
-	
+
 	private static ResultViewer resultViewer = null;
-	
+
 	private TableEx table; 
 
 	public static ResultViewer getDefault() {
@@ -28,7 +28,7 @@ public class ResultViewer extends ViewPart {
 	public ResultViewer() {
 		resultViewer = this;
 	}
-	
+
 	@Override
 	public void createPartControl(Composite parent) {
 		table = new TableEx(parent);

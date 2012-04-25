@@ -30,7 +30,7 @@ class WorkunitTreeItemContentProvider extends TreeItemContentProvider {
 		super(treeViewer);
 		this.wu = wu;
 	}
-	
+
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		if (newInput != null && !newInput.equals(oldInput)) {
@@ -43,12 +43,12 @@ class WorkunitTreeItemContentProvider extends TreeItemContentProvider {
 	public Object[] getElements(Object inputElement) {
 		return wuView.getChildren();
 	}
-	
+
 	@Override 
 	public void refreshChildren() {
 		wuView.refreshChildren();
 	}
-	
+
 	@Override
 	public void reloadChildren() {
 		wuView.refreshChildren();

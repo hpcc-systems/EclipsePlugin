@@ -49,7 +49,7 @@ public class ECLArchiveParser {
 				if (resource != null && resource instanceof IFile && !resource.equals(file) && resource.getName().endsWith(".ecl")) { 
 					ancestors.add((IFile) resource);
 				}
-				
+
 				break;
 			default:
 				break;
@@ -87,7 +87,7 @@ public class ECLArchiveParser {
 	public ECLArchiveParser(IFile file, String archive) {
 		doParse(file, new InputSource(new StringReader(archive)));
 	}
-	
+
 	public ECLArchiveParser(IFile file, BufferedReader reader) {
 		doParse(file, new InputSource(reader));
 	}

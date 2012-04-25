@@ -15,6 +15,6 @@ package org.hpccsystems.eclide.ui.navigator;
 public class CustomProjectWorkbenchRoot {
 
 	CustomProjectWorkbenchRoot() {
-		
+
 	}
 }

@@ -25,7 +25,7 @@ public class DataSingletonCollection extends Observable {
 		notificationDelta = null;
 		notifcationDepth = 0;
 	}
-	
+
 	protected synchronized DataSingleton get(DataSingleton item) {
 		if (items.containsKey(item.hashCode())) {
 			return items.get(item.hashCode());
@@ -51,7 +51,7 @@ public class DataSingletonCollection extends Observable {
 	public synchronized Collection<DataSingleton> getAll() {
 		return items.values();
 	}
-	
+
 	public synchronized void pushTransaction(String cause) {
 		if (notifcationDepth == 0) {
 			notificationDelta = new CollectionDelta(cause, items.values());

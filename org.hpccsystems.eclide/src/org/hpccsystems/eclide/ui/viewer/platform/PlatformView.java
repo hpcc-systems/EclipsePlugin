@@ -32,15 +32,17 @@ public class PlatformView extends PlatformBaseView {
 
 	@Override
 	public String getText() {
-		if (platform.getPort() != 8010)
+		if (platform.getPort() != 8010) {
 			return platform.getIP() + ":" + platform.getPort();
+		}
 		return platform.getIP();
 	}
 
 	@Override
 	public Image getImage() {
-		if (platform.isDisabled())
-			return Activator.getImage("icons/platform_disabled.png"); 
+		if (platform.isDisabled()) {
+			return Activator.getImage("icons/platform_disabled.png");
+		} 
 		return Activator.getImage("icons/platform.png"); 
 	}
 

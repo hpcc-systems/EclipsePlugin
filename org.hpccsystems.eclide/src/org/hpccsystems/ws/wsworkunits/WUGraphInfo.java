@@ -18,226 +18,232 @@
 package org.hpccsystems.ws.wsworkunits;
 
 public class WUGraphInfo  implements java.io.Serializable {
-    private java.lang.String wuid;
+	private java.lang.String wuid;
 
-    private java.lang.String name;
+	private java.lang.String name;
 
-    private java.lang.String GID;
+	private java.lang.String GID;
 
-    private java.lang.Integer batchWU;
+	private java.lang.Integer batchWU;
 
-    public WUGraphInfo() {
-    }
+	public WUGraphInfo() {
+	}
 
-    public WUGraphInfo(
-           java.lang.String wuid,
-           java.lang.String name,
-           java.lang.String GID,
-           java.lang.Integer batchWU) {
-           this.wuid = wuid;
-           this.name = name;
-           this.GID = GID;
-           this.batchWU = batchWU;
-    }
-
-
-    /**
-     * Gets the wuid value for this WUGraphInfo.
-     * 
-     * @return wuid
-     */
-    public java.lang.String getWuid() {
-        return wuid;
-    }
+	public WUGraphInfo(
+			java.lang.String wuid,
+			java.lang.String name,
+			java.lang.String GID,
+			java.lang.Integer batchWU) {
+		this.wuid = wuid;
+		this.name = name;
+		this.GID = GID;
+		this.batchWU = batchWU;
+	}
 
 
-    /**
-     * Sets the wuid value for this WUGraphInfo.
-     * 
-     * @param wuid
-     */
-    public void setWuid(java.lang.String wuid) {
-        this.wuid = wuid;
-    }
+	/**
+	 * Gets the wuid value for this WUGraphInfo.
+	 * 
+	 * @return wuid
+	 */
+	 public java.lang.String getWuid() {
+		 return wuid;
+	 }
 
 
-    /**
-     * Gets the name value for this WUGraphInfo.
-     * 
-     * @return name
-     */
-    public java.lang.String getName() {
-        return name;
-    }
+	 /**
+	  * Sets the wuid value for this WUGraphInfo.
+	  * 
+	  * @param wuid
+	  */
+	 public void setWuid(java.lang.String wuid) {
+		 this.wuid = wuid;
+	 }
 
 
-    /**
-     * Sets the name value for this WUGraphInfo.
-     * 
-     * @param name
-     */
-    public void setName(java.lang.String name) {
-        this.name = name;
-    }
+	 /**
+	  * Gets the name value for this WUGraphInfo.
+	  * 
+	  * @return name
+	  */
+	 public java.lang.String getName() {
+		 return name;
+	 }
 
 
-    /**
-     * Gets the GID value for this WUGraphInfo.
-     * 
-     * @return GID
-     */
-    public java.lang.String getGID() {
-        return GID;
-    }
+	 /**
+	  * Sets the name value for this WUGraphInfo.
+	  * 
+	  * @param name
+	  */
+	 public void setName(java.lang.String name) {
+		 this.name = name;
+	 }
 
 
-    /**
-     * Sets the GID value for this WUGraphInfo.
-     * 
-     * @param GID
-     */
-    public void setGID(java.lang.String GID) {
-        this.GID = GID;
-    }
+	 /**
+	  * Gets the GID value for this WUGraphInfo.
+	  * 
+	  * @return GID
+	  */
+	 public java.lang.String getGID() {
+		 return GID;
+	 }
 
 
-    /**
-     * Gets the batchWU value for this WUGraphInfo.
-     * 
-     * @return batchWU
-     */
-    public java.lang.Integer getBatchWU() {
-        return batchWU;
-    }
+	 /**
+	  * Sets the GID value for this WUGraphInfo.
+	  * 
+	  * @param GID
+	  */
+	 public void setGID(java.lang.String GID) {
+		 this.GID = GID;
+	 }
 
 
-    /**
-     * Sets the batchWU value for this WUGraphInfo.
-     * 
-     * @param batchWU
-     */
-    public void setBatchWU(java.lang.Integer batchWU) {
-        this.batchWU = batchWU;
-    }
+	 /**
+	  * Gets the batchWU value for this WUGraphInfo.
+	  * 
+	  * @return batchWU
+	  */
+	 public java.lang.Integer getBatchWU() {
+		 return batchWU;
+	 }
 
-    private java.lang.Object __equalsCalc = null;
-    @Override
-	public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof WUGraphInfo)) return false;
-        WUGraphInfo other = (WUGraphInfo) obj;
-        if (obj == null) return false;
-        if (this == obj) return true;
-        if (__equalsCalc != null) {
-            return (__equalsCalc == obj);
-        }
-        __equalsCalc = obj;
-        boolean _equals;
-        _equals = true && 
-            ((this.wuid==null && other.getWuid()==null) || 
-             (this.wuid!=null &&
-              this.wuid.equals(other.getWuid()))) &&
-            ((this.name==null && other.getName()==null) || 
-             (this.name!=null &&
-              this.name.equals(other.getName()))) &&
-            ((this.GID==null && other.getGID()==null) || 
-             (this.GID!=null &&
-              this.GID.equals(other.getGID()))) &&
-            ((this.batchWU==null && other.getBatchWU()==null) || 
-             (this.batchWU!=null &&
-              this.batchWU.equals(other.getBatchWU())));
-        __equalsCalc = null;
-        return _equals;
-    }
 
-    private boolean __hashCodeCalc = false;
-    @Override
-	public synchronized int hashCode() {
-        if (__hashCodeCalc) {
-            return 0;
-        }
-        __hashCodeCalc = true;
-        int _hashCode = 1;
-        if (getWuid() != null) {
-            _hashCode += getWuid().hashCode();
-        }
-        if (getName() != null) {
-            _hashCode += getName().hashCode();
-        }
-        if (getGID() != null) {
-            _hashCode += getGID().hashCode();
-        }
-        if (getBatchWU() != null) {
-            _hashCode += getBatchWU().hashCode();
-        }
-        __hashCodeCalc = false;
-        return _hashCode;
-    }
+	 /**
+	  * Sets the batchWU value for this WUGraphInfo.
+	  * 
+	  * @param batchWU
+	  */
+	 public void setBatchWU(java.lang.Integer batchWU) {
+		 this.batchWU = batchWU;
+	 }
 
-    // Type metadata
-    private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(WUGraphInfo.class, true);
+	 private java.lang.Object __equalsCalc = null;
+	 @Override
+	 public synchronized boolean equals(java.lang.Object obj) {
+		 if (!(obj instanceof WUGraphInfo)) {
+			return false;
+		}
+		 WUGraphInfo other = (WUGraphInfo) obj;
+		 if (obj == null) {
+			return false;
+		}
+		 if (this == obj) {
+			return true;
+		}
+		 if (__equalsCalc != null) {
+			 return (__equalsCalc == obj);
+		 }
+		 __equalsCalc = obj;
+		 boolean _equals;
+		 _equals = true && 
+				 ((this.wuid==null && other.getWuid()==null) || 
+						 (this.wuid!=null &&
+						 this.wuid.equals(other.getWuid()))) &&
+						 ((this.name==null && other.getName()==null) || 
+								 (this.name!=null &&
+								 this.name.equals(other.getName()))) &&
+								 ((this.GID==null && other.getGID()==null) || 
+										 (this.GID!=null &&
+										 this.GID.equals(other.getGID()))) &&
+										 ((this.batchWU==null && other.getBatchWU()==null) || 
+												 (this.batchWU!=null &&
+												 this.batchWU.equals(other.getBatchWU())));
+		 __equalsCalc = null;
+		 return _equals;
+	 }
 
-    static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", ">WUGraphInfo"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("wuid");
-        elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", "Wuid"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("name");
-        elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", "Name"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("GID");
-        elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", "GID"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("batchWU");
-        elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", "BatchWU"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-    }
+	 private boolean __hashCodeCalc = false;
+	 @Override
+	 public synchronized int hashCode() {
+		 if (__hashCodeCalc) {
+			 return 0;
+		 }
+		 __hashCodeCalc = true;
+		 int _hashCode = 1;
+		 if (getWuid() != null) {
+			 _hashCode += getWuid().hashCode();
+		 }
+		 if (getName() != null) {
+			 _hashCode += getName().hashCode();
+		 }
+		 if (getGID() != null) {
+			 _hashCode += getGID().hashCode();
+		 }
+		 if (getBatchWU() != null) {
+			 _hashCode += getBatchWU().hashCode();
+		 }
+		 __hashCodeCalc = false;
+		 return _hashCode;
+	 }
 
-    /**
-     * Return type metadata object
-     */
-    public static org.apache.axis.description.TypeDesc getTypeDesc() {
-        return typeDesc;
-    }
+	 // Type metadata
+	 private static org.apache.axis.description.TypeDesc typeDesc =
+	 new org.apache.axis.description.TypeDesc(WUGraphInfo.class, true);
 
-    /**
-     * Get Custom Serializer
-     */
-    public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanSerializer(
-            _javaType, _xmlType, typeDesc);
-    }
+	 static {
+		 typeDesc.setXmlType(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", ">WUGraphInfo"));
+		 org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+		 elemField.setFieldName("wuid");
+		 elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", "Wuid"));
+		 elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+		 elemField.setMinOccurs(0);
+		 elemField.setNillable(false);
+		 typeDesc.addFieldDesc(elemField);
+		 elemField = new org.apache.axis.description.ElementDesc();
+		 elemField.setFieldName("name");
+		 elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", "Name"));
+		 elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+		 elemField.setMinOccurs(0);
+		 elemField.setNillable(false);
+		 typeDesc.addFieldDesc(elemField);
+		 elemField = new org.apache.axis.description.ElementDesc();
+		 elemField.setFieldName("GID");
+		 elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", "GID"));
+		 elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+		 elemField.setMinOccurs(0);
+		 elemField.setNillable(false);
+		 typeDesc.addFieldDesc(elemField);
+		 elemField = new org.apache.axis.description.ElementDesc();
+		 elemField.setFieldName("batchWU");
+		 elemField.setXmlName(new javax.xml.namespace.QName("urn:hpccsystems:ws:wsworkunits", "BatchWU"));
+		 elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+		 elemField.setMinOccurs(0);
+		 elemField.setNillable(false);
+		 typeDesc.addFieldDesc(elemField);
+	 }
 
-    /**
-     * Get Custom Deserializer
-     */
-    public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanDeserializer(
-            _javaType, _xmlType, typeDesc);
-    }
+	 /**
+	  * Return type metadata object
+	  */
+	 public static org.apache.axis.description.TypeDesc getTypeDesc() {
+		 return typeDesc;
+	 }
+
+	 /**
+	  * Get Custom Serializer
+	  */
+	 public static org.apache.axis.encoding.Serializer getSerializer(
+			 java.lang.String mechType, 
+			 java.lang.Class _javaType,  
+			 javax.xml.namespace.QName _xmlType) {
+		 return 
+				 new  org.apache.axis.encoding.ser.BeanSerializer(
+						 _javaType, _xmlType, typeDesc);
+	 }
+
+	 /**
+	  * Get Custom Deserializer
+	  */
+	 public static org.apache.axis.encoding.Deserializer getDeserializer(
+			 java.lang.String mechType, 
+			 java.lang.Class _javaType,  
+			 javax.xml.namespace.QName _xmlType) {
+		 return 
+				 new  org.apache.axis.encoding.ser.BeanDeserializer(
+						 _javaType, _xmlType, typeDesc);
+	 }
 
 }

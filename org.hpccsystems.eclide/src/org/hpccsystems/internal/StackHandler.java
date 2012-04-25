@@ -25,14 +25,14 @@ public class StackHandler extends DefaultHandler {
 		Element(String tag, Attributes attributes) {
 			this.tag = tag;
 			this.attributes = attributes;
-			this.content = new StringBuilder();
+			content = new StringBuilder();
 		}
 
 		void appendContent(char[] ch, int start, int length) {
 			content.append(new String(ch, start, length));		
 		}
 	}
-	
+
 	protected Stack<Element> elementStack;
 
 	public StackHandler() {

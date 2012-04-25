@@ -27,19 +27,19 @@ public class TableEx extends Composite {
 
 	public TableEx(Composite parent) {
 		super(parent, SWT.NONE);
-		
+
 		FillLayout layout = new FillLayout();
 		setLayout(layout);
-		
+
 		table = new Table(this, SWT.VIRTUAL | SWT.FULL_SELECTION);
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 
-	    TableColumn tc = new TableColumn(table, SWT.NONE);
+		TableColumn tc = new TableColumn(table, SWT.NONE);
 		tc.setText("##");
 		tc.setWidth(30);
-		
+
 		table.addListener(SWT.SetData, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
@@ -53,8 +53,9 @@ public class TableEx extends Composite {
 				}
 				table.setRedraw(false);
 				if (row == 0) {
-					for (TableColumn tc : table.getColumns()) 
-				        tc.pack(); 
+					for (TableColumn tc : table.getColumns()) {
+						tc.pack();
+					} 
 				}
 				table.setRedraw(true);
 			}
@@ -62,9 +63,10 @@ public class TableEx extends Composite {
 	}
 
 	public void setResult(Result _result) {
-		if (_result == null)
+		if (_result == null) {
 			return;
-		
+		}
+
 		table.setRedraw(false);
 		table.setItemCount(0);
 		result = null;
@@ -74,9 +76,9 @@ public class TableEx extends Composite {
 		result = _result;
 
 		for (int i = 0; i < result.getColumnCount(); ++i) {
-		    TableColumn tc = new TableColumn(table, SWT.NONE, i + 1);
-		    tc.setText(result.getColumnName(i));
-		    tc.setWidth(120);
+			TableColumn tc = new TableColumn(table, SWT.NONE, i + 1);
+			tc.setText(result.getColumnName(i));
+			tc.setWidth(120);
 		}
 		table.setItemCount(result.getTotal().intValue());
 		table.setRedraw(true);

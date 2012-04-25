@@ -23,7 +23,7 @@ public class ECLBase extends Observable implements Serializable {
 	HashMap<String, String> attributes;
 
 	public ECLBase() {
-		this.attributes = new HashMap<String, String>();
+		attributes = new HashMap<String, String>();
 	}
 
 	public ECLBase(Attributes attributes) {

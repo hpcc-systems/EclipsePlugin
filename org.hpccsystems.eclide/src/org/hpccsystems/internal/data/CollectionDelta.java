@@ -20,26 +20,26 @@ public class CollectionDelta {
 	protected ArrayList<DataSingleton> added;
 	protected ArrayList<DataSingleton> unchanged;
 	protected ArrayList<DataSingleton> removed;
-	
+
 	public CollectionDelta(String cause) {
 		this.cause = cause;
-		this.before = new ArrayList<DataSingleton>();
+		before = new ArrayList<DataSingleton>();
 	}
 
 	public <T extends DataSingleton> CollectionDelta(String cause, Collection<T> before) {
 		this.cause = cause;
 		this.before = new ArrayList<DataSingleton>(before);
 	}
-	
+
 	public <T extends DataSingleton> CollectionDelta calcChanges(T[] after) {
 		return calcChanges(new ArrayList<T>(Arrays.asList(after)));		
 	}
-	
+
 	public <T extends DataSingleton> CollectionDelta calcChanges(Collection<T> after) {
 		new ArrayList<DataSingleton>(after);
-		this.added = new ArrayList<DataSingleton>();
-		this.unchanged = new ArrayList<DataSingleton>();
-		this.removed = new ArrayList<DataSingleton>(before);
+		added = new ArrayList<DataSingleton>();
+		unchanged = new ArrayList<DataSingleton>();
+		removed = new ArrayList<DataSingleton>(before);
 		for (T item : after) {
 			if (removed.contains(item)) {
 				unchanged.add(item);
@@ -50,11 +50,11 @@ public class CollectionDelta {
 		}
 		return this;
 	}
-	
+
 	public boolean hasChanged() {
 		return !removed.isEmpty() || !added.isEmpty();
 	}
-	
+
 	public boolean exists(DataSingleton item) {
 		return added.contains(item) || unchanged.contains(item);
 	}
@@ -66,7 +66,7 @@ public class CollectionDelta {
 	public boolean removeContains(DataSingleton item) {
 		return removed.contains(item);
 	}
-	
+
 	public ArrayList<DataSingleton> getAdded() {
 		return added;
 	}

@@ -59,7 +59,7 @@ public class ECLPerspective implements IPerspectiveFactory {
 
 		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, 0.75f, editorArea);
 		right.addView(IPageLayout.ID_OUTLINE);
-}
+	}
 
 	private void addActionSets() {
 		layout.addActionSet("org.eclipse.debug.ui.launchActionSet"); 

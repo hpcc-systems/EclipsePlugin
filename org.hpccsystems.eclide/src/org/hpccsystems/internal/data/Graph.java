@@ -27,13 +27,13 @@ public class Graph extends DataSingleton {
 		}
 		return graph;
 	}
-	
+
 	private Workunit workunit;
 	private ECLGraph info;
 	public enum Notification {
 		GRAPH
 	}
-	
+
 	private Graph(Workunit workunit, String name) {
 		this.workunit = workunit;
 		info = new ECLGraph();
@@ -53,15 +53,16 @@ public class Graph extends DataSingleton {
 	}
 
 	public State getStateID() {
-		if (info.getRunning() != null && info.getRunning()) 
+		if (info.getRunning() != null && info.getRunning()) {
 			return State.RUNNING;
-		else if (info.getComplete() != null && info.getComplete())
+		} else if (info.getComplete() != null && info.getComplete()) {
 			return State.COMPLETED;
-		else if (info.getFailed() != null && info.getFailed())
+		} else if (info.getFailed() != null && info.getFailed()) {
 			return State.FAILED;
+		}
 		return State.UNKNOWN;
 	}
-	
+
 	@Override
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID()) || workunit.isComplete();
@@ -102,16 +103,18 @@ public class Graph extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Graph) ) 
+		if ( !(aThat instanceof Graph) ) {
 			return false;
+		}
 		Graph that = (Graph)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(this.workunit, that.workunit) &&
-				EqualsUtil.areEqual(this.info.getName(), that.info.getName());
+		return 	EqualsUtil.areEqual(workunit, that.workunit) &&
+				EqualsUtil.areEqual(info.getName(), that.info.getName());
 	}
 
 	@Override

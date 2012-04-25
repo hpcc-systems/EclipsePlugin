@@ -29,12 +29,12 @@ public class TextItemView extends PlatformBaseView {
 	public Workunit getWorkunit() {
 		return workunit;
 	}
-	
+
 	@Override
 	public String getText() {
 		return "Submitted ECL";
 	}
-	
+
 	public String getQueryText() {
 		return workunit.getQueryText();
 	}

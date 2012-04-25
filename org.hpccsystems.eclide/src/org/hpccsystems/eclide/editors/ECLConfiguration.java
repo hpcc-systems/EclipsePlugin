@@ -41,19 +41,19 @@ public class ECLConfiguration extends TextSourceViewerConfiguration {
 
 	@Override
 	public IContentAssistant getContentAssistant(ISourceViewer sv) {
-        ContentAssistant ca = new ContentAssistant();
-        ca.enableAutoActivation(true);
-        
-        IContentAssistProcessor cap = new ECLCompletionProcessor();
-        ca.setContentAssistProcessor(cap, IDocument.DEFAULT_CONTENT_TYPE);
-        ca.setContentAssistProcessor(cap, ECLPartitionScanner.ECL_BODY);
-        ca.setInformationControlCreator(getInformationControlCreator(sv));
-        return ca;
-     }
+		ContentAssistant ca = new ContentAssistant();
+		ca.enableAutoActivation(true);
+
+		IContentAssistProcessor cap = new ECLCompletionProcessor();
+		ca.setContentAssistProcessor(cap, IDocument.DEFAULT_CONTENT_TYPE);
+		ca.setContentAssistProcessor(cap, ECLPartitionScanner.ECL_BODY);
+		ca.setInformationControlCreator(getInformationControlCreator(sv));
+		return ca;
+	}
 	@Override
 	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
 		//if (contentType.equals(ECLPartitionScanner.ECL_BODY)) {
-			return new ECLTextHover(sourceViewer, contentType);
+		return new ECLTextHover(sourceViewer, contentType);
 		//}
 		//return super.getTextHover(sourceViewer, contentType);
 	}
@@ -82,43 +82,43 @@ public class ECLConfiguration extends TextSourceViewerConfiguration {
 	@Override
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
 		return new String[] {
-			IDocument.DEFAULT_CONTENT_TYPE,
-			ECLPartitionScanner.ECL_JAVADOC,
-			ECLPartitionScanner.ECL_COMMENT,
-			ECLPartitionScanner.ECL_BODY };
+				IDocument.DEFAULT_CONTENT_TYPE,
+				ECLPartitionScanner.ECL_JAVADOC,
+				ECLPartitionScanner.ECL_COMMENT,
+				ECLPartitionScanner.ECL_BODY };
 	}
-	
-//	public ITextDoubleClickStrategy getDoubleClickStrategy(
-//		ISourceViewer sourceViewer,
-//		String contentType) {
-//		if (doubleClickStrategy == null)
-//			doubleClickStrategy = new ECLDoubleClickStrategy();
-//		return doubleClickStrategy;
-//	}
+
+	//	public ITextDoubleClickStrategy getDoubleClickStrategy(
+	//		ISourceViewer sourceViewer,
+	//		String contentType) {
+	//		if (doubleClickStrategy == null)
+	//			doubleClickStrategy = new ECLDoubleClickStrategy();
+	//		return doubleClickStrategy;
+	//	}
 
 	@Override
 	public IAnnotationHover getAnnotationHover(ISourceViewer sourceViewer) {
 		return super.getAnnotationHover(sourceViewer);
 	}
-	
+
 	protected ECLScanner getECLScanner() {
 		if (scanner == null) {
 			scanner = new ECLScanner(colorManager);
 			scanner.setDefaultReturnToken(
-				new Token(
-					new TextAttribute(
-						colorManager.getColor(IECLColorConstants.DEFAULT))));
+					new Token(
+							new TextAttribute(
+									colorManager.getColor(IECLColorConstants.DEFAULT))));
 		}
 		return scanner;
 	}
-	
+
 	protected ECLTagScanner getECLTagScanner() {
 		if (tagScanner == null) {
 			tagScanner = new ECLTagScanner(colorManager);
 			tagScanner.setDefaultReturnToken(
-				new Token(
-					new TextAttribute(
-						colorManager.getColor(IECLColorConstants.TAG))));
+					new Token(
+							new TextAttribute(
+									colorManager.getColor(IECLColorConstants.TAG))));
 		}
 		return tagScanner;
 	}
@@ -128,7 +128,7 @@ public class ECLConfiguration extends TextSourceViewerConfiguration {
 		PresentationReconciler reconciler = new PresentationReconciler();
 
 		DefaultDamagerRepairer dr =
-			new DefaultDamagerRepairer(getECLTagScanner());
+				new DefaultDamagerRepairer(getECLTagScanner());
 		reconciler.setDamager(dr, ECLPartitionScanner.ECL_BODY);
 		reconciler.setRepairer(dr, ECLPartitionScanner.ECL_BODY);
 
@@ -137,18 +137,18 @@ public class ECLConfiguration extends TextSourceViewerConfiguration {
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
 		NonRuleBasedDamagerRepairer ndr =
-			new NonRuleBasedDamagerRepairer(
-				new TextAttribute(
-					colorManager.getColor(IECLColorConstants.ECL_COMMENT)));
+				new NonRuleBasedDamagerRepairer(
+						new TextAttribute(
+								colorManager.getColor(IECLColorConstants.ECL_COMMENT)));
 		reconciler.setDamager(ndr, ECLPartitionScanner.ECL_COMMENT);
 		reconciler.setRepairer(ndr, ECLPartitionScanner.ECL_COMMENT);
 
 		ndr =
 				new NonRuleBasedDamagerRepairer(
-					new TextAttribute(
-						colorManager.getColor(IECLColorConstants.ECL_JAVADOC)));
-			reconciler.setDamager(ndr, ECLPartitionScanner.ECL_JAVADOC);
-			reconciler.setRepairer(ndr, ECLPartitionScanner.ECL_JAVADOC);
+						new TextAttribute(
+								colorManager.getColor(IECLColorConstants.ECL_JAVADOC)));
+		reconciler.setDamager(ndr, ECLPartitionScanner.ECL_JAVADOC);
+		reconciler.setRepairer(ndr, ECLPartitionScanner.ECL_JAVADOC);
 
 		return reconciler;
 	}

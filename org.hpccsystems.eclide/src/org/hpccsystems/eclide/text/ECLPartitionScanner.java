@@ -39,7 +39,7 @@ public class ECLPartitionScanner extends RuleBasedPartitionScanner {
 		//  Comments
 		rules.add(new EndOfLineRule("//", eclComment));
 		rules.add(new MultiLineRule("/*", "*/", eclComment));
-		
+
 		//  Actual ECL
 		rules.add(new ECLRule(eclBody));
 

@@ -13,7 +13,7 @@ import org.hpccsystems.internal.data.Data;
 
 public class ECLContentProvider implements ITreeContentProvider {
 	Viewer viewer;
-	
+
 	class ProjectClientToolsElement {
 		IProject project;
 		ClientTools clientTools;
@@ -22,7 +22,7 @@ public class ECLContentProvider implements ITreeContentProvider {
 			this.project = project;
 			this.clientTools = clientTools;
 		}
-		
+
 		IFolder getEclLibraryFolder() {
 			IFolder hiddenLibFolder = project.getFolder("ECL Library (" + clientTools.getVersion() + ")");
 			if (!hiddenLibFolder.exists()) {
@@ -35,7 +35,7 @@ public class ECLContentProvider implements ITreeContentProvider {
 			return hiddenLibFolder;
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
 	}

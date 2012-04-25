@@ -24,13 +24,13 @@ import org.eclipse.jface.text.presentation.IPresentationRepairer;
 import org.eclipse.swt.custom.StyleRange;
 
 public class NonRuleBasedDamagerRepairer
-	implements IPresentationDamager, IPresentationRepairer {
+implements IPresentationDamager, IPresentationRepairer {
 
 	/** The document this object works on */
 	protected IDocument fDocument;
 	/** The default text attribute if non is returned as data by the current token */
 	protected TextAttribute fDefaultTextAttribute;
-	
+
 	/**
 	 * Constructor for NonRuleBasedDamagerRepairer.
 	 */
@@ -59,8 +59,9 @@ public class NonRuleBasedDamagerRepairer
 	protected int endOfLineOf(int offset) throws BadLocationException {
 
 		IRegion info = fDocument.getLineInformationOfOffset(offset);
-		if (offset <= info.getOffset() + info.getLength())
+		if (offset <= info.getOffset() + info.getLength()) {
 			return info.getOffset() + info.getLength();
+		}
 
 		int line = fDocument.getLineOfOffset(offset);
 		try {
@@ -76,33 +77,34 @@ public class NonRuleBasedDamagerRepairer
 	 */
 	@Override
 	public IRegion getDamageRegion(
-		ITypedRegion partition,
-		DocumentEvent event,
-		boolean documentPartitioningChanged) {
+			ITypedRegion partition,
+			DocumentEvent event,
+			boolean documentPartitioningChanged) {
 		if (!documentPartitioningChanged) {
 			try {
 
 				IRegion info =
-					fDocument.getLineInformationOfOffset(event.getOffset());
+						fDocument.getLineInformationOfOffset(event.getOffset());
 				int start = Math.max(partition.getOffset(), info.getOffset());
 
 				int end =
-					event.getOffset()
+						event.getOffset()
 						+ (event.getText() == null
-							? event.getLength()
-							: event.getText().length());
+						? event.getLength()
+								: event.getText().length());
 
 				if (info.getOffset() <= end
-					&& end <= info.getOffset() + info.getLength()) {
+						&& end <= info.getOffset() + info.getLength()) {
 					// optimize the case of the same line
 					end = info.getOffset() + info.getLength();
-				} else
+				} else {
 					end = endOfLineOf(end);
+				}
 
 				end =
-					Math.min(
-						partition.getOffset() + partition.getLength(),
-						end);
+						Math.min(
+								partition.getOffset() + partition.getLength(),
+								end);
 				return new Region(start, end - start);
 
 			} catch (BadLocationException x) {
@@ -117,13 +119,13 @@ public class NonRuleBasedDamagerRepairer
 	 */
 	@Override
 	public void createPresentation(
-		TextPresentation presentation,
-		ITypedRegion region) {
+			TextPresentation presentation,
+			ITypedRegion region) {
 		addRange(
-			presentation,
-			region.getOffset(),
-			region.getLength(),
-			fDefaultTextAttribute);
+				presentation,
+				region.getOffset(),
+				region.getLength(),
+				fDefaultTextAttribute);
 	}
 
 	/**
@@ -135,17 +137,18 @@ public class NonRuleBasedDamagerRepairer
 	 * @param attr the attribute describing the style of the range to be styled
 	 */
 	protected void addRange(
-		TextPresentation presentation,
-		int offset,
-		int length,
-		TextAttribute attr) {
-		if (attr != null)
+			TextPresentation presentation,
+			int offset,
+			int length,
+			TextAttribute attr) {
+		if (attr != null) {
 			presentation.addStyleRange(
-				new StyleRange(
-					offset,
-					length,
-					attr.getForeground(),
-					attr.getBackground(),
-					attr.getStyle()));
+					new StyleRange(
+							offset,
+							length,
+							attr.getForeground(),
+							attr.getBackground(),
+							attr.getStyle()));
+		}
 	}
 }

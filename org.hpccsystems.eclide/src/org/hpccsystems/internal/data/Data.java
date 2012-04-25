@@ -23,14 +23,14 @@ import org.eclipse.debug.core.ILaunchConfigurationListener;
 
 public class Data extends Observable {
 	private static Data singletonFactory;
-	
+
 	private Collection<Platform> platforms;	
 	private Collection<ClientTools> clientTools;	
-	
+
 	//  Singleton Pattern
 	private Data() {
-		this.platforms = new ArrayList<Platform>();
-		this.clientTools = new ArrayList<ClientTools>();
+		platforms = new ArrayList<Platform>();
+		clientTools = new ArrayList<ClientTools>();
 
 		//  Load platforms  ---
 		ILaunchConfiguration[] configs;
@@ -38,12 +38,14 @@ public class Data extends Observable {
 			configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
 			for(int i = 0; i < configs.length; ++i) {
 				Platform p = GetPlatform(configs[i]);
-				if (p != null && !platforms.contains(p))
+				if (p != null && !platforms.contains(p)) {
 					platforms.add(p);
+				}
 
 				ClientTools ct = GetClientTools(configs[i]);
-				if (!clientTools.contains(ct))
+				if (!clientTools.contains(ct)) {
 					clientTools.add(ct);
+				}
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -51,7 +53,7 @@ public class Data extends Observable {
 
 		//  Monitor platforms  ---
 		DebugPlugin.getDefault().getLaunchManager().addLaunchConfigurationListener(new ILaunchConfigurationListener() {
-			
+
 			@Override
 			public void launchConfigurationRemoved(ILaunchConfiguration configuration) {
 				Platform p = GetPlatform(configuration);
@@ -61,13 +63,13 @@ public class Data extends Observable {
 				}
 				notifyObservers();
 			}
-			
+
 			@Override
 			public void launchConfigurationChanged(ILaunchConfiguration configuration) {
 				//  GetPlatform will update config information
 				GetPlatform(configuration);
 			}
-			
+
 			@Override
 			public void launchConfigurationAdded(ILaunchConfiguration configuration) {
 				Platform p = GetPlatform(configuration);
@@ -78,7 +80,7 @@ public class Data extends Observable {
 				notifyObservers();
 			}
 		});
-		
+
 		setChanged();
 	}
 
@@ -88,12 +90,12 @@ public class Data extends Observable {
 		}
 		return singletonFactory;
 	}
-	
+
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}
-	
+
 	//  Platform  ---
 	public Platform GetPlatform(ILaunchConfiguration launchConfiguration) {
 		Platform retVal = null;
@@ -103,16 +105,16 @@ public class Data extends Observable {
 			ip = launchConfiguration.getAttribute(Platform.P_IP, "");
 		} catch (CoreException e) {
 		} 
-		
+
 		try {
 			port = launchConfiguration.getAttribute(Platform.P_PORT, 8010);
 		} catch (CoreException e) {
 		}
-		
+
 		if (port == 0) {
 			port = 8010;
 		}
-		
+
 		if (!ip.isEmpty() && port != 0) {
 			retVal = Platform.get(ip, port);
 			retVal.update(launchConfiguration);	
@@ -144,7 +146,7 @@ public class Data extends Observable {
 		}
 		return workunits;
 	}
-	
+
 	//  ClientTools  ---
 	public ClientTools[] GetClientTools() {
 		return clientTools.toArray(new ClientTools[0]);
@@ -163,7 +165,7 @@ public class Data extends Observable {
 		}
 		return retVal;
 	}
-	
+
 	public ClientTools GetClientTools(IFile file) {
 		ClientTools retVal = null;
 		ILaunchConfiguration launchConfiguration = DebugPlugin.getDefault().getLaunchManager().getLaunchConfiguration(file);
@@ -171,8 +173,9 @@ public class Data extends Observable {
 			retVal = GetClientTools(launchConfiguration);
 		}
 
-		if (retVal != null)
+		if (retVal != null) {
 			return retVal;
+		}
 
 		for(ClientTools ct : clientTools) {
 			if (retVal == null) {

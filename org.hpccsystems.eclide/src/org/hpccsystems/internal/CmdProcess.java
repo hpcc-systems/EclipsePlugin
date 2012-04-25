@@ -29,7 +29,7 @@ public class CmdProcess {
 		void ProcessOut(BufferedReader outReader);
 		void ProcessErr(BufferedReader errReader);
 	}
-	
+
 	IPath workingPath;
 	IPath additionalPath;
 	private IProcessOutput handler;
@@ -37,39 +37,27 @@ public class CmdProcess {
 	MessageConsoleStream consoleOut;	
 
 	String QUOTE = "";
-	
+
 	public CmdProcess(IPath workingPath, IPath additionalPath, IProcessOutput handler, MessageConsoleStream consoleOut) {
-		if (workingPath == null)
+		if (workingPath == null) {
 			workingPath = additionalPath;
+		}
 		this.workingPath = workingPath;
 		this.additionalPath = additionalPath;
 		this.handler = handler;
 		this.consoleOut = consoleOut;
 		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 	}
-	
-	private MessageConsole FindConsole(final String name) {
-		ConsolePlugin plugin = ConsolePlugin.getDefault();
-		IConsoleManager conMan = plugin.getConsoleManager();
-		IConsole[] existing = conMan.getConsoles();
-		for (int i = 0; i < existing.length; i++)
-			if (name.equals(existing[i].getName()))
-				return (MessageConsole) existing[i];
-		//no console found, so create a new one
-		MessageConsole myConsole = new MessageConsole(name, null);
-		conMan.addConsoles(new IConsole[]{myConsole});
-		return myConsole;
-	}
-	
+
 	public void exec(String command, String commonArgs, String baseArgs) {
 		CmdArgs cmdArgs = new CmdArgs(command, commonArgs, baseArgs);
 		exec(cmdArgs);
 	}
-	
+
 	public void exec(CmdArgs args) {
 		exec(args, null, false);
 	}
-	
+
 	public void exec(CmdArgs args, final IFile target, boolean eclplusArgs) {
 		args.Print(consoleOut, eclplusArgs);
 		List<String> argList = args.Get(eclplusArgs);
@@ -91,7 +79,7 @@ public class CmdProcess {
 
 			final BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-			
+
 			Runnable readStdIn = new Runnable() {
 				@Override
 				public void run() {

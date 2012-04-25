@@ -31,7 +31,7 @@ public class ECLTextHover implements ITextHover {
 	ECLTextHover(ISourceViewer sourceViewer, String contentType) {
 		this.sourceViewer = sourceViewer;
 		this.contentType = contentType;
-		this.meta = ECLGlobalMeta.get();
+		meta = ECLGlobalMeta.get();
 	}
 
 	@Override
@@ -43,8 +43,9 @@ public class ECLTextHover implements ITextHover {
 		try {
 			for (int n = offset-1; n >= 0; n--) {
 				char c = doc.getChar(n);
-				if (!Character.isJavaIdentifierPart(c) && c != '.' && c != '#')
+				if (!Character.isJavaIdentifierPart(c) && c != '.' && c != '#') {
 					return n + 1;
+				}
 			}
 		} catch (BadLocationException e) {
 			// ... log the exception ...
@@ -56,8 +57,9 @@ public class ECLTextHover implements ITextHover {
 		try {
 			for (int n = offset; n < doc.getLength(); ++n) {
 				char c = doc.getChar(n);
-				if (!Character.isJavaIdentifierPart(c) && c != '.')
+				if (!Character.isJavaIdentifierPart(c) && c != '.') {
 					return n;
+				}
 			}
 		} catch (BadLocationException e) {
 			// ... log the exception ...
@@ -70,7 +72,7 @@ public class ECLTextHover implements ITextHover {
 		int lastOffset = getLastCharOffset(doc, offset);
 		try {
 			return doc.get(firstOffset,  lastOffset - firstOffset);
-			
+
 		} catch (BadLocationException e) {
 			// ... log the exception ...
 		}
@@ -84,17 +86,18 @@ public class ECLTextHover implements ITextHover {
 		if (doc instanceof ECLDocument) {
 			IFile file = ((ECLDocument)doc).getFile();
 			source = meta.getSource(file.getLocation());
-			if (source == null)
+			if (source == null) {
 				return "---  NO META  ---";
+			}
 		}
 
 		String text = getHoverWord(doc, hoverRegion.getOffset());
 		StringBuilder hover = new StringBuilder("---  SEARCH INFO  ---");
 		hover.append("\nSearch For:  " + text);
-		
+
 		ECLMetaNode context = source.getContext(hoverRegion.getOffset());
 		hover.append("\nContext:  " + context.getName());
-		
+
 		ECLMetaNode found = context.findDefinition(text, false);
 		if (found != null) {
 			hover.append("\n---  MATCH  ---");
@@ -116,8 +119,8 @@ public class ECLTextHover implements ITextHover {
 				hover.append("\nDefinition:  " + mdef.getName() + " (" + mdef.getOffset() + ", " + mdef.getLength() + ")");
 			}
 		}
-		*/
-		
+		 */
+
 		return hover.toString();
 	}
 

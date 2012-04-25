@@ -37,14 +37,14 @@ import org.hpccsystems.eclide.ui.viewer.ResultViewer;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitsViewer;
 
 public class Eclipse {
-	
+
 	public static final String MARKER_TYPE = "org.hpccsystems.eclide.eclProblem";
 
 	//  Navigator Helpers  ---
 	static public IWorkspaceRoot getWorkspaceRoot() {
 		return ResourcesPlugin.getWorkspace().getRoot();
 	}
-	
+
 	static public IResource findResource(IPath path) {
 		return getWorkspaceRoot().getFileForLocation(path);
 	}
@@ -59,35 +59,40 @@ public class Eclipse {
 	}
 
 	static public IProject findProject(String name) {
-		if (name.isEmpty())
+		if (name.isEmpty()) {
 			return null;
+		}
 
 		return getWorkspaceRoot().getProject(name);
 	}
 
 	static public IFile findFile(IProject project, String name) {
-		if (name.isEmpty())
+		if (name.isEmpty()) {
 			return null;
+		}
 
 		return project.getFile(name);
 	}
-	
+
 	static public IFile findFile(String name) {
-		if (name.isEmpty())
+		if (name.isEmpty()) {
 			return null;
+		}
 
 		IProject[] projects = getWorkspaceRoot().getProjects();
-        for (int i = 0; i < projects.length; i++) {
-        	IFile retVal = findFile(projects[i], name);
-        	if (retVal != null)
-        		return retVal;
-        }
-        return null;
+		for (int i = 0; i < projects.length; i++) {
+			IFile retVal = findFile(projects[i], name);
+			if (retVal != null) {
+				return retVal;
+			}
+		}
+		return null;
 	}
 
 	static public IFile findFile(IPath path) {
-		if (path.isEmpty())
+		if (path.isEmpty()) {
 			return null;
+		}
 
 		return getWorkspaceRoot().getFile(path);
 	}
@@ -97,9 +102,11 @@ public class Eclipse {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();
 		IConsole[] existing = conMan.getConsoles();
-		for (int i = 0; i < existing.length; i++)
-			if (name.equals(existing[i].getName()))
+		for (int i = 0; i < existing.length; i++) {
+			if (name.equals(existing[i].getName())) {
 				return (MessageConsole) existing[i];
+			}
+		}
 		//no console found, so create a new one
 		MessageConsole myConsole = new MessageConsole(name, null);
 		conMan.addConsoles(new IConsole[]{myConsole});
@@ -132,15 +139,15 @@ public class Eclipse {
 			showHtmlViewer();
 		}
 		retVal = HtmlViewer.getDefault();
-		*/
+		 */
 		return retVal;
 	}
-	
+
 	static public WorkunitsViewer findWorkunitsViewer() {
 		WorkunitsViewer retVal = WorkunitsViewer.getDefault();
 		return retVal;
 	}
-	
+
 	static public void showResultViewer() {
 		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
 		for (int i = 0; i < windows.length; ++i) {
@@ -167,10 +174,10 @@ public class Eclipse {
 			showResultViewer();
 		}
 		retVal = ResultViewer.getDefault();
-		*/
+		 */
 		return retVal;
 	}
-	
+
 	//  Marker Helpers  ---
 	static public void addMarker(IResource resolvedFile, int severity, String code, String message, int lineNumber, int colNumber, boolean oneErrorOnly)
 	{
@@ -187,16 +194,17 @@ public class Eclipse {
 				try {
 					IMarker[] markers = resolvedFile.findMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
 					for (int i = 0; i < markers.length; ++i) {
-						if (oneErrorOnly && markers[i].getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR))
+						if (oneErrorOnly && markers[i].getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR)) {
 							return;
-						
+						}
+
 						if (markers[i].getAttribute(IMarker.SEVERITY).equals(severity) && 
 								markers[i].getAttribute(IMarker.MESSAGE).equals(message) && 
 								markers[i].getAttribute(IMarker.LINE_NUMBER).equals(lineNumber)) {
 							return;
 						}
 					}
-		
+
 					IMarker marker = resolvedFile.createMarker(MARKER_TYPE);
 					marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
 					marker.setAttribute(IMarker.MESSAGE, message);
@@ -241,7 +249,7 @@ public class Eclipse {
 		}
 		return dirtyres.toArray(new IResource[dirtyres.size()]);
 	}
-	
+
 	public static void doSaveDirty(IProject project)
 	{
 		IProject[] projects = new IProject[1];

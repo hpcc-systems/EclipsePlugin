@@ -22,12 +22,13 @@ import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 public class FileSprayWorkunit extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
 	public static FileSprayWorkunit get(Platform platform, String wuid) {
-		if (wuid == null || wuid.isEmpty())
+		if (wuid == null || wuid.isEmpty()) {
 			return null;
-		
+		}
+
 		return (FileSprayWorkunit)All.get(new FileSprayWorkunit(platform, wuid));
 	}
-	
+
 	private Platform platform;
 	private DFUWorkunit info;
 	public enum Notification {
@@ -36,11 +37,11 @@ public class FileSprayWorkunit extends DataSingleton {
 
 	FileSprayWorkunit(Platform platform, String id) {
 		this.platform = platform;
-		this.info = new DFUWorkunit();
-		this.info.setID(id);
+		info = new DFUWorkunit();
+		info.setID(id);
 		setChanged();
 	}
-	
+
 	public Platform getPlatform() {
 		return platform;
 	}
@@ -60,7 +61,7 @@ public class FileSprayWorkunit extends DataSingleton {
 6    DFUstate_finished,
 7    DFUstate_monitoring,
 8    DFUstate_aborting
-	
+
 	WUStateNoLongerOnServer 999
 	 */	
 	public State getStateID() {
@@ -86,38 +87,46 @@ public class FileSprayWorkunit extends DataSingleton {
 	}
 
 	public LogicalFile getLogicalFile() {
-		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
+		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null) {
 			fullRefresh();
-		
-		String logicalFileName = info.getSourceLogicalName();
-		if (logicalFileName == null || logicalFileName.isEmpty())
-			logicalFileName = info.getDestLogicalName();
+		}
 
-		if (logicalFileName == null || logicalFileName.isEmpty())
+		String logicalFileName = info.getSourceLogicalName();
+		if (logicalFileName == null || logicalFileName.isEmpty()) {
+			logicalFileName = info.getDestLogicalName();
+		}
+
+		if (logicalFileName == null || logicalFileName.isEmpty()) {
 			return null;
-		
+		}
+
 		return getLogicalFile(logicalFileName);
 	}
 
 	public String getFilePath() {
-		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
+		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null) {
 			fullRefresh();
+		}
 
 		String filePath = info.getSourceFilePath();
-		if (filePath == null || filePath.isEmpty())
+		if (filePath == null || filePath.isEmpty()) {
 			filePath = info.getDestFilePath();
+		}
 
-		if (filePath == null || filePath.isEmpty())
+		if (filePath == null || filePath.isEmpty()) {
 			return null;
-		
+		}
+
 		return filePath;
 	}
-	
+
 	public boolean isDespray() {
-		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null)
+		if (info.getSourceLogicalName() == null || info.getDestLogicalName() == null) {
 			fullRefresh();
-		if (info.getSourceLogicalName() != null && info.getDestFilePath() != null)
+		}
+		if (info.getSourceLogicalName() != null && info.getDestFilePath() != null) {
 			return true;
+		}
 		return false;
 	}
 
@@ -125,7 +134,7 @@ public class FileSprayWorkunit extends DataSingleton {
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID());
 	}
-	
+
 	public void refreshState() {
 		fullRefresh();
 	}
@@ -191,11 +200,11 @@ public class FileSprayWorkunit extends DataSingleton {
 		}
 		return false;
 	}
-	
+
 	synchronized boolean updateLogicalFiles(DFUWorkunit wu) {
 		if (wu != null && info.getID().equals(wu.getID()) && (
-					EqualsUtil.hasChanged(info.getSourceLogicalName(), wu.getSourceLogicalName()) ||
-					EqualsUtil.hasChanged(info.getDestLogicalName(), wu.getDestLogicalName()) 
+				EqualsUtil.hasChanged(info.getSourceLogicalName(), wu.getSourceLogicalName()) ||
+				EqualsUtil.hasChanged(info.getDestLogicalName(), wu.getDestLogicalName()) 
 				)) {
 			info = wu;
 			setChanged();
@@ -203,19 +212,21 @@ public class FileSprayWorkunit extends DataSingleton {
 		}
 		return false;
 	}
-	
+
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof FileSprayWorkunit) ) 
+		if ( !(aThat instanceof FileSprayWorkunit) ) {
 			return false;
+		}
 		FileSprayWorkunit that = (FileSprayWorkunit)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return EqualsUtil.areEqual(this.platform, that.platform) &&
-				EqualsUtil.areEqual(this.info.getID(), that.info.getID());
+		return EqualsUtil.areEqual(platform, that.platform) &&
+				EqualsUtil.areEqual(info.getID(), that.info.getID());
 	}
 
 	@Override

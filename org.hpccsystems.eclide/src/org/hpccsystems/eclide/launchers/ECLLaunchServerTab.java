@@ -49,7 +49,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			} else if (source == fAddressText) {
 			}
 		}
-		
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
@@ -60,10 +60,10 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			}
 		}
 	}
-	
+
 	private WidgetListener fListener = new WidgetListener();
-	
-    Image image;
+
+	Image image;
 
 	private Button disableButton;
 	protected Text fIPText;
@@ -99,7 +99,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		fClusterText = SWTFactory.createSingleText(group, 1);
 		fClusterText.addModifyListener(fListener);
 	}
-	
+
 	protected void createCredentialsEditor(Composite parent) {
 		Group group = SWTFactory.createGroup(parent, "Credentials:", 2, 1, GridData.FILL_HORIZONTAL);
 		SWTFactory.createLabel(group, "User:  ", 1);
@@ -121,11 +121,11 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 		browser = new Browser(group, SWT.BORDER);
 		browser.setUrl("about:blank");
-    	GridData gd = new GridData(GridData.FILL_BOTH);
-    	gd.horizontalSpan = 3;
-    	browser.setLayoutData(gd);
-    	browser.addAuthenticationListener(new AuthenticationListener() {
-			
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 3;
+		browser.setLayoutData(gd);
+		browser.addAuthenticationListener(new AuthenticationListener() {
+
 			@Override
 			public void authenticate(AuthenticationEvent event) {
 				// TODO Auto-generated method stub
@@ -139,20 +139,20 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	public final void createControl(Composite parent) {
 		Composite projComp = SWTFactory.createComposite(parent, parent.getFont(), 1, 1, GridData.FILL_BOTH); 
 		((GridLayout)projComp.getLayout()).verticalSpacing = 0;
-		
+
 		createVerticalSpacer(projComp, 1);
 		createServerEditor(projComp);
 		createCredentialsEditor(projComp);		
 		createVerticalSpacer(projComp, 1);
 		createBrowser(projComp);
 		setControl(projComp);
-		
+
 	}
-	
+
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-//		ip.setText("localhost");
-//		cluster.setText("hthor");
+		//		ip.setText("localhost");
+		//		cluster.setText("hthor");
 	}
 
 	@Override
@@ -189,12 +189,12 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	}
 
 	protected void handleProjectButtonSelected() {
-//		IJavaProject project = chooseJavaProject();
-//		if (project == null) {
-//			return;
-//		}
-//		String projectName = project.getElementName();
-//		fProjText.setText(projectName);		
+		//		IJavaProject project = chooseJavaProject();
+		//		if (project == null) {
+		//			return;
+		//		}
+		//		String projectName = project.getElementName();
+		//		fProjText.setText(projectName);		
 	}
 
 	void refreshAddress() {
@@ -203,7 +203,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		url.append(":" + fPortText.getText() + "/");
 		fAddressText.setText(url.toString());
 	}
-	
+
 	void refreshBrowser() {
 		browser.addProgressListener(new ProgressAdapter() {
 			@Override
@@ -221,11 +221,11 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		return "HPCC Platform";
 	}
 
-    @Override
+	@Override
 	public Image getImage() {
-        if (image == null) {
-        	image = Activator.getImage("icons/releng_gears.gif"); //$NON-NLS-1$
-        }
-        return image;
-    }
+		if (image == null) {
+			image = Activator.getImage("icons/releng_gears.gif"); //$NON-NLS-1$
+		}
+		return image;
+	}
 }

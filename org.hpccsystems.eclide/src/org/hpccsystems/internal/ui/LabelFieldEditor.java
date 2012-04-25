@@ -36,14 +36,14 @@ public class LabelFieldEditor extends FieldEditor {
 	@Override
 	protected void doFillIntoGrid(Composite parent, int numColumns) {
 		label = getLabelControl(parent);
-		
+
 		GridData gridData = new GridData();
 		gridData.horizontalSpan = numColumns;
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.grabExcessHorizontalSpace = false;
 		gridData.verticalAlignment = GridData.CENTER;
 		gridData.grabExcessVerticalSpace = false;
-		
+
 		label.setLayoutData(gridData);
 	}
 

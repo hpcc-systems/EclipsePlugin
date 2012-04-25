@@ -43,9 +43,10 @@ import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 public class Workunit extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
 	public static Workunit get(Platform platform, String wuid) {
-		if (wuid == null || wuid.isEmpty())
+		if (wuid == null || wuid.isEmpty()) {
 			return null;
-		
+		}
+
 		return (Workunit)All.get(new Workunit(platform, wuid));
 	}
 
@@ -57,7 +58,7 @@ public class Workunit extends DataSingleton {
 	private Collection<Graph> graphs;
 	private Collection<LogicalFile> sourceFiles;
 	private Map<String, String> applicationValues;
-	
+
 	public enum Notification {
 		WORKUNIT,
 		CLUSTER,
@@ -73,14 +74,14 @@ public class Workunit extends DataSingleton {
 		this.platform = platform;
 		info = new ECLWorkunit();
 		info.setWuid(wuid); 		
-		this.resultViews = new ArrayList<String>(); 		
-		this.results = new ArrayList<Result>(); 		
-		this.graphs = new ArrayList<Graph>(); 		
-		this.sourceFiles = new ArrayList<LogicalFile>(); 		
-		this.applicationValues = new HashMap<String, String>();
+		resultViews = new ArrayList<String>(); 		
+		results = new ArrayList<Result>(); 		
+		graphs = new ArrayList<Graph>(); 		
+		sourceFiles = new ArrayList<LogicalFile>(); 		
+		applicationValues = new HashMap<String, String>();
 		setChanged();
 	}
-	
+
 	public Platform getPlatform() {
 		return platform;
 	}
@@ -90,16 +91,19 @@ public class Workunit extends DataSingleton {
 	}
 
 	public String getQueryText() {
-		if (info.getQuery() == null)
+		if (info.getQuery() == null) {
 			fullRefresh(false, false, false, false);
-		if (info.getQuery() != null)
+		}
+		if (info.getQuery() != null) {
 			return info.getQuery().getText();
+		}
 		return "";
 	}
-	
+
 	public Object getClusterName() {
-		if (info.getCluster() == null)
+		if (info.getCluster() == null) {
 			fullRefresh(false, false, false, false);
+		}
 		return info.getCluster();
 	}
 
@@ -121,7 +125,7 @@ public class Workunit extends DataSingleton {
 	WUStateDebugPaused,14
 	WUStateDebugRunning,15
 	WUStateSize
-	
+
 	WUStateNoLongerOnServer 999
 	 */
 
@@ -150,23 +154,27 @@ public class Workunit extends DataSingleton {
 	}
 
 	public String getState() {
-		if (info.getState() == null)
+		if (info.getState() == null) {
 			fastRefresh();
+		}
 		return info.getState() != null ? info.getState() : "Unknown";
 
 	}
-	
+
 	public String[] getResultViews() {
-		if (resultViews == null)
+		if (resultViews == null) {
 			fullRefresh(false, true, false, false);
+		}
 		return resultViews.toArray(new String[0]);
 	}
 
 	public String getApplicationValue(String key) {
-		if (applicationValues.isEmpty())
+		if (applicationValues.isEmpty()) {
 			fullRefresh(false, false, false, true);
-		if (applicationValues.containsKey(key))
+		}
+		if (applicationValues.containsKey(key)) {
 			return applicationValues.get(key);
+		}
 		return "";
 	}
 	//  Results  ---
@@ -221,11 +229,12 @@ public class Workunit extends DataSingleton {
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID());
 	}
-	
+
 	public String getJobname() {
 		String retVal = info.getJobname();
-		if (retVal == null)
+		if (retVal == null) {
 			return "";
+		}
 		return retVal;
 	}
 	//  Actions  ---
@@ -237,7 +246,7 @@ public class Workunit extends DataSingleton {
 			wuids[0] = info.getWuid();
 			request.setWuids(wuids);
 			try {
-				WUAbortResponse response = service.WUAbort(request);
+				service.WUAbort(request);
 				refreshState();
 			} catch (ArrayOfEspException e) {
 				assert false;
@@ -256,7 +265,7 @@ public class Workunit extends DataSingleton {
 			wuids[0] = info.getWuid();
 			request.setWuids(wuids);
 			try {
-				WUDeleteResponse response = service.WUDelete(request);
+				service.WUDelete(request);
 				refreshState();
 			} catch (ArrayOfEspException e) {
 				assert false;
@@ -266,7 +275,7 @@ public class Workunit extends DataSingleton {
 			}
 		}
 	}
-	
+
 
 	public void resubmit(boolean restart, boolean clone) {
 		WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
@@ -278,7 +287,7 @@ public class Workunit extends DataSingleton {
 			wuids[0] = info.getWuid();
 			request.setWuids(wuids);
 			try {
-				WUResubmitResponse response = service.WUResubmit(request);
+				service.WUResubmit(request);
 				refreshState();
 			} catch (ArrayOfEspException e) {
 				assert false;
@@ -292,7 +301,7 @@ public class Workunit extends DataSingleton {
 	public void resubmit() {
 		resubmit(false, false);
 	}
-	
+
 	public void restart() {
 		resubmit(true, false);
 	}
@@ -307,7 +316,7 @@ public class Workunit extends DataSingleton {
 			WUPublishWorkunit request = new WUPublishWorkunit();
 			request.setWuid(info.getWuid());
 			try {
-				WUPublishWorkunitResponse response = service.WUPublishWorkunit(request);
+				service.WUPublishWorkunit(request);
 				refreshState();
 			} catch (ArrayOfEspException e) {
 				assert false;
@@ -332,8 +341,9 @@ public class Workunit extends DataSingleton {
 			request.setCount(1);
 			try {
 				WUQueryResponse response = service.WUQuery(request);
-				if (response.getWorkunits() != null && response.getWorkunits().length == 1)
-					update(response.getWorkunits()[0]);		
+				if (response.getWorkunits() != null && response.getWorkunits().length == 1) {
+					update(response.getWorkunits()[0]);
+				}		
 			} catch (ArrayOfEspException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -342,8 +352,9 @@ public class Workunit extends DataSingleton {
 				e.printStackTrace();
 			}
 		}
-		if (previousState != getStateID())
+		if (previousState != getStateID()) {
 			fullRefresh();
+		}
 	}
 
 	@Override
@@ -373,12 +384,13 @@ public class Workunit extends DataSingleton {
 							break;
 						}
 					}
-					
+
 				} else {
 					update(response.getWorkunit());
 				}
-				if (response.getResultViews() != null)
-					resultViews = Arrays.asList(response.getResultViews()); 
+				if (response.getResultViews() != null) {
+					resultViews = Arrays.asList(response.getResultViews());
+				} 
 			} catch (ArrayOfEspException e) {
 				assert false;
 				e.printStackTrace();
@@ -450,7 +462,7 @@ public class Workunit extends DataSingleton {
 		}
 		return false;
 	}
-	
+
 	synchronized boolean updateJobname(String jobname) {
 		if (jobname != null && EqualsUtil.hasChanged(info.getJobname(), jobname)) {
 			info.setJobname(jobname);
@@ -459,7 +471,7 @@ public class Workunit extends DataSingleton {
 		}
 		return false;
 	}
-	
+
 	synchronized boolean updateQuery(ECLQuery q) {
 		if (q != null && EqualsUtil.hasChanged(info.getQuery(), q)) {
 			info.setQuery(q);
@@ -537,16 +549,18 @@ public class Workunit extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Workunit) ) 
+		if ( !(aThat instanceof Workunit) ) {
 			return false;
+		}
 		Workunit that = (Workunit)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return EqualsUtil.areEqual(this.platform, that.platform) &&
-				EqualsUtil.areEqual(this.info.getWuid(), that.info.getWuid());
+		return EqualsUtil.areEqual(platform, that.platform) &&
+				EqualsUtil.areEqual(info.getWuid(), that.info.getWuid());
 	}
 
 	@Override

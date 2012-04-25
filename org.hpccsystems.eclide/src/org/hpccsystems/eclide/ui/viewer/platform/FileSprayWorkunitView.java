@@ -31,8 +31,8 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 
 	FileSprayWorkunitView(TreeItemOwner treeViewer, PlatformBaseView parent, FileSprayWorkunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 		refreshChildren();
 	}
 
@@ -42,8 +42,9 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 
 	@Override
 	public String getText() {
-		if (workunit.isComplete()) 
+		if (workunit.isComplete()) {
 			return workunit.getID();
+		}
 		return workunit.getID() + " (" + workunit.getStateID() + ")";
 	}
 
@@ -101,7 +102,7 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 		}
 		return null;
 	}
-	
+
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("FileSpray", "GetDFUWorkunit", "wuid=" + workunit.getID());
@@ -111,32 +112,37 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 	public void refreshItem() {
 		workunit.refreshState();		
 	}
-	
+
 	@Override
 	public void refreshChildren() {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof FileSprayWorkunitView)
+			if (parent instanceof FileSprayWorkunitView) {
 				if (workunit == ((FileSprayWorkunitView)parent).workunit) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
+			}
 			parent = parent.getParent();
 		}
 		if (retVal.isEmpty()) {
 			LogicalFile lf = workunit.getLogicalFile();
 			String filePath = workunit.getFilePath();
 			if (workunit.isDespray()) {
-				if (lf != null)
+				if (lf != null) {
 					retVal.add(new LogicalFileView(treeViewer, this, platform, lf));
-				if (filePath != null)
+				}
+				if (filePath != null) {
 					retVal.add(new LandingZoneFileView(treeViewer, this, platform, filePath));
+				}
 			} else {
-				if (filePath != null)
+				if (filePath != null) {
 					retVal.add(new LandingZoneFileView(treeViewer, this, platform, filePath));
-				if (lf != null)
+				}
+				if (lf != null) {
 					retVal.add(new LogicalFileView(treeViewer, this, platform, lf));
+				}
 			}
 		}
 		children.set(retVal.toArray(new ItemView[0]));

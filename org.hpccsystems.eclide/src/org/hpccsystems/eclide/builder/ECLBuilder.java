@@ -31,17 +31,17 @@ import org.hpccsystems.internal.data.Data;
 public class ECLBuilder extends IncrementalProjectBuilder {
 	class ECLDeltaVisitor implements IResourceDeltaVisitor {
 		private IProgressMonitor monitor;
-		
+
 		ECLDeltaVisitor(IProgressMonitor monitor) {
 			this.monitor = monitor;
 		}
-		
+
 		@Override
 		public boolean visit(IResourceDelta delta) throws CoreException {
 			if (monitor.isCanceled()) {
 				return false;
 			}
-			
+
 			IResource resource = delta.getResource();
 			switch (delta.getKind()) {
 			case IResourceDelta.ADDED:
@@ -102,9 +102,10 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	void checkItem(IResource resource, IProgressMonitor monitor) {
 		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
 			IFile file = (IFile) resource;
-			if (checkedFiles.contains(file))
+			if (checkedFiles.contains(file)) {
 				return;
-			
+			}
+
 			checkedFiles.add(file);
 			monitor.subTask(file.getName());
 			ClientTools ct = Data.get().GetClientTools(file);

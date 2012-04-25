@@ -18,9 +18,9 @@
 package org.hpccsystems.ws.WsAttributes;
 
 public interface WsAttributes extends javax.xml.rpc.Service {
-    public java.lang.String getWsAttributesServiceSoapAddress();
+	public java.lang.String getWsAttributesServiceSoapAddress();
 
-    public org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap getWsAttributesServiceSoap() throws javax.xml.rpc.ServiceException;
+	public org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap getWsAttributesServiceSoap() throws javax.xml.rpc.ServiceException;
 
-    public org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap getWsAttributesServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+	public org.hpccsystems.ws.WsAttributes.WsAttributesServiceSoap getWsAttributesServiceSoap(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
 }

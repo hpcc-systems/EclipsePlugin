@@ -15,8 +15,8 @@ public class ResultFolderView extends FolderItemView implements Observer {
 
 	ResultFolderView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 	}
 
 	@Override
@@ -32,11 +32,12 @@ public class ResultFolderView extends FolderItemView implements Observer {
 	@Override
 	public void refreshChildren() {
 		ArrayList<Object> retVal = new ArrayList<Object>();
-		for(Result r : workunit.getResults())
+		for(Result r : workunit.getResults()) {
 			retVal.add(new ResultView(treeViewer, this, platform, r));
+		}
 		children.set(retVal.toArray(new ItemView[0]));
 	}
-	
+
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 instanceof Workunit.Notification) {

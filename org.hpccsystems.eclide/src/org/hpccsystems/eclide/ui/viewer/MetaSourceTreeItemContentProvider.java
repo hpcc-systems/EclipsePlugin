@@ -19,10 +19,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
-import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
-import org.hpccsystems.eclide.builder.meta.ECLSource;
 
 class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observer{
 	TreeViewer viewer;
@@ -32,14 +30,14 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 	MetaSourceTreeItemContentProvider() {
 		source = null;
 	}
-	
+
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		this.viewer = (TreeViewer)viewer;
 		source = null;
 		if (newInput != null && !newInput.equals(oldInput)) {
 			if (newInput instanceof IPath) {
-				this.path = (IPath)newInput;
+				path = (IPath)newInput;
 				if (source == null) {
 					source = ECLGlobalMeta.get().getSource(path);
 					if (source != null) {
@@ -66,12 +64,13 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		ArrayList<ECLMetaNode> nodes = new ArrayList<ECLMetaNode>(); 
-		if (parentElement instanceof ECLMetaNode)
+		if (parentElement instanceof ECLMetaNode) {
 			for (ECLMetaNode node : ((ECLMetaNode)parentElement).getChildren()) {
 				if (!(node.getData().getName().startsWith("__") && node.getData().getName().endsWith("__"))) {
 					nodes.add(node);
 				}
 			}
+		}
 		return nodes.toArray();
 	}
 
@@ -82,9 +81,10 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if (element instanceof ECLMetaNode)
+		if (element instanceof ECLMetaNode) {
 			return ((ECLMetaNode)element).getChildren().size() > 0;
-		return false;
+		}
+			return false;
 	}
 
 	@Override

@@ -41,7 +41,7 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	public ECLCompilerPreferencePage() {
 		super(GRID);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
@@ -69,7 +69,7 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 		addField(new StringFieldEditor(ClientTools.P_ARGSSYNTAX, "&Syntax Check:", getFieldEditorParent()));
 		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILE, "&Local Compile:", getFieldEditorParent()));
 		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILEREMOTE, "&Remote Compile:", getFieldEditorParent()));
-		
+
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Workunit Arguments:", getFieldEditorParent()));
 		addField(new StringFieldEditor(ClientTools.P_ARGSWULOCAL, "&Local:", getFieldEditorParent()));

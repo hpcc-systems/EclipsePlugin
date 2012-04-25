@@ -75,8 +75,9 @@ public class ECLDefinition extends ECLBase implements Serializable {
 
 	public int getLength() {
 		int retVal = getEndOffset() - getOffset();
-		if (retVal >= 0)
+		if (retVal >= 0) {
 			return retVal;
+		}
 		return 0;
 	}
 }

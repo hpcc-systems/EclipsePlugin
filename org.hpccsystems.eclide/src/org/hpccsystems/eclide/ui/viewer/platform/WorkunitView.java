@@ -23,15 +23,14 @@ import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
-import org.hpccsystems.internal.ui.tree.ItemView.ACTION;
 
 public class WorkunitView extends PlatformBaseView implements Observer {
 	Workunit workunit;
 
 	public WorkunitView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
-		this.workunit = wu;
-		this.workunit.addObserver(this);
+		workunit = wu;
+		workunit.addObserver(this);
 		refreshChildren();
 	}
 
@@ -40,8 +39,9 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 	}
 	@Override
 	public String getText() {
-		if (workunit.isComplete()) 
+		if (workunit.isComplete()) {
 			return workunit.getWuid();
+		}
 		return workunit.getWuid() + " (" + workunit.getState() + ")";
 	}
 
@@ -86,7 +86,7 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
@@ -96,7 +96,7 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 	public void refreshItem() {
 		workunit.refreshState();		
 	}
-	
+
 	@Override
 	public boolean canPerform(ACTION action) {
 		switch (action) {
@@ -145,11 +145,12 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 		ArrayList<ItemView> retVal = new ArrayList<ItemView>();
 		ItemView parent = getParent();
 		while (parent != null) {
-			if (parent instanceof WorkunitView)
+			if (parent instanceof WorkunitView) {
 				if (workunit == ((WorkunitView)parent).workunit) {
 					retVal.add(new RecursiveItemView(treeViewer, this));				
 					break;
 				}
+			}
 			parent = parent.getParent();
 		}
 		if (retVal.isEmpty()) {

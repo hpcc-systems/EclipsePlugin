@@ -25,12 +25,12 @@ public class ECLTagScanner extends RuleBasedScanner {
 
 	public ECLTagScanner(ECLColorManager manager) {
 		IToken string =
-			new Token(
-				new TextAttribute(manager.getColor(IECLColorConstants.ECL_STRING)));
+				new Token(
+						new TextAttribute(manager.getColor(IECLColorConstants.ECL_STRING)));
 
 		//IRule[] rules = new IRule[3];
 		ArrayList<IRule> rules= new ArrayList<IRule>();
-	
+
 		// Add rule for double quotes
 		rules.add(new SingleLineRule("\"", "\"", string, '\\'));
 		// Add a rule for single quotes

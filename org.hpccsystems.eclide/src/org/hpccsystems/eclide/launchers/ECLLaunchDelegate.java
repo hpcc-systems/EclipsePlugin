@@ -33,9 +33,9 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		saveBeforeLaunch(configuration, mode, monitor);
-		
+
 		final String cluster = configuration.getAttribute(Platform.P_CLUSTER, ""); 
-		
+
 		IFile file = null;
 		IStructuredSelection ss = SelectedResourceManager.getDefault().getCurrentSelection();
 		Object o = ss.getFirstElement();

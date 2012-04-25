@@ -32,9 +32,9 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 
 	WorkunitsTreeItemContentProvider(TreeViewer treeViewer) {
 		super(treeViewer);
-		this.children = new LazyChildLoader<ItemView>();
+		children = new LazyChildLoader<ItemView>();
 	}
-	
+
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		if (newInput != null && !newInput.equals(oldInput)) {
@@ -55,18 +55,18 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 	public Object[] getElements(Object inputElement) {
 		return children.get();
 	}
-	
+
 	@Override 
 	public void refreshChildren() {
 		Workunit.All.deleteObserver(this);
-			
+
 		CollectionDelta delta = new CollectionDelta("primeChildren", getCurrentWorkunits());
 		delta.calcChanges(data.getWorkunits(null, "", "", ""));
 		mergeChanges(delta);
 
 		Workunit.All.addObserver(this);
 	}
-	
+
 	@Override
 	public void reloadChildren() {
 		children.clear();
@@ -84,7 +84,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 		}
 		return retVal;
 	}
-	
+
 	boolean mergeChanges(CollectionDelta delta) {
 		boolean changed = false;
 		for (Object item : children.get().clone()) {
@@ -98,7 +98,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 				}
 			}
 		}
-		
+
 		//  Add new workunits  ---
 		for (DataSingleton ds : delta.getAdded()) {
 			if (ds instanceof Workunit) {
@@ -108,13 +108,14 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 				changed = true;
 			}
 		}
-		
-		if (changed)
+
+		if (changed) {
 			children.sort(new WorkunitComparator());
+		}
 
 		return changed;
 	}
-	
+
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o instanceof DataSingletonCollection) {

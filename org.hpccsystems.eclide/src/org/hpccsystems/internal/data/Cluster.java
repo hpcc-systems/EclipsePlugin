@@ -36,7 +36,7 @@ public class Cluster extends DataSingleton  {
 	private Platform platform;
 	private TpTargetCluster info;
 	private TpClusterInfoResponse info2;
-	
+
 	Cluster(Platform platform, String name) {
 		this.platform = platform;
 		info = new TpTargetCluster();
@@ -44,7 +44,7 @@ public class Cluster extends DataSingleton  {
 		info2 = new TpClusterInfoResponse();
 		info2.setName(name);
 	}
-	
+
 	public String getName() {
 		return info.getName();
 	}
@@ -78,7 +78,7 @@ public class Cluster extends DataSingleton  {
 			}
 		}
 	}
-	
+
 	void Update(TpTargetCluster tc) {
 		if (info.getName().equals(tc.getName())) {
 			info = tc;
@@ -95,16 +95,18 @@ public class Cluster extends DataSingleton  {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Cluster) ) 
+		if ( !(aThat instanceof Cluster) ) {
 			return false;
+		}
 		Cluster that = (Cluster)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return EqualsUtil.areEqual(this.platform, that.platform) &&
-				EqualsUtil.areEqual(this.info.getName(), that.info.getName());
+		return EqualsUtil.areEqual(platform, that.platform) &&
+				EqualsUtil.areEqual(info.getName(), that.info.getName());
 	}
 
 	@Override

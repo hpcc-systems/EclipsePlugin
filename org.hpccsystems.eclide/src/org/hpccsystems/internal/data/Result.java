@@ -41,38 +41,42 @@ public class Result extends DataSingleton {
 	public enum Notification {
 		RESULT
 	}
-	
+
 	class ResultData {
 		final int PAGE_SIZE = 180;
 		final int PAGE_BEFORE = 60;
 		Map<Long, Map<Integer, String>> data;
-		
+
 		ResultData() {
 			data = new HashMap<Long, Map<Integer, String>>();
 		}
-		
+
 		String GetCell(long row, int col) {
-			if (data.containsKey(row))
+			if (data.containsKey(row)) {
 				return data.get(row).get(col);
-			
+			}
+
 			Long start = row;
 			for (int i = 0; i < PAGE_BEFORE; ++i) {
-				if (start -1 < 0)
+				if (start -1 < 0) {
 					break;
-				
-				if (data.containsKey(start - 1))
+				}
+
+				if (data.containsKey(start - 1)) {
 					break;
-				
+				}
+
 				--start;
 			}
-			
+
 			int count = (int)(row - start);
 			for (int i = count; i < PAGE_SIZE; ++i) {
-				if (data.containsKey(start + count))
+				if (data.containsKey(start + count)) {
 					break;
+				}
 				++count;
 			}
-			
+
 			WsWorkunitsServiceSoap service = workunit.getPlatform().getWsWorkunitsService();
 			if (service != null) {
 				WUResult request = new WUResult();
@@ -86,7 +90,7 @@ public class Result extends DataSingleton {
 					if (resultString != null) {
 						int offset = resultString.indexOf("<Dataset");
 						resultString = resultString.substring(offset);
-						DatasetParser dp = new DatasetParser(response.getStart(), new InputSource(new StringReader(resultString)), data);
+						new DatasetParser(response.getStart(), new InputSource(new StringReader(resultString)), data);
 						return data.get(row).get(col);
 					}
 				} catch (ArrayOfEspException e) {
@@ -97,13 +101,13 @@ public class Result extends DataSingleton {
 					e.printStackTrace();
 				}
 			}
-			
+
 			return data.get(row).get(col);
 		}
 	}
-	
+
 	ResultData data;
-	
+
 	private Result(Workunit workunit, Integer sequence) {
 		this.workunit = workunit;
 		info = new ECLResult();
@@ -111,7 +115,7 @@ public class Result extends DataSingleton {
 		data = new ResultData();
 		setChanged();
 	}
-	
+
 	public Workunit getWorkunit() {
 		return workunit;
 	}
@@ -142,36 +146,38 @@ public class Result extends DataSingleton {
 		}
 		return State.UNKNOWN;
 	}
-	
+
 	public Long getTotal() {
 		return info.getTotal();
 	}
-	
+
 	public String[] getResultViews() {
 		return workunit.getResultViews();
 	}
-	
+
 	@Override
 	public boolean isComplete() {
 		return StateHelper.isCompleted(getStateID()) || workunit.isComplete();
 	}
 
 	public int getColumnCount() {
-		if (info.getECLSchemas() == null)
+		if (info.getECLSchemas() == null) {
 			return 0;
+		}
 		return info.getECLSchemas().length;
 	}
 
 	public String getColumnName(int i) {
-		if (info.getECLSchemas() == null)
+		if (info.getECLSchemas() == null) {
 			return "";
+		}
 		return info.getECLSchemas()[i].getColumnName();
 	}
 
 	public String getCell(int row, int col) {
 		return data.GetCell(row, col);
 	}
-	
+
 	//  Refresh + Update  ---
 	@Override
 	void fastRefresh() {
@@ -199,7 +205,7 @@ public class Result extends DataSingleton {
 	synchronized boolean UpdateState(ECLResult result) {
 		if (result != null && info.getSequence().equals(result.getSequence()) &&
 				EqualsUtil.hasChanged(info, result)) {
-			
+
 			assert(result.getECLSchemas() != null);
 			info = result;
 			setChanged();
@@ -210,16 +216,18 @@ public class Result extends DataSingleton {
 
 	@Override 
 	public boolean equals(Object aThat) {
-		if ( this == aThat ) 
+		if ( this == aThat ) {
 			return true;
+		}
 
-		if ( !(aThat instanceof Result) ) 
+		if ( !(aThat instanceof Result) ) {
 			return false;
+		}
 		Result that = (Result)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(this.workunit, that.workunit) &&
-				EqualsUtil.areEqual(this.info.getSequence(), that.info.getSequence());
+		return 	EqualsUtil.areEqual(workunit, that.workunit) &&
+				EqualsUtil.areEqual(info.getSequence(), that.info.getSequence());
 	}
 
 	@Override

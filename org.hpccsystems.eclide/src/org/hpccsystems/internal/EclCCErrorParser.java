@@ -21,7 +21,7 @@ public class EclCCErrorParser {
 	public int errorCount = 0;
 	public int warningCount = 0;
 	public ArrayList<EclCCError> items;
-	
+
 	public EclCCErrorParser(BufferedReader reader, MessageConsoleStream eclccConsoleWriter) {
 		items = new ArrayList<EclCCError>();
 		String errorLine = null;
@@ -31,7 +31,7 @@ public class EclCCErrorParser {
 					eclccConsoleWriter.print("Err: ");
 					eclccConsoleWriter.println(errorLine);
 				}
-				
+
 				EclCCError error = new EclCCError(errorLine);
 				switch (error.severity) {
 				case IMarker.SEVERITY_ERROR:

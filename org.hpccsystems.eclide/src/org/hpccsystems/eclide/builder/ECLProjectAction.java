@@ -43,7 +43,7 @@ public class ECLProjectAction implements IObjectActionDelegate {
 				} else if (element instanceof IAdaptable) {
 					project = (IProject) ((IAdaptable) element).getAdapter(IProject.class);
 				}
-				
+
 				if (project != null) {
 					setNature(project);
 				}

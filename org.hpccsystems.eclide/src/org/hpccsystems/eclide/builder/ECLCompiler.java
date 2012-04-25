@@ -44,9 +44,9 @@ public class ECLCompiler {
 
 	IProject project;
 	IProject[] referencedProjects;
-	
+
 	String version = null;
-	
+
 	ConfigurationPreferenceStore launchConfiguration;
 	IPath binPath;
 	File eclccFile;
@@ -65,7 +65,7 @@ public class ECLCompiler {
 	boolean monitorDependees = false;
 	boolean supressSubsequentErrors = false;
 	boolean enableMetaProcessing = true;
-	
+
 	boolean executeRemotely = false;
 	String serverIP;
 	String serverCluster;
@@ -81,11 +81,11 @@ public class ECLCompiler {
 	boolean hasError;	//TODO Has Error notification is all wrong.
 
 	String QUOTE = "";
-	
+
 	class BasicHandler implements IProcessOutput {
 		protected StringBuilder sbOut;
 		protected StringBuilder sbErr;
-		
+
 		BasicHandler() {
 			sbOut = new StringBuilder();
 			sbErr = new StringBuilder();
@@ -145,13 +145,13 @@ public class ECLCompiler {
 		public ECLArchiveHandler() {
 			super();
 		}
-		
+
 		Set<IFile> getAncestors(IFile file) {
 			ECLArchiveParser parser = new ECLArchiveParser(file, sbOut.toString());
 			assert(parser != null);
 			return parser.ancestors;
 		}
-		
+
 		@Override
 		public void ProcessOut(BufferedReader reader) {
 			super.ProcessOut(reader);
@@ -189,8 +189,9 @@ public class ECLCompiler {
 					eclccConsoleWriter.print("Out: ");
 					eclccConsoleWriter.println(stdIn);
 					int lastSpace = stdIn.lastIndexOf(' ');
-					if (lastSpace != -1)
+					if (lastSpace != -1) {
 						wuid = stdIn.substring(lastSpace + 1, stdIn.length());
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -204,7 +205,7 @@ public class ECLCompiler {
 		binPath = new Path(launchConfiguration.getAttribute(ClientTools.P_TOOLSPATH, ClientTools.P_TOOLSPATH_DEFAULT));
 		eclccFile = binPath.append("eclcc").toFile();
 		eclplusFile = binPath.append("eclplus").toFile();
-		
+
 		argsCommon = launchConfiguration.getAttribute(ClientTools.P_ARGSCOMMON, ClientTools.P_ARGSCOMMON_DEFAULT);
 		argsSyntaxCheck = launchConfiguration.getAttribute(ClientTools.P_ARGSSYNTAX, ClientTools.P_ARGSSYNTAX_DEFAULT);
 		argsCompile = launchConfiguration.getAttribute(ClientTools.P_ARGSCOMPILE, ClientTools.P_ARGSCOMPILE_DEFAULT);
@@ -229,10 +230,10 @@ public class ECLCompiler {
 		eclccConsoleWriter = eclccConsole.newMessageStream();
 		//eclccConsoleWriter.setActivateOnWrite(true);
 	}
-	
+
 	public ECLCompiler(ConfigurationPreferenceStore launchConfiguration, IProject project) {
 		this(launchConfiguration);
-		
+
 		this.project = project;
 		try {
 			referencedProjects = project.getReferencedProjects();
@@ -240,24 +241,24 @@ public class ECLCompiler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		projectPath = project.getLocation();
 		workingPath = project.getWorkingLocation(Activator.PLUGIN_ID);
 
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 	}
-	
+
 	boolean HasCompiler() {
 		return !getVersion().isEmpty();
 	}
-	
+
 	void GetIncludeArgs(CmdArgs cmdArgs) {
 		cmdArgs.Append("I",  projectPath.toOSString());
 		for (int i = 0; i < referencedProjects.length; ++i) {
 			cmdArgs.Append("I",  referencedProjects[i].getLocation().toOSString());
 		}
 	}
-	
+
 	public String getVersion() {
 		if (version == null) {
 			version = new String();
@@ -271,26 +272,28 @@ public class ECLCompiler {
 		}
 		return version;
 	}
-	
+
 	public String getBuildVersion() {
 		String version = getVersion();
 		String[] versions = version.split(" ");
-		if (versions.length >= 2)
+		if (versions.length >= 2) {
 			return versions[1];
+		}
 		return "";
 	}
-	
+
 	public String getLanguageVersion() {
 		String version = getVersion();
 		String[] versions = version.split(" ");
-		if (versions.length >= 1)
+		if (versions.length >= 1) {
 			return versions[0];
+		}
 		return "";
 	}
-	
+
 	public void checkSyntax(IFile file) {
 		Eclipse.deleteMarkers(file);
-		
+
 		if (!HasCompiler()) {
 			Eclipse.addMarker(file, IMarker.SEVERITY_ERROR, badConfigurationCode, badConfiguration, 0, 0, true);
 			eclccConsoleWriter.println(noCompiler);
@@ -300,8 +303,9 @@ public class ECLCompiler {
 		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCommon, argsSyntaxCheck);
 		GetIncludeArgs(cmdArgs);
 
-		if (monitorDependees) 
+		if (monitorDependees) {
 			cmdArgs.Append("E");
+		}
 		ECLArchiveHandler handler = new ECLArchiveHandler();
 		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
@@ -312,7 +316,7 @@ public class ECLCompiler {
 
 	public String getArchive(IFile file) {
 		Eclipse.deleteMarkers(file);
-		
+
 		if (!HasCompiler()) {
 			Eclipse.addMarker(file, IMarker.SEVERITY_ERROR, badConfigurationCode, badConfiguration, 0, 0, true);
 			eclccConsoleWriter.println(noCompiler);
@@ -326,8 +330,9 @@ public class ECLCompiler {
 			IPath manifestPath = file.getLocation().removeLastSegments(1);
 			manifestPath = manifestPath.append("files");
 			manifestPath = manifestPath.append("manifest.xml");
-			if (manifestPath.toFile().exists())
+			if (manifestPath.toFile().exists()) {
 				cmdArgs.Append("manifest=", manifestPath.toOSString());
+			}
 		}
 
 		hasError = false;
@@ -338,9 +343,10 @@ public class ECLCompiler {
 	}
 
 	public String getMeta(IFile file) {
-		if (!enableMetaProcessing)
+		if (!enableMetaProcessing) {
 			return "";
-		
+		}
+
 		if (!HasCompiler()) {
 			eclccConsoleWriter.println(noCompiler);
 			return "";
@@ -382,10 +388,11 @@ public class ECLCompiler {
 		IFolder retVal = project.getFolder("ECL Library (" + getLanguageVersion() + ")");
 		if (!retVal.exists()) {
 			try {
-				if (OS.isWindowsPlatform())
+				if (OS.isWindowsPlatform()) {
 					retVal.createLink(binPath.append("ecllibrary"), IResource.HIDDEN, null);
-				else
+				} else {
 					retVal.createLink(binPath.append("../share/ecllibrary"), IResource.HIDDEN, null);
+				}
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

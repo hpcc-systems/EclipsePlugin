@@ -25,7 +25,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
 public class ECLLaunchShortcutLocal implements ILaunchShortcut2 {
-	
+
 	@Override
 	public void launch(ISelection selection, String mode) {
 	}
@@ -40,7 +40,7 @@ public class ECLLaunchShortcutLocal implements ILaunchShortcut2 {
 			ILaunchConfiguration[] configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
 			for(int i = 0; i < configs.length; ++i) {
 				//if (configs[i].getAttribute(Platform.P_ENABLED, true)) {
-					retVal.add(configs[i]);
+				retVal.add(configs[i]);
 				//}
 			}
 		} catch (CoreException e) {

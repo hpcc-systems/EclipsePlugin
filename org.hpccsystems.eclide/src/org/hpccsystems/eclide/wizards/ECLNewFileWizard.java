@@ -45,7 +45,7 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 		super();
 		setNeedsProgressMonitor(true);
 	}
-	
+
 	@Override
 	public void addPages() {
 		page = new ECLNewFileWizardPage(selection);
@@ -89,7 +89,7 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * The worker method. It will find the container, create the
 	 * file if missing or just replace its contents, and open
@@ -97,10 +97,10 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 	 */
 
 	private void doFinish(
-		String containerName,
-		String fileName,
-		IProgressMonitor monitor)
-		throws CoreException {
+			String containerName,
+			String fileName,
+			IProgressMonitor monitor)
+					throws CoreException {
 		// create a sample file
 		monitor.beginTask("Creating " + fileName, 2);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -126,7 +126,7 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 			@Override
 			public void run() {
 				IWorkbenchPage page =
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
 					IDE.openEditor(page, file, true);
 				} catch (PartInitException e) {
@@ -135,26 +135,28 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 		});
 		monitor.worked(1);
 	}
-	
-    static String stripExtension(String str) { 
-        if (str == null) 
-        	return null; 
- 
-        int pos = str.lastIndexOf("."); 
-        if (pos == -1) 
-        	return str; 
- 
-        return str.substring(0, pos); 
-    } 
 
-    private InputStream openContentStream(String fileName) {
+	static String stripExtension(String str) { 
+		if (str == null) {
+			return null;
+		} 
+
+		int pos = str.lastIndexOf("."); 
+		if (pos == -1) {
+			return str;
+		} 
+
+		return str.substring(0, pos); 
+	} 
+
+	private InputStream openContentStream(String fileName) {
 		String contents = "export " + stripExtension(fileName) + " := 'todo';";
 		return new ByteArrayInputStream(contents.getBytes());
 	}
 
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status =
-			new Status(IStatus.ERROR, "org.hpccsystems.eclide", IStatus.OK, message, null);
+				new Status(IStatus.ERROR, "org.hpccsystems.eclide", IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
 }
