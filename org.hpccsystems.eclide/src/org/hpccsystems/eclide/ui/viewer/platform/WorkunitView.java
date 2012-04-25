@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
-import org.hpccsystems.internal.ui.tree.ItemView.ACTION;
 
 public class WorkunitView extends PlatformBaseView implements Observer {
 	Workunit workunit;
