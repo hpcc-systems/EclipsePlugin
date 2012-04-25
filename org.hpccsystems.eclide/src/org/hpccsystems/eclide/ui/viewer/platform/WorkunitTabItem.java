@@ -16,7 +16,6 @@ import java.util.Observer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.ui.viewer.BrowserEx;
@@ -29,13 +28,8 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 	
 	Workunit workunit;
 	WorkunitView wuView;
-	
-	SashForm sashFormMain;
 
-	CTabFolder resultContainer;
-	
-	//SashForm sashFormResult;
-	WorkunitViewer workunitViewer;
+	CTabFolder detailsContainer;
 	
 	CTabItem browserTab;
 	private BrowserEx browser;
@@ -52,36 +46,30 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 		wuView.getWorkunit().addObserver(this);
 
 		parent.setLayout(new FillLayout());
-		sashFormMain = new SashForm(parent, SWT.HORIZONTAL);
 
-		workunitViewer = new WorkunitViewer(this, workunit);
-		workunitViewer.createPartControl(sashFormMain);
+		detailsContainer = new CTabFolder(parent, SWT.BOTTOM);
 
-		//sashFormResult = new SashForm(sashFormMain, SWT.VERTICAL);
-		resultContainer = new CTabFolder(sashFormMain, SWT.TOP);
-
-		browserTab = new CTabItem(resultContainer, SWT.NONE);
-		browser = new BrowserEx(resultContainer);
+		browserTab = new CTabItem(detailsContainer, SWT.NONE);
+		browser = new BrowserEx(detailsContainer);
 		browserTab.setControl(browser);
 		browserTab.setText("ECL Watch");
 					
-		tableTab = new CTabItem(resultContainer, SWT.NONE);
-		table = new TableEx(resultContainer);
+		tableTab = new CTabItem(detailsContainer, SWT.NONE);
+		table = new TableEx(detailsContainer);
 		tableTab.setControl(table);
 		tableTab.setText("Result View");
 
-		textTab = new CTabItem(resultContainer, SWT.NONE);
-		text = new TextEx(resultContainer);
+		textTab = new CTabItem(detailsContainer, SWT.NONE);
+		text = new TextEx(detailsContainer);
 		textTab.setControl(text);
 		textTab.setText("Query");
 
 		setText(wuView.getText());
 		setImage(wuView.getImage());
 
-		sashFormMain.setWeights(new int[] {15, 85});
-		//sashFormResult.setWeights(new int[] {100, 0});
-		
-	    setControl(sashFormMain);
+	    setControl(detailsContainer);
+	    
+	    detailsContainer.setTabHeight(0);
 	}
 	
 	public Workunit getWorkunit() {
@@ -92,20 +80,20 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 		return wuView;
 	}
 
-	void navigateTo(String url, String user, String password) {
+	public void navigateTo(String url, String user, String password) {
 		browser.setUrl(null, url, user, password);
-		resultContainer.setSelection(browserTab);
+		detailsContainer.setSelection(browserTab);
 	}
 
-	void setResult(Result result) {
+	public void setResult(Result result) {
 		table.setResult(result);
-		resultContainer.setSelection(tableTab);
+		detailsContainer.setSelection(tableTab);
 	}
 
-	void setQuery(String query) {
+	public void setQuery(String query) {
 		text.setText(query);
 		//table.setResult(result);
-		resultContainer.setSelection(textTab);
+		detailsContainer.setSelection(textTab);
 	}
 
 	@Override

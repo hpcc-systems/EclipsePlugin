@@ -112,6 +112,10 @@ public class Result extends DataSingleton {
 		setChanged();
 	}
 	
+	public Workunit getWorkunit() {
+		return workunit;
+	}
+
 	public String getWuid() {
 		return workunit.getWuid();
 	}
