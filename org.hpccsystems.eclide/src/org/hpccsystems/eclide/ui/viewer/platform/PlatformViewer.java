@@ -175,7 +175,11 @@ public class PlatformViewer extends ViewPart {
 							WorkunitView wuView = item.getWorkunitAncestor();
 
 							if (wuView != null) {
-								IFile file = Eclipse.findFile(new Path(wuView.getWorkunit().getApplicationValue("path")));
+								IFile file = null;
+								if (wuView.getWorkunit().hasApplicationValue("path"))
+									file = Eclipse.findFile(new Path(wuView.getWorkunit().getApplicationValue("path")));
+								else
+									file = Eclipse.findFile(new Path("unknown_project/unknown_source.ecl"));
 
 								try {
 									IEditorPart ep = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file, true);
