@@ -236,4 +236,11 @@ public class FileSprayWorkunit extends DataSingleton {
 		result = HashCodeUtil.hash(result, info.getID());
 		return result;
 	}
+
+	public Object getClusterName() {
+		if (info.getClusterName() == null) {
+			fullRefresh();
+		}
+		return info.getClusterName();
+	}
 }

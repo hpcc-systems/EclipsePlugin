@@ -102,9 +102,9 @@ public class ImportWizardPage extends WizardResourceImportPage {
 		fIPText = new StringFieldEditor("IPSelect", "Server IP:  ", fileSelectionArea);
 		fIPText.setStringValue("10.173.84.202");
 		fUserText = new StringFieldEditor("User", "User:  ", fileSelectionArea);
-		fUserText.setStringValue("gosmith");
+		fUserText.setStringValue("");
 		fPasswordText = new PasswordFieldEditor("Password", "Password:  ", fileSelectionArea);
-		fPasswordText.setStringValue("password");
+		fPasswordText.setStringValue("");
 	}
 
 	@Override

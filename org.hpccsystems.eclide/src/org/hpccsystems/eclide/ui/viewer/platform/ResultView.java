@@ -19,7 +19,6 @@ public class ResultView extends PlatformBaseView implements Observer {
 		super(treeViewer, parent, platform);
 		this.result = result; 
 		this.result.addObserver(this);
-		refreshChildren();
 	}
 
 	@Override

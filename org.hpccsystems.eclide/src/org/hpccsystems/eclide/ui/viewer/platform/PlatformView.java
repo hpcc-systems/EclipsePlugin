@@ -23,7 +23,6 @@ public class PlatformView extends PlatformBaseView {
 
 	PlatformView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
 		super(treeViewer, parent, platform);
-		refreshChildren();
 	}
 
 	public Platform getPlatform() {

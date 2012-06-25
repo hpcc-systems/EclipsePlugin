@@ -23,7 +23,6 @@ public class TextItemView extends PlatformBaseView {
 	TextItemView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit workunit) {
 		super(treeViewer, parent, workunit.getPlatform());
 		this.workunit = workunit; 
-		refreshChildren();
 	}
 
 	public Workunit getWorkunit() {

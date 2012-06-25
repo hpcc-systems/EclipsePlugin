@@ -32,7 +32,10 @@ public class CmdArgs {
 		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
 
 		this.cmd = cmd;
-		String allArgs = commonArgs + " " + baseArgs;
+		String allArgs = commonArgs;
+		if (!allArgs.isEmpty())
+			allArgs += " "; 
+		allArgs += baseArgs;
 		this.baseArgs = Arrays.asList(allArgs.split(" "));
 		args = new TreeMap<String, Set<String>>();
 	}
