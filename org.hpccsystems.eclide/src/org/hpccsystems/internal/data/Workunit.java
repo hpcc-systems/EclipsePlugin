@@ -168,6 +168,16 @@ public class Workunit extends DataSingleton {
 		return resultViews.toArray(new String[0]);
 	}
 
+	public boolean hasApplicationValue(String key) {
+		if (applicationValues.isEmpty()) {
+			fullRefresh(false, false, false, true);
+		}
+		if (applicationValues.containsKey(key)) {
+			return true;
+		}
+		return false;
+	}
+
 	public String getApplicationValue(String key) {
 		if (applicationValues.isEmpty()) {
 			fullRefresh(false, false, false, true);
