@@ -83,8 +83,10 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 		for (DataSingleton ds : delta.getAdded()) {
 			if (ds instanceof FileSprayWorkunit) {
 				FileSprayWorkunit wu = (FileSprayWorkunit)ds;
-				children.add(new FileSprayWorkunitView(treeViewer, this, wu));						
-				changed = true;
+				if (platform.equals(wu.getPlatform())  && (clusterName.isEmpty() || clusterName.equals(wu.getClusterName()))) {
+					children.add(new FileSprayWorkunitView(treeViewer, this, wu));						
+					changed = true;
+				}
 			}
 		}
 

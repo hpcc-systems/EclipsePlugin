@@ -93,7 +93,6 @@ class ClusterView extends PlatformBaseView {
 		super(treeViewer, parent, platform);
 		this.cluster = cluster;
 		clusterName = cluster.getName();
-		refreshChildren();
 	}
 
 	@Override
@@ -155,7 +154,6 @@ class DropZoneView extends PlatformBaseView {
 	DropZoneView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, DropZone dropZone) {
 		super(treeViewer, parent, platform);
 		this.dropZone = dropZone;
-		refreshChildren();
 	}
 
 	@Override
@@ -389,7 +387,6 @@ class LogicalFileContentsView extends PlatformBaseView {
 	LogicalFileContentsView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, LogicalFile file) {
 		super(treeViewer, parent, platform);
 		this.file = file; 
-		refreshChildren();
 	}
 
 	@Override
@@ -414,7 +411,6 @@ class LandingZoneFileView extends PlatformBaseView {
 	LandingZoneFileView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform, String path) {
 		super(treeViewer, parent, platform);
 		this.path = path; 
-		refreshChildren();
 	}
 
 	@Override
@@ -436,7 +432,6 @@ class ResultViewView extends PlatformBaseView {
 		super(treeViewer, parent, platform);
 		this.result = result; 
 		this.viewName = viewName;
-		refreshChildren();
 	}
 
 	@Override
@@ -500,7 +495,6 @@ class MessageItemView extends ItemView {
 	MessageItemView(TreeItemOwner treeViewer, ItemView parent, String message) {
 		super(treeViewer, parent);
 		this.message = message;
-		refreshChildren();
 	}
 
 	@Override

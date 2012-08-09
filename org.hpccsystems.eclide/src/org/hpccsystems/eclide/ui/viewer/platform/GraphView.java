@@ -17,7 +17,6 @@ public class GraphView extends PlatformBaseView implements Observer {
 		super(treeViewer, parent, platform);
 		this.graph = graph; 
 		this.graph.addObserver(this);
-		refreshChildren();
 	}
 
 	public Graph getGraph() {

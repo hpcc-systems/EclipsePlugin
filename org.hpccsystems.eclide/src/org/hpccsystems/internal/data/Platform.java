@@ -37,6 +37,9 @@ import org.hpccsystems.ws.wsdfu.DFUQueryResponse;
 import org.hpccsystems.ws.wsdfu.WsDfuLocator;
 import org.hpccsystems.ws.wsdfu.WsDfuServiceSoap;
 import org.hpccsystems.ws.wstopology.TpDropZone;
+import org.hpccsystems.ws.wstopology.TpLogicalCluster;
+import org.hpccsystems.ws.wstopology.TpLogicalClusterQueryRequest;
+import org.hpccsystems.ws.wstopology.TpLogicalClusterQueryResponse;
 import org.hpccsystems.ws.wstopology.TpServiceQueryRequest;
 import org.hpccsystems.ws.wstopology.TpServiceQueryResponse;
 import org.hpccsystems.ws.wstopology.TpServices;
@@ -257,6 +260,7 @@ public class Platform extends DataSingleton {
 			request.setCluster(cluster);
 			request.setStartDate(startDate);
 			request.setEndDate(startDate);
+			request.setCount(100);
 			try {
 				WUQueryResponse response = service.WUQuery(request);
 				updateWorkunits(response.getWorkunits());
@@ -284,7 +288,8 @@ public class Platform extends DataSingleton {
 		workunits.clear();
 		if (rawWorkunits != null) {
 			for(ECLWorkunit wu : rawWorkunits) {
-				workunits.add(getWorkunit(wu)); 	//  Will mark changed if needed  ---
+				if (!wu.getWuid().equalsIgnoreCase("global") && !wu.getWuid().equalsIgnoreCase("resultLimit"))
+					workunits.add(getWorkunit(wu)); 	//  Will mark changed if needed  ---
 			}
 		}
 	}
@@ -305,6 +310,7 @@ public class Platform extends DataSingleton {
 			//TODO CollectionDelta monitor = new CollectionDelta("getFileSprayWorkunits", fileSprayWorkunits);
 			FileSprayServiceSoap service = getFileSprayService();
 			GetDFUWorkunits request = new GetDFUWorkunits();
+			request.setPageSize(new Long(100));
 			request.setCluster(cluster);
 			try {
 				GetDFUWorkunitsResponse response = service.getDFUWorkunits(request);
@@ -440,10 +446,10 @@ public class Platform extends DataSingleton {
 		if (isEnabled()) {
 			//TODO CollectionDelta monitor = new CollectionDelta("getClusters", clusters);
 			WsTopologyServiceSoap service = getWsTopologyService();
-			TpTargetClusterQueryRequest request = new TpTargetClusterQueryRequest();
+			TpLogicalClusterQueryRequest request = new TpLogicalClusterQueryRequest();
 			try {
-				TpTargetClusterQueryResponse response = service.tpTargetClusterQuery(request);
-				updateClusters(response.getTpTargetClusters());
+				TpLogicalClusterQueryResponse response = service.tpLogicalClusterQuery(request);
+				updateClusters(response.getTpLogicalClusters());
 			} catch (ArrayOfEspException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -456,10 +462,10 @@ public class Platform extends DataSingleton {
 		return clusters.toArray(new Cluster[0]);
 	}
 
-	synchronized void updateClusters(TpTargetCluster[] rawCluster) {
-		if (rawCluster != null) {
-			for(TpTargetCluster c : rawCluster) {
-				clusters.add(getCluster(c)); 	//  Will mark changed if needed  ---
+	synchronized void updateClusters(TpLogicalCluster[] tpLogicalClusters) {
+		if (tpLogicalClusters != null) {
+			for(TpLogicalCluster c : tpLogicalClusters) {
+				clusters.add(getCluster(c.getName())); 	//  Will mark changed if needed  ---
 			}
 		}
 	}
@@ -530,6 +536,8 @@ public class Platform extends DataSingleton {
 	void initStub(org.apache.axis.client.Stub stub) {
 		stub.setUsername(getUser());
 		stub.setPassword(getPassword());
+		stub.setTimeout(180 * 1000);
+		stub.setMaintainSession(true);
 	}
 
 	void latencyTest() {
