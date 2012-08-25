@@ -18,6 +18,8 @@ import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
@@ -39,47 +41,6 @@ public class ECLTextHover implements ITextHover {
 		return new Region(offset, 0);
 	}
 
-	private int getFirstCharOffset(IDocument doc, int offset) {
-		try {
-			for (int n = offset-1; n >= 0; n--) {
-				char c = doc.getChar(n);
-				if (!Character.isJavaIdentifierPart(c) && c != '.' && c != '#') {
-					return n + 1;
-				}
-			}
-		} catch (BadLocationException e) {
-			// ... log the exception ...
-		}
-		return offset;
-	}
-
-	private int getLastCharOffset(IDocument doc, int offset) {
-		try {
-			for (int n = offset; n < doc.getLength(); ++n) {
-				char c = doc.getChar(n);
-				if (!Character.isJavaIdentifierPart(c) && c != '.') {
-					return n;
-				}
-			}
-		} catch (BadLocationException e) {
-			// ... log the exception ...
-		}
-		return offset;
-	}
-
-	private String getHoverWord(IDocument doc, int offset) {
-		int firstOffset = getFirstCharOffset(doc, offset);
-		int lastOffset = getLastCharOffset(doc, offset);
-		try {
-			return doc.get(firstOffset,  lastOffset - firstOffset);
-
-		} catch (BadLocationException e) {
-			// ... log the exception ...
-		}
-		return "";
-	}
-
-
 	@Override
 	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
 		IDocument doc = textViewer.getDocument();
@@ -91,7 +52,7 @@ public class ECLTextHover implements ITextHover {
 			}
 		}
 
-		String text = getHoverWord(doc, hoverRegion.getOffset());
+		final String text = ECLEditor.getHoverWord(doc, hoverRegion.getOffset());
 		StringBuilder hover = new StringBuilder("---  SEARCH INFO  ---");
 		hover.append("\nSearch For:  " + text);
 
@@ -101,25 +62,8 @@ public class ECLTextHover implements ITextHover {
 		ECLMetaNode found = context.findDefinition(text, false);
 		if (found != null) {
 			hover.append("\n---  MATCH  ---");
-			//hover.append("\nFound in:  " + def.getSource().getPathString());
 			hover.append("\nDefinition:  " + found.getQualifiedName());// + " (" + def.getOffset() + ", " + def.getLength() + ")");
 		}
-
-		/*
-		ArrayList<ECLDefinition> matchedDef = new ArrayList<ECLDefinition>();
-		context.findDefinitionList(text, matchedDef);
-		if (!matchedDef.isEmpty()) {
-			hover.append("\n---  PARTIAL MATCH  ---");
-			boolean first = true;
-			for(ECLDefinition mdef : matchedDef) {
-				if (first) {
-					first = false;
-					hover.append("\nFound in:  " + mdef.getSource().getPathString());
-				}
-				hover.append("\nDefinition:  " + mdef.getName() + " (" + mdef.getOffset() + ", " + mdef.getLength() + ")");
-			}
-		}
-		 */
 
 		return hover.toString();
 	}
