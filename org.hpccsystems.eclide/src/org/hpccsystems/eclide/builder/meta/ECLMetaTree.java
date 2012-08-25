@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Observable;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.hpccsystems.internal.Eclipse;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -110,7 +112,15 @@ public class ECLMetaTree implements Serializable {
 		return visitor.processNode(node);
 	}
 
+	public ECLMetaNode getSource(IFile file) {
+		if (file == null)
+			return null;
+		return getSource(file.getLocation());
+	}
+	
 	public ECLMetaNode getSource(final IPath path) {
+		if (path == null)
+			return null;
 		ECLMetaNode found = depthFirst(root, new IVisitor() {
 			@Override
 			public ECLMetaNode processNode(ECLMetaNode node) {
@@ -125,7 +135,7 @@ public class ECLMetaTree implements Serializable {
 
 		if (found == null) {
 			// No meta info from compiler, use project structure.
-			IResource resource = Eclipse.findResource(path);
+			IResource resource = Eclipse.findFile(path);
 			if (resource != null) {
 				IPath relPath = resource.getProjectRelativePath();
 				relPath = relPath.removeFileExtension();
@@ -204,6 +214,16 @@ public class ECLMetaTree implements Serializable {
 			retVal += name;
 			return retVal;
 		}
+		
+		public IPath getPath() {
+			if (data != null && data.attributes.containsKey("sourcePath")) {
+				return new Path(data.attributes.get("sourcePath"));
+			}
+			if (parent != null) {
+				return parent.getPath();
+			}
+			return null;
+		}
 
 		public String getName() {
 			return name;
@@ -281,6 +301,20 @@ public class ECLMetaTree implements Serializable {
 
 		public Collection<ECLMetaNode> getChildren() {
 			return children.values();
+		}
+
+		public int getLine() {
+			if (data != null && data.attributes.containsKey("line")) {
+				return Integer.decode(data.attributes.get("line"));
+			}
+			return 0;
+		}
+
+		public boolean isFolder() {
+			if (getData() instanceof ECLFolder) {
+				return true;
+			}
+			return false;
 		}
 	}
 

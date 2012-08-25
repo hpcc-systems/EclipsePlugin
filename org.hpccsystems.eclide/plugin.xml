@@ -302,4 +302,43 @@
 	     </possibleChildren>
 	 </navigatorContent>
 	</extension>
+ <extension
+       point="org.eclipse.ui.commands">
+    <category
+          id="org.hpccsystems.eclide.commands.category"
+          name="ECL Category">
+    </category>
+    <command
+          categoryId="org.hpccsystems.eclide.commands.category"
+          id="org.hpccsystems.eclide.commands.openDeclaration"
+          name="Open Declaration">
+    </command>
+ </extension>
+ <extension
+       point="org.eclipse.ui.handlers">
+    <handler
+          class="org.hpccsystems.eclide.handlers.OpenDeclarationHandler"
+          commandId="org.eclipse.jdt.ui.edit.text.java.open.editor">
+    </handler>
+ </extension>
+ <extension point="org.eclipse.ui.menus">
+    <menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+       <menu id="edit" label="Edit" mnemonic="E">
+          <command commandId="org.eclipse.jdt.ui.edit.text.java.open.editor" id="org.hpccsystems.eclide.menus.openDeclaration">
+          </command>
+       </menu>
+    </menuContribution>
+<menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?before=additions">
+         <command
+               commandId="org.eclipse.jdt.ui.edit.text.java.open.editor"
+               mnemonic="%contributions.view.edit.mnemonic">
+    <visibleWhen>
+       <with variable="selection">
+          <instanceof value="org.eclipse.jface.text.ITextSelection"/>
+       </with>            
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
 </plugin>
