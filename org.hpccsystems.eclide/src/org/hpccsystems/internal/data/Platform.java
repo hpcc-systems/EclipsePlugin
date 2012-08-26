@@ -283,13 +283,29 @@ public class Platform extends DataSingleton {
 	public Collection<Workunit> getWorkunits() {
 		return getWorkunits("", "", "");
 	}
+	
+	boolean isValid(String wuid) {
+		//W20120816-100734
+		if (wuid.length() >= 16) {
+			if (wuid.startsWith("W")) {
+				for (int i = 1; i < 8; ++i) {
+					if (!Character.isDigit(wuid.charAt(i)))
+						return false;
+				}
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	synchronized void updateWorkunits(ECLWorkunit[] rawWorkunits) {
 		workunits.clear();
 		if (rawWorkunits != null) {
 			for(ECLWorkunit wu : rawWorkunits) {
-				if (!wu.getWuid().equalsIgnoreCase("global") && !wu.getWuid().equalsIgnoreCase("resultLimit"))
+				if (isValid(wu.getWuid())) {
 					workunits.add(getWorkunit(wu)); 	//  Will mark changed if needed  ---
+				}
 			}
 		}
 	}

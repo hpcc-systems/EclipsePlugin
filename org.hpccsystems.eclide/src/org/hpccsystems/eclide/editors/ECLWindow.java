@@ -167,15 +167,22 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		return null;
 	}
 
-	public void showItemView(ItemView item) {
+	public void showItemView(ItemView item, boolean createTab) {
 		if (!workunitsLoaded) {
-			delayedShowItemView = item;
-			return;
+			if (createTab) {
+				WorkunitView wuView = item.getWorkunitAncestor();
+				if (!workunitTabMap.containsKey(wuView.getWorkunit())) {
+					workunitTabMap.put(wuView.getWorkunit(), new WorkunitTabItem(workunitFolder, SWT.NONE, 1, wuView));
+				}
+			} else {			
+				delayedShowItemView = item;
+				return;
+			}
 		}
 
 		delayedShowItemView = null;
 		if (item instanceof WorkunitView) {
-			showEclWatch((WorkunitView)item); 
+			showEclWatch((WorkunitView)item, item); 
 			return;
 		} else if (item instanceof ResultView) {
 			showResult((ResultView)item); 
@@ -190,15 +197,15 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		//  Descendant of WorkunitView?  ---
 		WorkunitView wuView = item.getWorkunitAncestor();
 		if (wuView != null) {
-			showEclWatch(wuView);
+			showEclWatch(wuView, item);
 		}
 	}
 
-	void showEclWatch(WorkunitView wuView) {
+	void showEclWatch(WorkunitView wuView, ItemView item) {
 		WorkunitTabItem tabItem = selectTab(wuView.getWorkunit());
 		if (tabItem != null) {
 			try {
-				tabItem.navigateTo(wuView.getWebPageURL().toString(), wuView.getUser(), wuView.getPassword());
+				tabItem.navigateTo(item.getWebPageURL().toString(), wuView.getUser(), wuView.getPassword());
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
@@ -478,7 +485,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				}
 				workunitsLoaded = true;
 				if (delayedShowItemView != null) {
-					showItemView(delayedShowItemView);
+					showItemView(delayedShowItemView, false);
 				}
 
 			}
