@@ -121,7 +121,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 		browser = new Browser(group, SWT.BORDER);
 		browser.setUrl("about:blank");
-		GridData gd = new GridData(GridData.FILL_BOTH);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.horizontalSpan = 3;
 		browser.setLayoutData(gd);
 		browser.addAuthenticationListener(new AuthenticationListener() {
