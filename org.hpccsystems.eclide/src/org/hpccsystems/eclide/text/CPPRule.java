@@ -14,15 +14,16 @@ import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.MultiLineRule;
 
-public class ECLRule extends MultiLineRule {
+public class CPPRule extends MultiLineRule {
 
-	public ECLRule(IToken token) {
-		super("<", ">", token);
+	public CPPRule(IToken token) {
+		super("beginc++", "endc++", token);
 	}
 
 	@Override
 	protected boolean sequenceDetected(ICharacterScanner scanner, char[] sequence, boolean eofAllowed) {
 		int c = scanner.read();
+		/*
 		if (sequence[0] == '<') {
 			if (c == '?') {
 				// processing instruction - abort
@@ -37,6 +38,7 @@ public class ECLRule extends MultiLineRule {
 		} else if (sequence[0] == '>') {
 			scanner.unread();
 		}
+		*/
 		return super.sequenceDetected(scanner, sequence, eofAllowed);
 	}
 }
