@@ -79,6 +79,14 @@ public class ClientTools extends DataSingleton {
 		}
 	}
 
+	public IPath getEclExamplesPath() {
+		if (OS.isWindowsPlatform()) {
+			return path.append("examples");
+		} else {
+			return path.append("../examples");
+		}
+	}
+
 	public ECLCompiler getCompiler(IProject project) {
 		return new ECLCompiler(launchConfiguration, project);
 	}
@@ -165,5 +173,12 @@ public class ClientTools extends DataSingleton {
 		int result = HashCodeUtil.SEED;
 		result = HashCodeUtil.hash(result, path);
 		return result;
+	}
+	
+	public String getLibraryFolderName() {
+		return "ECL Library";
+	}
+	public String getExamplesFolderName() {
+		return "Examples";
 	}
 }

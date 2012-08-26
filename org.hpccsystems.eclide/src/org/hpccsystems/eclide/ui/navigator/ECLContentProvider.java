@@ -24,7 +24,7 @@ public class ECLContentProvider implements ITreeContentProvider {
 		}
 
 		IFolder getEclLibraryFolder() {
-			IFolder hiddenLibFolder = project.getFolder("ECL Library (" + clientTools.getVersion() + ")");
+			IFolder hiddenLibFolder = project.getFolder(clientTools.getLibraryFolderName());
 			if (!hiddenLibFolder.exists()) {
 				try {
 					hiddenLibFolder.createLink(clientTools.getEclLibraryPath(), IResource.HIDDEN, null);
@@ -33,6 +33,18 @@ public class ECLContentProvider implements ITreeContentProvider {
 				}
 			}
 			return hiddenLibFolder;
+		}
+
+		IFolder getEclExampleFolder() {
+			IFolder hiddenExampleFolder = project.getFolder(clientTools.getExamplesFolderName());
+			if (!hiddenExampleFolder.exists()) {
+				try {
+					hiddenExampleFolder.createLink(clientTools.getEclExamplesPath(), IResource.HIDDEN, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+			return hiddenExampleFolder;
 		}
 	}
 
@@ -60,6 +72,7 @@ public class ECLContentProvider implements ITreeContentProvider {
 		} else if (parentElement instanceof ProjectClientToolsElement) {
 			ProjectClientToolsElement pct = (ProjectClientToolsElement)parentElement;
 			retVal.add(pct.getEclLibraryFolder());
+			retVal.add(pct.getEclExampleFolder());
 		}
 		return retVal.toArray();
 	}
