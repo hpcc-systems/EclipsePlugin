@@ -31,37 +31,9 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 	private final IContextInformation[] NO_CONTEXTS = { };
 	private final char[] PROPOSAL_ACTIVATION_CHARS = { '.' };
 
-	private int getFirstCharOffset(IDocument doc, int offset, boolean includePeriod) {
-		try {
-			for (int n = offset-1; n >= 0; n--) {
-				char c = doc.getChar(n);
-				if (!(Character.isJavaIdentifierPart(c) || (c == '.' && includePeriod) || c == '#')) {
-					return n + 1;
-				}
-			}
-		} catch (BadLocationException e) {
-			// ... log the exception ...
-		}
-		return offset;
-	}
-
-	private int getLastCharOffset(IDocument doc, int offset) {
-		try {
-			for (int n = offset; n < doc.getLength(); ++n) {
-				char c = doc.getChar(n);
-				if (!Character.isJavaIdentifierPart(c) && c != '.') {
-					return n;
-				}
-			}
-		} catch (BadLocationException e) {
-			// ... log the exception ...
-		}
-		return offset;
-	}
-
 	private String getAutoCKnownString(IDocument doc, int offset) {
-		int firstOffset = getFirstCharOffset(doc, offset, true);
-		int replacementPos = getFirstCharOffset(doc, offset, false);
+		int firstOffset = ECLEditor.getFirstCharOffset(doc, offset, true);
+		int replacementPos = ECLEditor.getFirstCharOffset(doc, offset, false);
 		try {
 			String retVal = doc.get(firstOffset,  replacementPos - firstOffset);
 			if (retVal.endsWith(".")) {
@@ -76,7 +48,7 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 	}
 
 	private String getAutoCRemainingString(IDocument doc, int offset) {
-		int replacementPos = getFirstCharOffset(doc, offset, false);
+		int replacementPos = ECLEditor.getFirstCharOffset(doc, offset, false);
 		try {
 			return doc.get(replacementPos,  offset - replacementPos);
 
@@ -93,14 +65,14 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 		IDocument doc = viewer.getDocument();
 		if (doc instanceof ECLDocument) {
 			IFile file = ((ECLDocument)doc).getFile();
-			ECLMetaNode source = ECLGlobalMeta.get().getSource(file.getLocation());
+			ECLMetaNode source = ECLGlobalMeta.get().getSource(file);
 			if (source != null) {
 				ECLMetaNode context = source.getContext(offset);
 
 				String knownText = getAutoCKnownString(doc, offset);
 				String remainingText = getAutoCRemainingString(doc, offset);
-				int replacementPos = getFirstCharOffset(doc, offset, false);
-				int endReplacementPos = getLastCharOffset(doc, offset);
+				int replacementPos = ECLEditor.getFirstCharOffset(doc, offset, false);
+				int endReplacementPos = ECLEditor.getLastCharOffset(doc, offset);
 				if (knownText.isEmpty()) {
 					for (int i = 0; i < 6; ++i) {
 						for (String s : ECLKeywords.getKeywords(i)) {

@@ -2,9 +2,10 @@ package org.hpccsystems.eclide.editors;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.help.HelpSystem;
 import org.eclipse.help.IContext;
 import org.eclipse.help.IHelpResource;
-import org.eclipse.help.HelpSystem;
 import org.eclipse.help.IIndex;
 import org.eclipse.help.IIndexEntry;
 import org.eclipse.help.ITopic;

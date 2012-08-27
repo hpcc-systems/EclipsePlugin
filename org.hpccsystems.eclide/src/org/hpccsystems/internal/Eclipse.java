@@ -12,6 +12,7 @@ package org.hpccsystems.internal;
 
 import java.util.HashSet;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -21,7 +22,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -36,8 +36,6 @@ import org.eclipse.ui.ide.IDE;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.eclide.ui.viewer.ResultViewer;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitsViewer;
-import org.hpccsystems.internal.data.ClientTools;
-import org.hpccsystems.internal.data.Data;
 
 public class Eclipse {
 
@@ -103,7 +101,7 @@ public class Eclipse {
 		
 		if (path.isAbsolute())
 		{
-			IFile[] files = Eclipse.getWorkspaceRoot().findFilesForLocationURI(path.toFile().toURI(), IWorkspaceRoot.INCLUDE_HIDDEN);
+			IFile[] files = Eclipse.getWorkspaceRoot().findFilesForLocationURI(path.toFile().toURI(), IContainer.INCLUDE_HIDDEN);
 			if (files.length > 0) {
 				for(int i = 0; i < files.length; ++i) {
 					if (files[i].getProject() == project) {
