@@ -128,11 +128,26 @@ This Agreement is governed by the laws of the State of New York and the intellec
       <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.apache.axis"/>
-      <import plugin="javax.xml.rpc"/>
+      <import plugin="org.eclipse.help"/>
+      <import plugin="javax.xml.rpc" version="1.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="org.hpccsystems.eclide"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.hpccsystems.ecldoc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.hpccsystems.eclsoap"
          download-size="0"
          install-size="0"
          version="0.0.0"

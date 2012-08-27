@@ -27,17 +27,13 @@ import org.hpccsystems.ws.wsworkunits.ECLSourceFile;
 import org.hpccsystems.ws.wsworkunits.ECLWorkunit;
 import org.hpccsystems.ws.wsworkunits.EspException;
 import org.hpccsystems.ws.wsworkunits.WUAbort;
-import org.hpccsystems.ws.wsworkunits.WUAbortResponse;
 import org.hpccsystems.ws.wsworkunits.WUDelete;
-import org.hpccsystems.ws.wsworkunits.WUDeleteResponse;
 import org.hpccsystems.ws.wsworkunits.WUInfo;
 import org.hpccsystems.ws.wsworkunits.WUInfoResponse;
 import org.hpccsystems.ws.wsworkunits.WUPublishWorkunit;
-import org.hpccsystems.ws.wsworkunits.WUPublishWorkunitResponse;
 import org.hpccsystems.ws.wsworkunits.WUQuery;
 import org.hpccsystems.ws.wsworkunits.WUQueryResponse;
 import org.hpccsystems.ws.wsworkunits.WUResubmit;
-import org.hpccsystems.ws.wsworkunits.WUResubmitResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
 
 public class Workunit extends DataSingleton {

@@ -15,8 +15,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.jface.text,
  org.eclipse.debug.ui,
- javax.xml.rpc,
+ javax.xml.rpc;bundle-version="1.1.0",
  org.apache.axis,
+ org.hpccsystems.eclsoap,
  org.hpccsystems.ecldoc
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -122,39 +123,5 @@ Export-Package: org.hpccsystems.eclide;
  org.hpccsystems.internal.autoc;x-internal:=true,
  org.hpccsystems.internal.data;x-internal:=true,
  org.hpccsystems.internal.ui;x-internal:=true,
- org.hpccsystems.internal.ui.tree;x-internal:=true,
- org.hpccsystems.ws.WsAttributes;
-  uses:="org.apache.axis.client,
-   org.apache.axis,
-   org.apache.axis.description,
-   org.apache.axis.encoding,
-   javax.xml.rpc,
-   javax.xml.namespace",
- org.hpccsystems.ws.filespray;
-  uses:="org.apache.axis.client,
-   org.apache.axis,
-   org.apache.axis.description,
-   org.apache.axis.encoding,
-   javax.xml.rpc,
-   javax.xml.namespace",
- org.hpccsystems.ws.wsdfu;
-  uses:="org.apache.axis.client,
-   org.apache.axis,
-   org.apache.axis.description,
-   org.apache.axis.encoding,
-   javax.xml.rpc,
-   javax.xml.namespace",
- org.hpccsystems.ws.wstopology;
-  uses:="org.apache.axis.client,
-   org.apache.axis,
-   org.apache.axis.description,
-   org.apache.axis.encoding,
-   javax.xml.rpc,
-   javax.xml.namespace",
- org.hpccsystems.ws.wsworkunits;
-  uses:="org.apache.axis.client,
-   org.apache.axis,
-   org.apache.axis.description,
-   org.apache.axis.encoding,
-   javax.xml.rpc,
-   javax.xml.namespace"
+ org.hpccsystems.internal.ui.tree;x-internal:=true
+Import-Package: org.hpccsystems.ws.wstopology

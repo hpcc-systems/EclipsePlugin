@@ -22,7 +22,6 @@ import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.DataQuerySet;
 import org.hpccsystems.internal.data.DropZone;
 import org.hpccsystems.internal.data.FileSprayWorkunit;
-import org.hpccsystems.internal.data.Graph;
 import org.hpccsystems.internal.data.LogicalFile;
 import org.hpccsystems.internal.data.Platform;
 import org.hpccsystems.internal.data.Result;
