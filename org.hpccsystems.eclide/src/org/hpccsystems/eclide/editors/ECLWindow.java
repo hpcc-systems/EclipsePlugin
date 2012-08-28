@@ -30,6 +30,9 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -321,6 +324,10 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		return childItem;
 	}
 
+	public ECLEditor getEditor(){
+		return editor;
+	}
+
 	@Override
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
@@ -506,5 +513,19 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		mgr.add(actions.cloneItemAction);
 		mgr.add(actions.deleteItemAction);
 		actions.setState();
+	}
+
+	public void gotoLine(int lineNumber) {
+		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		if (document != null) {
+			IRegion lineInfo = null;
+			try {
+				lineInfo = document.getLineInformation(lineNumber - 1);
+			} catch (BadLocationException e) {
+			}
+			if (lineInfo != null) {
+				editor.selectAndReveal(lineInfo.getOffset(), 0);
+			}
+		}
 	}
 }

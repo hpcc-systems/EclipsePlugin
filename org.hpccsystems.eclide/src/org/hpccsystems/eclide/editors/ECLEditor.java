@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.editors;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.help.IContextProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -17,6 +19,9 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
+import org.hpccsystems.eclide.builder.meta.ECLMetaTree;
+import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 
 public class ECLEditor extends TextEditor {
 	
@@ -120,6 +125,30 @@ public class ECLEditor extends TextEditor {
 
 	public String getHoverWord() {
 		return getHoverWord(getDocument(), getCaretPosition());
+	}
+	
+	public ECLMetaNode getDefinition() {
+		IDocument doc = getDocument();
+		ECLMetaNode source;
+		if (doc instanceof ECLDocument) {
+			IFile file = ((ECLDocument)doc).getFile();
+			ECLMetaTree meta = ECLGlobalMeta.get();
+			source = meta.getSource(file);
+			if (source != null) {
+				ECLMetaNode context = source.getContext(getCaretPosition());
+				return context.findDefinition(getHoverWord(), false);
+			}
+		}
+		return null;
+	}
+
+	public IProject getProject() {
+		IDocument doc = getDocument();
+		if (doc instanceof ECLDocument) {
+			IFile file = ((ECLDocument)doc).getFile();
+			return file.getProject();
+		}
+		return null;
 	}
 }
 
