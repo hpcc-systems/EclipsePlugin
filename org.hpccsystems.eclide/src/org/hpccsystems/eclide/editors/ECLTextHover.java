@@ -11,15 +11,12 @@
 package org.hpccsystems.eclide.editors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
@@ -46,7 +43,7 @@ public class ECLTextHover implements ITextHover {
 		IDocument doc = textViewer.getDocument();
 		if (doc instanceof ECLDocument) {
 			IFile file = ((ECLDocument)doc).getFile();
-			source = meta.getSource(file.getLocation());
+			source = meta.getSource(file);
 			if (source == null) {
 				return "---  NO META  ---";
 			}
@@ -58,7 +55,7 @@ public class ECLTextHover implements ITextHover {
 
 		ECLMetaNode context = source.getContext(hoverRegion.getOffset());
 		hover.append("\nContext:  " + context.getName());
-
+		
 		ECLMetaNode found = context.findDefinition(text, false);
 		if (found != null) {
 			hover.append("\n---  MATCH  ---");

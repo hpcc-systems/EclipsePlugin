@@ -1,0 +1,4614 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<index>
+   <entry keyword="#APPEND">
+      <topic href="html/bk01ch12s02.html#d0e26196"/>
+   </entry>
+   <entry keyword="#BREAK">
+      <topic href="html/bk01ch12s14.html#d0e26924"/>
+   </entry>
+   <entry keyword="#CONSTANT">
+      <topic href="html/bk01ch12s03.html#d0e26250"/>
+   </entry>
+   <entry keyword="#DECLARE">
+      <topic href="html/bk01ch12s04.html#d0e26301"/>
+   </entry>
+   <entry keyword="#DEMANGLE">
+      <topic href="html/bk01ch12s05.html#d0e26349"/>
+   </entry>
+   <entry keyword="#ELSE">
+      <topic href="html/bk01ch12s12.html#d0e26775"/>
+   </entry>
+   <entry keyword="#ELSEIF">
+      <topic href="html/bk01ch12s12.html#d0e26754"/>
+   </entry>
+   <entry keyword="#END">
+      <topic href="html/bk01ch12s14.html#d0e26940"/>
+   </entry>
+   <entry keyword="#ERROR">
+      <topic href="html/bk01ch12s06.html#d0e26394"/>
+   </entry>
+   <entry keyword="#EXPAND">
+      <topic href="html/bk01ch12s07.html#d0e26437"/>
+   </entry>
+   <entry keyword="#EXPORT">
+      <topic href="html/bk01ch12s08.html#d0e26507"/>
+   </entry>
+   <entry keyword="#EXPORTXML">
+      <topic href="html/bk01ch12s09.html#d0e26546"/>
+   </entry>
+   <entry keyword="#FOR">
+      <topic href="html/bk01ch12s10.html#d0e26604"/>
+   </entry>
+   <entry keyword="#GETDATATYPE">
+      <topic href="html/bk01ch12s11.html#d0e26694"/>
+   </entry>
+   <entry keyword="#IF">
+      <topic href="html/bk01ch12s12.html#d0e26736"/>
+   </entry>
+   <entry keyword="#INMODULE">
+      <topic href="html/bk01ch12s13.html#d0e26860"/>
+   </entry>
+   <entry keyword="#LOOP">
+      <topic href="html/bk01ch12s14.html#d0e26907"/>
+   </entry>
+   <entry keyword="#MANGLE">
+      <topic href="html/bk01ch12s15.html#d0e26995"/>
+   </entry>
+   <entry keyword="#ONWARNING">
+      <topic href="html/bk01ch12s16.html#d0e27040"/>
+   </entry>
+   <entry keyword="#OPTION">
+      <topic href="html/bk01ch12s17.html#d0e27087"/>
+   </entry>
+   <entry keyword="#SET">
+      <topic href="html/bk01ch12s18.html#d0e28029"/>
+   </entry>
+   <entry keyword="#STORED">
+      <topic href="html/bk01ch12s19.html#d0e28083"/>
+   </entry>
+   <entry keyword="#TEXT">
+      <topic href="html/bk01ch12s20.html#d0e28137"/>
+   </entry>
+   <entry keyword="#UNIQUENAME">
+      <topic href="html/bk01ch12s21.html#d0e28179"/>
+   </entry>
+   <entry keyword="#WARNING">
+      <topic href="html/bk01ch12s22.html#d0e28228"/>
+   </entry>
+   <entry keyword="#WORKUNIT">
+      <topic href="html/bk01ch10s13s05.html#d0e10470"/>
+   </entry>
+   <entry keyword="#WORKUNIT">
+      <topic href="html/bk01ch12s23.html#d0e28271"/>
+   </entry>
+   <entry keyword=".SO">
+      <topic href="html/bk01ch13s03.html#d0e28473"/>
+   </entry>
+   <entry keyword="__COMPRESSED__">
+      <topic href="html/bk01ch05s02s01.html#d0e4165"/>
+   </entry>
+   <entry keyword="AbortDfuWorkunit">
+      <topic href="html/bk02ch06s02.html#d0e32430"/>
+   </entry>
+   <entry keyword="ABS">
+      <topic href="html/bk01ch10s01.html#d0e8779"/>
+   </entry>
+   <entry keyword="ABS function">
+      <topic href="html/bk01ch10s01.html#d0e8782"/>
+   </entry>
+   <entry keyword="ACOS">
+      <topic href="html/bk01ch10s02.html#d0e8825"/>
+   </entry>
+   <entry keyword="ACOS function">
+      <topic href="html/bk01ch10s02.html#d0e8828"/>
+   </entry>
+   <entry keyword="Actions as Attributes">
+      <topic href="html/bk01ch02s09s03.html#d0e1285"/>
+   </entry>
+   <entry keyword="AddFileRelationship">
+      <topic href="html/bk02ch05s03.html#d0e31917"/>
+   </entry>
+   <entry keyword="Addition">
+      <topic href="html/bk01ch03s01s01.html#d0e1373"/>
+   </entry>
+   <entry keyword="AddSuperFile">
+      <topic href="html/bk02ch02s11.html#d0e30671"/>
+   </entry>
+   <entry keyword="addWorkunitError">
+      <topic href="html/bk02ch12s04.html#d0e38494"/>
+   </entry>
+   <entry keyword="addWorkunitInformation">
+      <topic href="html/bk02ch12s02.html#d0e38342"/>
+   </entry>
+   <entry keyword="addWorkunitWarning">
+      <topic href="html/bk02ch12s03.html#d0e38418"/>
+   </entry>
+   <entry keyword="AFTER">
+      <topic href="html/bk01ch10s05.html#d0e9213"/>
+   </entry>
+   <entry keyword="AGGREGATE">
+      <topic href="html/bk01ch10s03.html#d0e8896"/>
+   </entry>
+   <entry keyword="AGGREGATE function">
+      <topic href="html/bk01ch10s03.html#d0e8899"/>
+   </entry>
+   <entry keyword="ALL">
+      <topic href="html/bk01ch08s01.html#d0e6851"/>
+   </entry>
+   <entry keyword="ALL">
+      <topic href="html/bk01ch10s26.html#d0e11739"/>
+   </entry>
+   <entry keyword="ALL">
+      <topic href="html/bk01ch10s49.html#d0e14038"/>
+   </entry>
+   <entry keyword="ALL">
+      <topic href="html/bk01ch10s60s03.html#d0e15166"/>
+   </entry>
+   <entry keyword="ALL">
+      <topic href="html/bk01ch10s82.html#d0e18439"/>
+   </entry>
+   <entry keyword="ALL">
+      <topic href="html/bk01ch10s82s06.html#d0e19518"/>
+   </entry>
+   <entry keyword="ALL">
+      <topic href="html/bk01ch10s84s01.html#d0e19891"/>
+   </entry>
+   <entry keyword="ALL">
+      <topic href="html/bk01ch10s135.html#d0e25051"/>
+   </entry>
+   <entry keyword="ALL keyword">
+      <topic href="html/bk01ch08s01.html#d0e6862"/>
+   </entry>
+   <entry keyword="ALLNODES">
+      <topic href="html/bk01ch10s04.html#d0e9137"/>
+   </entry>
+   <entry keyword="ALLNODES function">
+      <topic href="html/bk01ch10s04.html#d0e9140"/>
+   </entry>
+   <entry keyword="AND">
+      <topic href="html/bk01ch03s07.html#d0e1790"/>
+   </entry>
+   <entry keyword="AND">
+      <topic href="html/bk01ch05s01s03.html#d0e3397"/>
+   </entry>
+   <entry keyword="AND NOT">
+      <topic href="html/bk01ch05s01s03.html#d0e3441"/>
+   </entry>
+   <entry keyword="ANY">
+      <topic href="html/bk01ch02s06s04.html#d0e941"/>
+   </entry>
+   <entry keyword="APPLY">
+      <topic href="html/bk01ch10s05.html#d0e9192"/>
+   </entry>
+   <entry keyword="APPLY function">
+      <topic href="html/bk01ch10s05.html#d0e9195"/>
+   </entry>
+   <entry keyword="arguments">
+      <topic href="html/bk01ch02s06.html#d0e779"/>
+   </entry>
+   <entry keyword="arithmetic operators">
+      <topic href="html/bk01ch03s01s01.html#d0e1329"/>
+   </entry>
+   <entry keyword="AS">
+      <topic href="html/bk01ch08s05.html#d0e7063"/>
+   </entry>
+   <entry keyword="ASCII">
+      <topic href="html/bk01ch05s02s02.html#d0e4397"/>
+   </entry>
+   <entry keyword="ASCII">
+      <topic href="html/bk01ch10s06.html#d0e9301"/>
+   </entry>
+   <entry keyword="ASCII">
+      <topic href="html/bk01ch10s82s03.html#d0e19009"/>
+   </entry>
+   <entry keyword="ASCII function">
+      <topic href="html/bk01ch10s06.html#d0e9304"/>
+   </entry>
+   <entry keyword="ASIN">
+      <topic href="html/bk01ch10s07.html#d0e9352"/>
+   </entry>
+   <entry keyword="ASIN function">
+      <topic href="html/bk01ch10s07.html#d0e9355"/>
+   </entry>
+   <entry keyword="ASSERT">
+      <topic href="html/bk01ch10s08.html#d0e9424"/>
+   </entry>
+   <entry keyword="ASSERT function">
+      <topic href="html/bk01ch10s08.html#d0e9467"/>
+   </entry>
+   <entry keyword="ASSTRING">
+      <topic href="html/bk01ch10s09.html#d0e9564"/>
+   </entry>
+   <entry keyword="ASSTRING function">
+      <topic href="html/bk01ch10s09.html#d0e9594"/>
+   </entry>
+   <entry keyword="ATAN">
+      <topic href="html/bk01ch10s10.html#d0e9630"/>
+   </entry>
+   <entry keyword="ATAN function">
+      <topic href="html/bk01ch10s10.html#d0e9633"/>
+   </entry>
+   <entry keyword="ATAN function">
+      <topic href="html/bk01ch10s11.html#d0e9743"/>
+   </entry>
+   <entry keyword="ATAN2">
+      <topic href="html/bk01ch10s11.html#d0e9704"/>
+   </entry>
+   <entry keyword="ATAN2 function">
+      <topic href="html/bk01ch10s11.html#d0e9707"/>
+   </entry>
+   <entry keyword="ATMOST">
+      <topic href="html/bk01ch10s60s03.html#d0e15217"/>
+   </entry>
+   <entry keyword="ATMOST">
+      <topic href="html/bk01ch10s84s01.html#d0e19983"/>
+   </entry>
+   <entry keyword="Attribute">
+      <topic href="html/bk01ch02s03.html#d0e377"/>
+   </entry>
+   <entry keyword="Attribute Definition Operator">
+      <topic href="html/bk01ch02s03.html#d0e420"/>
+   </entry>
+   <entry keyword="Attribute Name">
+      <topic href="html/bk01ch02s03s01.html#d0e468"/>
+   </entry>
+   <entry keyword="Attribute Types">
+      <topic href="html/bk01ch02s04.html#d0e515"/>
+   </entry>
+   <entry keyword="Attribute Visibility">
+      <topic href="html/bk01ch02s07.html#d0e1073"/>
+   </entry>
+   <entry keyword="Attribute Visibility">
+      <topic href="html/bk01ch09s06s01.html#d0e8278"/>
+   </entry>
+   <entry keyword="Attributes as Actions">
+      <topic href="html/bk01ch02s09s02.html#d0e1275"/>
+   </entry>
+   <entry keyword="Audit">
+      <topic href="html/bk02ch13s01.html#d0e38568"/>
+   </entry>
+   <entry keyword="Audit.Audit">
+      <topic href="html/bk02ch13s01.html#d0e38565"/>
+   </entry>
+   <entry keyword="AVE">
+      <topic href="html/bk01ch10s12.html#d0e9791"/>
+   </entry>
+   <entry keyword="AVE function">
+      <topic href="html/bk01ch10s12.html#d0e9794"/>
+   </entry>
+   <entry keyword="BEFORE">
+      <topic href="html/bk01ch10s05.html#d0e9203"/>
+   </entry>
+   <entry keyword="BEGINC++">
+      <topic href="html/bk01ch09s01.html#d0e7536"/>
+   </entry>
+   <entry keyword="BEGINC++ Structure">
+      <topic href="html/bk01ch09s01.html#d0e7524"/>
+   </entry>
+   <entry keyword="BEST">
+      <topic href="html/bk01ch10s84s01.html#d0e20063"/>
+   </entry>
+   <entry keyword="BEST">
+      <topic href="html/bk01ch10s122.html#d0e24123"/>
+   </entry>
+   <entry keyword="BETWEEN">
+      <topic href="html/bk01ch03s07.html#d0e1782"/>
+   </entry>
+   <entry keyword="Between Operator">
+      <topic href="html/bk01ch03s07.html#d0e1774"/>
+   </entry>
+   <entry keyword="BIG_ENDIAN">
+      <topic href="html/bk01ch04s02.html#d0e1946"/>
+   </entry>
+   <entry keyword="Binary values">
+      <topic href="html/bk01ch02s02s02.html#d0e362"/>
+   </entry>
+   <entry keyword="Bitshift Left">
+      <topic href="html/bk01ch03s01s03.html#d0e1460"/>
+   </entry>
+   <entry keyword="Bitshift operators">
+      <topic href="html/bk01ch03s01s03.html#d0e1440"/>
+   </entry>
+   <entry keyword="Bitshift Right">
+      <topic href="html/bk01ch03s01s03.html#d0e1452"/>
+   </entry>
+   <entry keyword="Bitwise AND">
+      <topic href="html/bk01ch03s01s02.html#d0e1405"/>
+   </entry>
+   <entry keyword="Bitwise Exclusive OR">
+      <topic href="html/bk01ch03s01s02.html#d0e1421"/>
+   </entry>
+   <entry keyword="Bitwise NOT">
+      <topic href="html/bk01ch03s01s02.html#d0e1429"/>
+   </entry>
+   <entry keyword="Bitwise operators">
+      <topic href="html/bk01ch03s01s02.html#d0e1393"/>
+   </entry>
+   <entry keyword="Bitwise OR">
+      <topic href="html/bk01ch03s01s02.html#d0e1413"/>
+   </entry>
+   <entry keyword="BOOLEAN">
+      <topic href="html/bk01ch04s01s01.html#d0e1865"/>
+   </entry>
+   <entry keyword="BOOLEAN">
+      <topic href="html/bk01ch06s02s05.html#d0e5847"/>
+   </entry>
+   <entry keyword="Boolean">
+      <topic href="html/bk01ch02s04.html#d0e522"/>
+   </entry>
+   <entry keyword="Boolean AND">
+      <topic href="html/bk01ch03s02.html#d0e1599"/>
+   </entry>
+   <entry keyword="Boolean Attribute">
+      <topic href="html/bk01ch02s04s01.html#d0e553"/>
+   </entry>
+   <entry keyword="Boolean Attribute">
+      <topic href="html/bk01ch02s05.html#d0e740"/>
+   </entry>
+   <entry keyword="Boolean NOT">
+      <topic href="html/bk01ch03s02.html#d0e1581"/>
+   </entry>
+   <entry keyword="Boolean NOT">
+      <topic href="html/bk01ch03s02.html#d0e1590"/>
+   </entry>
+   <entry keyword="Boolean OR">
+      <topic href="html/bk01ch03s02.html#d0e1608"/>
+   </entry>
+   <entry keyword="BOOLEAN value type">
+      <topic href="html/bk01ch04s01s01.html#d0e1868"/>
+   </entry>
+   <entry keyword="BUILD">
+      <topic href="html/bk01ch10s13.html#d0e9888"/>
+   </entry>
+   <entry keyword="BUILD action">
+      <topic href="html/bk01ch05s03.html#d0e5246"/>
+   </entry>
+   <entry keyword="BUILD action">
+      <topic href="html/bk01ch05s03s02.html#d0e5301"/>
+   </entry>
+   <entry keyword="CASE">
+      <topic href="html/bk01ch10s14.html#d0e10522"/>
+   </entry>
+   <entry keyword="CASE">
+      <topic href="html/bk01ch10s84s01.html#d0e19945"/>
+   </entry>
+   <entry keyword="CASE function">
+      <topic href="html/bk01ch10s14.html#d0e10525"/>
+   </entry>
+   <entry keyword="Casting Rules">
+      <topic href="html/bk01ch04s15s04.html#d0e2732"/>
+   </entry>
+   <entry keyword="Character Sets">
+      <topic href="html/bk01ch02s04s04.html#d0e642"/>
+   </entry>
+   <entry keyword="CHECKPOINT">
+      <topic href="html/bk01ch11s02.html#d0e25113"/>
+   </entry>
+   <entry keyword="CHECKPOINT workflow service">
+      <topic href="html/bk01ch11s02.html#d0e25121"/>
+   </entry>
+   <entry keyword="Child Dataset">
+      <topic href="html/bk01ch05s02s08.html#d0e4870"/>
+   </entry>
+   <entry keyword="child dataset records">
+      <topic href="html/bk01ch05s02s08.html#d0e4917"/>
+   </entry>
+   <entry keyword="CHOOSE">
+      <topic href="html/bk01ch10s15.html#d0e10648"/>
+   </entry>
+   <entry keyword="CHOOSE function">
+      <topic href="html/bk01ch10s15.html#d0e10651"/>
+   </entry>
+   <entry keyword="CHOOSEN">
+      <topic href="html/bk01ch05s02.html#d0e3908"/>
+   </entry>
+   <entry keyword="CHOOSEN">
+      <topic href="html/bk01ch05s02s08.html#d0e4907"/>
+   </entry>
+   <entry keyword="CHOOSEN">
+      <topic href="html/bk01ch10s16.html#d0e10734"/>
+   </entry>
+   <entry keyword="CHOOSEN function">
+      <topic href="html/bk01ch10s16.html#d0e10737"/>
+   </entry>
+   <entry keyword="CHOOSESETS">
+      <topic href="html/bk01ch10s17.html#d0e10822"/>
+   </entry>
+   <entry keyword="CHOOSESETS function">
+      <topic href="html/bk01ch10s17.html#d0e10825"/>
+   </entry>
+   <entry keyword="CleanSpaces">
+      <topic href="html/bk02ch07s02.html#d0e34317"/>
+   </entry>
+   <entry keyword="ClearSuperFile">
+      <topic href="html/bk02ch02s13.html#d0e30904"/>
+   </entry>
+   <entry keyword="CLUSTER">
+      <topic href="html/bk01ch10s13s01.html#d0e10083"/>
+   </entry>
+   <entry keyword="CLUSTER">
+      <topic href="html/bk01ch10s82s02.html#d0e18662"/>
+   </entry>
+   <entry keyword="CLUSTER">
+      <topic href="html/bk01ch10s82s03.html#d0e18838"/>
+   </entry>
+   <entry keyword="CLUSTER">
+      <topic href="html/bk01ch10s82s04.html#d0e19178"/>
+   </entry>
+   <entry keyword="CLUSTER">
+      <topic href="html/bk01ch11s08.html#d0e25538"/>
+   </entry>
+   <entry keyword="CLUSTERSIZE">
+      <topic href="html/bk01ch10s18.html#d0e10965"/>
+   </entry>
+   <entry keyword="CmdProcess">
+      <topic href="html/bk02ch14s03.html#d0e38764"/>
+   </entry>
+   <entry keyword="COMBINE">
+      <topic href="html/bk01ch10s19.html#d0e11015"/>
+   </entry>
+   <entry keyword="COMBINE function">
+      <topic href="html/bk01ch10s19.html#d0e10997"/>
+   </entry>
+   <entry keyword="CompareAtStrength">
+      <topic href="html/bk02ch07s03.html#d0e34385"/>
+   </entry>
+   <entry keyword="CompareFiles">
+      <topic href="html/bk02ch01s01.html#d0e28950"/>
+   </entry>
+   <entry keyword="CompareIgnoreCase">
+      <topic href="html/bk02ch07s04.html#d0e34512"/>
+   </entry>
+   <entry keyword="comparison operator">
+      <topic href="html/bk01ch03s01s04.html#d0e1472"/>
+   </entry>
+   <entry keyword="comparison operator">
+      <topic href="html/bk01ch10s128.html#d0e24578"/>
+   </entry>
+   <entry keyword="COMPRESSED">
+      <topic href="html/bk01ch05s02s01.html#d0e4162"/>
+   </entry>
+   <entry keyword="COMPRESSED">
+      <topic href="html/bk01ch05s03.html#d0e5072"/>
+   </entry>
+   <entry keyword="COMPRESSED">
+      <topic href="html/bk01ch10s82s02.html#d0e18687"/>
+   </entry>
+   <entry keyword="COMPRESSION">
+      <topic href="html/bk01ch10s13s01.html#d0e10141"/>
+   </entry>
+   <entry keyword="Concatenation">
+      <topic href="html/bk01ch03s05.html#d0e1707"/>
+   </entry>
+   <entry keyword="Concatenation">
+      <topic href="html/bk01ch05s02s08.html#d0e4967"/>
+   </entry>
+   <entry keyword="CONST">
+      <topic href="html/bk01ch02s06.html#d0e826"/>
+   </entry>
+   <entry keyword="CONST">
+      <topic href="html/bk01ch10s08.html#d0e9446"/>
+   </entry>
+   <entry keyword="CONST">
+      <topic href="html/bk01ch13s02.html#d0e28439"/>
+   </entry>
+   <entry keyword="CONST Function">
+      <topic href="html/bk01ch13s02.html#d0e28442"/>
+   </entry>
+   <entry keyword="Constant set">
+      <topic href="html/bk01ch02s04s03.html#d0e585"/>
+   </entry>
+   <entry keyword="constant values">
+      <topic href="html/bk01ch02s04s03.html#d0e589"/>
+   </entry>
+   <entry keyword="constant values">
+      <topic href="html/bk01ch05s02s06.html#d0e4827"/>
+   </entry>
+   <entry keyword="constants">
+      <topic href="html/bk01ch02s02s01.html#d0e309"/>
+   </entry>
+   <entry keyword="Contains">
+      <topic href="html/bk02ch07s05.html#d0e34631"/>
+   </entry>
+   <entry keyword="Copy">
+      <topic href="html/bk02ch06s03.html#d0e32488"/>
+   </entry>
+   <entry keyword="CORRELATION">
+      <topic href="html/bk01ch10s20.html#d0e11188"/>
+   </entry>
+   <entry keyword="CORRELATION function">
+      <topic href="html/bk01ch10s20.html#d0e11191"/>
+   </entry>
+   <entry keyword="COS">
+      <topic href="html/bk01ch10s21.html#d0e11279"/>
+   </entry>
+   <entry keyword="COS function">
+      <topic href="html/bk01ch10s21.html#d0e11282"/>
+   </entry>
+   <entry keyword="COSH">
+      <topic href="html/bk01ch10s22.html#d0e11350"/>
+   </entry>
+   <entry keyword="COSH function">
+      <topic href="html/bk01ch10s22.html#d0e11353"/>
+   </entry>
+   <entry keyword="COUNT">
+      <topic href="html/bk01ch05s02.html#d0e3886"/>
+   </entry>
+   <entry keyword="COUNT">
+      <topic href="html/bk01ch05s02s08.html#d0e4885"/>
+   </entry>
+   <entry keyword="COUNT">
+      <topic href="html/bk01ch10s23.html#d0e11441"/>
+   </entry>
+   <entry keyword="COUNT">
+      <topic href="html/bk01ch10s66.html#d0e16532"/>
+   </entry>
+   <entry keyword="COUNT">
+      <topic href="html/bk01ch10s66.html#d0e16588"/>
+   </entry>
+   <entry keyword="COUNT">
+      <topic href="html/bk01ch10s104.html#d0e22189"/>
+   </entry>
+   <entry keyword="COUNT">
+      <topic href="html/bk01ch11s13.html#d0e26045"/>
+   </entry>
+   <entry keyword="COUNT function">
+      <topic href="html/bk01ch10s23.html#d0e11421"/>
+   </entry>
+   <entry keyword="COUNTER">
+      <topic href="html/bk01ch05s02s08.html#d0e4987"/>
+   </entry>
+   <entry keyword="COUNTER">
+      <topic href="html/bk01ch08s11.html#d0e7465"/>
+   </entry>
+   <entry keyword="COUNTER">
+      <topic href="html/bk01ch09s07s02.html#d0e8689"/>
+   </entry>
+   <entry keyword="COUNTER">
+      <topic href="html/bk01ch10s28s01.html#d0e12159"/>
+   </entry>
+   <entry keyword="COUNTER">
+      <topic href="html/bk01ch10s48.html#d0e13976"/>
+   </entry>
+   <entry keyword="COUNTER">
+      <topic href="html/bk01ch10s60s07.html#d0e15827"/>
+   </entry>
+   <entry keyword="COUNTER">
+      <topic href="html/bk01ch10s71.html#d0e17129"/>
+   </entry>
+   <entry keyword="COUNTER">
+      <topic href="html/bk01ch10s79s04.html#d0e18094"/>
+   </entry>
+   <entry keyword="COUNTER">
+      <topic href="html/bk01ch10s89s01.html#d0e20845"/>
+   </entry>
+   <entry keyword="COVARIANCE">
+      <topic href="html/bk01ch10s24.html#d0e11524"/>
+   </entry>
+   <entry keyword="COVARIANCE function">
+      <topic href="html/bk01ch10s24.html#d0e11527"/>
+   </entry>
+   <entry keyword="CreateExternalDirectory">
+      <topic href="html/bk02ch03s04.html#d0e31569"/>
+   </entry>
+   <entry keyword="CreateSuperFile">
+      <topic href="html/bk02ch02s01.html#d0e29998"/>
+   </entry>
+   <entry keyword="CRON">
+      <topic href="html/bk01ch10s25.html#d0e11612"/>
+   </entry>
+   <entry keyword="CRON function">
+      <topic href="html/bk01ch10s25.html#d0e11615"/>
+   </entry>
+   <entry keyword="CSV">
+      <topic href="html/bk01ch05s02s02.html#d0e4343"/>
+   </entry>
+   <entry keyword="CSV">
+      <topic href="html/bk01ch05s02s04.html#d0e4691"/>
+   </entry>
+   <entry keyword="CSV">
+      <topic href="html/bk01ch10s82.html#d0e18321"/>
+   </entry>
+   <entry keyword="CSV">
+      <topic href="html/bk01ch10s82s03.html#d0e18826"/>
+   </entry>
+   <entry keyword="CSV">
+      <topic href="html/bk01ch10s82s05.html#d0e19399"/>
+   </entry>
+   <entry keyword="CSV">
+      <topic href="html/bk01ch10s85.html#d0e20221"/>
+   </entry>
+   <entry keyword="CSV Files">
+      <topic href="html/bk01ch05s02s02.html#d0e4327"/>
+   </entry>
+   <entry keyword="CSV Files">
+      <topic href="html/bk01ch10s82s03.html#d0e18794"/>
+   </entry>
+   <entry keyword="DaliServer">
+      <topic href="html/bk02ch09s04.html#d0e37337"/>
+   </entry>
+   <entry keyword="DATA">
+      <topic href="html/bk01ch04s08.html#d0e2320"/>
+   </entry>
+   <entry keyword="Data string">
+      <topic href="html/bk01ch02s02s01.html#d0e305"/>
+   </entry>
+   <entry keyword="DATA value type">
+      <topic href="html/bk01ch04s08.html#d0e2323"/>
+   </entry>
+   <entry keyword="DATASET">
+      <topic href="html/bk01ch05s02.html#d0e3805"/>
+   </entry>
+   <entry keyword="DATASET">
+      <topic href="html/bk01ch05s02.html#d0e3923"/>
+   </entry>
+   <entry keyword="DATASET">
+      <topic href="html/bk01ch05s02s02.html#d0e4335"/>
+   </entry>
+   <entry keyword="DATASET">
+      <topic href="html/bk01ch05s04s05.html#d0e5496"/>
+   </entry>
+   <entry keyword="DATASET">
+      <topic href="html/bk01ch10s13s01.html#d0e10109"/>
+   </entry>
+   <entry keyword="DATASET">
+      <topic href="html/bk01ch10s111.html#d0e22668"/>
+   </entry>
+   <entry keyword="Dataset">
+      <topic href="html/bk01ch02s04s05.html#d0e665"/>
+   </entry>
+   <entry keyword="DATASET declaration">
+      <topic href="html/bk01ch05s04s01.html#d0e5375"/>
+   </entry>
+   <entry keyword="DATASET declaration">
+      <topic href="html/bk01ch05s04s05.html#d0e5489"/>
+   </entry>
+   <entry keyword="DATASET parameter">
+      <topic href="html/bk01ch02s06s03.html#d0e901"/>
+   </entry>
+   <entry keyword="DATASET parameters">
+      <topic href="html/bk01ch05s02.html#d0e4135"/>
+   </entry>
+   <entry keyword="Date.Date_rec">
+      <topic href="html/bk02ch08s01.html#d0e36878"/>
+   </entry>
+   <entry keyword="Date.Date_t">
+      <topic href="html/bk02ch08s01.html#d0e36887"/>
+   </entry>
+   <entry keyword="Date.DateFromParts">
+      <topic href="html/bk02ch08s05.html#d0e37083"/>
+   </entry>
+   <entry keyword="Date.Day">
+      <topic href="html/bk02ch08s04.html#d0e37034"/>
+   </entry>
+   <entry keyword="Date.Days_t">
+      <topic href="html/bk02ch08s01.html#d0e36896"/>
+   </entry>
+   <entry keyword="Date.Month">
+      <topic href="html/bk02ch08s03.html#d0e36985"/>
+   </entry>
+   <entry keyword="Date.Year">
+      <topic href="html/bk02ch08s02.html#d0e36936"/>
+   </entry>
+   <entry keyword="dbglog">
+      <topic href="html/bk02ch12s01.html#d0e38285"/>
+   </entry>
+   <entry keyword="Debug.GetParseTree">
+      <topic href="html/bk02ch15s01.html#d0e38893"/>
+   </entry>
+   <entry keyword="Debug.GetXMLParseTree">
+      <topic href="html/bk02ch15s02.html#d0e38943"/>
+   </entry>
+   <entry keyword="Debug.msTick">
+      <topic href="html/bk02ch15s04.html#d0e39050"/>
+   </entry>
+   <entry keyword="Debug.Sleep">
+      <topic href="html/bk02ch15s03.html#d0e38993"/>
+   </entry>
+   <entry keyword="DECIMAL">
+      <topic href="html/bk01ch04s04.html#d0e2107"/>
+   </entry>
+   <entry keyword="DECIMAL value type">
+      <topic href="html/bk01ch04s04.html#d0e2126"/>
+   </entry>
+   <entry keyword="DEDUP">
+      <topic href="html/bk01ch10s13s01.html#d0e10165"/>
+   </entry>
+   <entry keyword="DEDUP">
+      <topic href="html/bk01ch10s26.html#d0e11721"/>
+   </entry>
+   <entry keyword="DEDUP">
+      <topic href="html/bk01ch10s74.html#d0e17415"/>
+   </entry>
+   <entry keyword="DEDUP">
+      <topic href="html/bk01ch10s75.html#d0e17552"/>
+   </entry>
+   <entry keyword="DEDUP function">
+      <topic href="html/bk01ch10s26.html#d0e11727"/>
+   </entry>
+   <entry keyword="DEDUP function">
+      <topic href="html/bk01ch10s26s01.html#d0e11907"/>
+   </entry>
+   <entry keyword="DEDUP function">
+      <topic href="html/bk01ch10s100.html#d0e21792"/>
+   </entry>
+   <entry keyword="DEFINE">
+      <topic href="html/bk01ch10s27.html#d0e11931"/>
+   </entry>
+   <entry keyword="DEFINE function">
+      <topic href="html/bk01ch10s27.html#d0e11937"/>
+   </entry>
+   <entry keyword="DeleteExternalFile">
+      <topic href="html/bk02ch03s03.html#d0e31511"/>
+   </entry>
+   <entry keyword="DeleteLogicalFiles">
+      <topic href="html/bk02ch01s02.html#d0e29123"/>
+   </entry>
+   <entry keyword="DeleteSuperFile">
+      <topic href="html/bk02ch02s03.html#d0e30179"/>
+   </entry>
+   <entry keyword="DENORMALIZE">
+      <topic href="html/bk01ch10s28.html#d0e11997"/>
+   </entry>
+   <entry keyword="DENORMALIZE function">
+      <topic href="html/bk01ch10s28.html#d0e12003"/>
+   </entry>
+   <entry keyword="DEPRECATED">
+      <topic href="html/bk01ch11s03.html#d0e25184"/>
+   </entry>
+   <entry keyword="DEPRECATED workflow service">
+      <topic href="html/bk01ch11s03.html#d0e25192"/>
+   </entry>
+   <entry keyword="DESCEND">
+      <topic href="html/bk01ch10s93.html#d0e21127"/>
+   </entry>
+   <entry keyword="DESCEND">
+      <topic href="html/bk01ch10s94.html#d0e21212"/>
+   </entry>
+   <entry keyword="DeSpray">
+      <topic href="html/bk02ch06s04.html#d0e32732"/>
+   </entry>
+   <entry keyword="DfuPlusExec">
+      <topic href="html/bk02ch06s01.html#d0e32385"/>
+   </entry>
+   <entry keyword="DISTINCT statement in SQL">
+      <topic href="html/bk01ch10s26.html#d0e11838"/>
+   </entry>
+   <entry keyword="DISTRIBUTE">
+      <topic href="html/bk01ch10s13s01.html#d0e10095"/>
+   </entry>
+   <entry keyword="DISTRIBUTE">
+      <topic href="html/bk01ch10s29.html#d0e12206"/>
+   </entry>
+   <entry keyword="DISTRIBUTE function">
+      <topic href="html/bk01ch10s29.html#d0e12212"/>
+   </entry>
+   <entry keyword="DISTRIBUTED">
+      <topic href="html/bk01ch05s03.html#d0e5090"/>
+   </entry>
+   <entry keyword="DISTRIBUTED">
+      <topic href="html/bk01ch10s13s01.html#d0e10135"/>
+   </entry>
+   <entry keyword="DISTRIBUTED">
+      <topic href="html/bk01ch10s30.html#d0e12478"/>
+   </entry>
+   <entry keyword="DISTRIBUTED function">
+      <topic href="html/bk01ch10s30.html#d0e12484"/>
+   </entry>
+   <entry keyword="DISTRIBUTION">
+      <topic href="html/bk01ch10s31.html#d0e12555"/>
+   </entry>
+   <entry keyword="DISTRIBUTION action">
+      <topic href="html/bk01ch10s133.html#d0e24965"/>
+   </entry>
+   <entry keyword="DISTRIBUTION function">
+      <topic href="html/bk01ch10s31.html#d0e12561"/>
+   </entry>
+   <entry keyword="Division">
+      <topic href="html/bk01ch03s01s01.html#d0e1341"/>
+   </entry>
+   <entry keyword="dot syntax">
+      <topic href="html/bk01ch02s08s01.html#d0e1166"/>
+   </entry>
+   <entry keyword="Dynamic Files">
+      <topic href="html/bk01ch05s04s04.html#d0e5454"/>
+   </entry>
+   <entry keyword="EBCDIC">
+      <topic href="html/bk01ch05s02s02.html#d0e4401"/>
+   </entry>
+   <entry keyword="EBCDIC">
+      <topic href="html/bk01ch10s32.html#d0e12633"/>
+   </entry>
+   <entry keyword="EBCDIC">
+      <topic href="html/bk01ch10s82s03.html#d0e19013"/>
+   </entry>
+   <entry keyword="EBCDIC function">
+      <topic href="html/bk01ch10s32.html#d0e12639"/>
+   </entry>
+   <entry keyword="ECL">
+      <topic href="html/bk01ch02s01.html#d0e199"/>
+   </entry>
+   <entry keyword="ECL definition">
+      <topic href="html/bk01ch02s03.html#d0e373"/>
+   </entry>
+   <entry keyword="ECL IDE">
+      <topic href="html/bk01ch02s02s01.html#d0e278"/>
+   </entry>
+   <entry keyword="ECL keywords">
+      <topic href="html/bk01ch02s03s02.html#d0e484"/>
+   </entry>
+   <entry keyword="EditDistance">
+      <topic href="html/bk02ch07s07.html#d0e34775"/>
+   </entry>
+   <entry keyword="EditDistanceWithinRadius">
+      <topic href="html/bk02ch07s08.html#d0e34865"/>
+   </entry>
+   <entry keyword="Email.SendEmail">
+      <topic href="html/bk02ch16s01.html#d0e39099"/>
+   </entry>
+   <entry keyword="Email.SendEmailAttachData">
+      <topic href="html/bk02ch16s02.html#d0e39178"/>
+   </entry>
+   <entry keyword="Email.SendEmailAttachText">
+      <topic href="html/bk02ch16s03.html#d0e39287"/>
+   </entry>
+   <entry keyword="EncodeRfsQuery">
+      <topic href="html/bk02ch04s01.html#d0e31634"/>
+   </entry>
+   <entry keyword="ENCRYPT">
+      <topic href="html/bk01ch05s02s01.html#d0e4189"/>
+   </entry>
+   <entry keyword="ENCRYPT">
+      <topic href="html/bk01ch05s02s02.html#d0e4417"/>
+   </entry>
+   <entry keyword="ENCRYPT">
+      <topic href="html/bk01ch05s02s03.html#d0e4581"/>
+   </entry>
+   <entry keyword="ENCRYPT">
+      <topic href="html/bk01ch10s82s02.html#d0e18672"/>
+   </entry>
+   <entry keyword="ENCRYPT">
+      <topic href="html/bk01ch10s82s03.html#d0e18848"/>
+   </entry>
+   <entry keyword="ENCRYPT">
+      <topic href="html/bk01ch10s82s04.html#d0e19170"/>
+   </entry>
+   <entry keyword="ENDC++">
+      <topic href="html/bk01ch09s01.html#d0e7550"/>
+   </entry>
+   <entry keyword="ENDMACRO">
+      <topic href="html/bk01ch09s05.html#d0e8058"/>
+   </entry>
+   <entry keyword="EndsWith">
+      <topic href="html/bk02ch07s09.html#d0e34958"/>
+   </entry>
+   <entry keyword="ENTH">
+      <topic href="html/bk01ch10s17.html#d0e10863"/>
+   </entry>
+   <entry keyword="ENTH">
+      <topic href="html/bk01ch10s33.html#d0e12691"/>
+   </entry>
+   <entry keyword="ENTH function">
+      <topic href="html/bk01ch10s33.html#d0e12685"/>
+   </entry>
+   <entry keyword="ENUM">
+      <topic href="html/bk01ch04s14.html#d0e2594"/>
+   </entry>
+   <entry keyword="ENUM datatype">
+      <topic href="html/bk01ch04s14.html#d0e2597"/>
+   </entry>
+   <entry keyword="EqualIgnoreCase">
+      <topic href="html/bk02ch07s10.html#d0e35020"/>
+   </entry>
+   <entry keyword="Equivalence">
+      <topic href="html/bk01ch03s01s04.html#d0e1479"/>
+   </entry>
+   <entry keyword="Equivalence">
+      <topic href="html/bk01ch07s02s01.html#d0e6554"/>
+   </entry>
+   <entry keyword="Equivalence Comparison">
+      <topic href="html/bk01ch03s01s04.html#d0e1548"/>
+   </entry>
+   <entry keyword="ERROR">
+      <topic href="html/bk01ch10s34.html#d0e12786"/>
+   </entry>
+   <entry keyword="ERROR function">
+      <topic href="html/bk01ch10s34.html#d0e12792"/>
+   </entry>
+   <entry keyword="ERROR function">
+      <topic href="html/bk01ch10s41.html#d0e13448"/>
+   </entry>
+   <entry keyword="EVALUATE">
+      <topic href="html/bk01ch10s35s01.html#d0e12893"/>
+   </entry>
+   <entry keyword="EVALUATE action">
+      <topic href="html/bk01ch10s35s01.html#d0e12905"/>
+   </entry>
+   <entry keyword="EVALUATE function">
+      <topic href="html/bk01ch10s35s02.html#d0e12953"/>
+   </entry>
+   <entry keyword="EVENT">
+      <topic href="html/bk01ch10s36.html#d0e13016"/>
+   </entry>
+   <entry keyword="EVENT function">
+      <topic href="html/bk01ch10s36.html#d0e13022"/>
+   </entry>
+   <entry keyword="EVENTEXTRA">
+      <topic href="html/bk01ch10s38.html#d0e13138"/>
+   </entry>
+   <entry keyword="EVENTEXTRA function">
+      <topic href="html/bk01ch10s38.html#d0e13162"/>
+   </entry>
+   <entry keyword="EVENTNAME">
+      <topic href="html/bk01ch10s37.html#d0e13088"/>
+   </entry>
+   <entry keyword="EXCEPT">
+      <topic href="html/bk01ch08s02.html#d0e6884"/>
+   </entry>
+   <entry keyword="EXCEPT keyword">
+      <topic href="html/bk01ch08s02.html#d0e6899"/>
+   </entry>
+   <entry keyword="EXCLUSIVE">
+      <topic href="html/bk01ch10s17.html#d0e10842"/>
+   </entry>
+   <entry keyword="EXISTS">
+      <topic href="html/bk01ch10s39.html#d0e13195"/>
+   </entry>
+   <entry keyword="EXISTS function">
+      <topic href="html/bk01ch10s39.html#d0e13201"/>
+   </entry>
+   <entry keyword="EXP">
+      <topic href="html/bk01ch10s40.html#d0e13282"/>
+   </entry>
+   <entry keyword="EXP function">
+      <topic href="html/bk01ch10s40.html#d0e13288"/>
+   </entry>
+   <entry keyword="EXP function">
+      <topic href="html/bk01ch10s67.html#d0e16710"/>
+   </entry>
+   <entry keyword="EXPIRE">
+      <topic href="html/bk01ch10s61.html#d0e16063"/>
+   </entry>
+   <entry keyword="EXPIRE">
+      <topic href="html/bk01ch10s62.html#d0e16187"/>
+   </entry>
+   <entry keyword="EXPIRE">
+      <topic href="html/bk01ch10s82s02.html#d0e18705"/>
+   </entry>
+   <entry keyword="EXPIRE">
+      <topic href="html/bk01ch10s82s03.html#d0e18874"/>
+   </entry>
+   <entry keyword="EXPIRE">
+      <topic href="html/bk01ch10s82s04.html#d0e19200"/>
+   </entry>
+   <entry keyword="EXPIRE">
+      <topic href="html/bk01ch11s08.html#d0e25546"/>
+   </entry>
+   <entry keyword="Explicit Casting">
+      <topic href="html/bk01ch04s15s01.html#d0e2680"/>
+   </entry>
+   <entry keyword="EXPORT">
+      <topic href="html/bk01ch02s07s01.html#d0e1098"/>
+   </entry>
+   <entry keyword="EXPORT">
+      <topic href="html/bk01ch06s02s01.html#d0e5662"/>
+   </entry>
+   <entry keyword="EXPORT">
+      <topic href="html/bk01ch08s03.html#d0e6935"/>
+   </entry>
+   <entry keyword="EXPORT keyword">
+      <topic href="html/bk01ch08s03.html#d0e6950"/>
+   </entry>
+   <entry keyword="EXPORTed">
+      <topic href="html/bk01ch02s08s01.html#d0e1148"/>
+   </entry>
+   <entry keyword="EXPORTed Attributes">
+      <topic href="html/bk01ch02s08s01.html#d0e1152"/>
+   </entry>
+   <entry keyword="Expression">
+      <topic href="html/bk01ch02s03.html#d0e410"/>
+   </entry>
+   <entry keyword="Expressions">
+      <topic href="html/bk01ch03s01.html#d0e1320"/>
+   </entry>
+   <entry keyword="Expressions and Operators">
+      <topic href="html/bk01ch03s01.html#d0e1315"/>
+   </entry>
+   <entry keyword="EXTEND">
+      <topic href="html/bk01ch10s82.html#d0e18431"/>
+   </entry>
+   <entry keyword="EXTEND">
+      <topic href="html/bk01ch10s82s06.html#d0e19510"/>
+   </entry>
+   <entry keyword="Extended PARSE">
+      <topic href="html/bk01ch10s84s03.html#d0e20186"/>
+   </entry>
+   <entry keyword="Extended PARSE Examples">
+      <topic href="html/bk01ch10s84s03.html#d0e20193"/>
+   </entry>
+   <entry keyword="External Service">
+      <topic href="html/bk01ch13s03.html#d0e28469"/>
+   </entry>
+   <entry keyword="external system services">
+      <topic href="html/bk01ch13s03.html#d0e28466"/>
+   </entry>
+   <entry keyword="ExternalLogicalFileName">
+      <topic href="html/bk02ch03s01.html#d0e31382"/>
+   </entry>
+   <entry keyword="Extract">
+      <topic href="html/bk02ch07s11.html#d0e35084"/>
+   </entry>
+   <entry keyword="FAIL">
+      <topic href="html/bk01ch10s08.html#d0e9439"/>
+   </entry>
+   <entry keyword="FAIL">
+      <topic href="html/bk01ch10s41.html#d0e13338"/>
+   </entry>
+   <entry keyword="FAIL action">
+      <topic href="html/bk01ch10s34.html#d0e12872"/>
+   </entry>
+   <entry keyword="FAIL function">
+      <topic href="html/bk01ch10s41.html#d0e13349"/>
+   </entry>
+   <entry keyword="FAILCODE">
+      <topic href="html/bk01ch10s42.html#d0e13472"/>
+   </entry>
+   <entry keyword="FAILCODE function">
+      <topic href="html/bk01ch10s42.html#d0e13466"/>
+   </entry>
+   <entry keyword="FAILMESSAGE">
+      <topic href="html/bk01ch10s43.html#d0e13505"/>
+   </entry>
+   <entry keyword="FAILMESSAGE">
+      <topic href="html/bk01ch10s111.html#d0e22927"/>
+   </entry>
+   <entry keyword="FAILMESSAGE function">
+      <topic href="html/bk01ch10s43.html#d0e13511"/>
+   </entry>
+   <entry keyword="FAILURE">
+      <topic href="html/bk01ch11s04.html#d0e25245"/>
+   </entry>
+   <entry keyword="FAILURE workflow service">
+      <topic href="html/bk01ch10s42.html#d0e13480"/>
+   </entry>
+   <entry keyword="FAILURE workflow service">
+      <topic href="html/bk01ch11s04.html#d0e25253"/>
+   </entry>
+   <entry keyword="FALSE">
+      <topic href="html/bk01ch04s01s01.html#d0e1881"/>
+   </entry>
+   <entry keyword="FALSE">
+      <topic href="html/bk01ch08s12.html#d0e7484"/>
+   </entry>
+   <entry keyword="FALSE keyword">
+      <topic href="html/bk01ch08s12.html#d0e7504"/>
+   </entry>
+   <entry keyword="fCopy">
+      <topic href="html/bk02ch06s03.html#d0e32565"/>
+   </entry>
+   <entry keyword="fDeSpray">
+      <topic href="html/bk02ch06s04.html#d0e32789"/>
+   </entry>
+   <entry keyword="FETCH">
+      <topic href="html/bk01ch10s44.html#d0e13560"/>
+   </entry>
+   <entry keyword="FETCH function">
+      <topic href="html/bk01ch10s44.html#d0e13563"/>
+   </entry>
+   <entry keyword="FEW">
+      <topic href="html/bk01ch10s03.html#d0e8933"/>
+   </entry>
+   <entry keyword="FEW">
+      <topic href="html/bk01ch10s13s01.html#d0e10123"/>
+   </entry>
+   <entry keyword="FEW">
+      <topic href="html/bk01ch10s16.html#d0e10749"/>
+   </entry>
+   <entry keyword="FEW">
+      <topic href="html/bk01ch10s47.html#d0e13843"/>
+   </entry>
+   <entry keyword="FEW">
+      <topic href="html/bk01ch10s60s03.html#d0e15158"/>
+   </entry>
+   <entry keyword="FEW">
+      <topic href="html/bk01ch10s112.html#d0e23085"/>
+   </entry>
+   <entry keyword="FEW">
+      <topic href="html/bk01ch10s118.html#d0e23747"/>
+   </entry>
+   <entry keyword="FEW">
+      <topic href="html/bk01ch11s05.html#d0e25325"/>
+   </entry>
+   <entry keyword="FEW">
+      <topic href="html/bk01ch11s11.html#d0e25884"/>
+   </entry>
+   <entry keyword="File Scope">
+      <topic href="html/bk01ch05s04s01.html#d0e5356"/>
+   </entry>
+   <entry keyword="File.AbortDfuWorkunit">
+      <topic href="html/bk02ch06s02.html#d0e32427"/>
+   </entry>
+   <entry keyword="File.AddFileRelationship">
+      <topic href="html/bk02ch05s03.html#d0e31914"/>
+   </entry>
+   <entry keyword="File.AddSuperFile">
+      <topic href="html/bk02ch02s11.html#d0e30668"/>
+   </entry>
+   <entry keyword="File.ClearSuperFile">
+      <topic href="html/bk02ch02s13.html#d0e30901"/>
+   </entry>
+   <entry keyword="File.CompareFiles">
+      <topic href="html/bk02ch01s01.html#d0e28947"/>
+   </entry>
+   <entry keyword="File.Copy">
+      <topic href="html/bk02ch06s03.html#d0e32485"/>
+   </entry>
+   <entry keyword="File.CreateExternalDirectory">
+      <topic href="html/bk02ch03s04.html#d0e31566"/>
+   </entry>
+   <entry keyword="File.CreateSuperFile">
+      <topic href="html/bk02ch02s01.html#d0e29995"/>
+   </entry>
+   <entry keyword="File.DeleteExternalFile">
+      <topic href="html/bk02ch03s03.html#d0e31508"/>
+   </entry>
+   <entry keyword="File.DeleteLogicalFiles">
+      <topic href="html/bk02ch01s02.html#d0e29120"/>
+   </entry>
+   <entry keyword="File.DeleteSuperFile">
+      <topic href="html/bk02ch02s03.html#d0e30176"/>
+   </entry>
+   <entry keyword="File.DeSpray">
+      <topic href="html/bk02ch06s04.html#d0e32729"/>
+   </entry>
+   <entry keyword="File.DfuPlusExec">
+      <topic href="html/bk02ch06s01.html#d0e32382"/>
+   </entry>
+   <entry keyword="File.ExternalLogicalFileName">
+      <topic href="html/bk02ch03s01.html#d0e31379"/>
+   </entry>
+   <entry keyword="File.fCopy">
+      <topic href="html/bk02ch06s03.html#d0e32562"/>
+   </entry>
+   <entry keyword="File.fDeSpray">
+      <topic href="html/bk02ch06s04.html#d0e32786"/>
+   </entry>
+   <entry keyword="File.FileExists">
+      <topic href="html/bk02ch01s04.html#d0e29275"/>
+   </entry>
+   <entry keyword="File.FileRelationshipList">
+      <topic href="html/bk02ch05s04.html#d0e32116"/>
+   </entry>
+   <entry keyword="File.FindSuperFileSubName">
+      <topic href="html/bk02ch02s09.html#d0e30564"/>
+   </entry>
+   <entry keyword="File.FinishSuperFileTransaction">
+      <topic href="html/bk02ch02s17.html#d0e31322"/>
+   </entry>
+   <entry keyword="File.fMonitorFile">
+      <topic href="html/bk02ch11s01.html#d0e37949"/>
+   </entry>
+   <entry keyword="File.fMonitorLogicalFileName">
+      <topic href="html/bk02ch11s02.html#d0e38148"/>
+   </entry>
+   <entry keyword="File.fPromoteSuperFileList">
+      <topic href="html/bk02ch02s16.html#d0e31181"/>
+   </entry>
+   <entry keyword="File.fSprayFixed">
+      <topic href="html/bk02ch06s07.html#d0e33313"/>
+   </entry>
+   <entry keyword="File.fSprayVariable">
+      <topic href="html/bk02ch06s08.html#d0e33618"/>
+   </entry>
+   <entry keyword="File.fSprayXML">
+      <topic href="html/bk02ch06s09.html#d0e33969"/>
+   </entry>
+   <entry keyword="File.GetColumnMapping">
+      <topic href="html/bk02ch05s02.html#d0e31858"/>
+   </entry>
+   <entry keyword="File.GetFileDescription">
+      <topic href="html/bk02ch01s06.html#d0e29426"/>
+   </entry>
+   <entry keyword="File.GetLogicalFileAttribute">
+      <topic href="html/bk02ch01s07.html#d0e29479"/>
+   </entry>
+   <entry keyword="File.GetSuperFileSubCount">
+      <topic href="html/bk02ch02s04.html#d0e30251"/>
+   </entry>
+   <entry keyword="File.GetSuperFileSubName">
+      <topic href="html/bk02ch02s05.html#d0e30306"/>
+   </entry>
+   <entry keyword="File.LogicalFileList">
+      <topic href="html/bk02ch01s03.html#d0e29179"/>
+   </entry>
+   <entry keyword="File.LogicalFileSuperOwners">
+      <topic href="html/bk02ch02s06.html#d0e30385"/>
+   </entry>
+   <entry keyword="File.LogicalFileSuperSubList">
+      <topic href="html/bk02ch02s07.html#d0e30448"/>
+   </entry>
+   <entry keyword="File.MonitorFile">
+      <topic href="html/bk02ch11s01.html#d0e37895"/>
+   </entry>
+   <entry keyword="File.MonitorLogicalFileName">
+      <topic href="html/bk02ch11s02.html#d0e38106"/>
+   </entry>
+   <entry keyword="File.MoveExternalFile">
+      <topic href="html/bk02ch03s02.html#d0e31435"/>
+   </entry>
+   <entry keyword="File.PromoteSuperFileList">
+      <topic href="html/bk02ch02s16.html#d0e31111"/>
+   </entry>
+   <entry keyword="File.ProtectLogicalFile">
+      <topic href="html/bk02ch01s08.html#d0e29541"/>
+   </entry>
+   <entry keyword="File.RemoteDirectory">
+      <topic href="html/bk02ch01s09.html#d0e29599"/>
+   </entry>
+   <entry keyword="File.RemotePull">
+      <topic href="html/bk02ch06s05.html#d0e32911"/>
+   </entry>
+   <entry keyword="File.RemoveFileRelationship">
+      <topic href="html/bk02ch05s05.html#d0e32251"/>
+   </entry>
+   <entry keyword="File.RemoveSuperFile">
+      <topic href="html/bk02ch02s12.html#d0e30800"/>
+   </entry>
+   <entry keyword="File.RenameLogicalFile">
+      <topic href="html/bk02ch01s10.html#d0e29702"/>
+   </entry>
+   <entry keyword="File.ReplaceSuperFile">
+      <topic href="html/bk02ch02s15.html#d0e31038"/>
+   </entry>
+   <entry keyword="File.Replicate">
+      <topic href="html/bk02ch06s06.html#d0e33132"/>
+   </entry>
+   <entry keyword="File.RfsAction">
+      <topic href="html/bk02ch04s02.html#d0e31693"/>
+   </entry>
+   <entry keyword="File.RfsEncodeQuery">
+      <topic href="html/bk02ch04s01.html#d0e31631"/>
+   </entry>
+   <entry keyword="File.SetColumnMapping">
+      <topic href="html/bk02ch05s01.html#d0e31755"/>
+   </entry>
+   <entry keyword="File.SetFileDescription">
+      <topic href="html/bk02ch01s11.html#d0e29757"/>
+   </entry>
+   <entry keyword="File.SetReadOnly">
+      <topic href="html/bk02ch01s12.html#d0e29812"/>
+   </entry>
+   <entry keyword="File.SprayFixed">
+      <topic href="html/bk02ch06s07.html#d0e33235"/>
+   </entry>
+   <entry keyword="File.SprayVariable">
+      <topic href="html/bk02ch06s08.html#d0e33486"/>
+   </entry>
+   <entry keyword="File.SprayXML">
+      <topic href="html/bk02ch06s09.html#d0e33851"/>
+   </entry>
+   <entry keyword="File.StartSuperFileTransaction">
+      <topic href="html/bk02ch02s10.html#d0e30627"/>
+   </entry>
+   <entry keyword="File.SuperFileContents">
+      <topic href="html/bk02ch02s08.html#d0e30489"/>
+   </entry>
+   <entry keyword="File.SuperFileExists">
+      <topic href="html/bk02ch02s02.html#d0e30118"/>
+   </entry>
+   <entry keyword="File.SwapSuperFile">
+      <topic href="html/bk02ch02s14.html#d0e30974"/>
+   </entry>
+   <entry keyword="File.VerifyFile">
+      <topic href="html/bk02ch01s13.html#d0e29873"/>
+   </entry>
+   <entry keyword="File.WaitDfuWorkunit">
+      <topic href="html/bk02ch06s10.html#d0e34184"/>
+   </entry>
+   <entry keyword="FileExists">
+      <topic href="html/bk02ch01s04.html#d0e29278"/>
+   </entry>
+   <entry keyword="FileRelationshipList">
+      <topic href="html/bk02ch05s04.html#d0e32119"/>
+   </entry>
+   <entry keyword="Filter">
+      <topic href="html/bk02ch07s12.html#d0e35165"/>
+   </entry>
+   <entry keyword="FilterOut">
+      <topic href="html/bk02ch07s13.html#d0e35243"/>
+   </entry>
+   <entry keyword="Filters">
+      <topic href="html/bk01ch02s05.html#d0e725"/>
+   </entry>
+   <entry keyword="Find">
+      <topic href="html/bk02ch07s14.html#d0e35324"/>
+   </entry>
+   <entry keyword="FindCount">
+      <topic href="html/bk02ch07s15.html#d0e35455"/>
+   </entry>
+   <entry keyword="FindReplace">
+      <topic href="html/bk02ch07s18.html#d0e35751"/>
+   </entry>
+   <entry keyword="FindSuperFileSubName">
+      <topic href="html/bk02ch02s09.html#d0e30567"/>
+   </entry>
+   <entry keyword="FinishSuperFileTransaction">
+      <topic href="html/bk02ch02s17.html#d0e31325"/>
+   </entry>
+   <entry keyword="FIRST">
+      <topic href="html/bk01ch05s03.html#d0e5084"/>
+   </entry>
+   <entry keyword="FIRST">
+      <topic href="html/bk01ch10s13s01.html#d0e10153"/>
+   </entry>
+   <entry keyword="FIRST">
+      <topic href="html/bk01ch10s84s01.html#d0e19882"/>
+   </entry>
+   <entry keyword="FLAT">
+      <topic href="html/bk01ch05s02s01.html#d0e4238"/>
+   </entry>
+   <entry keyword="Flat Files">
+      <topic href="html/bk01ch10s82s02.html#d0e18632"/>
+   </entry>
+   <entry keyword="floating point">
+      <topic href="html/bk01ch04s03.html#d0e2063"/>
+   </entry>
+   <entry keyword="fMonitorFile">
+      <topic href="html/bk02ch11s01.html#d0e37952"/>
+   </entry>
+   <entry keyword="fMonitorLogicalFileName">
+      <topic href="html/bk02ch11s02.html#d0e38151"/>
+   </entry>
+   <entry keyword="Foreign files">
+      <topic href="html/bk01ch05s04s02.html#d0e5392"/>
+   </entry>
+   <entry keyword="ForeignLogicalFileName">
+      <topic href="html/bk02ch01s05.html#d0e29349"/>
+   </entry>
+   <entry keyword="forward reference">
+      <topic href="html/bk01ch02s01s01.html#d0e240"/>
+   </entry>
+   <entry keyword="forward reference">
+      <topic href="html/bk01ch07s02s01.html#d0e6583"/>
+   </entry>
+   <entry keyword="forward reference">
+      <topic href="html/bk01ch10s27.html#d0e11979"/>
+   </entry>
+   <entry keyword="fPromoteSuperFileList">
+      <topic href="html/bk02ch02s16.html#d0e31184"/>
+   </entry>
+   <entry keyword="FROM">
+      <topic href="html/bk01ch08s05.html#d0e7078"/>
+   </entry>
+   <entry keyword="FROMUNICODE">
+      <topic href="html/bk01ch10s45.html#d0e13706"/>
+   </entry>
+   <entry keyword="FROMUNICODE function">
+      <topic href="html/bk01ch10s45.html#d0e13709"/>
+   </entry>
+   <entry keyword="FROMXML">
+      <topic href="html/bk01ch10s46.html#d0e13768"/>
+   </entry>
+   <entry keyword="FROMXML function">
+      <topic href="html/bk01ch10s46.html#d0e13771"/>
+   </entry>
+   <entry keyword="fSprayFixed">
+      <topic href="html/bk02ch06s07.html#d0e33316"/>
+   </entry>
+   <entry keyword="fSprayVariable">
+      <topic href="html/bk02ch06s08.html#d0e33621"/>
+   </entry>
+   <entry keyword="fSprayXML">
+      <topic href="html/bk02ch06s09.html#d0e33972"/>
+   </entry>
+   <entry keyword="FULL ONLY">
+      <topic href="html/bk01ch10s60s07.html#d0e15812"/>
+   </entry>
+   <entry keyword="FULL OUTER">
+      <topic href="html/bk01ch10s60s07.html#d0e15770"/>
+   </entry>
+   <entry keyword="FUNCTION">
+      <topic href="html/bk01ch09s02.html#d0e7690"/>
+   </entry>
+   <entry keyword="FUNCTION Structure">
+      <topic href="html/bk01ch09s02.html#d0e7672"/>
+   </entry>
+   <entry keyword="FUNCTIONMACRO">
+      <topic href="html/bk01ch09s03.html#d0e7813"/>
+   </entry>
+   <entry keyword="FUNCTIONMACRO Structure">
+      <topic href="html/bk01ch09s03.html#d0e7795"/>
+   </entry>
+   <entry keyword="Functions">
+      <topic href="html/bk01ch02s06.html#d0e768"/>
+   </entry>
+   <entry keyword="Functions as Actions">
+      <topic href="html/bk01ch02s09s01.html#d0e1259"/>
+   </entry>
+   <entry keyword="GetColumnMapping">
+      <topic href="html/bk02ch05s02.html#d0e31861"/>
+   </entry>
+   <entry keyword="GetExpandLogicalFileName">
+      <topic href="html/bk02ch09s06.html#d0e37431"/>
+   </entry>
+   <entry keyword="GetFileDescription">
+      <topic href="html/bk02ch01s06.html#d0e29429"/>
+   </entry>
+   <entry keyword="GetHostName">
+      <topic href="html/bk02ch14s01.html#d0e38640"/>
+   </entry>
+   <entry keyword="GETISVALID">
+      <topic href="html/bk01ch06s02s05.html#d0e5852"/>
+   </entry>
+   <entry keyword="GetLogicalFileAttribute">
+      <topic href="html/bk02ch01s07.html#d0e29482"/>
+   </entry>
+   <entry keyword="GetParseTree">
+      <topic href="html/bk02ch15s01.html#d0e38897"/>
+   </entry>
+   <entry keyword="GetSuperFileSubCount">
+      <topic href="html/bk02ch02s04.html#d0e30254"/>
+   </entry>
+   <entry keyword="GetSuperFileSubName">
+      <topic href="html/bk02ch02s05.html#d0e30309"/>
+   </entry>
+   <entry keyword="GetUniqueInteger">
+      <topic href="html/bk02ch14s04.html#d0e38836"/>
+   </entry>
+   <entry keyword="GetXMLParseTree">
+      <topic href="html/bk02ch15s02.html#d0e38947"/>
+   </entry>
+   <entry keyword="GLOBAL">
+      <topic href="html/bk01ch10s47.html#d0e13829"/>
+   </entry>
+   <entry keyword="GLOBAL">
+      <topic href="html/bk01ch11s05.html#d0e25317"/>
+   </entry>
+   <entry keyword="GLOBAL function">
+      <topic href="html/bk01ch10s47.html#d0e13832"/>
+   </entry>
+   <entry keyword="GLOBAL workflow service">
+      <topic href="html/bk01ch10s47.html#d0e13895"/>
+   </entry>
+   <entry keyword="GLOBAL workflow service">
+      <topic href="html/bk01ch11s05.html#d0e25329"/>
+   </entry>
+   <entry keyword="GRAPH">
+      <topic href="html/bk01ch10s48.html#d0e13913"/>
+   </entry>
+   <entry keyword="GRAPH function">
+      <topic href="html/bk01ch10s48.html#d0e13916"/>
+   </entry>
+   <entry keyword="Greater or Equal">
+      <topic href="html/bk01ch03s01s04.html#d0e1538"/>
+   </entry>
+   <entry keyword="Greater Than">
+      <topic href="html/bk01ch03s01s04.html#d0e1518"/>
+   </entry>
+   <entry keyword="GROUP">
+      <topic href="html/bk01ch08s04.html#d0e6986"/>
+   </entry>
+   <entry keyword="GROUP">
+      <topic href="html/bk01ch10s19.html#d0e11023"/>
+   </entry>
+   <entry keyword="GROUP">
+      <topic href="html/bk01ch10s28.html#d0e12028"/>
+   </entry>
+   <entry keyword="GROUP">
+      <topic href="html/bk01ch10s85.html#d0e20260"/>
+   </entry>
+   <entry keyword="GROUP">
+      <topic href="html/bk01ch10s100.html#d0e21731"/>
+   </entry>
+   <entry keyword="Group">
+      <topic href="html/bk01ch10s49.html#d0e14020"/>
+   </entry>
+   <entry keyword="Group">
+      <topic href="html/bk02ch09s05.html#d0e37387"/>
+   </entry>
+   <entry keyword="GROUP function">
+      <topic href="html/bk01ch05s02s09.html#d0e5011"/>
+   </entry>
+   <entry keyword="GROUP function">
+      <topic href="html/bk01ch10s49.html#d0e14023"/>
+   </entry>
+   <entry keyword="GROUP function">
+      <topic href="html/bk01ch10s127.html#d0e24504"/>
+   </entry>
+   <entry keyword="GROUP keyword">
+      <topic href="html/bk01ch08s04.html#d0e6980"/>
+   </entry>
+   <entry keyword="GROUP keyword">
+      <topic href="html/bk01ch10s129.html#d0e24648"/>
+   </entry>
+   <entry keyword="GROUPED">
+      <topic href="html/bk01ch05s02.html#d0e3919"/>
+   </entry>
+   <entry keyword="GROUPED">
+      <topic href="html/bk01ch05s02s09.html#d0e4997"/>
+   </entry>
+   <entry keyword="GROUPED">
+      <topic href="html/bk01ch10s60s03.html#d0e15162"/>
+   </entry>
+   <entry keyword="HASH">
+      <topic href="html/bk01ch10s26.html#d0e11743"/>
+   </entry>
+   <entry keyword="HASH">
+      <topic href="html/bk01ch10s50.html#d0e14144"/>
+   </entry>
+   <entry keyword="HASH">
+      <topic href="html/bk01ch10s60s03.html#d0e15196"/>
+   </entry>
+   <entry keyword="HASH function">
+      <topic href="html/bk01ch10s50.html#d0e14147"/>
+   </entry>
+   <entry keyword="HASH32 function">
+      <topic href="html/bk01ch10s51.html#d0e14209"/>
+   </entry>
+   <entry keyword="HASH64">
+      <topic href="html/bk01ch10s51.html#d0e14206"/>
+   </entry>
+   <entry keyword="HASH64">
+      <topic href="html/bk01ch10s52.html#d0e14268"/>
+   </entry>
+   <entry keyword="HASH64 function">
+      <topic href="html/bk01ch10s52.html#d0e14271"/>
+   </entry>
+   <entry keyword="HASHCRC function">
+      <topic href="html/bk01ch10s53.html#d0e14333"/>
+   </entry>
+   <entry keyword="HASHMD5">
+      <topic href="html/bk01ch10s54.html#d0e14392"/>
+   </entry>
+   <entry keyword="HASHMD5 function">
+      <topic href="html/bk01ch10s54.html#d0e14395"/>
+   </entry>
+   <entry keyword="HASHRC">
+      <topic href="html/bk01ch10s53.html#d0e14330"/>
+   </entry>
+   <entry keyword="HAVING">
+      <topic href="html/bk01ch10s55.html#d0e14454"/>
+   </entry>
+   <entry keyword="HAVING function">
+      <topic href="html/bk01ch10s55.html#d0e14457"/>
+   </entry>
+   <entry keyword="HEADING">
+      <topic href="html/bk01ch05s02s02.html#d0e4347"/>
+   </entry>
+   <entry keyword="HEADING">
+      <topic href="html/bk01ch10s82s03.html#d0e18947"/>
+   </entry>
+   <entry keyword="HEADING">
+      <topic href="html/bk01ch10s82s04.html#d0e19280"/>
+   </entry>
+   <entry keyword="HEADING">
+      <topic href="html/bk01ch10s111.html#d0e22857"/>
+   </entry>
+   <entry keyword="heapsort">
+      <topic href="html/bk01ch10s112s01.html#d0e23243"/>
+   </entry>
+   <entry keyword="Hexadecimal">
+      <topic href="html/bk01ch02s02s01.html#d0e291"/>
+   </entry>
+   <entry keyword="Hexadecimal">
+      <topic href="html/bk01ch02s02s02.html#d0e358"/>
+   </entry>
+   <entry keyword="HPCC">
+      <topic href="html/bk01ch02s01.html#d0e204"/>
+   </entry>
+   <entry keyword="hthor">
+      <topic href="html/bk01ch10s112s01.html#d0e23269"/>
+   </entry>
+   <entry keyword="IF">
+      <topic href="html/bk01ch10s56.html#d0e14509"/>
+   </entry>
+   <entry keyword="IF function">
+      <topic href="html/bk01ch10s56.html#d0e14518"/>
+   </entry>
+   <entry keyword="IFBLOCK">
+      <topic href="html/bk01ch05s01.html#d0e3004"/>
+   </entry>
+   <entry keyword="IFF">
+      <topic href="html/bk01ch10s56.html#d0e14512"/>
+   </entry>
+   <entry keyword="IFF function">
+      <topic href="html/bk01ch10s56.html#d0e14533"/>
+   </entry>
+   <entry keyword="Implicit Casting">
+      <topic href="html/bk01ch04s15s02.html#d0e2693"/>
+   </entry>
+   <entry keyword="Implicit Dataset">
+      <topic href="html/bk01ch05s05.html#d0e5518"/>
+   </entry>
+   <entry keyword="Implicit Dataset Relationality">
+      <topic href="html/bk01ch05s05.html#d0e5525"/>
+   </entry>
+   <entry keyword="IMPORT">
+      <topic href="html/bk01ch08s05.html#d0e7049"/>
+   </entry>
+   <entry keyword="IMPORT AS">
+      <topic href="html/bk01ch08s05.html#d0e7106"/>
+   </entry>
+   <entry keyword="IMPORT FROM">
+      <topic href="html/bk01ch08s05.html#d0e7142"/>
+   </entry>
+   <entry keyword="IMPORTed">
+      <topic href="html/bk01ch02s08s01.html#d0e1156"/>
+   </entry>
+   <entry keyword="IN">
+      <topic href="html/bk01ch03s06.html#d0e1713"/>
+   </entry>
+   <entry keyword="In Line Dataset">
+      <topic href="html/bk01ch05s02s06.html#d0e4806"/>
+   </entry>
+   <entry keyword="IN Operator">
+      <topic href="html/bk01ch03s06.html#d0e1716"/>
+   </entry>
+   <entry keyword="in-line a set of data">
+      <topic href="html/bk01ch05s02s06.html#d0e4823"/>
+   </entry>
+   <entry keyword="In-Line Dataset">
+      <topic href="html/bk01ch05s02s06.html#d0e4803"/>
+   </entry>
+   <entry keyword="INDEPENDENT">
+      <topic href="html/bk01ch11s06.html#d0e25395"/>
+   </entry>
+   <entry keyword="INDEPENDENT workflow service">
+      <topic href="html/bk01ch11s06.html#d0e25398"/>
+   </entry>
+   <entry keyword="INDEX">
+      <topic href="html/bk01ch05s03.html#d0e5046"/>
+   </entry>
+   <entry keyword="INDEX declaration">
+      <topic href="html/bk01ch05s03.html#d0e5250"/>
+   </entry>
+   <entry keyword="Indexing">
+      <topic href="html/bk01ch02s04s04.html#d0e629"/>
+   </entry>
+   <entry keyword="Inline TRANSFORMs">
+      <topic href="html/bk01ch09s07s03.html#d0e8696"/>
+   </entry>
+   <entry keyword="Inline TRANSFORMs">
+      <topic href="html/bk01ch09s07s04.html#d0e8717"/>
+   </entry>
+   <entry keyword="INNER">
+      <topic href="html/bk01ch10s75s02.html#d0e17697"/>
+   </entry>
+   <entry keyword="insertionsort">
+      <topic href="html/bk01ch10s112s01.html#d0e23239"/>
+   </entry>
+   <entry keyword="INTEGER">
+      <topic href="html/bk01ch02s02s02.html#d0e351"/>
+   </entry>
+   <entry keyword="INTEGER">
+      <topic href="html/bk01ch04s02.html#d0e1896"/>
+   </entry>
+   <entry keyword="INTEGER">
+      <topic href="html/bk01ch06s02s03.html#d0e5772"/>
+   </entry>
+   <entry keyword="INTEGER">
+      <topic href="html/bk01ch13s03s06.html#d0e28623"/>
+   </entry>
+   <entry keyword="Integer Division">
+      <topic href="html/bk01ch03s01s01.html#d0e1349"/>
+   </entry>
+   <entry keyword="INTEGER value type">
+      <topic href="html/bk01ch04s02.html#d0e1924"/>
+   </entry>
+   <entry keyword="INTERFACE">
+      <topic href="html/bk01ch09s04.html#d0e7927"/>
+   </entry>
+   <entry keyword="interface">
+      <topic href="html/bk01ch10s116.html#d0e23601"/>
+   </entry>
+   <entry keyword="INTERFACE Structure">
+      <topic href="html/bk01ch09s04.html#d0e7915"/>
+   </entry>
+   <entry keyword="INTERNAL">
+      <topic href="html/bk01ch10s65.html#d0e16403"/>
+   </entry>
+   <entry keyword="INTFORMAT">
+      <topic href="html/bk01ch10s57.html#d0e14637"/>
+   </entry>
+   <entry keyword="INTFORMAT function">
+      <topic href="html/bk01ch10s57.html#d0e14640"/>
+   </entry>
+   <entry keyword="ISVALID">
+      <topic href="html/bk01ch10s58.html#d0e14702"/>
+   </entry>
+   <entry keyword="ISVALID function">
+      <topic href="html/bk01ch10s58.html#d0e14705"/>
+   </entry>
+   <entry keyword="ITERATE">
+      <topic href="html/bk01ch10s59.html#d0e14758"/>
+   </entry>
+   <entry keyword="ITERATE function">
+      <topic href="html/bk01ch10s59.html#d0e14764"/>
+   </entry>
+   <entry keyword="Job.LogString">
+      <topic href="html/bk02ch10s07.html#d0e37837"/>
+   </entry>
+   <entry keyword="Job.Name">
+      <topic href="html/bk02ch10s03.html#d0e37637"/>
+   </entry>
+   <entry keyword="Job.OS">
+      <topic href="html/bk02ch10s05.html#d0e37737"/>
+   </entry>
+   <entry keyword="Job.Platform">
+      <topic href="html/bk02ch10s06.html#d0e37787"/>
+   </entry>
+   <entry keyword="Job.User">
+      <topic href="html/bk02ch10s04.html#d0e37687"/>
+   </entry>
+   <entry keyword="Job.WUID">
+      <topic href="html/bk02ch10s01.html#d0e37537"/>
+   </entry>
+   <entry keyword="JOIN">
+      <topic href="html/bk01ch10s60.html#d0e14871"/>
+   </entry>
+   <entry keyword="JOIN">
+      <topic href="html/bk01ch10s60s08.html#d0e15837"/>
+   </entry>
+   <entry keyword="JOIN function">
+      <topic href="html/bk01ch10s60.html#d0e14874"/>
+   </entry>
+   <entry keyword="JOIN function">
+      <topic href="html/bk01ch10s60s08.html#d0e15868"/>
+   </entry>
+   <entry keyword="JOIN Set">
+      <topic href="html/bk01ch10s60s08.html#d0e15840"/>
+   </entry>
+   <entry keyword="JOIN setofdatasets">
+      <topic href="html/bk01ch10s60s10.html#d0e15912"/>
+   </entry>
+   <entry keyword="Join Types">
+      <topic href="html/bk01ch10s75s02.html#d0e17676"/>
+   </entry>
+   <entry keyword="joincondition">
+      <topic href="html/bk01ch08s06.html#d0e7245"/>
+   </entry>
+   <entry keyword="joincondition">
+      <topic href="html/bk01ch10s60s02.html#d0e15121"/>
+   </entry>
+   <entry keyword="JOINED">
+      <topic href="html/bk01ch10s112.html#d0e23029"/>
+   </entry>
+   <entry keyword="joinflags">
+      <topic href="html/bk01ch10s60s03.html#d0e15132"/>
+   </entry>
+   <entry keyword="JOINS FULL OUTER">
+      <topic href="html/bk01ch10s60s05.html#d0e15690"/>
+   </entry>
+   <entry keyword="KEEP">
+      <topic href="html/bk01ch10s26.html#d0e11747"/>
+   </entry>
+   <entry keyword="KEEP">
+      <topic href="html/bk01ch10s60s03.html#d0e15205"/>
+   </entry>
+   <entry keyword="KEEP">
+      <topic href="html/bk01ch10s84s01.html#d0e19967"/>
+   </entry>
+   <entry keyword="KEYDIFF">
+      <topic href="html/bk01ch10s61.html#d0e16044"/>
+   </entry>
+   <entry keyword="KEYDIFF function">
+      <topic href="html/bk01ch10s61.html#d0e16047"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch08s06.html#d0e7175"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s12.html#d0e9802"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s20.html#d0e11203"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s23.html#d0e11433"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s24.html#d0e11539"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s39.html#d0e13209"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s60s03.html#d0e15180"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s66.html#d0e16521"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s66.html#d0e16577"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s76.html#d0e17779"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s89.html#d0e20686"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s117.html#d0e23644"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s118.html#d0e23773"/>
+   </entry>
+   <entry keyword="KEYED">
+      <topic href="html/bk01ch10s129.html#d0e24632"/>
+   </entry>
+   <entry keyword="Keyed JOIN">
+      <topic href="html/bk01ch10s60s04.html#d0e15590"/>
+   </entry>
+   <entry keyword="KEYED Keyword">
+      <topic href="html/bk01ch08s06.html#d0e7233"/>
+   </entry>
+   <entry keyword="KEYPATCH">
+      <topic href="html/bk01ch10s62.html#d0e16168"/>
+   </entry>
+   <entry keyword="KEYPATCH action">
+      <topic href="html/bk01ch10s61.html#d0e16141"/>
+   </entry>
+   <entry keyword="KEYPATCH function">
+      <topic href="html/bk01ch10s62.html#d0e16171"/>
+   </entry>
+   <entry keyword="KEYUNICODE">
+      <topic href="html/bk01ch10s63.html#d0e16282"/>
+   </entry>
+   <entry keyword="KEYUNICODE function">
+      <topic href="html/bk01ch10s63.html#d0e16285"/>
+   </entry>
+   <entry keyword="Landing Zone files">
+      <topic href="html/bk01ch05s04s03.html#d0e5417"/>
+   </entry>
+   <entry keyword="LAST">
+      <topic href="html/bk01ch10s17.html#d0e10852"/>
+   </entry>
+   <entry keyword="LEFT">
+      <topic href="html/bk01ch08s07.html#d0e7289"/>
+   </entry>
+   <entry keyword="LEFT">
+      <topic href="html/bk01ch10s28s01.html#d0e12142"/>
+   </entry>
+   <entry keyword="LEFT">
+      <topic href="html/bk01ch10s79.html#d0e17986"/>
+   </entry>
+   <entry keyword="LEFT ONLY">
+      <topic href="html/bk01ch10s60s07.html#d0e15784"/>
+   </entry>
+   <entry keyword="LEFT ONLY">
+      <topic href="html/bk01ch10s75s02.html#d0e17721"/>
+   </entry>
+   <entry keyword="LEFT OUTER">
+      <topic href="html/bk01ch10s60s07.html#d0e15748"/>
+   </entry>
+   <entry keyword="LEFT OUTER">
+      <topic href="html/bk01ch10s75s02.html#d0e17709"/>
+   </entry>
+   <entry keyword="LENGTH">
+      <topic href="html/bk01ch05s02.html#d0e3894"/>
+   </entry>
+   <entry keyword="LENGTH">
+      <topic href="html/bk01ch05s02s08.html#d0e4893"/>
+   </entry>
+   <entry keyword="LENGTH">
+      <topic href="html/bk01ch10s64.html#d0e16337"/>
+   </entry>
+   <entry keyword="LENGTH function">
+      <topic href="html/bk01ch10s64.html#d0e16340"/>
+   </entry>
+   <entry keyword="Less or Equal">
+      <topic href="html/bk01ch03s01s04.html#d0e1528"/>
+   </entry>
+   <entry keyword="Less Than">
+      <topic href="html/bk01ch03s01s04.html#d0e1508"/>
+   </entry>
+   <entry keyword="LIBRARY">
+      <topic href="html/bk01ch09s06.html#d0e8168"/>
+   </entry>
+   <entry keyword="LIBRARY">
+      <topic href="html/bk01ch10s65.html#d0e16392"/>
+   </entry>
+   <entry keyword="LIBRARY function">
+      <topic href="html/bk01ch10s13s05.html#d0e10474"/>
+   </entry>
+   <entry keyword="LIBRARY function">
+      <topic href="html/bk01ch10s65.html#d0e16395"/>
+   </entry>
+   <entry keyword="LIMIT">
+      <topic href="html/bk01ch10s60s03.html#d0e15237"/>
+   </entry>
+   <entry keyword="LIMIT">
+      <topic href="html/bk01ch10s66.html#d0e16502"/>
+   </entry>
+   <entry keyword="LIMIT function">
+      <topic href="html/bk01ch10s66.html#d0e16505"/>
+   </entry>
+   <entry keyword="LITERAL">
+      <topic href="html/bk01ch10s111.html#d0e22961"/>
+   </entry>
+   <entry keyword="LITTLE_ENDIAN">
+      <topic href="html/bk01ch04s02.html#d0e1950"/>
+   </entry>
+   <entry keyword="LN">
+      <topic href="html/bk01ch10s67.html#d0e16679"/>
+   </entry>
+   <entry keyword="LN function">
+      <topic href="html/bk01ch10s40.html#d0e13317"/>
+   </entry>
+   <entry keyword="LN function">
+      <topic href="html/bk01ch10s67.html#d0e16682"/>
+   </entry>
+   <entry keyword="LOAD">
+      <topic href="html/bk01ch06s02s01.html#d0e5670"/>
+   </entry>
+   <entry keyword="LOADXML">
+      <topic href="html/bk01ch10s68.html#d0e16742"/>
+   </entry>
+   <entry keyword="LOADXML function">
+      <topic href="html/bk01ch10s68.html#d0e16745"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s03.html#d0e8929"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s13s01.html#d0e10127"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s19.html#d0e11032"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s26.html#d0e11764"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s28.html#d0e12011"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s33.html#d0e12710"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s44.html#d0e13579"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s49.html#d0e14046"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s59.html#d0e14772"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s60s03.html#d0e15192"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s69.html#d0e16819"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s74.html#d0e17423"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s88.html#d0e20510"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s89.html#d0e20690"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s100.html#d0e21710"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s112.html#d0e23077"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s118.html#d0e23767"/>
+   </entry>
+   <entry keyword="LOCAL">
+      <topic href="html/bk01ch10s122.html#d0e24135"/>
+   </entry>
+   <entry keyword="LOCAL function">
+      <topic href="html/bk01ch05s03.html#d0e5254"/>
+   </entry>
+   <entry keyword="LOCAL function">
+      <topic href="html/bk01ch10s69.html#d0e16822"/>
+   </entry>
+   <entry keyword="LOCALE">
+      <topic href="html/bk01ch05s01.html#d0e2978"/>
+   </entry>
+   <entry keyword="LocaleCompareAtStrength">
+      <topic href="html/bk02ch07s03.html#d0e34406"/>
+   </entry>
+   <entry keyword="LocaleCompareIgnoreCase">
+      <topic href="html/bk02ch07s04.html#d0e34551"/>
+   </entry>
+   <entry keyword="LocaleFind">
+      <topic href="html/bk02ch07s14.html#d0e35363"/>
+   </entry>
+   <entry keyword="LocaleFindAtStrength">
+      <topic href="html/bk02ch07s16.html#d0e35517"/>
+   </entry>
+   <entry keyword="LocaleFindAtStrengthReplace">
+      <topic href="html/bk02ch07s17.html#d0e35635"/>
+   </entry>
+   <entry keyword="LocaleFindReplace">
+      <topic href="html/bk02ch07s18.html#d0e35790"/>
+   </entry>
+   <entry keyword="LocaleToLowerCase">
+      <topic href="html/bk02ch07s26.html#d0e36463"/>
+   </entry>
+   <entry keyword="LocaleToTitleCase">
+      <topic href="html/bk02ch07s27.html#d0e36559"/>
+   </entry>
+   <entry keyword="LocaleToUpperCase">
+      <topic href="html/bk02ch07s28.html#d0e36658"/>
+   </entry>
+   <entry keyword="LOG">
+      <topic href="html/bk01ch10s70.html#d0e16880"/>
+   </entry>
+   <entry keyword="LOG function">
+      <topic href="html/bk01ch10s70.html#d0e16883"/>
+   </entry>
+   <entry keyword="Log.addWorkunitError">
+      <topic href="html/bk02ch12s04.html#d0e38490"/>
+   </entry>
+   <entry keyword="Log.addWorkunitInformation">
+      <topic href="html/bk02ch12s02.html#d0e38338"/>
+   </entry>
+   <entry keyword="Log.addWorkunitWarning">
+      <topic href="html/bk02ch12s03.html#d0e38414"/>
+   </entry>
+   <entry keyword="Log.dbglog">
+      <topic href="html/bk02ch12s01.html#d0e38281"/>
+   </entry>
+   <entry keyword="LOGICAL Filenames">
+      <topic href="html/bk01ch05s04.html#d0e5350"/>
+   </entry>
+   <entry keyword="Logical graphs">
+      <topic href="html/bk01ch12s17s02.html#d0e27412"/>
+   </entry>
+   <entry keyword="logical operators">
+      <topic href="html/bk01ch03s02.html#d0e1567"/>
+   </entry>
+   <entry keyword="logical operators">
+      <topic href="html/bk01ch05s01s03.html#d0e3381"/>
+   </entry>
+   <entry keyword="LogicalFileList">
+      <topic href="html/bk02ch01s03.html#d0e29182"/>
+   </entry>
+   <entry keyword="LogicalFileSuperOwners">
+      <topic href="html/bk02ch02s06.html#d0e30388"/>
+   </entry>
+   <entry keyword="LogicalFileSuperSubList">
+      <topic href="html/bk02ch02s07.html#d0e30451"/>
+   </entry>
+   <entry keyword="LogicalToPhysical">
+      <topic href="html/bk02ch09s03.html#d0e37257"/>
+   </entry>
+   <entry keyword="LogString">
+      <topic href="html/bk02ch10s07.html#d0e37841"/>
+   </entry>
+   <entry keyword="LOOKUP">
+      <topic href="html/bk01ch10s60s03.html#d0e15154"/>
+   </entry>
+   <entry keyword="LOOP">
+      <topic href="html/bk01ch10s71.html#d0e16934"/>
+   </entry>
+   <entry keyword="LOOP function">
+      <topic href="html/bk01ch10s48.html#d0e13993"/>
+   </entry>
+   <entry keyword="LOOP function">
+      <topic href="html/bk01ch10s71.html#d0e16937"/>
+   </entry>
+   <entry keyword="loopbody">
+      <topic href="html/bk01ch10s71.html#d0e17047"/>
+   </entry>
+   <entry keyword="loopcondition">
+      <topic href="html/bk01ch10s71.html#d0e17099"/>
+   </entry>
+   <entry keyword="loopcount">
+      <topic href="html/bk01ch10s71.html#d0e17038"/>
+   </entry>
+   <entry keyword="loopfilter">
+      <topic href="html/bk01ch10s71.html#d0e17087"/>
+   </entry>
+   <entry keyword="LZW">
+      <topic href="html/bk01ch05s03.html#d0e5076"/>
+   </entry>
+   <entry keyword="LZW">
+      <topic href="html/bk01ch10s13s01.html#d0e10145"/>
+   </entry>
+   <entry keyword="MACRO">
+      <topic href="html/bk01ch09s05.html#d0e8045"/>
+   </entry>
+   <entry keyword="MACRO Structure">
+      <topic href="html/bk01ch09s05.html#d0e8026"/>
+   </entry>
+   <entry keyword="MANY">
+      <topic href="html/bk01ch10s03.html#d0e8937"/>
+   </entry>
+   <entry keyword="MANY">
+      <topic href="html/bk01ch10s47.html#d0e13851"/>
+   </entry>
+   <entry keyword="MANY">
+      <topic href="html/bk01ch10s60s03.html#d0e15150"/>
+   </entry>
+   <entry keyword="MANY">
+      <topic href="html/bk01ch10s84s01.html#d0e20072"/>
+   </entry>
+   <entry keyword="MANY">
+      <topic href="html/bk01ch10s118.html#d0e23751"/>
+   </entry>
+   <entry keyword="MAP">
+      <topic href="html/bk01ch10s72.html#d0e17169"/>
+   </entry>
+   <entry keyword="MAP function">
+      <topic href="html/bk01ch10s72.html#d0e17172"/>
+   </entry>
+   <entry keyword="MATCHED">
+      <topic href="html/bk01ch10s84s01.html#d0e20017"/>
+   </entry>
+   <entry keyword="MATCHED ALL">
+      <topic href="html/bk01ch10s84s01.html#d0e20033"/>
+   </entry>
+   <entry keyword="MAX">
+      <topic href="html/bk01ch10s84s01.html#d0e19999"/>
+   </entry>
+   <entry keyword="MAX">
+      <topic href="html/bk01ch10s110.html#d0e22594"/>
+   </entry>
+   <entry keyword="MAX function">
+      <topic href="html/bk01ch10s73.html#d0e17303"/>
+   </entry>
+   <entry keyword="MAXCOUNT">
+      <topic href="html/bk01ch05s01s04.html#d0e3532"/>
+   </entry>
+   <entry keyword="MAXLENGTH">
+      <topic href="html/bk01ch05s01.html#d0e2970"/>
+   </entry>
+   <entry keyword="MAXLENGTH">
+      <topic href="html/bk01ch05s01s04.html#d0e3519"/>
+   </entry>
+   <entry keyword="MAXLENGTH">
+      <topic href="html/bk01ch05s02s02.html#d0e4386"/>
+   </entry>
+   <entry keyword="MAXLENGTH">
+      <topic href="html/bk01ch06s02s04.html#d0e5820"/>
+   </entry>
+   <entry keyword="MAXLENGTH">
+      <topic href="html/bk01ch10s84.html#d0e19726"/>
+   </entry>
+   <entry keyword="MERGE">
+      <topic href="html/bk01ch10s13s01.html#d0e10103"/>
+   </entry>
+   <entry keyword="MERGE">
+      <topic href="html/bk01ch10s74.html#d0e17386"/>
+   </entry>
+   <entry keyword="MERGE">
+      <topic href="html/bk01ch10s111.html#d0e22883"/>
+   </entry>
+   <entry keyword="MERGE">
+      <topic href="html/bk01ch10s118.html#d0e23780"/>
+   </entry>
+   <entry keyword="MERGE function">
+      <topic href="html/bk01ch10s74.html#d0e17389"/>
+   </entry>
+   <entry keyword="MERGEJOIN">
+      <topic href="html/bk01ch10s75.html#d0e17526"/>
+   </entry>
+   <entry keyword="MERGEJOIN function">
+      <topic href="html/bk01ch10s60s08.html#d0e15865"/>
+   </entry>
+   <entry keyword="MERGEJOIN function">
+      <topic href="html/bk01ch10s75.html#d0e17532"/>
+   </entry>
+   <entry keyword="MIN">
+      <topic href="html/bk01ch10s76.html#d0e17768"/>
+   </entry>
+   <entry keyword="MIN">
+      <topic href="html/bk01ch10s84s01.html#d0e20008"/>
+   </entry>
+   <entry keyword="MIN function">
+      <topic href="html/bk01ch10s76.html#d0e17771"/>
+   </entry>
+   <entry keyword="MODULE">
+      <topic href="html/bk01ch09s06.html#d0e8154"/>
+   </entry>
+   <entry keyword="MODULE Structure">
+      <topic href="html/bk01ch09s06.html#d0e8142"/>
+   </entry>
+   <entry keyword="Modulus Division">
+      <topic href="html/bk01ch03s01s01.html#d0e1357"/>
+   </entry>
+   <entry keyword="MOFN">
+      <topic href="html/bk01ch10s75s02.html#d0e17733"/>
+   </entry>
+   <entry keyword="MonitorFile">
+      <topic href="html/bk02ch11s01.html#d0e37898"/>
+   </entry>
+   <entry keyword="MonitorLogicalFileName">
+      <topic href="html/bk02ch11s02.html#d0e38109"/>
+   </entry>
+   <entry keyword="MoveExternalFile">
+      <topic href="html/bk02ch03s02.html#d0e31438"/>
+   </entry>
+   <entry keyword="msTick">
+      <topic href="html/bk02ch15s04.html#d0e39054"/>
+   </entry>
+   <entry keyword="Multiplication">
+      <topic href="html/bk01ch03s01s01.html#d0e1365"/>
+   </entry>
+   <entry keyword="N-ary merge/join">
+      <topic href="html/bk01ch10s48.html#d0e13970"/>
+   </entry>
+   <entry keyword="Name">
+      <topic href="html/bk01ch02s03.html#d0e400"/>
+   </entry>
+   <entry keyword="Name">
+      <topic href="html/bk02ch10s03.html#d0e37641"/>
+   </entry>
+   <entry keyword="NAMED">
+      <topic href="html/bk01ch02s06s06.html#d0e1025"/>
+   </entry>
+   <entry keyword="NAMED">
+      <topic href="html/bk01ch10s31.html#d0e12577"/>
+   </entry>
+   <entry keyword="NAMED">
+      <topic href="html/bk01ch10s82.html#d0e18423"/>
+   </entry>
+   <entry keyword="NAMED">
+      <topic href="html/bk01ch10s82s06.html#d0e19502"/>
+   </entry>
+   <entry keyword="NAMED">
+      <topic href="html/bk01ch10s82s07.html#d0e19566"/>
+   </entry>
+   <entry keyword="NAMED OUTPUT">
+      <topic href="html/bk01ch10s82s06.html#d0e19472"/>
+   </entry>
+   <entry keyword="Named Output Dataset">
+      <topic href="html/bk01ch05s02s05.html#d0e4762"/>
+   </entry>
+   <entry keyword="NAMESPACE">
+      <topic href="html/bk01ch10s111.html#d0e22944"/>
+   </entry>
+   <entry keyword="Natural Language Parsing">
+      <topic href="html/bk01ch07s01.html#d0e5906"/>
+   </entry>
+   <entry keyword="Nested child datasets">
+      <topic href="html/bk01ch05s05.html#d0e5530"/>
+   </entry>
+   <entry keyword="NOCASE">
+      <topic href="html/bk01ch10s84s01.html#d0e19936"/>
+   </entry>
+   <entry keyword="NOCASE">
+      <topic href="html/bk01ch10s96.html#d0e21365"/>
+   </entry>
+   <entry keyword="NOCASE">
+      <topic href="html/bk01ch10s97.html#d0e21474"/>
+   </entry>
+   <entry keyword="Node">
+      <topic href="html/bk02ch09s01.html#d0e37160"/>
+   </entry>
+   <entry keyword="Nodes">
+      <topic href="html/bk02ch09s02.html#d0e37207"/>
+   </entry>
+   <entry keyword="NOLOCAL">
+      <topic href="html/bk01ch10s77.html#d0e17859"/>
+   </entry>
+   <entry keyword="NOLOCAL function">
+      <topic href="html/bk01ch10s77.html#d0e17862"/>
+   </entry>
+   <entry keyword="non-procedural language">
+      <topic href="html/bk01ch02s01s01.html#d0e236"/>
+   </entry>
+   <entry keyword="NONEMPTY">
+      <topic href="html/bk01ch10s78.html#d0e17914"/>
+   </entry>
+   <entry keyword="NONEMPTY function">
+      <topic href="html/bk01ch10s78.html#d0e17920"/>
+   </entry>
+   <entry keyword="NORMALIZE">
+      <topic href="html/bk01ch10s79.html#d0e17967"/>
+   </entry>
+   <entry keyword="NORMALIZE function">
+      <topic href="html/bk01ch10s79.html#d0e17970"/>
+   </entry>
+   <entry keyword="NOROOT">
+      <topic href="html/bk01ch05s02s03.html#d0e4577"/>
+   </entry>
+   <entry keyword="NOROOT">
+      <topic href="html/bk01ch10s13s01.html#d0e10131"/>
+   </entry>
+   <entry keyword="NOSCAN">
+      <topic href="html/bk01ch10s84s01.html#d0e19909"/>
+   </entry>
+   <entry keyword="NOSORT">
+      <topic href="html/bk01ch10s28.html#d0e12015"/>
+   </entry>
+   <entry keyword="NOSORT">
+      <topic href="html/bk01ch10s60s03.html#d0e15172"/>
+   </entry>
+   <entry keyword="Not Equal">
+      <topic href="html/bk01ch03s01s04.html#d0e1491"/>
+   </entry>
+   <entry keyword="NOT MATCHED">
+      <topic href="html/bk01ch10s84s01.html#d0e20042"/>
+   </entry>
+   <entry keyword="NOT MATCHED ONLY">
+      <topic href="html/bk01ch10s84s01.html#d0e20054"/>
+   </entry>
+   <entry keyword="NOTHOR">
+      <topic href="html/bk01ch10s80.html#d0e18122"/>
+   </entry>
+   <entry keyword="NOTHOR function">
+      <topic href="html/bk01ch10s80.html#d0e18111"/>
+   </entry>
+   <entry keyword="NOTIFY">
+      <topic href="html/bk01ch10s81.html#d0e18180"/>
+   </entry>
+   <entry keyword="NOTIFY function">
+      <topic href="html/bk01ch10s81.html#d0e18176"/>
+   </entry>
+   <entry keyword="NOTRIM">
+      <topic href="html/bk01ch05s02s02.html#d0e4411"/>
+   </entry>
+   <entry keyword="ONFAIL">
+      <topic href="html/bk01ch10s66.html#d0e16561"/>
+   </entry>
+   <entry keyword="ONFAIL">
+      <topic href="html/bk01ch10s111.html#d0e22912"/>
+   </entry>
+   <entry keyword="ONWARNING">
+      <topic href="html/bk01ch11s07.html#d0e25455"/>
+   </entry>
+   <entry keyword="ONWARNING workflow service">
+      <topic href="html/bk01ch11s07.html#d0e25463"/>
+   </entry>
+   <entry keyword="Operators">
+      <topic href="html/bk01ch03s01.html#d0e1312"/>
+   </entry>
+   <entry keyword="OPT">
+      <topic href="html/bk01ch05s02s01.html#d0e4169"/>
+   </entry>
+   <entry keyword="OPT">
+      <topic href="html/bk01ch05s03.html#d0e5068"/>
+   </entry>
+   <entry keyword="OPT">
+      <topic href="html/bk01ch08s06.html#d0e7189"/>
+   </entry>
+   <entry keyword="OPT">
+      <topic href="html/bk01ch10s82s04.html#d0e19303"/>
+   </entry>
+   <entry keyword="OPT">
+      <topic href="html/bk01ch10s89s02.html#d0e20876"/>
+   </entry>
+   <entry keyword="OR">
+      <topic href="html/bk01ch05s01s03.html#d0e3419"/>
+   </entry>
+   <entry keyword="OS">
+      <topic href="html/bk02ch10s05.html#d0e37741"/>
+   </entry>
+   <entry keyword="OUTPUT">
+      <topic href="html/bk01ch10s82.html#d0e18279"/>
+   </entry>
+   <entry keyword="OUTPUT">
+      <topic href="html/bk01ch10s82s02.html#d0e18646"/>
+   </entry>
+   <entry keyword="OUTPUT">
+      <topic href="html/bk01ch10s82s03.html#d0e18808"/>
+   </entry>
+   <entry keyword="OUTPUT">
+      <topic href="html/bk01ch10s82s04.html#d0e19140"/>
+   </entry>
+   <entry keyword="OUTPUT">
+      <topic href="html/bk01ch10s82s06.html#d0e19486"/>
+   </entry>
+   <entry keyword="OUTPUT">
+      <topic href="html/bk01ch10s82s07.html#d0e19554"/>
+   </entry>
+   <entry keyword="OUTPUT">
+      <topic href="html/bk01ch10s85.html#d0e20253"/>
+   </entry>
+   <entry keyword="OUTPUT - CSV Files">
+      <topic href="html/bk01ch10s82s03.html#d0e18797"/>
+   </entry>
+   <entry keyword="OUTPUT - NAMED Files">
+      <topic href="html/bk01ch10s82s06.html#d0e19475"/>
+   </entry>
+   <entry keyword="OUTPUT - XML Files">
+      <topic href="html/bk01ch10s82s04.html#d0e19129"/>
+   </entry>
+   <entry keyword="OUTPUT action">
+      <topic href="html/bk01ch10s82.html#d0e18276"/>
+   </entry>
+   <entry keyword="OUTPUT Pipe Files">
+      <topic href="html/bk01ch10s82s05.html#d0e19365"/>
+   </entry>
+   <entry keyword="OUTPUT Scalar Values">
+      <topic href="html/bk01ch10s82s07.html#d0e19540"/>
+   </entry>
+   <entry keyword="OUTPUT Thor/Flat Files">
+      <topic href="html/bk01ch10s82s02.html#d0e18635"/>
+   </entry>
+   <entry keyword="OUTPUT Workunit Files">
+      <topic href="html/bk01ch10s82s08.html#d0e19590"/>
+   </entry>
+   <entry keyword="OVERRIGHT">
+      <topic href="html/bk01ch10s61.html#d0e16055"/>
+   </entry>
+   <entry keyword="OVERWRITE">
+      <topic href="html/bk01ch10s13s01.html#d0e10117"/>
+   </entry>
+   <entry keyword="OVERWRITE">
+      <topic href="html/bk01ch10s62.html#d0e16179"/>
+   </entry>
+   <entry keyword="OVERWRITE">
+      <topic href="html/bk01ch10s82s02.html#d0e18695"/>
+   </entry>
+   <entry keyword="OVERWRITE">
+      <topic href="html/bk01ch10s82s03.html#d0e18864"/>
+   </entry>
+   <entry keyword="OVERWRITE">
+      <topic href="html/bk01ch10s82s04.html#d0e19190"/>
+   </entry>
+   <entry keyword="PACKED">
+      <topic href="html/bk01ch05s01.html#d0e2988"/>
+   </entry>
+   <entry keyword="packed decimal">
+      <topic href="html/bk01ch04s04.html#d0e2146"/>
+   </entry>
+   <entry keyword="packed decimal">
+      <topic href="html/bk01ch04s04.html#d0e2173"/>
+   </entry>
+   <entry keyword="packed decimal">
+      <topic href="html/bk01ch04s04.html#d0e2177"/>
+   </entry>
+   <entry keyword="packed hexadecimal">
+      <topic href="html/bk01ch04s08.html#d0e2335"/>
+   </entry>
+   <entry keyword="PARALLEL">
+      <topic href="html/bk01ch10s60s03.html#d0e15278"/>
+   </entry>
+   <entry keyword="PARALLEL">
+      <topic href="html/bk01ch10s71.html#d0e16949"/>
+   </entry>
+   <entry keyword="PARALLEL">
+      <topic href="html/bk01ch10s83.html#d0e19657"/>
+   </entry>
+   <entry keyword="PARALLEL">
+      <topic href="html/bk01ch10s89.html#d0e20680"/>
+   </entry>
+   <entry keyword="PARALLEL">
+      <topic href="html/bk01ch10s111.html#d0e22899"/>
+   </entry>
+   <entry keyword="PARALLEL action">
+      <topic href="html/bk01ch10s82s07.html#d0e19579"/>
+   </entry>
+   <entry keyword="PARALLEL function">
+      <topic href="html/bk01ch10s83.html#d0e19646"/>
+   </entry>
+   <entry keyword="Parameter Passing">
+      <topic href="html/bk01ch02s06.html#d0e772"/>
+   </entry>
+   <entry keyword="parameters">
+      <topic href="html/bk01ch02s03.html#d0e445"/>
+   </entry>
+   <entry keyword="PARSE">
+      <topic href="html/bk01ch10s84.html#d0e19708"/>
+   </entry>
+   <entry keyword="PARSE">
+      <topic href="html/bk01ch10s84s01.html#d0e20081"/>
+   </entry>
+   <entry keyword="PARSE Examples">
+      <topic href="html/bk01ch10s84s03.html#d0e20190"/>
+   </entry>
+   <entry keyword="PARSE function">
+      <topic href="html/bk01ch07s03.html#d0e6620"/>
+   </entry>
+   <entry keyword="PARSE function">
+      <topic href="html/bk01ch10s84.html#d0e19711"/>
+   </entry>
+   <entry keyword="PARSE Text">
+      <topic href="html/bk01ch10s84s01.html#d0e19827"/>
+   </entry>
+   <entry keyword="PARSE XML">
+      <topic href="html/bk01ch10s84s02.html#d0e20124"/>
+   </entry>
+   <entry keyword="PARTITION LEFT">
+      <topic href="html/bk01ch10s60s03.html#d0e15142"/>
+   </entry>
+   <entry keyword="PARTITION RIGHT">
+      <topic href="html/bk01ch10s60s03.html#d0e15146"/>
+   </entry>
+   <entry keyword="Passing a DATASET parameter">
+      <topic href="html/bk01ch05s02s09.html#d0e5007"/>
+   </entry>
+   <entry keyword="Passing Set Parameters">
+      <topic href="html/bk01ch13s03s06.html#d0e28608"/>
+   </entry>
+   <entry keyword="PATTERN">
+      <topic href="html/bk01ch07s02.html#d0e5925"/>
+   </entry>
+   <entry keyword="Perl regular expression">
+      <topic href="html/bk01ch10s96.html#d0e21427"/>
+   </entry>
+   <entry keyword="Perl regular expression">
+      <topic href="html/bk01ch10s97.html#d0e21536"/>
+   </entry>
+   <entry keyword="PERSIST">
+      <topic href="html/bk01ch11s08.html#d0e25523"/>
+   </entry>
+   <entry keyword="PERSIST workflow service">
+      <topic href="html/bk01ch11s08.html#d0e25554"/>
+   </entry>
+   <entry keyword="PHYSICALLENGTH">
+      <topic href="html/bk01ch06s02s03.html#d0e5777"/>
+   </entry>
+   <entry keyword="PIPE">
+      <topic href="html/bk01ch10s82.html#d0e18395"/>
+   </entry>
+   <entry keyword="PIPE">
+      <topic href="html/bk01ch10s82s05.html#d0e19388"/>
+   </entry>
+   <entry keyword="PIPE">
+      <topic href="html/bk01ch10s85.html#d0e20210"/>
+   </entry>
+   <entry keyword="Pipe">
+      <topic href="html/bk01ch05s02s04.html#d0e4683"/>
+   </entry>
+   <entry keyword="PIPE Files">
+      <topic href="html/bk01ch05s02s04.html#d0e4671"/>
+   </entry>
+   <entry keyword="PIPE function">
+      <topic href="html/bk01ch05s02s04.html#d0e4751"/>
+   </entry>
+   <entry keyword="PIPE function">
+      <topic href="html/bk01ch10s85.html#d0e20213"/>
+   </entry>
+   <entry keyword="Platform">
+      <topic href="html/bk02ch10s06.html#d0e37791"/>
+   </entry>
+   <entry keyword="POWER">
+      <topic href="html/bk01ch10s86.html#d0e20367"/>
+   </entry>
+   <entry keyword="POWER function">
+      <topic href="html/bk01ch10s86.html#d0e20370"/>
+   </entry>
+   <entry keyword="PREFETCH">
+      <topic href="html/bk01ch10s89.html#d0e20672"/>
+   </entry>
+   <entry keyword="PREFETCH">
+      <topic href="html/bk01ch10s89.html#d0e20702"/>
+   </entry>
+   <entry keyword="PRELOAD">
+      <topic href="html/bk01ch05s02s01.html#d0e4179"/>
+   </entry>
+   <entry keyword="PRELOAD">
+      <topic href="html/bk01ch05s03.html#d0e5062"/>
+   </entry>
+   <entry keyword="PRELOAD">
+      <topic href="html/bk01ch10s87.html#d0e20432"/>
+   </entry>
+   <entry keyword="PRELOAD function">
+      <topic href="html/bk01ch10s87.html#d0e20435"/>
+   </entry>
+   <entry keyword="PRIORITY">
+      <topic href="html/bk01ch11s09.html#d0e25709"/>
+   </entry>
+   <entry keyword="PRIORITY workflow service">
+      <topic href="html/bk01ch11s09.html#d0e25717"/>
+   </entry>
+   <entry keyword="PROCESS">
+      <topic href="html/bk01ch10s88.html#d0e20495"/>
+   </entry>
+   <entry keyword="PROCESS function">
+      <topic href="html/bk01ch10s88.html#d0e20498"/>
+   </entry>
+   <entry keyword="PROJECT">
+      <topic href="html/bk01ch10s89.html#d0e20661"/>
+   </entry>
+   <entry keyword="PROJECT">
+      <topic href="html/bk01ch10s89s02.html#d0e20868"/>
+   </entry>
+   <entry keyword="PROJECT function">
+      <topic href="html/bk01ch10s89.html#d0e20664"/>
+   </entry>
+   <entry keyword="PromoteSuperFileList">
+      <topic href="html/bk02ch02s16.html#d0e31114"/>
+   </entry>
+   <entry keyword="ProtectLogicalFile">
+      <topic href="html/bk02ch01s08.html#d0e29544"/>
+   </entry>
+   <entry keyword="PULL">
+      <topic href="html/bk01ch10s90.html#d0e20965"/>
+   </entry>
+   <entry keyword="PULL function">
+      <topic href="html/bk01ch10s90.html#d0e20968"/>
+   </entry>
+   <entry keyword="QSTRING">
+      <topic href="html/bk01ch04s06.html#d0e2239"/>
+   </entry>
+   <entry keyword="QSTRING string constants">
+      <topic href="html/bk01ch02s02s01.html#d0e339"/>
+   </entry>
+   <entry keyword="QSTRING value type">
+      <topic href="html/bk01ch04s06.html#d0e2249"/>
+   </entry>
+   <entry keyword="query library">
+      <topic href="html/bk01ch09s06.html#d0e8254"/>
+   </entry>
+   <entry keyword="query library">
+      <topic href="html/bk01ch10s13.html#d0e10068"/>
+   </entry>
+   <entry keyword="quicksort">
+      <topic href="html/bk01ch10s112s01.html#d0e23235"/>
+   </entry>
+   <entry keyword="QUOTE">
+      <topic href="html/bk01ch05s02s02.html#d0e4376"/>
+   </entry>
+   <entry keyword="QUOTE">
+      <topic href="html/bk01ch10s82s03.html#d0e18996"/>
+   </entry>
+   <entry keyword="RANDOM">
+      <topic href="html/bk01ch10s91.html#d0e21013"/>
+   </entry>
+   <entry keyword="RANDOM function">
+      <topic href="html/bk01ch10s91.html#d0e21016"/>
+   </entry>
+   <entry keyword="RANGE">
+      <topic href="html/bk01ch10s92.html#d0e21050"/>
+   </entry>
+   <entry keyword="RANGE function">
+      <topic href="html/bk01ch10s92.html#d0e21053"/>
+   </entry>
+   <entry keyword="RANK">
+      <topic href="html/bk01ch10s93.html#d0e21112"/>
+   </entry>
+   <entry keyword="RANK function">
+      <topic href="html/bk01ch10s93.html#d0e21115"/>
+   </entry>
+   <entry keyword="RANKED">
+      <topic href="html/bk01ch10s94.html#d0e21197"/>
+   </entry>
+   <entry keyword="RANKED function">
+      <topic href="html/bk01ch10s94.html#d0e21200"/>
+   </entry>
+   <entry keyword="REAL">
+      <topic href="html/bk01ch04s03.html#d0e2044"/>
+   </entry>
+   <entry keyword="REAL">
+      <topic href="html/bk01ch13s03s06.html#d0e28648"/>
+   </entry>
+   <entry keyword="REAL data type">
+      <topic href="html/bk01ch04s03.html#d0e2050"/>
+   </entry>
+   <entry keyword="REALFORMAT">
+      <topic href="html/bk01ch10s95.html#d0e21279"/>
+   </entry>
+   <entry keyword="REALFORMAT Function">
+      <topic href="html/bk01ch10s95.html#d0e21285"/>
+   </entry>
+   <entry keyword="realvalue">
+      <topic href="html/bk01ch10s102.html#d0e21988"/>
+   </entry>
+   <entry keyword="RECORD">
+      <topic href="html/bk01ch05s01.html#d0e2962"/>
+   </entry>
+   <entry keyword="record matching">
+      <topic href="html/bk01ch10s75s01.html#d0e17637"/>
+   </entry>
+   <entry keyword="Record Matching Logic">
+      <topic href="html/bk01ch10s75s01.html#d0e17632"/>
+   </entry>
+   <entry keyword="Record Set">
+      <topic href="html/bk01ch02s04.html#d0e540"/>
+   </entry>
+   <entry keyword="Record Set">
+      <topic href="html/bk01ch02s04s05.html#d0e669"/>
+   </entry>
+   <entry keyword="Record Set">
+      <topic href="html/bk01ch02s05.html#d0e729"/>
+   </entry>
+   <entry keyword="Record Set">
+      <topic href="html/bk01ch03s03.html#d0e1639"/>
+   </entry>
+   <entry keyword="Record Set Attribute">
+      <topic href="html/bk01ch02s04s05.html#d0e675"/>
+   </entry>
+   <entry keyword="Record Set Operators">
+      <topic href="html/bk01ch03s03.html#d0e1643"/>
+   </entry>
+   <entry keyword="RECORD Structure">
+      <topic href="html/bk01ch05s01.html#d0e2954"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch03s03.html#d0e1649"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch05s01.html#d0e3030"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch05s02s03.html#d0e4650"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch05s02s06.html#d0e4833"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch06s01.html#d0e5627"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch07s03.html#d0e6616"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch07s04.html#d0e6758"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch08s09.html#d0e7384"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch09s07s01.html#d0e8652"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch10s84s01.html#d0e20106"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch10s84s01.html#d0e20113"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch10s89.html#d0e20766"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch10s118.html#d0e23802"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch10s118.html#d0e23882"/>
+   </entry>
+   <entry keyword="RECORD structure">
+      <topic href="html/bk01ch10s129.html#d0e24652"/>
+   </entry>
+   <entry keyword="RECORDOF">
+      <topic href="html/bk01ch04s13.html#d0e2545"/>
+   </entry>
+   <entry keyword="RECORDOF datatype">
+      <topic href="html/bk01ch04s13.html#d0e2548"/>
+   </entry>
+   <entry keyword="RECOVERY">
+      <topic href="html/bk01ch11s10.html#d0e25781"/>
+   </entry>
+   <entry keyword="RECOVERY workflow service">
+      <topic href="html/bk01ch11s10.html#d0e25793"/>
+   </entry>
+   <entry keyword="recstruct">
+      <topic href="html/bk01ch10s103s01.html#d0e22116"/>
+   </entry>
+   <entry keyword="regex">
+      <topic href="html/bk01ch10s96.html#d0e21417"/>
+   </entry>
+   <entry keyword="regex">
+      <topic href="html/bk01ch10s97.html#d0e21523"/>
+   </entry>
+   <entry keyword="REGEXFIND">
+      <topic href="html/bk01ch10s96.html#d0e21350"/>
+   </entry>
+   <entry keyword="REGEXFIND function">
+      <topic href="html/bk01ch10s96.html#d0e21353"/>
+   </entry>
+   <entry keyword="REGEXREPLACE">
+      <topic href="html/bk01ch10s97.html#d0e21463"/>
+   </entry>
+   <entry keyword="REGEXREPLACE function">
+      <topic href="html/bk01ch10s97.html#d0e21466"/>
+   </entry>
+   <entry keyword="REGROUP">
+      <topic href="html/bk01ch10s98.html#d0e21572"/>
+   </entry>
+   <entry keyword="REGROUP function">
+      <topic href="html/bk01ch10s98.html#d0e21575"/>
+   </entry>
+   <entry keyword="regular expression">
+      <topic href="html/bk01ch07s02.html#d0e5961"/>
+   </entry>
+   <entry keyword="REJECTED">
+      <topic href="html/bk01ch10s99.html#d0e21630"/>
+   </entry>
+   <entry keyword="REJECTED function">
+      <topic href="html/bk01ch10s99.html#d0e21633"/>
+   </entry>
+   <entry keyword="REJECTED function">
+      <topic href="html/bk01ch10s132.html#d0e24884"/>
+   </entry>
+   <entry keyword="Relationality">
+      <topic href="html/bk01ch05s05.html#d0e5522"/>
+   </entry>
+   <entry keyword="RemoteDirectory">
+      <topic href="html/bk02ch01s09.html#d0e29602"/>
+   </entry>
+   <entry keyword="RemotePull">
+      <topic href="html/bk02ch06s05.html#d0e32914"/>
+   </entry>
+   <entry keyword="RemoveFileRelationship">
+      <topic href="html/bk02ch05s05.html#d0e32254"/>
+   </entry>
+   <entry keyword="RemoveSuffix">
+      <topic href="html/bk02ch07s20.html#d0e35961"/>
+   </entry>
+   <entry keyword="RemoveSuperFile">
+      <topic href="html/bk02ch02s12.html#d0e30803"/>
+   </entry>
+   <entry keyword="RenameLogicalFile">
+      <topic href="html/bk02ch01s10.html#d0e29705"/>
+   </entry>
+   <entry keyword="REPEAT">
+      <topic href="html/bk01ch10s82s05.html#d0e19414"/>
+   </entry>
+   <entry keyword="REPEAT">
+      <topic href="html/bk01ch10s85.html#d0e20243"/>
+   </entry>
+   <entry keyword="ReplaceSuperFile">
+      <topic href="html/bk02ch02s15.html#d0e31041"/>
+   </entry>
+   <entry keyword="Replicate">
+      <topic href="html/bk02ch06s06.html#d0e33136"/>
+   </entry>
+   <entry keyword="Reserved Words">
+      <topic href="html/bk01ch02s03s02.html#d0e488"/>
+   </entry>
+   <entry keyword="ResolveHostName">
+      <topic href="html/bk02ch14s02.html#d0e38702"/>
+   </entry>
+   <entry keyword="resultrec">
+      <topic href="html/bk01ch10s103s02.html#d0e22138"/>
+   </entry>
+   <entry keyword="RETRY">
+      <topic href="html/bk01ch10s111.html#d0e22831"/>
+   </entry>
+   <entry keyword="RETURN">
+      <topic href="html/bk01ch02s08s03.html#d0e1229"/>
+   </entry>
+   <entry keyword="RETURN">
+      <topic href="html/bk01ch09s02.html#d0e7754"/>
+   </entry>
+   <entry keyword="RETURN">
+      <topic href="html/bk01ch09s03.html#d0e7877"/>
+   </entry>
+   <entry keyword="Reverse">
+      <topic href="html/bk02ch07s21.html#d0e36032"/>
+   </entry>
+   <entry keyword="RfsAction">
+      <topic href="html/bk02ch04s02.html#d0e31696"/>
+   </entry>
+   <entry keyword="RIGHT">
+      <topic href="html/bk01ch08s07.html#d0e7293"/>
+   </entry>
+   <entry keyword="RIGHT">
+      <topic href="html/bk01ch10s28s01.html#d0e12152"/>
+   </entry>
+   <entry keyword="RIGHT ONLY">
+      <topic href="html/bk01ch10s60s07.html#d0e15798"/>
+   </entry>
+   <entry keyword="RIGHT OUTER">
+      <topic href="html/bk01ch10s60s07.html#d0e15759"/>
+   </entry>
+   <entry keyword="RIGHT1">
+      <topic href="html/bk01ch10s03.html#d0e8915"/>
+   </entry>
+   <entry keyword="RIGHT2">
+      <topic href="html/bk01ch10s03.html#d0e8919"/>
+   </entry>
+   <entry keyword="ROLLUP">
+      <topic href="html/bk01ch10s100.html#d0e21699"/>
+   </entry>
+   <entry keyword="ROLLUP function">
+      <topic href="html/bk01ch10s100.html#d0e21702"/>
+   </entry>
+   <entry keyword="ROLLUP function">
+      <topic href="html/bk01ch10s112.html#d0e23222"/>
+   </entry>
+   <entry keyword="ROUND">
+      <topic href="html/bk01ch10s101.html#d0e21900"/>
+   </entry>
+   <entry keyword="ROUND function">
+      <topic href="html/bk01ch10s101.html#d0e21903"/>
+   </entry>
+   <entry keyword="ROUNDUP">
+      <topic href="html/bk01ch10s102.html#d0e21953"/>
+   </entry>
+   <entry keyword="ROUNDUP function">
+      <topic href="html/bk01ch10s102.html#d0e21956"/>
+   </entry>
+   <entry keyword="ROW">
+      <topic href="html/bk01ch05s03.html#d0e5080"/>
+   </entry>
+   <entry keyword="ROW">
+      <topic href="html/bk01ch10s13s01.html#d0e10149"/>
+   </entry>
+   <entry keyword="ROW">
+      <topic href="html/bk01ch10s103.html#d0e22009"/>
+   </entry>
+   <entry keyword="ROW function">
+      <topic href="html/bk01ch09s06s04.html#d0e8387"/>
+   </entry>
+   <entry keyword="ROW function">
+      <topic href="html/bk01ch10s103.html#d0e22012"/>
+   </entry>
+   <entry keyword="ROWDIFF">
+      <topic href="html/bk01ch10s104.html#d0e22178"/>
+   </entry>
+   <entry keyword="ROWDIFF function">
+      <topic href="html/bk01ch10s104.html#d0e22181"/>
+   </entry>
+   <entry keyword="ROWS(LEFT)">
+      <topic href="html/bk01ch08s08.html#d0e7324"/>
+   </entry>
+   <entry keyword="ROWS(RIGHT)">
+      <topic href="html/bk01ch08s08.html#d0e7328"/>
+   </entry>
+   <entry keyword="ROWSET">
+      <topic href="html/bk01ch10s48.html#d0e13958"/>
+   </entry>
+   <entry keyword="ROWSET(LEFT)">
+      <topic href="html/bk01ch10s48.html#d0e13962"/>
+   </entry>
+   <entry keyword="Roxie">
+      <topic href="html/bk01ch10s69.html#d0e16856"/>
+   </entry>
+   <entry keyword="Roxie">
+      <topic href="html/bk01ch10s112s01.html#d0e23285"/>
+   </entry>
+   <entry keyword="RULE">
+      <topic href="html/bk01ch07s02.html#d0e6007"/>
+   </entry>
+   <entry keyword="SAMPLE">
+      <topic href="html/bk01ch10s105.html#d0e22244"/>
+   </entry>
+   <entry keyword="SAMPLE function">
+      <topic href="html/bk01ch10s105.html#d0e22247"/>
+   </entry>
+   <entry keyword="Scalar OUTPUT">
+      <topic href="html/bk01ch10s82s07.html#d0e19543"/>
+   </entry>
+   <entry keyword="SCAN">
+      <topic href="html/bk01ch10s84s01.html#d0e19918"/>
+   </entry>
+   <entry keyword="SCAN ALL">
+      <topic href="html/bk01ch10s84s01.html#d0e19927"/>
+   </entry>
+   <entry keyword="SCOPE">
+      <topic href="html/bk01ch05s04.html#d0e5346"/>
+   </entry>
+   <entry keyword="Scope">
+      <topic href="html/bk01ch02s03.html#d0e429"/>
+   </entry>
+   <entry keyword="SELF">
+      <topic href="html/bk01ch08s09.html#d0e7374"/>
+   </entry>
+   <entry keyword="SELF">
+      <topic href="html/bk01ch09s07.html#d0e8464"/>
+   </entry>
+   <entry keyword="SELF keyword">
+      <topic href="html/bk01ch08s09.html#d0e7397"/>
+   </entry>
+   <entry keyword="SendEmail">
+      <topic href="html/bk02ch16s01.html#d0e39103"/>
+   </entry>
+   <entry keyword="SendEmailAttachData">
+      <topic href="html/bk02ch16s02.html#d0e39182"/>
+   </entry>
+   <entry keyword="SendEmailAttachText">
+      <topic href="html/bk02ch16s03.html#d0e39291"/>
+   </entry>
+   <entry keyword="SEPARATOR">
+      <topic href="html/bk01ch05s02s02.html#d0e4355"/>
+   </entry>
+   <entry keyword="SEPARATOR">
+      <topic href="html/bk01ch10s82s03.html#d0e18970"/>
+   </entry>
+   <entry keyword="SEQUENTIAL">
+      <topic href="html/bk01ch10s106.html#d0e22318"/>
+   </entry>
+   <entry keyword="SEQUENTIAL function">
+      <topic href="html/bk01ch10s106.html#d0e22321"/>
+   </entry>
+   <entry keyword="Service Function Keywords">
+      <topic href="html/bk01ch13s03s04.html#d0e28522"/>
+   </entry>
+   <entry keyword="SERVICE Structure">
+      <topic href="html/bk01ch10s05.html#d0e9248"/>
+   </entry>
+   <entry keyword="SERVICE Structure">
+      <topic href="html/bk01ch13s01.html#d0e28360"/>
+   </entry>
+   <entry keyword="SERVICE Structure">
+      <topic href="html/bk01ch13s03s03.html#d0e28509"/>
+   </entry>
+   <entry keyword="SERVICE structure">
+      <topic href="html/bk01ch13s03s06.html#d0e28655"/>
+   </entry>
+   <entry keyword="SERVICE structure">
+      <topic href="html/bk01ch13s03s06.html#d0e28687"/>
+   </entry>
+   <entry keyword="SET">
+      <topic href="html/bk01ch02s06.html#d0e847"/>
+   </entry>
+   <entry keyword="SET">
+      <topic href="html/bk01ch10s107.html#d0e22375"/>
+   </entry>
+   <entry keyword="Set">
+      <topic href="html/bk01ch02s04.html#d0e534"/>
+   </entry>
+   <entry keyword="Set Attribute">
+      <topic href="html/bk01ch02s04s03.html#d0e577"/>
+   </entry>
+   <entry keyword="Set Attribute">
+      <topic href="html/bk01ch02s04s03.html#d0e609"/>
+   </entry>
+   <entry keyword="SET function">
+      <topic href="html/bk01ch02s04s03.html#d0e613"/>
+   </entry>
+   <entry keyword="SET function">
+      <topic href="html/bk01ch10s107.html#d0e22378"/>
+   </entry>
+   <entry keyword="SET OF">
+      <topic href="html/bk01ch04s11.html#d0e2439"/>
+   </entry>
+   <entry keyword="SET OF value type">
+      <topic href="html/bk01ch04s11.html#d0e2469"/>
+   </entry>
+   <entry keyword="Set Operators">
+      <topic href="html/bk01ch03s04.html#d0e1674"/>
+   </entry>
+   <entry keyword="Set Ordering">
+      <topic href="html/bk01ch02s04s04.html#d0e626"/>
+   </entry>
+   <entry keyword="SET parameters">
+      <topic href="html/bk01ch02s06s02.html#d0e885"/>
+   </entry>
+   <entry keyword="Set Parameters">
+      <topic href="html/bk01ch13s03s06.html#d0e28611"/>
+   </entry>
+   <entry keyword="SetColumnMapping">
+      <topic href="html/bk02ch05s01.html#d0e31758"/>
+   </entry>
+   <entry keyword="SetFileDescription">
+      <topic href="html/bk02ch01s11.html#d0e29760"/>
+   </entry>
+   <entry keyword="SetReadOnly">
+      <topic href="html/bk02ch01s12.html#d0e29815"/>
+   </entry>
+   <entry keyword="Sets can contain attributes and expressions">
+      <topic href="html/bk01ch02s04s03.html#d0e601"/>
+   </entry>
+   <entry keyword="SHARED">
+      <topic href="html/bk01ch02s07s02.html#d0e1117"/>
+   </entry>
+   <entry keyword="SHARED">
+      <topic href="html/bk01ch08s10.html#d0e7415"/>
+   </entry>
+   <entry keyword="SHARED keyword">
+      <topic href="html/bk01ch08s10.html#d0e7430"/>
+   </entry>
+   <entry keyword="Shared Object">
+      <topic href="html/bk01ch13s03.html#d0e28476"/>
+   </entry>
+   <entry keyword="SIN">
+      <topic href="html/bk01ch10s108.html#d0e22437"/>
+   </entry>
+   <entry keyword="SIN function">
+      <topic href="html/bk01ch10s108.html#d0e22440"/>
+   </entry>
+   <entry keyword="SINGLE">
+      <topic href="html/bk01ch10s82s03.html#d0e18963"/>
+   </entry>
+   <entry keyword="Single Row Dataset">
+      <topic href="html/bk01ch05s02s07.html#d0e4850"/>
+   </entry>
+   <entry keyword="Single-Row Dataset">
+      <topic href="html/bk01ch05s02s07.html#d0e4847"/>
+   </entry>
+   <entry keyword="SINH">
+      <topic href="html/bk01ch10s109.html#d0e22508"/>
+   </entry>
+   <entry keyword="SINH function">
+      <topic href="html/bk01ch10s109.html#d0e22511"/>
+   </entry>
+   <entry keyword="SIZEOF">
+      <topic href="html/bk01ch10s110.html#d0e22579"/>
+   </entry>
+   <entry keyword="SIZEOF function">
+      <topic href="html/bk01ch10s110.html#d0e22582"/>
+   </entry>
+   <entry keyword="SKEW">
+      <topic href="html/bk01ch10s29.html#d0e12254"/>
+   </entry>
+   <entry keyword="SKEW">
+      <topic href="html/bk01ch10s60s03.html#d0e15258"/>
+   </entry>
+   <entry keyword="SKEW">
+      <topic href="html/bk01ch10s112.html#d0e23041"/>
+   </entry>
+   <entry keyword="SKIP">
+      <topic href="html/bk01ch08s11.html#d0e7454"/>
+   </entry>
+   <entry keyword="SKIP">
+      <topic href="html/bk01ch09s07.html#d0e8442"/>
+   </entry>
+   <entry keyword="SKIP">
+      <topic href="html/bk01ch10s60s03.html#d0e15245"/>
+   </entry>
+   <entry keyword="SKIP">
+      <topic href="html/bk01ch10s66.html#d0e16543"/>
+   </entry>
+   <entry keyword="SKIP">
+      <topic href="html/bk01ch10s84s01.html#d0e19954"/>
+   </entry>
+   <entry keyword="Sleep">
+      <topic href="html/bk02ch15s03.html#d0e38997"/>
+   </entry>
+   <entry keyword="SOAPCALL">
+      <topic href="html/bk01ch05s01s05.html#d0e3729"/>
+   </entry>
+   <entry keyword="SOAPCALL">
+      <topic href="html/bk01ch10s111.html#d0e22642"/>
+   </entry>
+   <entry keyword="SOAPCALL">
+      <topic href="html/bk01ch10s111s01.html#d0e22975"/>
+   </entry>
+   <entry keyword="SOAPCALL Action">
+      <topic href="html/bk01ch10s111s02.html#d0e22991"/>
+   </entry>
+   <entry keyword="SOAPCALL Function">
+      <topic href="html/bk01ch10s111.html#d0e22650"/>
+   </entry>
+   <entry keyword="SOAPCALL Function">
+      <topic href="html/bk01ch10s111s01.html#d0e22969"/>
+   </entry>
+   <entry keyword="SOAPCALL Options">
+      <topic href="html/bk01ch10s111.html#d0e22811"/>
+   </entry>
+   <entry keyword="SORT">
+      <topic href="html/bk01ch10s112.html#d0e23014"/>
+   </entry>
+   <entry keyword="sort algorithms">
+      <topic href="html/bk01ch10s112s01.html#d0e23231"/>
+   </entry>
+   <entry keyword="SORT function">
+      <topic href="html/bk01ch10s112.html#d0e23017"/>
+   </entry>
+   <entry keyword="SORTED">
+      <topic href="html/bk01ch05s03.html#d0e5058"/>
+   </entry>
+   <entry keyword="SORTED">
+      <topic href="html/bk01ch10s13s01.html#d0e10091"/>
+   </entry>
+   <entry keyword="SORTED">
+      <topic href="html/bk01ch10s60.html#d0e14903"/>
+   </entry>
+   <entry keyword="SORTED">
+      <topic href="html/bk01ch10s60s08.html#d0e15849"/>
+   </entry>
+   <entry keyword="SORTED">
+      <topic href="html/bk01ch10s74.html#d0e17403"/>
+   </entry>
+   <entry keyword="SORTED">
+      <topic href="html/bk01ch10s75.html#d0e17540"/>
+   </entry>
+   <entry keyword="SORTED">
+      <topic href="html/bk01ch10s113.html#d0e23382"/>
+   </entry>
+   <entry keyword="SORTED function">
+      <topic href="html/bk01ch10s113.html#d0e23370"/>
+   </entry>
+   <entry keyword="SprayFixed">
+      <topic href="html/bk02ch06s07.html#d0e33238"/>
+   </entry>
+   <entry keyword="SprayVariable">
+      <topic href="html/bk02ch06s08.html#d0e33489"/>
+   </entry>
+   <entry keyword="SprayXML">
+      <topic href="html/bk02ch06s09.html#d0e33854"/>
+   </entry>
+   <entry keyword="SQRT">
+      <topic href="html/bk01ch10s114.html#d0e23462"/>
+   </entry>
+   <entry keyword="SQRT function">
+      <topic href="html/bk01ch10s114.html#d0e23465"/>
+   </entry>
+   <entry keyword="square brackets">
+      <topic href="html/bk01ch01s02s02.html#d0e155"/>
+   </entry>
+   <entry keyword="square brackets">
+      <topic href="html/bk01ch02s04s03.html#d0e581"/>
+   </entry>
+   <entry keyword="square brackets">
+      <topic href="html/bk01ch02s06.html#d0e851"/>
+   </entry>
+   <entry keyword="square brackets">
+      <topic href="html/bk01ch04s11.html#d0e2478"/>
+   </entry>
+   <entry keyword="square brackets">
+      <topic href="html/bk01ch10s71.html#d0e17070"/>
+   </entry>
+   <entry keyword="STABLE">
+      <topic href="html/bk01ch10s112.html#d0e23091"/>
+   </entry>
+   <entry keyword="StartSuperFileTransaction">
+      <topic href="html/bk02ch02s10.html#d0e30630"/>
+   </entry>
+   <entry keyword="StartsWith">
+      <topic href="html/bk02ch07s25.html#d0e36362"/>
+   </entry>
+   <entry keyword="STD.Audit.Audit">
+      <topic href="html/bk02ch13s01.html#d0e38562"/>
+   </entry>
+   <entry keyword="STD.Date.Date_rec">
+      <topic href="html/bk02ch08s01.html#d0e36875"/>
+   </entry>
+   <entry keyword="STD.Date.Date_t">
+      <topic href="html/bk02ch08s01.html#d0e36884"/>
+   </entry>
+   <entry keyword="STD.Date.DateFromParts">
+      <topic href="html/bk02ch08s05.html#d0e37080"/>
+   </entry>
+   <entry keyword="STD.Date.Day">
+      <topic href="html/bk02ch08s04.html#d0e37031"/>
+   </entry>
+   <entry keyword="STD.Date.Days_t">
+      <topic href="html/bk02ch08s01.html#d0e36893"/>
+   </entry>
+   <entry keyword="STD.Date.Month">
+      <topic href="html/bk02ch08s03.html#d0e36982"/>
+   </entry>
+   <entry keyword="STD.Date.Year">
+      <topic href="html/bk02ch08s02.html#d0e36933"/>
+   </entry>
+   <entry keyword="STD.File.AbortDfuWorkunit">
+      <topic href="html/bk02ch06s02.html#d0e32424"/>
+   </entry>
+   <entry keyword="STD.File.AddFileRelationship">
+      <topic href="html/bk02ch05s03.html#d0e31911"/>
+   </entry>
+   <entry keyword="STD.File.AddSuperFile">
+      <topic href="html/bk02ch02s11.html#d0e30665"/>
+   </entry>
+   <entry keyword="STD.File.ClearSuperFile">
+      <topic href="html/bk02ch02s13.html#d0e30898"/>
+   </entry>
+   <entry keyword="STD.File.CompareFiles">
+      <topic href="html/bk02ch01s01.html#d0e28944"/>
+   </entry>
+   <entry keyword="STD.File.Copy">
+      <topic href="html/bk02ch06s03.html#d0e32482"/>
+   </entry>
+   <entry keyword="STD.File.CreateExternalDirectory">
+      <topic href="html/bk02ch03s04.html#d0e31563"/>
+   </entry>
+   <entry keyword="STD.File.CreateSuperFile">
+      <topic href="html/bk02ch02s01.html#d0e29992"/>
+   </entry>
+   <entry keyword="STD.File.DeleteExternalFile">
+      <topic href="html/bk02ch03s03.html#d0e31505"/>
+   </entry>
+   <entry keyword="STD.File.DeleteLogicalFiles">
+      <topic href="html/bk02ch01s02.html#d0e29117"/>
+   </entry>
+   <entry keyword="STD.File.DeleteSuperFile">
+      <topic href="html/bk02ch02s03.html#d0e30173"/>
+   </entry>
+   <entry keyword="STD.File.DeSpray">
+      <topic href="html/bk02ch06s04.html#d0e32726"/>
+   </entry>
+   <entry keyword="STD.File.DfuPlusExec">
+      <topic href="html/bk02ch06s01.html#d0e32379"/>
+   </entry>
+   <entry keyword="STD.File.EncodeRfsQuery">
+      <topic href="html/bk02ch04s01.html#d0e31628"/>
+   </entry>
+   <entry keyword="STD.File.ExternalLogicalFileName">
+      <topic href="html/bk02ch03s01.html#d0e31376"/>
+   </entry>
+   <entry keyword="STD.File.fCopy">
+      <topic href="html/bk02ch06s03.html#d0e32559"/>
+   </entry>
+   <entry keyword="STD.File.fDeSpray">
+      <topic href="html/bk02ch06s04.html#d0e32783"/>
+   </entry>
+   <entry keyword="STD.File.FileExists">
+      <topic href="html/bk02ch01s04.html#d0e29272"/>
+   </entry>
+   <entry keyword="STD.File.FileRelationshipList">
+      <topic href="html/bk02ch05s04.html#d0e32113"/>
+   </entry>
+   <entry keyword="STD.File.FindSuperFileSubName">
+      <topic href="html/bk02ch02s09.html#d0e30561"/>
+   </entry>
+   <entry keyword="STD.File.FinishSuperFileTransaction">
+      <topic href="html/bk02ch02s17.html#d0e31319"/>
+   </entry>
+   <entry keyword="STD.File.fMonitorFile">
+      <topic href="html/bk02ch11s01.html#d0e37946"/>
+   </entry>
+   <entry keyword="STD.File.fMonitorLogicalFileName">
+      <topic href="html/bk02ch11s02.html#d0e38145"/>
+   </entry>
+   <entry keyword="STD.File.ForeignLogicalFileName">
+      <topic href="html/bk02ch01s05.html#d0e29343"/>
+   </entry>
+   <entry keyword="STD.File.ForeignLogicalFileName">
+      <topic href="html/bk02ch01s05.html#d0e29346"/>
+   </entry>
+   <entry keyword="STD.File.fPromoteSuperFileList">
+      <topic href="html/bk02ch02s16.html#d0e31178"/>
+   </entry>
+   <entry keyword="STD.File.fSprayFixed">
+      <topic href="html/bk02ch06s07.html#d0e33310"/>
+   </entry>
+   <entry keyword="STD.File.fSprayVariable">
+      <topic href="html/bk02ch06s08.html#d0e33615"/>
+   </entry>
+   <entry keyword="STD.File.fSprayXML">
+      <topic href="html/bk02ch06s09.html#d0e33966"/>
+   </entry>
+   <entry keyword="STD.File.GetColumnMapping">
+      <topic href="html/bk02ch05s02.html#d0e31855"/>
+   </entry>
+   <entry keyword="STD.File.GetFileDescription">
+      <topic href="html/bk02ch01s06.html#d0e29423"/>
+   </entry>
+   <entry keyword="STD.File.GetLogicalFileAttribute">
+      <topic href="html/bk02ch01s07.html#d0e29476"/>
+   </entry>
+   <entry keyword="STD.File.GetSuperFileSubCount">
+      <topic href="html/bk02ch02s04.html#d0e30248"/>
+   </entry>
+   <entry keyword="STD.File.GetSuperFileSubName">
+      <topic href="html/bk02ch02s05.html#d0e30303"/>
+   </entry>
+   <entry keyword="STD.File.LogicalFileList">
+      <topic href="html/bk02ch01s03.html#d0e29176"/>
+   </entry>
+   <entry keyword="STD.File.LogicalFileSuperOwners">
+      <topic href="html/bk02ch02s06.html#d0e30382"/>
+   </entry>
+   <entry keyword="STD.File.LogicalFileSuperSubList">
+      <topic href="html/bk02ch02s07.html#d0e30445"/>
+   </entry>
+   <entry keyword="STD.File.MonitorFile">
+      <topic href="html/bk02ch11s01.html#d0e37892"/>
+   </entry>
+   <entry keyword="STD.File.MonitorLogicalFileName">
+      <topic href="html/bk02ch11s02.html#d0e38103"/>
+   </entry>
+   <entry keyword="STD.File.MoveExternalFile">
+      <topic href="html/bk02ch03s02.html#d0e31432"/>
+   </entry>
+   <entry keyword="STD.File.PromoteSuperFileList">
+      <topic href="html/bk02ch02s16.html#d0e31108"/>
+   </entry>
+   <entry keyword="STD.File.ProtectLogicalFile">
+      <topic href="html/bk02ch01s08.html#d0e29538"/>
+   </entry>
+   <entry keyword="STD.File.RemoteDirectory">
+      <topic href="html/bk02ch01s09.html#d0e29596"/>
+   </entry>
+   <entry keyword="STD.File.RemotePull">
+      <topic href="html/bk02ch06s05.html#d0e32908"/>
+   </entry>
+   <entry keyword="STD.File.RemoveFileRelationship">
+      <topic href="html/bk02ch05s05.html#d0e32248"/>
+   </entry>
+   <entry keyword="STD.File.RemoveSuperFile">
+      <topic href="html/bk02ch02s12.html#d0e30797"/>
+   </entry>
+   <entry keyword="STD.File.RenameLogicalFile">
+      <topic href="html/bk02ch01s10.html#d0e29699"/>
+   </entry>
+   <entry keyword="STD.File.ReplaceSuperFile">
+      <topic href="html/bk02ch02s15.html#d0e31035"/>
+   </entry>
+   <entry keyword="STD.File.Replicate">
+      <topic href="html/bk02ch06s06.html#d0e33128"/>
+   </entry>
+   <entry keyword="STD.File.RfsAction">
+      <topic href="html/bk02ch04s02.html#d0e31690"/>
+   </entry>
+   <entry keyword="STD.File.SetColumnMapping">
+      <topic href="html/bk02ch05s01.html#d0e31752"/>
+   </entry>
+   <entry keyword="STD.File.SetFileDescription">
+      <topic href="html/bk02ch01s11.html#d0e29754"/>
+   </entry>
+   <entry keyword="STD.File.SetReadOnly">
+      <topic href="html/bk02ch01s12.html#d0e29809"/>
+   </entry>
+   <entry keyword="STD.File.SprayFixed">
+      <topic href="html/bk02ch06s07.html#d0e33232"/>
+   </entry>
+   <entry keyword="STD.File.SprayVariable">
+      <topic href="html/bk02ch06s08.html#d0e33483"/>
+   </entry>
+   <entry keyword="STD.File.SprayXML">
+      <topic href="html/bk02ch06s09.html#d0e33848"/>
+   </entry>
+   <entry keyword="STD.File.StartSuperFileTransaction">
+      <topic href="html/bk02ch02s10.html#d0e30624"/>
+   </entry>
+   <entry keyword="STD.File.SuperFileContents">
+      <topic href="html/bk02ch02s08.html#d0e30486"/>
+   </entry>
+   <entry keyword="STD.File.SuperFileExists">
+      <topic href="html/bk02ch02s02.html#d0e30115"/>
+   </entry>
+   <entry keyword="STD.File.SwapSuperFile">
+      <topic href="html/bk02ch02s14.html#d0e30971"/>
+   </entry>
+   <entry keyword="STD.File.VerifyFile">
+      <topic href="html/bk02ch01s13.html#d0e29870"/>
+   </entry>
+   <entry keyword="STD.File.WaitDfuWorkunit">
+      <topic href="html/bk02ch06s10.html#d0e34181"/>
+   </entry>
+   <entry keyword="STD.Str.CleanSpaces">
+      <topic href="html/bk02ch07s02.html#d0e34311"/>
+   </entry>
+   <entry keyword="STD.Str.CompareIgnoreCase">
+      <topic href="html/bk02ch07s04.html#d0e34506"/>
+   </entry>
+   <entry keyword="STD.Str.Contains">
+      <topic href="html/bk02ch07s05.html#d0e34625"/>
+   </entry>
+   <entry keyword="STD.Str.CountWords">
+      <topic href="html/bk02ch07s06.html#d0e34712"/>
+   </entry>
+   <entry keyword="STD.Str.EditDistance">
+      <topic href="html/bk02ch07s07.html#d0e34769"/>
+   </entry>
+   <entry keyword="STD.Str.EditDistanceWithinRadius">
+      <topic href="html/bk02ch07s08.html#d0e34859"/>
+   </entry>
+   <entry keyword="STD.Str.EndsWith">
+      <topic href="html/bk02ch07s09.html#d0e34952"/>
+   </entry>
+   <entry keyword="STD.Str.EqualIgnoreCase">
+      <topic href="html/bk02ch07s10.html#d0e35014"/>
+   </entry>
+   <entry keyword="STD.Str.Extract">
+      <topic href="html/bk02ch07s11.html#d0e35078"/>
+   </entry>
+   <entry keyword="STD.Str.Filter">
+      <topic href="html/bk02ch07s12.html#d0e35159"/>
+   </entry>
+   <entry keyword="STD.Str.FilterOut">
+      <topic href="html/bk02ch07s13.html#d0e35237"/>
+   </entry>
+   <entry keyword="STD.Str.FilterOut">
+      <topic href="html/bk02ch07s13.html#d0e35240"/>
+   </entry>
+   <entry keyword="STD.Str.Find">
+      <topic href="html/bk02ch07s14.html#d0e35318"/>
+   </entry>
+   <entry keyword="STD.Str.FindCount">
+      <topic href="html/bk02ch07s15.html#d0e35449"/>
+   </entry>
+   <entry keyword="STD.Str.FindReplace">
+      <topic href="html/bk02ch07s18.html#d0e35745"/>
+   </entry>
+   <entry keyword="STD.Str.GetNthWord">
+      <topic href="html/bk02ch07s19.html#d0e35871"/>
+   </entry>
+   <entry keyword="STD.Str.RemoveSuffix">
+      <topic href="html/bk02ch07s20.html#d0e35955"/>
+   </entry>
+   <entry keyword="STD.Str.Reverse">
+      <topic href="html/bk02ch07s21.html#d0e36026"/>
+   </entry>
+   <entry keyword="STD.Str.SplitWords">
+      <topic href="html/bk02ch07s22.html#d0e36097"/>
+   </entry>
+   <entry keyword="STD.Str.StartsWith">
+      <topic href="html/bk02ch07s25.html#d0e36356"/>
+   </entry>
+   <entry keyword="STD.Str.SubstituteExcluded">
+      <topic href="html/bk02ch07s23.html#d0e36154"/>
+   </entry>
+   <entry keyword="STD.Str.SubstituteIncluded">
+      <topic href="html/bk02ch07s24.html#d0e36255"/>
+   </entry>
+   <entry keyword="STD.Str.ToLowerCase">
+      <topic href="html/bk02ch07s26.html#d0e36418"/>
+   </entry>
+   <entry keyword="STD.Str.ToTitleCase">
+      <topic href="html/bk02ch07s27.html#d0e36516"/>
+   </entry>
+   <entry keyword="STD.Str.ToUpperCase">
+      <topic href="html/bk02ch07s28.html#d0e36613"/>
+   </entry>
+   <entry keyword="STD.Str.WildMatch">
+      <topic href="html/bk02ch07s29.html#d0e36711"/>
+   </entry>
+   <entry keyword="STD.Str.WordCount">
+      <topic href="html/bk02ch07s30.html#d0e36798"/>
+   </entry>
+   <entry keyword="STD.System.Debug.GetParseTree">
+      <topic href="html/bk02ch15s01.html#d0e38885"/>
+   </entry>
+   <entry keyword="STD.System.Debug.GetXMLParseTree">
+      <topic href="html/bk02ch15s02.html#d0e38935"/>
+   </entry>
+   <entry keyword="STD.System.Debug.msTick">
+      <topic href="html/bk02ch15s04.html#d0e39042"/>
+   </entry>
+   <entry keyword="STD.System.Debug.Sleep">
+      <topic href="html/bk02ch15s03.html#d0e38985"/>
+   </entry>
+   <entry keyword="STD.System.Email.SendEmail">
+      <topic href="html/bk02ch16s01.html#d0e39091"/>
+   </entry>
+   <entry keyword="STD.System.Email.SendEmailAttachData">
+      <topic href="html/bk02ch16s02.html#d0e39170"/>
+   </entry>
+   <entry keyword="STD.System.Email.SendEmailAttachText">
+      <topic href="html/bk02ch16s03.html#d0e39279"/>
+   </entry>
+   <entry keyword="STD.System.Job.LogString">
+      <topic href="html/bk02ch10s07.html#d0e37829"/>
+   </entry>
+   <entry keyword="STD.System.Job.Name">
+      <topic href="html/bk02ch10s03.html#d0e37629"/>
+   </entry>
+   <entry keyword="STD.System.Job.OS">
+      <topic href="html/bk02ch10s05.html#d0e37729"/>
+   </entry>
+   <entry keyword="STD.System.Job.Platform">
+      <topic href="html/bk02ch10s06.html#d0e37779"/>
+   </entry>
+   <entry keyword="STD.System.Job.Target">
+      <topic href="html/bk02ch09s07.html#d0e37483"/>
+   </entry>
+   <entry keyword="STD.System.Job.Target">
+      <topic href="html/bk02ch10s02.html#d0e37587"/>
+   </entry>
+   <entry keyword="STD.System.Job.User">
+      <topic href="html/bk02ch10s04.html#d0e37679"/>
+   </entry>
+   <entry keyword="STD.System.Job.WUID">
+      <topic href="html/bk02ch10s01.html#d0e37529"/>
+   </entry>
+   <entry keyword="STD.System.Log.addWorkunitError">
+      <topic href="html/bk02ch12s04.html#d0e38482"/>
+   </entry>
+   <entry keyword="STD.System.Log.addWorkunitInformation">
+      <topic href="html/bk02ch12s02.html#d0e38330"/>
+   </entry>
+   <entry keyword="STD.System.Log.addWorkunitWarning">
+      <topic href="html/bk02ch12s03.html#d0e38406"/>
+   </entry>
+   <entry keyword="STD.System.Log.dbglog">
+      <topic href="html/bk02ch12s01.html#d0e38273"/>
+   </entry>
+   <entry keyword="STD.System.STD.System.Job.Target">
+      <topic href="html/bk02ch09s07.html#d0e37475"/>
+   </entry>
+   <entry keyword="STD.System.STD.System.Job.Target">
+      <topic href="html/bk02ch10s02.html#d0e37579"/>
+   </entry>
+   <entry keyword="STD.System.ThorLib.DaliServer">
+      <topic href="html/bk02ch09s04.html#d0e37325"/>
+   </entry>
+   <entry keyword="STD.System.ThorLib.GetExpandLogicalFileName">
+      <topic href="html/bk02ch09s06.html#d0e37419"/>
+   </entry>
+   <entry keyword="STD.System.ThorLib.Group">
+      <topic href="html/bk02ch09s05.html#d0e37375"/>
+   </entry>
+   <entry keyword="STD.System.ThorLib.LogicalToPhysical">
+      <topic href="html/bk02ch09s03.html#d0e37245"/>
+   </entry>
+   <entry keyword="STD.System.Thorlib.Node">
+      <topic href="html/bk02ch09s01.html#d0e37151"/>
+   </entry>
+   <entry keyword="STD.System.Thorlib.Nodes">
+      <topic href="html/bk02ch09s02.html#d0e37198"/>
+   </entry>
+   <entry keyword="STD.System.Util.CmdProcess">
+      <topic href="html/bk02ch14s03.html#d0e38752"/>
+   </entry>
+   <entry keyword="STD.System.Util.GetHostName">
+      <topic href="html/bk02ch14s01.html#d0e38628"/>
+   </entry>
+   <entry keyword="STD.System.Util.GetUniqueInteger">
+      <topic href="html/bk02ch14s04.html#d0e38824"/>
+   </entry>
+   <entry keyword="STD.System.Util.ResolveHostName">
+      <topic href="html/bk02ch14s02.html#d0e38690"/>
+   </entry>
+   <entry keyword="STD.System.Workunit.WorkunitFilesRead">
+      <topic href="html/bk02ch17s07.html#d0e39925"/>
+   </entry>
+   <entry keyword="STD.System.Workunit.WorkunitFilesWritten">
+      <topic href="html/bk02ch17s08.html#d0e39985"/>
+   </entry>
+   <entry keyword="STD.System.Workunit.WorkunitList">
+      <topic href="html/bk02ch17s02.html#d0e39459"/>
+   </entry>
+   <entry keyword="STD.System.Workunit.WorkunitMessages">
+      <topic href="html/bk02ch17s06.html#d0e39865"/>
+   </entry>
+   <entry keyword="STD.System.Workunit.WorkunitTimeStamps">
+      <topic href="html/bk02ch17s05.html#d0e39805"/>
+   </entry>
+   <entry keyword="STD.System.Workunit.WorkunitTimings">
+      <topic href="html/bk02ch17s09.html#d0e40045"/>
+   </entry>
+   <entry keyword="STD.System.Workunit.WUIDdaysAgo">
+      <topic href="html/bk02ch17s04.html#d0e39746"/>
+   </entry>
+   <entry keyword="STD.System.Workunit.WUIDonDate">
+      <topic href="html/bk02ch17s03.html#d0e39666"/>
+   </entry>
+   <entry keyword="STD.Uni.CleanAccents">
+      <topic href="html/bk02ch07s01.html#d0e34262"/>
+   </entry>
+   <entry keyword="STD.Uni.CleanSpaces">
+      <topic href="html/bk02ch07s02.html#d0e34330"/>
+   </entry>
+   <entry keyword="STD.Uni.CompareAtStrength">
+      <topic href="html/bk02ch07s03.html#d0e34379"/>
+   </entry>
+   <entry keyword="STD.Uni.CompareIgnoreCase">
+      <topic href="html/bk02ch07s04.html#d0e34527"/>
+   </entry>
+   <entry keyword="STD.Uni.Contains">
+      <topic href="html/bk02ch07s05.html#d0e34646"/>
+   </entry>
+   <entry keyword="STD.Uni.EditDistance">
+      <topic href="html/bk02ch07s07.html#d0e34788"/>
+   </entry>
+   <entry keyword="STD.Uni.EditDistanceWithinRadius">
+      <topic href="html/bk02ch07s08.html#d0e34878"/>
+   </entry>
+   <entry keyword="STD.Uni.Extract">
+      <topic href="html/bk02ch07s11.html#d0e35097"/>
+   </entry>
+   <entry keyword="STD.Uni.Filter">
+      <topic href="html/bk02ch07s12.html#d0e35178"/>
+   </entry>
+   <entry keyword="STD.Uni.FilterOut">
+      <topic href="html/bk02ch07s13.html#d0e35258"/>
+   </entry>
+   <entry keyword="STD.Uni.Find">
+      <topic href="html/bk02ch07s14.html#d0e35339"/>
+   </entry>
+   <entry keyword="STD.Uni.FindReplace">
+      <topic href="html/bk02ch07s18.html#d0e35766"/>
+   </entry>
+   <entry keyword="STD.Uni.GetNthWord">
+      <topic href="html/bk02ch07s19.html#d0e35886"/>
+   </entry>
+   <entry keyword="STD.Uni.LocaleCompareAtStrength">
+      <topic href="html/bk02ch07s03.html#d0e34400"/>
+   </entry>
+   <entry keyword="STD.Uni.LocaleCompareIgnoreCase">
+      <topic href="html/bk02ch07s04.html#d0e34545"/>
+   </entry>
+   <entry keyword="STD.Uni.LocaleFind">
+      <topic href="html/bk02ch07s14.html#d0e35357"/>
+   </entry>
+   <entry keyword="STD.Uni.LocaleFindAtStrength">
+      <topic href="html/bk02ch07s16.html#d0e35511"/>
+   </entry>
+   <entry keyword="STD.Uni.LocaleFindAtStrengthReplace">
+      <topic href="html/bk02ch07s17.html#d0e35629"/>
+   </entry>
+   <entry keyword="STD.Uni.LocaleFindReplace">
+      <topic href="html/bk02ch07s18.html#d0e35784"/>
+   </entry>
+   <entry keyword="STD.Uni.LocaleToLowerCase">
+      <topic href="html/bk02ch07s26.html#d0e36457"/>
+   </entry>
+   <entry keyword="STD.Uni.LocaleToTitleCase">
+      <topic href="html/bk02ch07s27.html#d0e36553"/>
+   </entry>
+   <entry keyword="STD.Uni.LocaleToUpperCase">
+      <topic href="html/bk02ch07s28.html#d0e36652"/>
+   </entry>
+   <entry keyword="STD.Uni.Reverse">
+      <topic href="html/bk02ch07s21.html#d0e36047"/>
+   </entry>
+   <entry keyword="STD.Uni.SubstituteExcluded">
+      <topic href="html/bk02ch07s23.html#d0e36175"/>
+   </entry>
+   <entry keyword="STD.Uni.SubstituteIncluded">
+      <topic href="html/bk02ch07s24.html#d0e36276"/>
+   </entry>
+   <entry keyword="STD.Uni.ToLowerCase">
+      <topic href="html/bk02ch07s26.html#d0e36439"/>
+   </entry>
+   <entry keyword="STD.Uni.ToTitleCase">
+      <topic href="html/bk02ch07s27.html#d0e36535"/>
+   </entry>
+   <entry keyword="STD.Uni.ToUpperCase">
+      <topic href="html/bk02ch07s28.html#d0e36634"/>
+   </entry>
+   <entry keyword="STD.Uni.WildMatch">
+      <topic href="html/bk02ch07s29.html#d0e36730"/>
+   </entry>
+   <entry keyword="STD.Uni.WordCount">
+      <topic href="html/bk02ch07s30.html#d0e36813"/>
+   </entry>
+   <entry keyword="STEPPED">
+      <topic href="html/bk01ch10s115.html#d0e23517"/>
+   </entry>
+   <entry keyword="STEPPED function">
+      <topic href="html/bk01ch10s115.html#d0e23520"/>
+   </entry>
+   <entry keyword="STORE">
+      <topic href="html/bk01ch06s02s02.html#d0e5723"/>
+   </entry>
+   <entry keyword="STORED">
+      <topic href="html/bk01ch10s116.html#d0e23587"/>
+   </entry>
+   <entry keyword="STORED">
+      <topic href="html/bk01ch11s11.html#d0e25876"/>
+   </entry>
+   <entry keyword="STORED function">
+      <topic href="html/bk01ch10s116.html#d0e23590"/>
+   </entry>
+   <entry keyword="STORED workflow service">
+      <topic href="html/bk01ch11s11.html#d0e25888"/>
+   </entry>
+   <entry keyword="Str.CleanSpaces">
+      <topic href="html/bk02ch07s02.html#d0e34314"/>
+   </entry>
+   <entry keyword="Str.CompareIgnoreCase">
+      <topic href="html/bk02ch07s04.html#d0e34509"/>
+   </entry>
+   <entry keyword="Str.Contains">
+      <topic href="html/bk02ch07s05.html#d0e34628"/>
+   </entry>
+   <entry keyword="Str.CountWords">
+      <topic href="html/bk02ch07s06.html#d0e34715"/>
+   </entry>
+   <entry keyword="Str.EditDistance">
+      <topic href="html/bk02ch07s07.html#d0e34772"/>
+   </entry>
+   <entry keyword="Str.EditDistanceWithinRadius">
+      <topic href="html/bk02ch07s08.html#d0e34862"/>
+   </entry>
+   <entry keyword="Str.EndsWith">
+      <topic href="html/bk02ch07s09.html#d0e34955"/>
+   </entry>
+   <entry keyword="Str.EqualIgnoreCase">
+      <topic href="html/bk02ch07s10.html#d0e35017"/>
+   </entry>
+   <entry keyword="Str.Extract">
+      <topic href="html/bk02ch07s11.html#d0e35081"/>
+   </entry>
+   <entry keyword="Str.Filter">
+      <topic href="html/bk02ch07s12.html#d0e35162"/>
+   </entry>
+   <entry keyword="Str.Find">
+      <topic href="html/bk02ch07s14.html#d0e35321"/>
+   </entry>
+   <entry keyword="Str.FindCount">
+      <topic href="html/bk02ch07s15.html#d0e35452"/>
+   </entry>
+   <entry keyword="Str.FindReplace">
+      <topic href="html/bk02ch07s18.html#d0e35748"/>
+   </entry>
+   <entry keyword="Str.GetNthWord">
+      <topic href="html/bk02ch07s19.html#d0e35874"/>
+   </entry>
+   <entry keyword="Str.RemoveSuffix">
+      <topic href="html/bk02ch07s20.html#d0e35958"/>
+   </entry>
+   <entry keyword="Str.Reverse">
+      <topic href="html/bk02ch07s21.html#d0e36029"/>
+   </entry>
+   <entry keyword="Str.SplitWords">
+      <topic href="html/bk02ch07s22.html#d0e36100"/>
+   </entry>
+   <entry keyword="Str.StartsWith">
+      <topic href="html/bk02ch07s25.html#d0e36359"/>
+   </entry>
+   <entry keyword="Str.SubstituteExcluded">
+      <topic href="html/bk02ch07s23.html#d0e36157"/>
+   </entry>
+   <entry keyword="Str.SubstituteIncluded">
+      <topic href="html/bk02ch07s24.html#d0e36258"/>
+   </entry>
+   <entry keyword="Str.ToLowerCase">
+      <topic href="html/bk02ch07s26.html#d0e36421"/>
+   </entry>
+   <entry keyword="Str.ToTitleCase">
+      <topic href="html/bk02ch07s27.html#d0e36519"/>
+   </entry>
+   <entry keyword="Str.ToUpperCase">
+      <topic href="html/bk02ch07s28.html#d0e36616"/>
+   </entry>
+   <entry keyword="Str.WildMatch">
+      <topic href="html/bk02ch07s29.html#d0e36714"/>
+   </entry>
+   <entry keyword="Str.WordCount">
+      <topic href="html/bk02ch07s30.html#d0e36801"/>
+   </entry>
+   <entry keyword="STRING">
+      <topic href="html/bk01ch04s05.html#d0e2191"/>
+   </entry>
+   <entry keyword="String">
+      <topic href="html/bk01ch02s04s04.html#d0e638"/>
+   </entry>
+   <entry keyword="string constants">
+      <topic href="html/bk01ch02s02s01.html#d0e295"/>
+   </entry>
+   <entry keyword="string operator">
+      <topic href="html/bk01ch03s05.html#d0e1693"/>
+   </entry>
+   <entry keyword="string slice">
+      <topic href="html/bk01ch02s04s04.html#d0e654"/>
+   </entry>
+   <entry keyword="STRING value type">
+      <topic href="html/bk01ch04s05.html#d0e2207"/>
+   </entry>
+   <entry keyword="STRINGn">
+      <topic href="html/bk01ch13s03s06.html#d0e28680"/>
+   </entry>
+   <entry keyword="SubstituteExcluded">
+      <topic href="html/bk02ch07s23.html#d0e36160"/>
+   </entry>
+   <entry keyword="SubstituteIncluded">
+      <topic href="html/bk02ch07s24.html#d0e36261"/>
+   </entry>
+   <entry keyword="substring">
+      <topic href="html/bk01ch02s04s04.html#d0e650"/>
+   </entry>
+   <entry keyword="Subtraction">
+      <topic href="html/bk01ch03s01s01.html#d0e1381"/>
+   </entry>
+   <entry keyword="SUCCESS">
+      <topic href="html/bk01ch11s12.html#d0e25964"/>
+   </entry>
+   <entry keyword="SUCCESS workflow service">
+      <topic href="html/bk01ch11s12.html#d0e25972"/>
+   </entry>
+   <entry keyword="SUM">
+      <topic href="html/bk01ch10s117.html#d0e23633"/>
+   </entry>
+   <entry keyword="SUM function">
+      <topic href="html/bk01ch10s117.html#d0e23636"/>
+   </entry>
+   <entry keyword="SuperFile">
+      <topic href="html/bk01ch05s04s05.html#d0e5479"/>
+   </entry>
+   <entry keyword="SuperFileContents">
+      <topic href="html/bk02ch02s08.html#d0e30492"/>
+   </entry>
+   <entry keyword="SuperFileExists">
+      <topic href="html/bk02ch02s02.html#d0e30121"/>
+   </entry>
+   <entry keyword="SwapSuperFile">
+      <topic href="html/bk02ch02s14.html#d0e30977"/>
+   </entry>
+   <entry keyword="System.Debug.GetParseTree">
+      <topic href="html/bk02ch15s01.html#d0e38889"/>
+   </entry>
+   <entry keyword="System.Debug.GetXMLParseTree">
+      <topic href="html/bk02ch15s02.html#d0e38939"/>
+   </entry>
+   <entry keyword="System.Debug.msTick">
+      <topic href="html/bk02ch15s04.html#d0e39046"/>
+   </entry>
+   <entry keyword="System.Debug.Sleep">
+      <topic href="html/bk02ch15s03.html#d0e38989"/>
+   </entry>
+   <entry keyword="System.Email.SendEmail">
+      <topic href="html/bk02ch16s01.html#d0e39095"/>
+   </entry>
+   <entry keyword="System.Email.SendEmailAttachData">
+      <topic href="html/bk02ch16s02.html#d0e39174"/>
+   </entry>
+   <entry keyword="System.Email.SendEmailAttachText">
+      <topic href="html/bk02ch16s03.html#d0e39283"/>
+   </entry>
+   <entry keyword="System.Job.LogString">
+      <topic href="html/bk02ch10s07.html#d0e37833"/>
+   </entry>
+   <entry keyword="System.Job.Name">
+      <topic href="html/bk02ch10s03.html#d0e37633"/>
+   </entry>
+   <entry keyword="System.Job.OS">
+      <topic href="html/bk02ch10s05.html#d0e37733"/>
+   </entry>
+   <entry keyword="System.Job.Platform">
+      <topic href="html/bk02ch10s06.html#d0e37783"/>
+   </entry>
+   <entry keyword="System.Job.User">
+      <topic href="html/bk02ch10s04.html#d0e37683"/>
+   </entry>
+   <entry keyword="System.Job.WUID">
+      <topic href="html/bk02ch10s01.html#d0e37533"/>
+   </entry>
+   <entry keyword="System.Log.addWorkunitError">
+      <topic href="html/bk02ch12s04.html#d0e38486"/>
+   </entry>
+   <entry keyword="System.Log.addWorkunitInformation">
+      <topic href="html/bk02ch12s02.html#d0e38334"/>
+   </entry>
+   <entry keyword="System.Log.addWorkunitWarning">
+      <topic href="html/bk02ch12s03.html#d0e38410"/>
+   </entry>
+   <entry keyword="System.Log.dbglog">
+      <topic href="html/bk02ch12s01.html#d0e38277"/>
+   </entry>
+   <entry keyword="System.STD.System.Job.Target">
+      <topic href="html/bk02ch09s07.html#d0e37479"/>
+   </entry>
+   <entry keyword="System.STD.System.Job.Target">
+      <topic href="html/bk02ch10s02.html#d0e37583"/>
+   </entry>
+   <entry keyword="System.ThorLib.DaliServer">
+      <topic href="html/bk02ch09s04.html#d0e37329"/>
+   </entry>
+   <entry keyword="System.ThorLib.GetExpandLogicalFileName">
+      <topic href="html/bk02ch09s06.html#d0e37423"/>
+   </entry>
+   <entry keyword="System.ThorLib.Group">
+      <topic href="html/bk02ch09s05.html#d0e37379"/>
+   </entry>
+   <entry keyword="System.ThorLib.LogicalToPhysical">
+      <topic href="html/bk02ch09s03.html#d0e37249"/>
+   </entry>
+   <entry keyword="System.Thorlib.Node">
+      <topic href="html/bk02ch09s01.html#d0e37154"/>
+   </entry>
+   <entry keyword="System.Thorlib.Nodes">
+      <topic href="html/bk02ch09s02.html#d0e37201"/>
+   </entry>
+   <entry keyword="System.Util.CmdProcess">
+      <topic href="html/bk02ch14s03.html#d0e38756"/>
+   </entry>
+   <entry keyword="System.Util.GetHostName">
+      <topic href="html/bk02ch14s01.html#d0e38632"/>
+   </entry>
+   <entry keyword="System.Util.GetUniqueInteger">
+      <topic href="html/bk02ch14s04.html#d0e38828"/>
+   </entry>
+   <entry keyword="System.Util.ResolveHostName">
+      <topic href="html/bk02ch14s02.html#d0e38694"/>
+   </entry>
+   <entry keyword="System.Workunit.WorkunitFilesRead">
+      <topic href="html/bk02ch17s07.html#d0e39929"/>
+   </entry>
+   <entry keyword="System.Workunit.WorkunitFilesWritten">
+      <topic href="html/bk02ch17s08.html#d0e39989"/>
+   </entry>
+   <entry keyword="System.Workunit.WorkunitList">
+      <topic href="html/bk02ch17s02.html#d0e39463"/>
+   </entry>
+   <entry keyword="System.Workunit.WorkunitMessages">
+      <topic href="html/bk02ch17s06.html#d0e39869"/>
+   </entry>
+   <entry keyword="System.Workunit.WorkunitTimeStamps">
+      <topic href="html/bk02ch17s05.html#d0e39809"/>
+   </entry>
+   <entry keyword="System.Workunit.WorkunitTimings">
+      <topic href="html/bk02ch17s09.html#d0e40049"/>
+   </entry>
+   <entry keyword="System.Workunit.WUIDdaysAgo">
+      <topic href="html/bk02ch17s04.html#d0e39750"/>
+   </entry>
+   <entry keyword="System.Workunit.WUIDonDate">
+      <topic href="html/bk02ch17s03.html#d0e39670"/>
+   </entry>
+   <entry keyword="TABLE">
+      <topic href="html/bk01ch02s08s02.html#d0e1177"/>
+   </entry>
+   <entry keyword="TABLE">
+      <topic href="html/bk01ch10s118.html#d0e23728"/>
+   </entry>
+   <entry keyword="TABLE Function">
+      <topic href="html/bk01ch10s118.html#d0e23731"/>
+   </entry>
+   <entry keyword="TABLE function">
+      <topic href="html/bk01ch02s08s03.html#d0e1245"/>
+   </entry>
+   <entry keyword="TAN">
+      <topic href="html/bk01ch10s119.html#d0e23912"/>
+   </entry>
+   <entry keyword="TAN Function">
+      <topic href="html/bk01ch10s119.html#d0e23915"/>
+   </entry>
+   <entry keyword="TANH">
+      <topic href="html/bk01ch10s120.html#d0e23983"/>
+   </entry>
+   <entry keyword="TANH Function">
+      <topic href="html/bk01ch10s120.html#d0e23986"/>
+   </entry>
+   <entry keyword="Target">
+      <topic href="html/bk02ch09s07.html#d0e37487"/>
+   </entry>
+   <entry keyword="Target">
+      <topic href="html/bk02ch10s02.html#d0e37591"/>
+   </entry>
+   <entry keyword="Template Language">
+      <topic href="html/bk01ch10s68.html#d0e16795"/>
+   </entry>
+   <entry keyword="Template Language">
+      <topic href="html/bk01ch12s01.html#d0e26122"/>
+   </entry>
+   <entry keyword="Temporary SuperFile">
+      <topic href="html/bk01ch05s04s05.html#d0e5473"/>
+   </entry>
+   <entry keyword="TERMINATOR">
+      <topic href="html/bk01ch05s02s02.html#d0e4368"/>
+   </entry>
+   <entry keyword="TERMINATOR">
+      <topic href="html/bk01ch10s82s03.html#d0e18983"/>
+   </entry>
+   <entry keyword="THISNODE">
+      <topic href="html/bk01ch10s121.html#d0e24054"/>
+   </entry>
+   <entry keyword="THISNODE Function">
+      <topic href="html/bk01ch10s121.html#d0e24057"/>
+   </entry>
+   <entry keyword="THOR">
+      <topic href="html/bk01ch05s02s01.html#d0e4154"/>
+   </entry>
+   <entry keyword="THOR">
+      <topic href="html/bk01ch10s82.html#d0e18475"/>
+   </entry>
+   <entry keyword="THOR">
+      <topic href="html/bk01ch10s82s08.html#d0e19608"/>
+   </entry>
+   <entry keyword="Thor">
+      <topic href="html/bk01ch10s112s01.html#d0e23257"/>
+   </entry>
+   <entry keyword="ThorLib.DaliServer">
+      <topic href="html/bk02ch09s04.html#d0e37333"/>
+   </entry>
+   <entry keyword="ThorLib.GetExpandLogicalFileName">
+      <topic href="html/bk02ch09s06.html#d0e37427"/>
+   </entry>
+   <entry keyword="ThorLib.Group">
+      <topic href="html/bk02ch09s05.html#d0e37383"/>
+   </entry>
+   <entry keyword="ThorLib.LogicalToPhysical">
+      <topic href="html/bk02ch09s03.html#d0e37253"/>
+   </entry>
+   <entry keyword="Thorlib.Node">
+      <topic href="html/bk02ch09s01.html#d0e37157"/>
+   </entry>
+   <entry keyword="Thorlib.Nodes">
+      <topic href="html/bk02ch09s02.html#d0e37204"/>
+   </entry>
+   <entry keyword="THRESHOLD">
+      <topic href="html/bk01ch10s60s03.html#d0e15270"/>
+   </entry>
+   <entry keyword="THRESHOLD">
+      <topic href="html/bk01ch10s112.html#d0e23063"/>
+   </entry>
+   <entry keyword="TIMEOUT">
+      <topic href="html/bk01ch10s111.html#d0e22844"/>
+   </entry>
+   <entry keyword="TOKEN">
+      <topic href="html/bk01ch07s02.html#d0e5968"/>
+   </entry>
+   <entry keyword="ToLowerCase">
+      <topic href="html/bk02ch07s26.html#d0e36424"/>
+   </entry>
+   <entry keyword="Tomita parsing">
+      <topic href="html/bk01ch10s84s01.html#d0e20086"/>
+   </entry>
+   <entry keyword="TOPN">
+      <topic href="html/bk01ch10s122.html#d0e24112"/>
+   </entry>
+   <entry keyword="TOPN Function">
+      <topic href="html/bk01ch10s122.html#d0e24115"/>
+   </entry>
+   <entry keyword="ToTitleCase">
+      <topic href="html/bk02ch07s27.html#d0e36522"/>
+   </entry>
+   <entry keyword="TOUNICODE">
+      <topic href="html/bk01ch10s123.html#d0e24232"/>
+   </entry>
+   <entry keyword="TOUNICODE Function">
+      <topic href="html/bk01ch10s123.html#d0e24235"/>
+   </entry>
+   <entry keyword="ToUpperCase">
+      <topic href="html/bk02ch07s28.html#d0e36619"/>
+   </entry>
+   <entry keyword="TRANSFER">
+      <topic href="html/bk01ch10s124.html#d0e24294"/>
+   </entry>
+   <entry keyword="TRANSFER Function">
+      <topic href="html/bk01ch10s124.html#d0e24297"/>
+   </entry>
+   <entry keyword="TRANSFORM">
+      <topic href="html/bk01ch09s07.html#d0e8438"/>
+   </entry>
+   <entry keyword="TRANSFORM Function">
+      <topic href="html/bk01ch10s88s01.html#d0e20590"/>
+   </entry>
+   <entry keyword="TRANSFORM Function">
+      <topic href="html/bk01ch10s89s01.html#d0e20810"/>
+   </entry>
+   <entry keyword="transform function">
+      <topic href="html/bk01ch10s44s01.html#d0e13672"/>
+   </entry>
+   <entry keyword="transform function">
+      <topic href="html/bk01ch10s59s01.html#d0e14832"/>
+   </entry>
+   <entry keyword="transform function">
+      <topic href="html/bk01ch10s60s06.html#d0e15708"/>
+   </entry>
+   <entry keyword="TRANSFORM Function Requirements">
+      <topic href="html/bk01ch10s88s01.html#d0e20594"/>
+   </entry>
+   <entry keyword="TRANSFORM Function Requirements">
+      <topic href="html/bk01ch10s89s01.html#d0e20814"/>
+   </entry>
+   <entry keyword="Transform Requirement Process">
+      <topic href="html/bk01ch10s88s01.html#d0e20600"/>
+   </entry>
+   <entry keyword="Transform Requirement Project">
+      <topic href="html/bk01ch10s89s01.html#d0e20821"/>
+   </entry>
+   <entry keyword="Transform Requirements">
+      <topic href="html/bk01ch10s88s01.html#d0e20597"/>
+   </entry>
+   <entry keyword="Transform Requirements">
+      <topic href="html/bk01ch10s89s01.html#d0e20817"/>
+   </entry>
+   <entry keyword="TRANSFORM structure">
+      <topic href="html/bk01ch08s09.html#d0e7388"/>
+   </entry>
+   <entry keyword="TRANSFORM structure">
+      <topic href="html/bk01ch08s11.html#d0e7461"/>
+   </entry>
+   <entry keyword="TRANSFORM structure">
+      <topic href="html/bk01ch09s07.html#d0e8426"/>
+   </entry>
+   <entry keyword="TRANSFORM structure">
+      <topic href="html/bk01ch10s42.html#d0e13484"/>
+   </entry>
+   <entry keyword="TRANSFORM structure">
+      <topic href="html/bk01ch10s43.html#d0e13536"/>
+   </entry>
+   <entry keyword="TRANSFORM structure">
+      <topic href="html/bk01ch10s103s01.html#d0e22120"/>
+   </entry>
+   <entry keyword="TRIM">
+      <topic href="html/bk01ch10s82s04.html#d0e19295"/>
+   </entry>
+   <entry keyword="TRIM">
+      <topic href="html/bk01ch10s111.html#d0e22935"/>
+   </entry>
+   <entry keyword="TRIM">
+      <topic href="html/bk01ch10s125.html#d0e24353"/>
+   </entry>
+   <entry keyword="TRIM Function">
+      <topic href="html/bk01ch10s125.html#d0e24356"/>
+   </entry>
+   <entry keyword="TRIM OPT">
+      <topic href="html/bk01ch10s82s04.html#d0e19306"/>
+   </entry>
+   <entry keyword="TRUE">
+      <topic href="html/bk01ch04s01s01.html#d0e1875"/>
+   </entry>
+   <entry keyword="TRUE">
+      <topic href="html/bk01ch08s12.html#d0e7480"/>
+   </entry>
+   <entry keyword="TRUE keyword">
+      <topic href="html/bk01ch08s12.html#d0e7497"/>
+   </entry>
+   <entry keyword="TRUNCATE">
+      <topic href="html/bk01ch10s126.html#d0e24416"/>
+   </entry>
+   <entry keyword="TRUNCATE Function">
+      <topic href="html/bk01ch10s126.html#d0e24446"/>
+   </entry>
+   <entry keyword="TYPE">
+      <topic href="html/bk01ch06s01.html#d0e5578"/>
+   </entry>
+   <entry keyword="Type Casting">
+      <topic href="html/bk01ch04s15.html#d0e2674"/>
+   </entry>
+   <entry keyword="TYPE structure">
+      <topic href="html/bk01ch05s01.html#d0e3065"/>
+   </entry>
+   <entry keyword="TYPE structure">
+      <topic href="html/bk01ch06s01.html#d0e5603"/>
+   </entry>
+   <entry keyword="Type Transfer">
+      <topic href="html/bk01ch04s15s03.html#d0e2716"/>
+   </entry>
+   <entry keyword="TypeDef">
+      <topic href="html/bk01ch02s04.html#d0e546"/>
+   </entry>
+   <entry keyword="TypeDef Attribute">
+      <topic href="html/bk01ch02s04s07.html#d0e714"/>
+   </entry>
+   <entry keyword="TYPEOF">
+      <topic href="html/bk01ch04s12.html#d0e2499"/>
+   </entry>
+   <entry keyword="TYPEOF data type">
+      <topic href="html/bk01ch04s12.html#d0e2502"/>
+   </entry>
+   <entry keyword="UDECIMALn">
+      <topic href="html/bk01ch04s04.html#d0e2134"/>
+   </entry>
+   <entry keyword="UNGROUP">
+      <topic href="html/bk01ch10s127.html#d0e24470"/>
+   </entry>
+   <entry keyword="UNGROUP Function">
+      <topic href="html/bk01ch10s127.html#d0e24500"/>
+   </entry>
+   <entry keyword="Uni.CleanAccents">
+      <topic href="html/bk02ch07s01.html#d0e34265"/>
+   </entry>
+   <entry keyword="Uni.CleanSpaces">
+      <topic href="html/bk02ch07s02.html#d0e34333"/>
+   </entry>
+   <entry keyword="Uni.CompareAtStrength">
+      <topic href="html/bk02ch07s03.html#d0e34382"/>
+   </entry>
+   <entry keyword="Uni.CompareIgnoreCase">
+      <topic href="html/bk02ch07s04.html#d0e34530"/>
+   </entry>
+   <entry keyword="Uni.Contains">
+      <topic href="html/bk02ch07s05.html#d0e34649"/>
+   </entry>
+   <entry keyword="Uni.EditDistance">
+      <topic href="html/bk02ch07s07.html#d0e34791"/>
+   </entry>
+   <entry keyword="Uni.EditDistanceWithinRadius">
+      <topic href="html/bk02ch07s08.html#d0e34881"/>
+   </entry>
+   <entry keyword="Uni.Extract">
+      <topic href="html/bk02ch07s11.html#d0e35100"/>
+   </entry>
+   <entry keyword="Uni.Filter">
+      <topic href="html/bk02ch07s12.html#d0e35181"/>
+   </entry>
+   <entry keyword="Uni.FilterOut">
+      <topic href="html/bk02ch07s13.html#d0e35261"/>
+   </entry>
+   <entry keyword="Uni.Find">
+      <topic href="html/bk02ch07s14.html#d0e35342"/>
+   </entry>
+   <entry keyword="Uni.FindReplace">
+      <topic href="html/bk02ch07s18.html#d0e35769"/>
+   </entry>
+   <entry keyword="Uni.GetNthWord">
+      <topic href="html/bk02ch07s19.html#d0e35890"/>
+   </entry>
+   <entry keyword="Uni.LocaleCompareAtStrength">
+      <topic href="html/bk02ch07s03.html#d0e34403"/>
+   </entry>
+   <entry keyword="Uni.LocaleCompareIgnoreCase">
+      <topic href="html/bk02ch07s04.html#d0e34548"/>
+   </entry>
+   <entry keyword="Uni.LocaleFind">
+      <topic href="html/bk02ch07s14.html#d0e35360"/>
+   </entry>
+   <entry keyword="Uni.LocaleFindAtStrength">
+      <topic href="html/bk02ch07s16.html#d0e35514"/>
+   </entry>
+   <entry keyword="Uni.LocaleFindAtStrengthReplace">
+      <topic href="html/bk02ch07s17.html#d0e35632"/>
+   </entry>
+   <entry keyword="Uni.LocaleFindReplace">
+      <topic href="html/bk02ch07s18.html#d0e35787"/>
+   </entry>
+   <entry keyword="Uni.LocaleToLowerCase">
+      <topic href="html/bk02ch07s26.html#d0e36460"/>
+   </entry>
+   <entry keyword="Uni.LocaleToTitleCase">
+      <topic href="html/bk02ch07s27.html#d0e36556"/>
+   </entry>
+   <entry keyword="Uni.LocaleToUpperCase">
+      <topic href="html/bk02ch07s28.html#d0e36655"/>
+   </entry>
+   <entry keyword="Uni.Reverse">
+      <topic href="html/bk02ch07s21.html#d0e36050"/>
+   </entry>
+   <entry keyword="Uni.SubstituteExcluded">
+      <topic href="html/bk02ch07s23.html#d0e36178"/>
+   </entry>
+   <entry keyword="Uni.SubstituteIncluded">
+      <topic href="html/bk02ch07s24.html#d0e36279"/>
+   </entry>
+   <entry keyword="Uni.ToLowerCase">
+      <topic href="html/bk02ch07s26.html#d0e36442"/>
+   </entry>
+   <entry keyword="Uni.ToTitleCase">
+      <topic href="html/bk02ch07s27.html#d0e36538"/>
+   </entry>
+   <entry keyword="Uni.ToUpperCase">
+      <topic href="html/bk02ch07s28.html#d0e36637"/>
+   </entry>
+   <entry keyword="Uni.WildMatch">
+      <topic href="html/bk02ch07s29.html#d0e36733"/>
+   </entry>
+   <entry keyword="Uni.WordCount">
+      <topic href="html/bk02ch07s30.html#d0e36816"/>
+   </entry>
+   <entry keyword="UNICODE">
+      <topic href="html/bk01ch04s07.html#d0e2285"/>
+   </entry>
+   <entry keyword="UNICODE">
+      <topic href="html/bk01ch05s02s02.html#d0e4405"/>
+   </entry>
+   <entry keyword="UNICODE">
+      <topic href="html/bk01ch10s82s03.html#d0e19017"/>
+   </entry>
+   <entry keyword="Unicode string">
+      <topic href="html/bk01ch02s02s01.html#d0e319"/>
+   </entry>
+   <entry keyword="UNICODE value type">
+      <topic href="html/bk01ch04s07.html#d0e2297"/>
+   </entry>
+   <entry keyword="UNICODEORDER">
+      <topic href="html/bk01ch10s128.html#d0e24522"/>
+   </entry>
+   <entry keyword="UNICODEORDER function">
+      <topic href="html/bk01ch10s128.html#d0e24568"/>
+   </entry>
+   <entry keyword="UNORDERED">
+      <topic href="html/bk01ch10s60s03.html#d0e15188"/>
+   </entry>
+   <entry keyword="UNSIGNED">
+      <topic href="html/bk01ch04s02.html#d0e1918"/>
+   </entry>
+   <entry keyword="UNSIGNED">
+      <topic href="html/bk01ch04s04.html#d0e2113"/>
+   </entry>
+   <entry keyword="UNSIGNED value type">
+      <topic href="html/bk01ch04s02.html#d0e1921"/>
+   </entry>
+   <entry keyword="UNSORTED">
+      <topic href="html/bk01ch05s02s01.html#d0e4175"/>
+   </entry>
+   <entry keyword="UNSORTED">
+      <topic href="html/bk01ch10s118.html#d0e23759"/>
+   </entry>
+   <entry keyword="UNSTABLE">
+      <topic href="html/bk01ch10s112.html#d0e23099"/>
+   </entry>
+   <entry keyword="USE">
+      <topic href="html/bk01ch10s84s01.html#d0e20094"/>
+   </entry>
+   <entry keyword="User">
+      <topic href="html/bk02ch10s04.html#d0e37691"/>
+   </entry>
+   <entry keyword="UTF-8">
+      <topic href="html/bk01ch02s02s01.html#d0e274"/>
+   </entry>
+   <entry keyword="Util.CmdProcess">
+      <topic href="html/bk02ch14s03.html#d0e38760"/>
+   </entry>
+   <entry keyword="Util.GetHostName">
+      <topic href="html/bk02ch14s01.html#d0e38636"/>
+   </entry>
+   <entry keyword="Util.GetUniqueInteger">
+      <topic href="html/bk02ch14s04.html#d0e38832"/>
+   </entry>
+   <entry keyword="Util.ResolveHostName">
+      <topic href="html/bk02ch14s02.html#d0e38698"/>
+   </entry>
+   <entry keyword="Value">
+      <topic href="html/bk01ch02s04.html#d0e528"/>
+   </entry>
+   <entry keyword="Value Attribute">
+      <topic href="html/bk01ch02s04s02.html#d0e564"/>
+   </entry>
+   <entry keyword="Value Type">
+      <topic href="html/bk01ch02s03.html#d0e438"/>
+   </entry>
+   <entry keyword="Value Types">
+      <topic href="html/bk01ch02s06.html#d0e819"/>
+   </entry>
+   <entry keyword="Value Types">
+      <topic href="html/bk01ch04s01.html#d0e1854"/>
+   </entry>
+   <entry keyword="VARIANCE">
+      <topic href="html/bk01ch10s129.html#d0e24620"/>
+   </entry>
+   <entry keyword="VARSTRING">
+      <topic href="html/bk01ch04s09.html#d0e2362"/>
+   </entry>
+   <entry keyword="VARSTRING string constants">
+      <topic href="html/bk01ch02s02s01.html#d0e329"/>
+   </entry>
+   <entry keyword="VARSTRING value type">
+      <topic href="html/bk01ch04s09.html#d0e2365"/>
+   </entry>
+   <entry keyword="VARUNICODE">
+      <topic href="html/bk01ch04s10.html#d0e2401"/>
+   </entry>
+   <entry keyword="VARUNICODE value type">
+      <topic href="html/bk01ch04s10.html#d0e2404"/>
+   </entry>
+   <entry keyword="VerifyFile">
+      <topic href="html/bk02ch01s13.html#d0e29876"/>
+   </entry>
+   <entry keyword="VIRTUAL">
+      <topic href="html/bk01ch09s06.html#d0e8162"/>
+   </entry>
+   <entry keyword="Virtual">
+      <topic href="html/bk01ch05s01s04.html#d0e3577"/>
+   </entry>
+   <entry keyword="Virtual fileposition">
+      <topic href="html/bk01ch05s01s04.html#d0e3580"/>
+   </entry>
+   <entry keyword="Virtual localfileposition">
+      <topic href="html/bk01ch05s01s04.html#d0e3593"/>
+   </entry>
+   <entry keyword="WAIT">
+      <topic href="html/bk01ch10s130.html#d0e24707"/>
+   </entry>
+   <entry keyword="WAIT Function">
+      <topic href="html/bk01ch10s130.html#d0e24710"/>
+   </entry>
+   <entry keyword="WaitDfuWorkunit">
+      <topic href="html/bk02ch06s10.html#d0e34187"/>
+   </entry>
+   <entry keyword="WHEN">
+      <topic href="html/bk01ch10s131.html#d0e24755"/>
+   </entry>
+   <entry keyword="WHEN">
+      <topic href="html/bk01ch11s13.html#d0e26033"/>
+   </entry>
+   <entry keyword="WHEN Function">
+      <topic href="html/bk01ch10s131.html#d0e24758"/>
+   </entry>
+   <entry keyword="WHEN workflow service">
+      <topic href="html/bk01ch10s25.html#d0e11645"/>
+   </entry>
+   <entry keyword="WHEN workflow service">
+      <topic href="html/bk01ch10s36.html#d0e13058"/>
+   </entry>
+   <entry keyword="WHEN workflow service">
+      <topic href="html/bk01ch11s13.html#d0e26053"/>
+   </entry>
+   <entry keyword="WHICH">
+      <topic href="html/bk01ch10s132.html#d0e24845"/>
+   </entry>
+   <entry keyword="WHICH Function">
+      <topic href="html/bk01ch10s132.html#d0e24848"/>
+   </entry>
+   <entry keyword="WHICH function">
+      <topic href="html/bk01ch10s99.html#d0e21669"/>
+   </entry>
+   <entry keyword="WHOLE">
+      <topic href="html/bk01ch10s84s01.html#d0e19900"/>
+   </entry>
+   <entry keyword="WIDTH">
+      <topic href="html/bk01ch10s13s01.html#d0e10157"/>
+   </entry>
+   <entry keyword="WILD">
+      <topic href="html/bk01ch08s06.html#d0e7198"/>
+   </entry>
+   <entry keyword="WILD index filter">
+      <topic href="html/bk01ch08s06.html#d0e7179"/>
+   </entry>
+   <entry keyword="WILD Keyword">
+      <topic href="html/bk01ch08s06.html#d0e7239"/>
+   </entry>
+   <entry keyword="WildMatch">
+      <topic href="html/bk02ch07s29.html#d0e36717"/>
+   </entry>
+   <entry keyword="WORKUNIT">
+      <topic href="html/bk01ch05s02.html#d0e3837"/>
+   </entry>
+   <entry keyword="WORKUNIT">
+      <topic href="html/bk01ch10s133.html#d0e24914"/>
+   </entry>
+   <entry keyword="Workunit">
+      <topic href="html/bk01ch05s02s05.html#d0e4775"/>
+   </entry>
+   <entry keyword="WORKUNIT Function">
+      <topic href="html/bk01ch10s133.html#d0e24921"/>
+   </entry>
+   <entry keyword="Workunit OUTPUT">
+      <topic href="html/bk01ch10s82s08.html#d0e19593"/>
+   </entry>
+   <entry keyword="Workunit.WorkunitFilesRead">
+      <topic href="html/bk02ch17s07.html#d0e39933"/>
+   </entry>
+   <entry keyword="Workunit.WorkunitFilesWritten">
+      <topic href="html/bk02ch17s08.html#d0e39993"/>
+   </entry>
+   <entry keyword="Workunit.WorkunitList">
+      <topic href="html/bk02ch17s02.html#d0e39467"/>
+   </entry>
+   <entry keyword="Workunit.WorkunitMessages">
+      <topic href="html/bk02ch17s06.html#d0e39873"/>
+   </entry>
+   <entry keyword="Workunit.WorkunitTimeStamps">
+      <topic href="html/bk02ch17s05.html#d0e39813"/>
+   </entry>
+   <entry keyword="Workunit.WorkunitTimings">
+      <topic href="html/bk02ch17s09.html#d0e40053"/>
+   </entry>
+   <entry keyword="Workunit.WUIDdaysAgo">
+      <topic href="html/bk02ch17s04.html#d0e39754"/>
+   </entry>
+   <entry keyword="Workunit.WUIDonDate">
+      <topic href="html/bk02ch17s03.html#d0e39674"/>
+   </entry>
+   <entry keyword="WorkunitFilesRead">
+      <topic href="html/bk02ch17s07.html#d0e39937"/>
+   </entry>
+   <entry keyword="WorkunitFilesWritten">
+      <topic href="html/bk02ch17s08.html#d0e39997"/>
+   </entry>
+   <entry keyword="WorkunitList">
+      <topic href="html/bk02ch17s02.html#d0e39471"/>
+   </entry>
+   <entry keyword="WorkunitMessages">
+      <topic href="html/bk02ch17s06.html#d0e39877"/>
+   </entry>
+   <entry keyword="WorkunitTimeStamps">
+      <topic href="html/bk02ch17s05.html#d0e39817"/>
+   </entry>
+   <entry keyword="WorkunitTimings">
+      <topic href="html/bk02ch17s09.html#d0e40057"/>
+   </entry>
+   <entry keyword="WUID">
+      <topic href="html/bk01ch10s133.html#d0e24961"/>
+   </entry>
+   <entry keyword="WUID">
+      <topic href="html/bk02ch10s01.html#d0e37541"/>
+   </entry>
+   <entry keyword="WUIDdaysAgo">
+      <topic href="html/bk02ch17s04.html#d0e39758"/>
+   </entry>
+   <entry keyword="WUIDonDate">
+      <topic href="html/bk02ch17s03.html#d0e39678"/>
+   </entry>
+   <entry keyword="XML">
+      <topic href="html/bk01ch05s02s03.html#d0e4569"/>
+   </entry>
+   <entry keyword="XML">
+      <topic href="html/bk01ch05s02s04.html#d0e4695"/>
+   </entry>
+   <entry keyword="XML">
+      <topic href="html/bk01ch10s82.html#d0e18359"/>
+   </entry>
+   <entry keyword="XML">
+      <topic href="html/bk01ch10s82s04.html#d0e19160"/>
+   </entry>
+   <entry keyword="XML">
+      <topic href="html/bk01ch10s82s05.html#d0e19403"/>
+   </entry>
+   <entry keyword="XML">
+      <topic href="html/bk01ch10s84.html#d0e19746"/>
+   </entry>
+   <entry keyword="XML">
+      <topic href="html/bk01ch10s85.html#d0e20225"/>
+   </entry>
+   <entry keyword="XML Files">
+      <topic href="html/bk01ch10s82s04.html#d0e19126"/>
+   </entry>
+   <entry keyword="XMLDECODE">
+      <topic href="html/bk01ch10s134.html#d0e24989"/>
+   </entry>
+   <entry keyword="XMLDECODE Function">
+      <topic href="html/bk01ch10s134.html#d0e24992"/>
+   </entry>
+   <entry keyword="XMLDEFAULT">
+      <topic href="html/bk01ch05s01s04.html#d0e3560"/>
+   </entry>
+   <entry keyword="XMLENCODE">
+      <topic href="html/bk01ch10s135.html#d0e25036"/>
+   </entry>
+   <entry keyword="XMLENCODE Function">
+      <topic href="html/bk01ch10s135.html#d0e25039"/>
+   </entry>
+   <entry keyword="XOR Operator">
+      <topic href="html/bk01ch03s02s02.html#d0e1629"/>
+   </entry>
+   <entry keyword="XPATH">
+      <topic href="html/bk01ch05s01s04.html#d0e3543"/>
+   </entry>
+   <entry keyword="XPATH">
+      <topic href="html/bk01ch10s111.html#d0e22870"/>
+   </entry>
+   <entry keyword="XPATH support">
+      <topic href="html/bk01ch05s01s05.html#d0e3689"/>
+   </entry>
+</index>
