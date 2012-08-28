@@ -94,7 +94,7 @@ public class Workunit extends DataSingleton {
 		if (info.getQuery() == null) {
 			fullRefresh(false, false, false, false);
 		}
-		if (info.getQuery() != null) {
+		if (info.getQuery() != null && info.getQuery().getText() != null) {
 			return info.getQuery().getText();
 		}
 		return "";

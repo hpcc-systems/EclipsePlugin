@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.editors;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.help.IContextProvider;
@@ -17,7 +19,11 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.part.FileEditorInput;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree;
@@ -34,13 +40,64 @@ public class ECLEditor extends TextEditor {
     public static final String RULER_CONTEXT = EDITOR_CONTEXT + ".ruler";
 	
 	private ECLColorManager colorManager;
+	private boolean readOnly;
 
 	public ECLEditor() {
 		super();
+		readOnly = false;
 		colorManager = new ECLColorManager();
 		setSourceViewerConfiguration(new ECLConfiguration(colorManager));
 		setDocumentProvider(new ECLDocumentProvider());
 	}
+	
+	public void setReadonly() {
+		readOnly = true;
+		setPartName(getPartName() + " (Read-Only)");
+	}
+
+	@Override
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
+		super.init(site, input);
+		if (input instanceof FileEditorInput) {
+			IFile file = ((FileEditorInput)input).getFile();
+			File actualFile = new File(file.getLocation().toString());
+			if (!actualFile.canWrite()) {
+				setReadonly();
+			}
+		}
+	}
+	
+	@Override
+	public boolean isEditable() {
+		if (readOnly)
+			return false;
+			
+		return super.isEditable();
+	}
+
+	@Override
+	public boolean isEditorInputModifiable() {
+		if (readOnly)
+			return false;
+			
+		return super.isEditorInputModifiable();
+	}
+
+	@Override
+	public boolean isEditorInputReadOnly() {
+		if (readOnly)
+			return true;
+			
+		return super.isEditorInputReadOnly();
+	}
+
+	@Override
+	public boolean isDirty() {
+		if (readOnly)
+			return false;
+			
+		return super.isDirty();
+	}	
 	
 	@Override
 	protected void initializeEditor() {
