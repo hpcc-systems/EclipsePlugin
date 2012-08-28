@@ -11,11 +11,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.navigator,
  org.eclipse.ui.views,
  org.eclipse.core.runtime,
+ org.eclipse.help,
  org.eclipse.jdt.ui,
  org.eclipse.jface.text,
  org.eclipse.debug.ui,
+ javax.xml.rpc,
  org.apache.axis,
- javax.xml.rpc
+ org.hpccsystems.ecldoc
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.hpccsystems.eclide;
