@@ -29,7 +29,7 @@ public class CmdArgs {
 	protected Map<String, Set<String> > args;
 
 	public CmdArgs(String cmd, String commonArgs, String baseArgs) {
-		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
+		QUOTE = OS.getOSQuote();
 
 		this.cmd = cmd;
 		String allArgs = commonArgs;

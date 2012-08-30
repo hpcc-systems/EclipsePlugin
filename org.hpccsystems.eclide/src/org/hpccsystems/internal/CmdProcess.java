@@ -42,7 +42,7 @@ public class CmdProcess {
 		this.additionalPath = additionalPath;
 		this.handler = handler;
 		this.consoleOut = consoleOut;
-		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
+		QUOTE = OS.getOSQuote();
 	}
 
 	public void exec(String command, String commonArgs, String baseArgs) {

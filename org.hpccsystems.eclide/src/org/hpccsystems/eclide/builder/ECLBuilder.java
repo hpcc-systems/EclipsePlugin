@@ -110,7 +110,8 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			monitor.subTask(file.getName());
 			ClientTools ct = Data.get().GetClientTools(file);
 			IProject project = getProject();
-			ECLCompiler compiler = ct.getCompiler(project);
+			ECLCompiler compiler = ct.getCompiler();
+			compiler.setProject(project);
 
 			ECLGlobalMeta.parse(compiler.getMeta(file));
 
