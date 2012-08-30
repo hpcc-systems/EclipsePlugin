@@ -72,19 +72,11 @@ public class ClientTools extends DataSingleton {
 	}
 
 	public IPath getEclLibraryPath() {
-		if (OS.isWindowsPlatform()) {
-			return path.append("ecllibrary");
-		} else {
-			return path.append("../share/ecllibrary");
-		}
+		return path.append("../share/ecllibrary");
 	}
 
 	public IPath getEclExamplesPath() {
-		if (OS.isWindowsPlatform()) {
-			return path.append("examples");
-		} else {
-			return path.append("../examples");
-		}
+		return path.append("../examples");
 	}
 
 	public ECLCompiler getCompiler(IProject project) {
@@ -95,7 +87,7 @@ public class ClientTools extends DataSingleton {
 		if (version == null) {
 			version = new String();
 			ECLCompiler compiler = new ECLCompiler(launchConfiguration);
-			version = compiler.getLanguageVersion();
+			version = compiler.getVersion();
 			String[] parts = version.split(".");
 			if (parts.length >= 1) {
 				version_major = Integer.parseInt(parts[0]);
