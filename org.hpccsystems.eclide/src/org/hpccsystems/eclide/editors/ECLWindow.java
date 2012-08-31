@@ -187,9 +187,6 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		} else if (item instanceof ResultView) {
 			showResult((ResultView)item); 
 			return;
-		} else if (item instanceof TextItemView) {
-			showTextItem((TextItemView)item); 
-			return;
 		} else if (item instanceof GraphView) {
 			showGraph((GraphView)item);
 			return;
