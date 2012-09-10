@@ -31,7 +31,7 @@ public class HtmlViewer extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		browser = new BrowserEx(parent);
+		browser = new BrowserEx(parent, true);
 	}
 
 	String getUrl(String ip) {
