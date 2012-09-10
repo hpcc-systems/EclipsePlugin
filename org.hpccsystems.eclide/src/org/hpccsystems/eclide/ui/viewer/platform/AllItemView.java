@@ -304,7 +304,7 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
-		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
+		return platform.getURL("esp/files", "ECLPlaygroundResults.htm", "Wuid=" + workunit.getWuid() + "&SourceFiles=1");
 	}
 
 	@Override

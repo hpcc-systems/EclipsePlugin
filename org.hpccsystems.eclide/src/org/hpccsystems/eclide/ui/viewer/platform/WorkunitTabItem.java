@@ -50,7 +50,7 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 		detailsContainer = new CTabFolder(parent, SWT.BOTTOM);
 
 		browserTab = new CTabItem(detailsContainer, SWT.NONE);
-		browser = new BrowserEx(detailsContainer);
+		browser = new BrowserEx(detailsContainer, false);
 		browserTab.setControl(browser);
 		browserTab.setText("ECL Watch");
 
