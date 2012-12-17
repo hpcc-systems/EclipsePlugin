@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.hpccsystems.internal.data;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -72,11 +74,21 @@ public class ClientTools extends DataSingleton {
 	}
 
 	public IPath getEclLibraryPath() {
-		return path.append("../share/ecllibrary");
+		IPath retVal = path.removeLastSegments(1).append("share").append("ecllibrary");
+		if (retVal.toFile().exists())
+			return retVal;
+		retVal = path.append("ecllibrary");
+		assert(retVal.toFile().exists());
+		return retVal;
 	}
 
 	public IPath getEclExamplesPath() {
-		return path.append("../examples");
+		IPath retVal = path.removeLastSegments(1).append("examples");
+		if (retVal.toFile().exists())
+			return retVal;
+		retVal = path.append("examples");
+		assert(retVal.toFile().exists());
+		return retVal;
 	}
 
 	public ECLCompiler getCompiler(IProject project) {

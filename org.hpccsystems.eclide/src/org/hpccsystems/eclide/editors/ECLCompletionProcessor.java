@@ -67,8 +67,6 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 			IFile file = ((ECLDocument)doc).getFile();
 			ECLMetaNode source = ECLGlobalMeta.get().getSource(file);
 			if (source != null) {
-				ECLMetaNode context = source.getContext(offset);
-
 				String knownText = getAutoCKnownString(doc, offset);
 				String remainingText = getAutoCRemainingString(doc, offset);
 				int replacementPos = ECLEditor.getFirstCharOffset(doc, offset, false);
@@ -83,13 +81,16 @@ public class ECLCompletionProcessor implements IContentAssistProcessor {
 					}
 
 				} else {
-					ECLMetaNode def = context.findDefinition(knownText, false);
-					if (def != null) {
-						for (ECLMetaNode child_def : def.getChildren()) {
-							if (child_def.getName().toLowerCase().startsWith(remainingText.toLowerCase())) {
-								result.add(new CompletionProposal(child_def.getName(), replacementPos, endReplacementPos - replacementPos, child_def.getName().length()));
+					ECLMetaNode context = source.getContext(offset);
+					if (context != null) {
+						ECLMetaNode def = context.findDefinition(knownText, false);
+						if (def != null) {
+							for (ECLMetaNode child_def : def.getChildren()) {
+								if (child_def.getName().toLowerCase().startsWith(remainingText.toLowerCase())) {
+									result.add(new CompletionProposal(child_def.getName(), replacementPos, endReplacementPos - replacementPos, child_def.getName().length()));
+								}
 							}
-						}			
+						}
 					}
 				}
 			}

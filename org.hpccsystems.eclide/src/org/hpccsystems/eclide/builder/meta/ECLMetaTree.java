@@ -225,6 +225,26 @@ public class ECLMetaTree implements Serializable {
 			return null;
 		}
 
+		public ECLMetaNode getECLFolderNode() {
+			if (data instanceof ECLFolder) {
+				return this;
+			}
+			if (parent != null) {
+				return parent.getECLFolderNode();
+			}
+			return null;
+		}
+
+		public ECLMetaNode getECLSourceNode() {
+			if (data instanceof ECLSource) {
+				return this;
+			}
+			if (parent != null) {
+				return parent.getECLSourceNode();
+			}
+			return null;
+		}
+
 		public String getName() {
 			return name;
 		}
@@ -264,6 +284,15 @@ public class ECLMetaTree implements Serializable {
 		}
 
 		public ECLMetaNode findDefinition(String text, boolean downOnly) {
+			if (text.startsWith("$")) {
+				ECLMetaNode eclFolderNode = this.getECLFolderNode();
+				if (eclFolderNode != null) {
+					text = eclFolderNode.getName() + text.substring(1);
+				}
+			}
+			if (text.startsWith("$.")) {
+				text = text.substring(2);				
+			}
 			text = text.toLowerCase();
 			if (getName().equalsIgnoreCase(text)) {
 				return this;
@@ -291,12 +320,10 @@ public class ECLMetaTree implements Serializable {
 				return null;
 			}
 
-			// Find stops walking up up at the source level ---
-			if (getData() instanceof ECLSource) {
-				return null;
+			if (parent != null) {
+				return parent.findDefinition(text, false);
 			}
-
-			return parent.findDefinition(text, false);
+			return null;
 		}
 
 		public Collection<ECLMetaNode> getChildren() {

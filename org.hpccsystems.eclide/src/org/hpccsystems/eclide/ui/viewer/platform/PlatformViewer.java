@@ -50,7 +50,6 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 import org.hpccsystems.eclide.editors.ECLWindow;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
-import org.hpccsystems.eclide.ui.viewer.ResultViewer;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions.IPlatformUI;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Data;
@@ -84,7 +83,6 @@ public class PlatformViewer extends ViewPart {
 	MyTreeViewer treeViewer;
 	TreeItemContentProvider contentProvider;
 	private HtmlViewer htmlViewer;
-	private ResultViewer resultViewer;
 
 	Action showWebItemAction;
 	Action updateItemAction;
@@ -222,8 +220,7 @@ public class PlatformViewer extends ViewPart {
 							}
 
 							//  ECL Watch View  ---
-							boolean resultShown = showResult(item);
-							showWebPage(item, !resultShown);
+							showWebPage(item, true);
 						}
 					}
 				}
@@ -301,24 +298,6 @@ public class PlatformViewer extends ViewPart {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public boolean showResult(ItemView ti) {
-		Result result = ti.getResult();
-		if (result == null) {
-			return false;
-		}
-
-		if (resultViewer == null) {
-			resultViewer = Eclipse.findResultViewer();
-		}
-
-		if (resultViewer == null) {
-			return false;
-		}
-
-		resultViewer.showResult(result);
-		return true;
 	}
 
 	public void createActions() {
