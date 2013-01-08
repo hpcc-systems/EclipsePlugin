@@ -84,12 +84,6 @@
             name="%view.name.1">
       </view>
       <view
-            category="org.hpccsystems.eclide"
-            class="org.hpccsystems.eclide.ui.viewer.ResultViewer"
-            id="org.hpccsystems.eclide.resultView"
-            name="%view.name.2">
-      </view>
-      <view
             allowMultiple="false"
             category="org.hpccsystems.eclide"
             class="org.hpccsystems.eclide.ui.viewer.platform.PlatformViewer"

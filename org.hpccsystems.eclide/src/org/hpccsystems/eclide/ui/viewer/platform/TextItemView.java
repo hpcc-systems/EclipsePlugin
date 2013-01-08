@@ -45,7 +45,7 @@ public class TextItemView extends PlatformBaseView {
 
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
-		return platform.getURL("esp/files", "WUSource.htm", "Wuid=" + workunit.getWuid());
+		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
 }
 

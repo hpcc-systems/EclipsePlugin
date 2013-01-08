@@ -33,8 +33,6 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 
 	CTabItem browserTab;
 	private BrowserEx browser;
-	CTabItem tableTab;
-	private TableEx table;
 	CTabItem textTab;
 	private TextEx text;
 
@@ -53,11 +51,6 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 		browser = new BrowserEx(detailsContainer, false);
 		browserTab.setControl(browser);
 		browserTab.setText("ECL Watch");
-
-		tableTab = new CTabItem(detailsContainer, SWT.NONE);
-		table = new TableEx(detailsContainer);
-		tableTab.setControl(table);
-		tableTab.setText("Result View");
 
 		textTab = new CTabItem(detailsContainer, SWT.NONE);
 		text = new TextEx(detailsContainer);
@@ -83,11 +76,6 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 	public void navigateTo(String url, String user, String password) {
 		browser.setUrl(null, url, user, password);
 		detailsContainer.setSelection(browserTab);
-	}
-
-	public void setResult(Result result) {
-		table.setResult(result);
-		detailsContainer.setSelection(tableTab);
 	}
 
 	public void setQuery(String query) {
