@@ -1,0 +1,13 @@
+<!-- Add the following to your VM Arguements to disable axis debug logging:
+-Dlogback.configurationFile=C:\Path\To\git\EclipsePlugin\org.hpccsystems.eclide\logback.xml 
+-->
+<configuration>
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>%d [%thread] %level %logger - %m%n</Pattern>
+    </layout>
+  </appender>
+  <root level="${root-level:-INFO}">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+</configuration>
