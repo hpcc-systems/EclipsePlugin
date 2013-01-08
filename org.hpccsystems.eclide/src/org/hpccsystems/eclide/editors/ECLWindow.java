@@ -82,7 +82,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 	ECLContentOutlinePage eclOutlinePage;
 
-	private ECLEditor editor;
+	private IEditorPart editor;
 
 	Data data;
 	CTabFolder workunitFolder;
@@ -93,7 +93,6 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	Map<Workunit, WorkunitTabItem> workunitTabMap;
 
 	PlatformActions actions;
-
 
 	public ECLWindow() {
 		super();
@@ -294,8 +293,8 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	@Override
 	public void init(IEditorSite site, IEditorInput editorInput)
 			throws PartInitException {
-		if (!(editorInput instanceof IFileEditorInput)) {
-			throw new PartInitException("Invalid Input: Must be IFileEditorInput");
+		if (!(editorInput instanceof IEditorInput)) {
+			throw new PartInitException("Invalid Input: Must be IEditorInput");
 		}
 		super.init(site, editorInput);
 	}
@@ -311,7 +310,10 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	}
 
 	public ECLEditor getEditor(){
-		return editor;
+		if (editor instanceof ECLEditor) {
+			return (ECLEditor)editor;
+		}
+		return null;
 	}
 
 	@Override
@@ -352,7 +354,9 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 							Object o = ((TreeSelection)selection).getFirstElement();
 							if (o != null && o instanceof ECLMetaNode) {
 								ECLMetaNode node = (ECLMetaNode)o;
-								editor.setHighlightRange(node.getData().getOffset(), node.getData().getLength(), true);
+								if (editor instanceof ECLEditor) {
+									((ECLEditor)editor).setHighlightRange(node.getData().getOffset(), node.getData().getLength(), true);
+								}
 							}
 						}
 					}
@@ -406,16 +410,19 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 
 		//  Add new workunits  ---
-		IFileEditorInput input = (IFileEditorInput) getEditorInput(); 
-		IFile file = input.getFile();
-		String filePath = file.getFullPath().toPortableString();
-		for (DataSingleton ds : delta.getAdded()) {
-			if (ds instanceof Workunit) {
-				Workunit wu = (Workunit)ds;
-
-				if (filePath.compareTo(wu.getApplicationValue("path")) == 0) {
-					children.add(new WorkunitView(this, null, wu));
-					changed = true;
+		IEditorInput input = getEditorInput(); 
+		if (input instanceof IFileEditorInput) {
+			IFileEditorInput fileInput = (IFileEditorInput) getEditorInput(); 
+			IFile file = fileInput.getFile();
+			String filePath = file.getFullPath().toPortableString();
+			for (DataSingleton ds : delta.getAdded()) {
+				if (ds instanceof Workunit) {
+					Workunit wu = (Workunit)ds;
+	
+					if (filePath.compareTo(wu.getApplicationValue("path")) == 0) {
+						children.add(new WorkunitView(this, null, wu));
+						changed = true;
+					}
 				}
 			}
 		}
@@ -502,15 +509,17 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	}
 
 	public void gotoLine(int lineNumber) {
-		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-		if (document != null) {
-			IRegion lineInfo = null;
-			try {
-				lineInfo = document.getLineInformation(lineNumber - 1);
-			} catch (BadLocationException e) {
-			}
-			if (lineInfo != null) {
-				editor.selectAndReveal(lineInfo.getOffset(), 0);
+		if (editor instanceof ECLEditor) {
+			IDocument document = ((ECLEditor)editor).getDocumentProvider().getDocument(editor.getEditorInput());
+			if (document != null) {
+				IRegion lineInfo = null;
+				try {
+					lineInfo = document.getLineInformation(lineNumber - 1);
+				} catch (BadLocationException e) {
+				}
+				if (lineInfo != null) {
+					((ECLEditor)editor).selectAndReveal(lineInfo.getOffset(), 0);
+				}
 			}
 		}
 	}
