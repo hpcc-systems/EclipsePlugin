@@ -5,11 +5,13 @@ Bundle-SymbolicName: org.hpccsystems.eclsoap
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.hpccsystems.eclsoap.Activator
 Require-Bundle: org.eclipse.core.runtime,
- javax.xml.rpc;bundle-version="1.1.0",
+ javax.xml.rpc,
  org.apache.axis
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.hpccsystems.ws.WsAttributes;
+Export-Package: org.hpccsystems.eclsoap;
+  uses:="org.osgi.framework",
+ org.hpccsystems.ws.WsAttributes;
   uses:="org.apache.axis.client,
    org.apache.axis,
    org.apache.axis.description,
