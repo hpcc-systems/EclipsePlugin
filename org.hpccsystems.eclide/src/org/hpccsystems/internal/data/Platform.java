@@ -175,7 +175,10 @@ public class Platform extends DataSingleton {
 	 */	
 	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
 		if (isEnabled()) {
-			ECLCompiler compiler = new ECLCompiler(new ConfigurationPreferenceStore(configuration), file.getProject());
+			ClientTools clientTools = ClientTools.get(configuration);
+
+			ECLCompiler compiler = clientTools.getCompiler(); 
+			compiler.setProject(file.getProject());
 			String archive = compiler.getArchive(file);
 			if (!archive.isEmpty())
 			{
@@ -416,6 +419,9 @@ public class Platform extends DataSingleton {
 			WsDfuServiceSoap service = getWsDfuService();
 			DFUQueryRequest request = new DFUQueryRequest();
 			request.setClusterName(cluster);
+			request.setFirstN(100);
+			request.setPageStartFrom(0);
+			request.setPageSize(100);
 			try {
 				DFUQueryResponse response = service.DFUQuery(request);
 				updateLogicalFiles(response.getDFULogicalFiles());

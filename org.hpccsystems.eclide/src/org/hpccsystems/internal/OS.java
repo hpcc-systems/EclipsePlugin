@@ -22,4 +22,9 @@ public class OS {
 			return false;
 		}
 	}
+	
+	public static String getOSQuote()
+	{
+		return isWindowsPlatform() ? "\"" : "";
+	}
 }

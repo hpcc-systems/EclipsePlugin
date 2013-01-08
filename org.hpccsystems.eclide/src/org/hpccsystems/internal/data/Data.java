@@ -42,7 +42,7 @@ public class Data extends Observable {
 					platforms.add(p);
 				}
 
-				ClientTools ct = GetClientTools(configs[i]);
+				ClientTools ct = ClientTools.get(configs[i]);
 				if (!clientTools.contains(ct)) {
 					clientTools.add(ct);
 				}
@@ -67,17 +67,23 @@ public class Data extends Observable {
 			@Override
 			public void launchConfigurationChanged(ILaunchConfiguration configuration) {
 				//  GetPlatform will update config information
-				GetPlatform(configuration);
+				Platform p = GetPlatform(configuration);
+				if (p != null) {
+					setChanged();
+					notifyObservers();
+				}
 			}
 
 			@Override
 			public void launchConfigurationAdded(ILaunchConfiguration configuration) {
 				Platform p = GetPlatform(configuration);
-				if (!platforms.contains(p)) {
-					platforms.add(p);
-					setChanged();
+				if (p != null) {
+					if (!platforms.contains(p)) {
+						platforms.add(p);
+						setChanged();
+					}
+					notifyObservers();
 				}
-				notifyObservers();
 			}
 		});
 
@@ -152,40 +158,8 @@ public class Data extends Observable {
 		return clientTools.toArray(new ClientTools[0]);
 	}
 
-	public ClientTools GetClientTools(ILaunchConfiguration launchConfiguration) {
-		ClientTools retVal = null;
-		String path = "";
-		try {
-			path = launchConfiguration.getAttribute(ClientTools.P_TOOLSPATH, "");
-		} catch (CoreException e) {
-		} 
-		if (!path.isEmpty()) {
-			retVal = ClientTools.get(path);
-			retVal.update(launchConfiguration);	
-		}
-		return retVal;
-	}
-
 	public ClientTools GetClientTools(IFile file) {
-		ClientTools retVal = null;
 		ILaunchConfiguration launchConfiguration = DebugPlugin.getDefault().getLaunchManager().getLaunchConfiguration(file);
-		if (launchConfiguration != null) {
-			retVal = GetClientTools(launchConfiguration);
-		}
-
-		if (retVal != null) {
-			return retVal;
-		}
-
-		for(ClientTools ct : clientTools) {
-			if (retVal == null) {
-				retVal = ct;
-			} else {
-				if (ct.isNewerThan(retVal)) {
-					retVal = ct;
-				}
-			}
-		}
-		return retVal;
+		return ClientTools.get(launchConfiguration);
 	}
 }

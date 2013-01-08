@@ -61,7 +61,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		}
 	}
 
-	private WidgetListener fListener = new WidgetListener();
+	private WidgetListener fListener;
 
 	Image image;
 
@@ -76,6 +76,10 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	protected Text fAddressText;
 	private Button testButton;
 	private Browser browser;
+	
+	ECLLaunchServerTab() {
+		fListener = new WidgetListener();
+	}
 
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {

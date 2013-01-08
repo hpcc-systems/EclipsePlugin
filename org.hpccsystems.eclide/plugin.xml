@@ -25,8 +25,8 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
-            id="org.hpccsystems.eclide.preferences.ECLGlobalPreferencePage"
+            class="org.hpccsystems.eclide.preferences.ECLCompilerPreferencePage"
+            id="org.hpccsystems.eclide.preferences.ECLCompilerPreferencePage"
             name="%page.name.1">
       </page>
    </extension>

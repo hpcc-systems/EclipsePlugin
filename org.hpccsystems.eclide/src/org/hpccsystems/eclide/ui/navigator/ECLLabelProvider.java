@@ -36,7 +36,7 @@ public class ECLLabelProvider implements ILabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element instanceof ProjectClientToolsElement) {
-			String label = "Client Tools (" + ((ProjectClientToolsElement)element).clientTools.getVersion() + ")";
+			String label = "Client Tools (" + ((ProjectClientToolsElement)element).clientTools.getBuildVersion().toString() + ")";
 			return label;
 		}
 		return null;

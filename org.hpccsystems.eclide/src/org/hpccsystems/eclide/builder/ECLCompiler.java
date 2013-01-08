@@ -23,13 +23,13 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.internal.CmdArgs;
 import org.hpccsystems.internal.CmdProcess;
 import org.hpccsystems.internal.CmdProcess.IProcessOutput;
-import org.hpccsystems.internal.ConfigurationPreferenceStore;
 import org.hpccsystems.internal.ECLArchiveParser;
 import org.hpccsystems.internal.EclCCError;
 import org.hpccsystems.internal.EclCCErrorParser;
@@ -42,19 +42,99 @@ public class ECLCompiler {
 	final static String badConfigurationCode = "1004";
 	final static String badConfiguration = "Error:  Invalid compiler configuration (eclcc)";
 
-	IProject project;
-	IProject[] referencedProjects;
+	String QUOTE = "";
 
 	String version = null;
+	public class Version implements Comparable<Version> {
+		String versionString = ""; 
+		String prefix = ""; 
+		int major = 0; 
+		int minor = 0; 
+		int point = 0; 
+		String postfix = "";
+		
+		Version(String versionString) {
+			//3.6.1
+			//community_3.10.0-7rc
+			this.versionString = versionString;
+			String[] parts = versionString.split("(_|-)");
+			if (parts.length == 1) {
+				calcVersion(parts[0]);
+			} else if (parts.length == 3) {
+				prefix = parts[0];
+				calcVersion(parts[1]);
+				postfix = parts[2];
+			}
+		}
+		
+		void calcVersion(String version) {
+			major = 0;
+			minor = 0;
+			point = 0;
+			try {
+				String[] parts = version.split("\\.");
+				if (parts.length >= 1) {
+					major = Integer.parseInt(parts[0]);
+				}
+				if (parts.length >= 2) {
+					minor = Integer.parseInt(parts[1]);
+				}
+				if (parts.length >= 3) {
+					point = Integer.parseInt(parts[2]);
+				}
+			} catch (Exception e) {
+			}
+		}
 
-	ConfigurationPreferenceStore launchConfiguration;
+		@Override
+		public String toString() {
+			return versionString;
+		}
+		
+		@Override
+		public int compareTo(Version other) {
+			if (other.major < major) 
+				return -1;
+			else if (other.major > major)
+				return 1;
+			
+			if (other.minor < minor) 
+				return -1;
+			else if (other.minor > minor)
+				return 1;
+			
+			if (other.point < point) 
+				return -1;
+			else if (other.point > point)
+				return 1;
+			
+			int retVal = other.postfix.compareTo(postfix);
+			if (retVal != 0)
+				return retVal;
+
+			retVal = other.prefix.compareTo(prefix);
+			if (retVal != 0)
+				return retVal;
+
+			return 0;
+		}
+	}
+	private Version langVersion = null; 
+	private Version buildVersion = null; 
+
+	IPreferenceStore preferences;
 	IPath binPath;
 	File eclccFile;
 	File eclplusFile;
+
+	//  Project Info ---
+	IProject project;
+	IProject[] referencedProjects;
 	IPath projectPath;
 	IPath workingPath;
 	IPath rootFolder;	
 
+	//  Prefs Info ---
 	String argsCommon;
 	String argsSyntaxCheck;
 	String argsCompile;
@@ -66,10 +146,7 @@ public class ECLCompiler {
 	boolean supressSubsequentErrors = false;
 	boolean enableMetaProcessing = true;
 
-	boolean executeRemotely = false;
-	String serverIP;
-	String serverCluster;
-
+	//  Consoles
 	MessageConsole eclccConsole;
 	MessageConsoleStream eclccConsoleWriter;
 
@@ -79,8 +156,6 @@ public class ECLCompiler {
 	public String wuid;
 	public Set<IFile> ancestors;
 	boolean hasError;	//TODO Has Error notification is all wrong.
-
-	String QUOTE = "";
 
 	class BasicHandler implements IProcessOutput {
 		protected StringBuilder sbOut;
@@ -199,28 +274,11 @@ public class ECLCompiler {
 		}
 	}
 
-	public ECLCompiler(ConfigurationPreferenceStore launchConfiguration) {
-		this.launchConfiguration = launchConfiguration;
-		QUOTE = OS.isWindowsPlatform() ? "\"" : "";
-		binPath = new Path(launchConfiguration.getAttribute(ClientTools.P_TOOLSPATH, ClientTools.P_TOOLSPATH_DEFAULT));
+	public ECLCompiler(Path rootPath) {
+		QUOTE = OS.getOSQuote();
+		binPath = rootPath.append("bin");
 		eclccFile = binPath.append("eclcc").toFile();
 		eclplusFile = binPath.append("eclplus").toFile();
-
-		argsCommon = launchConfiguration.getAttribute(ClientTools.P_ARGSCOMMON, ClientTools.P_ARGSCOMMON_DEFAULT);
-		argsSyntaxCheck = launchConfiguration.getAttribute(ClientTools.P_ARGSSYNTAX, ClientTools.P_ARGSSYNTAX_DEFAULT);
-		argsCompile = launchConfiguration.getAttribute(ClientTools.P_ARGSCOMPILE, ClientTools.P_ARGSCOMPILE_DEFAULT);
-		argsCompileRemote = launchConfiguration.getAttribute(ClientTools.P_ARGSCOMPILEREMOTE, ClientTools.P_ARGSCOMPILEREMOTE_DEFAULT);
-		int inlineResultLimit = launchConfiguration.getAttribute(ClientTools.P_INLINERESULTLIMIT, ClientTools.P_INLINERESULTLIMIT_DEFAULT);
-		if (inlineResultLimit > 0) {
-			argsCompile += " -fapplyInstantEclTransformations=1 -fapplyInstantEclTransformationsLimit=" + inlineResultLimit;
-			argsCompileRemote += " -fapplyInstantEclTransformations=1 -fapplyInstantEclTransformationsLimit=" + inlineResultLimit;
-		}
-
-		argsWULocal = launchConfiguration.getAttribute(ClientTools.P_ARGSWULOCAL, ClientTools.P_ARGSWULOCAL_DEFAULT);
-
-		monitorDependees = launchConfiguration.getAttribute(ClientTools.P_MONITORDEPENDEES, ClientTools.P_MONITORDEPENDEES_DEFAULT);
-		supressSubsequentErrors = launchConfiguration.getAttribute(ClientTools.P_SUPRESSSECONDERROR, ClientTools.P_SUPRESSSECONDERROR_DEFAULT);
-		enableMetaProcessing = launchConfiguration.getAttribute(ClientTools.P_ENABLEMETAPROCESSING, ClientTools.P_ENABLEMETAPROCESSING_DEFAULT);
 
 		resultsConsole = Eclipse.findConsole("Results");
 		resultsConsoleWriter = resultsConsole.newMessageStream();
@@ -229,11 +287,36 @@ public class ECLCompiler {
 		eclccConsole = Eclipse.findConsole("eclcc");
 		eclccConsoleWriter = eclccConsole.newMessageStream();
 		//eclccConsoleWriter.setActivateOnWrite(true);
+		
+		setPreferences(Activator.getDefault().getPreferenceStore());
 	}
 
-	public ECLCompiler(ConfigurationPreferenceStore launchConfiguration, IProject project) {
-		this(launchConfiguration);
+	public void setPreferences(IPreferenceStore preferences) {
+		this.preferences = preferences;
+		loadPreferences();
+	}
+	
+	void loadPreferences() {
+		if (preferences != null) {
+			argsCommon = preferences.getString(ClientTools.P_ARGSCOMMON);
+			argsSyntaxCheck = preferences.getString(ClientTools.P_ARGSSYNTAX);
+			argsCompile = preferences.getString(ClientTools.P_ARGSCOMPILE);
+			argsCompileRemote = preferences.getString(ClientTools.P_ARGSCOMPILEREMOTE);
+			int inlineResultLimit = preferences.getInt(ClientTools.P_INLINERESULTLIMIT);
+			if (inlineResultLimit > 0) {
+				argsCompile += " -fapplyInstantEclTransformations=1 -fapplyInstantEclTransformationsLimit=" + inlineResultLimit;
+				argsCompileRemote += " -fapplyInstantEclTransformations=1 -fapplyInstantEclTransformationsLimit=" + inlineResultLimit;
+			}
+	
+			argsWULocal = preferences.getString(ClientTools.P_ARGSWULOCAL);
+	
+			monitorDependees = preferences.getBoolean(ClientTools.P_MONITORDEPENDEES);
+			supressSubsequentErrors = preferences.getBoolean(ClientTools.P_SUPRESSSECONDERROR);
+			enableMetaProcessing = preferences.getBoolean(ClientTools.P_ENABLEMETAPROCESSING);
+		}
+	}
 
+	public void setProject(IProject project) {
 		this.project = project;
 		try {
 			referencedProjects = project.getReferencedProjects();
@@ -244,7 +327,6 @@ public class ECLCompiler {
 
 		projectPath = project.getLocation();
 		workingPath = project.getWorkingLocation(Activator.PLUGIN_ID);
-
 		rootFolder = project.getWorkspace().getRoot().getFullPath();
 	}
 
@@ -256,6 +338,22 @@ public class ECLCompiler {
 		cmdArgs.Append("I",  projectPath.toOSString());
 		for (int i = 0; i < referencedProjects.length; ++i) {
 			cmdArgs.Append("I",  referencedProjects[i].getLocation().toOSString());
+		}
+	}
+
+	protected void calcVersion() {
+		if (langVersion == null && buildVersion == null) {
+			langVersion = new Version("0.0.0");
+			buildVersion = new Version("0.0.0");
+
+			//3.6.1 community_3.10.0-7rc
+			String[] parts = getVersion().split(" ");
+			if (parts.length >= 1) {
+				langVersion = new Version(parts[0]);
+			}
+			if (parts.length >= 2) {
+				buildVersion = new Version(parts[1]);
+			}
 		}
 	}
 
@@ -273,22 +371,14 @@ public class ECLCompiler {
 		return version;
 	}
 
-	public String getBuildVersion() {
-		String version = getVersion();
-		String[] versions = version.split(" ");
-		if (versions.length >= 2) {
-			return versions[1];
-		}
-		return "";
+	public Version getBuildVersion() {
+		calcVersion();
+		return buildVersion;
 	}
 
-	public String getLanguageVersion() {
-		String version = getVersion();
-		String[] versions = version.split(" ");
-		if (versions.length >= 1) {
-			return versions[0];
-		}
-		return "";
+	public Version getLanguageVersion() {
+		calcVersion();
+		return langVersion;
 	}
 
 	public void checkSyntax(IFile file) {
