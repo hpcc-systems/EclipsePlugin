@@ -12,7 +12,6 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,10 +20,9 @@ import java.util.List;
 import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourceAttributes;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -32,6 +30,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -42,8 +41,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPersistableElement;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -53,7 +55,7 @@ import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions.IPlatformUI;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.Result;
+import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
@@ -121,50 +123,147 @@ public class PlatformViewer extends ViewPart {
 		return new PlatformTreeItemContentProvider(treeViewer);
 	}
 	
-	class WorkingFileHolder {
-		public IProject tempProject = null;
-		public IFile file = null;
-	}
-	
-	WorkingFileHolder getWorkingFile(WorkunitView wuView) {
-		WorkingFileHolder retVal = new WorkingFileHolder();
-		String filePath = WUTempFolder + "/" + wuView.getWorkunit().getWuid() + ".tmp"; 
+	class WorkunitStorage implements IStorage {
+		private Workunit workunit;
+		private IFile file;
 		
-		if (wuView.getWorkunit().hasApplicationValue("path")) {
-			filePath = wuView.getWorkunit().getApplicationValue("path");
-		}
-		retVal.file = Eclipse.findFile(new Path(filePath));
-		
-		if (!retVal.file.exists()) {
-			try {
-				IWorkspaceRoot root = Eclipse.getWorkspaceRoot();
-			    retVal.tempProject = root.getProject(WUTempFolder);
-				// open if necessary
-				if (!retVal.tempProject.exists()) {
-					retVal.tempProject.create(null);
-				}
-				if (!retVal.tempProject.isOpen()) {
-					retVal.tempProject.open(null);
-				}
-				retVal.file = retVal.tempProject.getFile(wuView.getWorkunit().getWuid() + ".ecl");
-				if (!retVal.file.exists()) {
-					try {
-			            InputStream is = new ByteArrayInputStream(wuView.getWorkunit().getQueryText().getBytes("UTF-8"));
-			            retVal.file.create(is, true, null);
-			            ResourceAttributes attributes = new ResourceAttributes();
-			            attributes.setReadOnly(true);
-						retVal.file.setResourceAttributes(attributes);
-			        } catch (UnsupportedEncodingException e) {
-			            e.printStackTrace();
-			        }
-				}
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		WorkunitStorage(Workunit workunit) {
+			this.workunit = workunit;
+			if (this.workunit.hasApplicationValue("path")) {
+				String filePath = workunit.getApplicationValue("path");
+				file = Eclipse.findFile(new Path(filePath));
 			}
 		}
-		return retVal;
+		
+		public Workunit getWorkunit() {
+			return workunit;
+		}
+
+		public IFile getFile() {
+			return file;
+		}
+
+		@Override 
+		public InputStream getContents() throws CoreException {
+			return new ByteArrayInputStream(workunit.getQueryText().getBytes());
+		}
+
+		@Override 
+		public IPath getFullPath() {
+			return null;
+		}
+
+		@Override 
+		public Object getAdapter(Class adapter) {
+			return null;
+		}
+
+		@Override 
+		public String getName() {
+			return workunit.getWuid();
+		}
+
+		@Override 
+		public boolean isReadOnly() {
+			return true;
+		}
+		
+		@Override
+		public boolean equals(Object aThat) {
+			if ( this == aThat ) {
+				return true;
+			}
+
+			if ( !(aThat instanceof WorkunitStorage) ) {
+				return false;
+			}
+			WorkunitStorage that = (WorkunitStorage)aThat;
+			
+			return workunit.equals(that.workunit);
+		}
 	}
+	
+	class WorkunitInput implements IStorageEditorInput {
+		private WorkunitStorage storage;
+
+		WorkunitInput(Workunit workunit) {
+			this.storage = new WorkunitStorage(workunit);
+		}
+		
+		public boolean origonalFileExists() {
+			IFile origFile = storage.getFile(); 
+			if (origFile != null) {
+				return origFile.exists();
+			}
+			return false;
+		}
+
+		public IFile getOrigonalFile() {
+			return storage.getFile();
+		}
+
+		public String getOrigonalFilePath() {
+			IFile origonalFile = storage.getFile();
+			if (origonalFile != null) {
+				return origonalFile.getFullPath().toPortableString();
+			}
+			return "";
+		}
+
+		@Override 
+		public boolean exists() {
+			return true;
+		}
+
+		@Override 
+		public ImageDescriptor getImageDescriptor() {
+			return null;
+		}
+
+		@Override 
+		public String getName() {
+			return storage.getName();
+		}
+
+		@Override 
+		public IPersistableElement getPersistable() {
+			return null;
+		}
+
+		@Override 
+		public IStorage getStorage() {
+			return storage;
+		}
+
+		@Override 
+		public String getToolTipText() {
+			String tooltip = storage.getWorkunit().getJobname();
+			if (!tooltip.isEmpty()) {
+				tooltip += " - ";
+			}
+			tooltip += storage.getWorkunit().getWuid();
+			return tooltip;
+		}
+
+		@Override 
+		public Object getAdapter(Class adapter) {
+			return null;
+		}
+
+		@Override
+		public boolean equals(Object aThat) {
+			if ( this == aThat ) {
+				return true;
+			}
+
+			if ( !(aThat instanceof WorkunitInput) ) {
+				return false;
+			}
+			WorkunitInput that = (WorkunitInput)aThat;
+			
+			return storage.equals(that.storage);
+		}
+	}	
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -193,27 +292,22 @@ public class PlatformViewer extends ViewPart {
 							//  Editor View  ---
 							WorkunitView wuView = item.getWorkunitAncestor();
 							if (wuView != null) {
-								WorkingFileHolder fileHolder = getWorkingFile(wuView);
-								try
-								{
-									IEditorPart ep = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-									if (ep != null) {
-										IFileEditorInput input = (IFileEditorInput) ep.getEditorInput(); 
-										IFile file = input.getFile();
+								//WorkunitEditorInput workunitEditorInput = getWorkunitEditorInput(wuView);
+								WorkunitInput workunitInput = new WorkunitInput(wuView.getWorkunit());
+								IEditorPart ep = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+								if (ep != null) {
+									IEditorInput input = ep.getEditorInput();
+									if (input.equals(workunitInput)) {
+										PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(ep);
+										((ECLWindow) ep).showItemView((ItemView)next, false);
+									} else if (input instanceof IFileEditorInput) {
+										IFileEditorInput fileInput = (IFileEditorInput)input; 
+										IFile file = fileInput.getFile();
 										String editorPath = file.getFullPath().toPortableString();
-										String workunitPath = fileHolder.file.getFullPath().toPortableString();
+										String workunitPath = workunitInput.getOrigonalFilePath();
 										if (editorPath.compareTo(workunitPath) == 0) {
 											PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(ep);
 											((ECLWindow) ep).showItemView((ItemView)next, false);
-										}
-									}
-								} finally {
-									if (fileHolder.tempProject != null) {
-										try {
-											fileHolder.tempProject.delete(false, null);
-										} catch (CoreException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
 										}
 									}
 								}
@@ -237,36 +331,19 @@ public class PlatformViewer extends ViewPart {
 							ItemView item = (ItemView) selection.getFirstElement();
 							WorkunitView wuView = item.getWorkunitAncestor();
 							if (wuView != null) {
-								WorkingFileHolder fileHolder = getWorkingFile(wuView);
+								WorkunitInput workunitInput = new WorkunitInput(wuView.getWorkunit());
 								try {
-									IEditorPart ep = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), fileHolder.file, true);
-									((ECLWindow) ep).showItemView(item, fileHolder.tempProject != null);
-								} catch (PartInitException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} catch (CoreException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} finally {
-									if (fileHolder.tempProject != null) {
-										try {
-											fileHolder.tempProject.delete(false, null);
-										} catch (CoreException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}//									IEditorPart ep = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-//									if (ep != null) {
-//										IFileEditorInput input = (IFileEditorInput) ep.getEditorInput(); 
-//										IFile file = input.getFile();
-//										String editorPath = file.getFullPath().toPortableString();
-//										String workunitPath = fileHolder.file.getFullPath().toPortableString();
-//										if (editorPath.compareTo(workunitPath) == 0) {
-//											PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(ep);
-//											((ECLWindow) ep).showItemView((ItemView)next, false);
-//										}
-//									}
-
+									IEditorPart ep = null;
+									if (workunitInput.origonalFileExists()) {
+										ep = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), workunitInput.getOrigonalFile(), true);
+									} else {
+										ep = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), workunitInput, "org.hpccsystems.eclide.editors.ECLWindow");
 									}
+									if (ep instanceof ECLWindow) {
+										((ECLWindow) ep).showItemView(item, true);
+									}
+								} catch (PartInitException e) {
+									e.printStackTrace();
 								}
 							}
 						}

@@ -13,21 +13,24 @@ package org.hpccsystems.eclide.editors;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.Document;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 
 //  TODO:  There must be an easier way to get an IFile to the HoverText callback. 
 public class ECLDocument extends Document {
 
-	FileEditorInput editorInput;
+	IFileEditorInput editorInput;
 
 	public void setEditorInput(IEditorInput editorInput) {
-		if (editorInput instanceof FileEditorInput) {
-			this.editorInput = (FileEditorInput)editorInput;
+		if (editorInput instanceof IFileEditorInput) {
+			this.editorInput = (IFileEditorInput)editorInput;
 		}
 	}
 
 	IFile getFile() {
-		return editorInput.getFile();
+		if (editorInput != null) {
+			return editorInput.getFile();
+		}
+		return null;
 	}
 
 }

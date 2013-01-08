@@ -19,6 +19,7 @@ import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
 import org.eclipse.debug.internal.ui.stringsubstitution.SelectedResourceManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.hpccsystems.internal.data.Data;
@@ -41,9 +42,10 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 		Object o = ss.getFirstElement();
 		if(o instanceof IEditorPart) {
 			IEditorPart editorPart = (IEditorPart)o;
-			IFileEditorInput input = (IFileEditorInput)editorPart.getEditorInput();
-			if (input != null) {
-				file = input.getFile();
+			
+			IEditorInput input = editorPart.getEditorInput(); 
+			if (input instanceof IFileEditorInput) {
+				file = ((IFileEditorInput)input).getFile();
 			}
 		}
 		else if (ss instanceof TreeSelection) {

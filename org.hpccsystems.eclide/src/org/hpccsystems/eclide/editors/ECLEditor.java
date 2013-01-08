@@ -14,6 +14,9 @@ import java.io.File;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IStorage;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.help.IContextProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -21,9 +24,10 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.part.FileEditorInput;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree;
@@ -58,11 +62,24 @@ public class ECLEditor extends TextEditor {
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
-		if (input instanceof FileEditorInput) {
-			IFile file = ((FileEditorInput)input).getFile();
-			File actualFile = new File(file.getLocation().toString());
-			if (!actualFile.canWrite()) {
-				setReadonly();
+		if (input instanceof IStorageEditorInput) {
+			try {
+				IStorage storage = ((IStorageEditorInput)input).getStorage();
+				if (storage.isReadOnly()) {
+					setReadonly();
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			
+		} else if (input instanceof IFileEditorInput) {
+			IFile file = ((IFileEditorInput)input).getFile();
+			IPath fileLocation = file.getLocation();
+			if (fileLocation != null){
+				File actualFile = fileLocation.toFile();
+				if (actualFile == null || !actualFile.canWrite()) {
+					setReadonly();
+				}
 			}
 		}
 	}
