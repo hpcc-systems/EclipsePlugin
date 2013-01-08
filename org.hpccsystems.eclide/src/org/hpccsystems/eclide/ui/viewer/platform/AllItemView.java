@@ -106,8 +106,7 @@ class ClusterView extends PlatformBaseView {
 
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
-		//http://192.168.2.68:8010/ws_machine/GetTargetClusterInfo?form
-		return platform.getURL("ws_machine", "GetTargetClusterInfo", "TargetClusters=" + clusterName);
+		return platform.getURL("WsTopology", "TpTargetClusterQuery");
 	}
 
 	@Override
@@ -304,7 +303,7 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
 	@Override
 	public URL getWebPageURL() throws MalformedURLException {
-		return platform.getURL("esp/files", "ECLPlaygroundResults.htm", "Wuid=" + workunit.getWuid() + "&SourceFiles=1");
+		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
 
 	@Override
