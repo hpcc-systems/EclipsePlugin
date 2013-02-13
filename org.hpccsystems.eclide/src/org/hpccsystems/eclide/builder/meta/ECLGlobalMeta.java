@@ -81,11 +81,8 @@ public class ECLGlobalMeta {
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			Element e = elementStack.peek();
-			if (e.tag.equals("Source")) {
-				metaStack.pop();
-			} else if (e.tag.equals("Definition")) {
-				metaStack.pop();
-			} else if (e.tag.equals("Field")) {
+			if (e.tag.equals("Source") || e.tag.equals("Definition") || e.tag.equals("Field")) {
+				metaStack.peek().notifyObservers("endElement");
 				metaStack.pop();
 			} else if (e.tag.equals("Import")) {
 			}
