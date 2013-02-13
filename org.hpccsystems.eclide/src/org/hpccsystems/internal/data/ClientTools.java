@@ -160,8 +160,11 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		String rootFolder = "";
 		if (OS.isWindowsPlatform()) {
 			rootFolder = System.getenv("ProgramFiles(x86)");
-			if (rootFolder.isEmpty()) {
+			if (rootFolder == null || rootFolder.isEmpty()) {
 				rootFolder = System.getenv("ProgramFiles");
+			}
+			if (rootFolder == null || rootFolder.isEmpty()) {
+				rootFolder = "c:\\Program Files (x86)";
 			}
 		} else {
 			rootFolder = "/opt";
