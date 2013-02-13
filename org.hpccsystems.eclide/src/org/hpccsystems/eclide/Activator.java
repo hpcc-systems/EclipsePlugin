@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.hpccsystems.eclide;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -77,5 +78,11 @@ public class Activator extends AbstractUIPlugin {
 		Image image = imageDescriptor.createImage();
 		return image;
 	}
+	
+	public static void log(String msg) {
+	}
 
+	public static void log(String msg, Exception e) {
+	      plugin.getLog().log(new Status(Status.INFO, PLUGIN_ID, Status.OK, msg, e));
+	}
 }

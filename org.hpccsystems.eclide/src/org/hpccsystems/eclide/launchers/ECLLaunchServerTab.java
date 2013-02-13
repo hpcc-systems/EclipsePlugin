@@ -11,10 +11,13 @@
 package org.hpccsystems.eclide.launchers;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.internal.ui.SWTFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.AuthenticationEvent;
 import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
@@ -123,20 +126,34 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		testButton = SWTFactory.createPushButton(group, "Test", null);
 		testButton.addSelectionListener(fListener);
 
-		browser = new Browser(group, SWT.BORDER);
-		browser.setUrl("about:blank");
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gd.horizontalSpan = 3;
-		browser.setLayoutData(gd);
-		browser.addAuthenticationListener(new AuthenticationListener() {
-
-			@Override
-			public void authenticate(AuthenticationEvent event) {
-				// TODO Auto-generated method stub
-				event.user = fUserText.getText();
-				event.password = fPasswordText.getText();
-			}
-		});
+		try {
+			browser = new Browser(group, SWT.BORDER);
+		} catch (IllegalArgumentException e) {
+			browser = null;
+			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control", e);
+		} catch (SWTException e) {
+			browser = null;
+			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control", e);
+		} catch (SWTError e) {
+			browser = null;
+			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control");
+		}
+		if (browser != null) {
+			browser.setUrl("about:blank");
+			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+			gd.horizontalSpan = 3;
+			browser.setLayoutData(gd);
+			browser.addAuthenticationListener(new AuthenticationListener() {
+				@Override
+				public void authenticate(AuthenticationEvent event) {
+					// TODO Auto-generated method stub
+					event.user = fUserText.getText();
+					event.password = fPasswordText.getText();
+				}
+			});
+		} else {
+			SWTFactory.createLabel(group, "Warning:  Failed to create Web Browser, see Error Log for further details.", 3);
+		}
 	}
 
 	@Override
@@ -209,15 +226,17 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	}
 
 	void refreshBrowser() {
-		browser.addProgressListener(new ProgressAdapter() {
-			@Override
-			public void completed(ProgressEvent event) {
-				browser.removeProgressListener(this);
-				System.out.println(fAddressText.getText());
-				browser.setUrl(fAddressText.getText());
-			}
-		});
-		browser.setText("<html><body><h3>Loading (" + fAddressText.getText() + ")...</h3></body></html>");
+		if (browser != null) {
+			browser.addProgressListener(new ProgressAdapter() {
+				@Override
+				public void completed(ProgressEvent event) {
+					browser.removeProgressListener(this);
+					System.out.println(fAddressText.getText());
+					browser.setUrl(fAddressText.getText());
+				}
+			});
+			browser.setText("<html><body><h3>Loading (" + fAddressText.getText() + ")...</h3></body></html>");
+		}
 	}
 
 	@Override

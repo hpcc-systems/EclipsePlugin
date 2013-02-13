@@ -10,7 +10,10 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.ui.viewer;
 
+import org.eclipse.debug.internal.ui.SWTFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.AuthenticationEvent;
 import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
@@ -53,7 +56,9 @@ public class BrowserEx extends Composite {
 			backButton.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					browser.back();
+					if (browser != null) {
+						browser.back();
+					}
 				}
 	
 				@Override
@@ -67,7 +72,9 @@ public class BrowserEx extends Composite {
 			forwardButton.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					browser.forward();
+					if (browser != null) {
+						browser.forward();
+					}
 				}
 	
 				@Override
@@ -86,7 +93,9 @@ public class BrowserEx extends Composite {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					//				navigateTo(url, user, password);
-					browser.setUrl(comboUrl.getText());
+					if (browser != null) {
+						browser.setUrl(comboUrl.getText());
+					}
 				}
 	
 				@Override
@@ -94,56 +103,71 @@ public class BrowserEx extends Composite {
 				}
 			});
 		}
-		
-		browser = new Browser(this, SWT.BORDER);
-		GridData layoutData = new GridData(GridData.FILL_BOTH);
-		layoutData.horizontalSpan = 4;
-		layoutData.verticalSpan = 1;
-		browser.setLayoutData(layoutData);
-		browser.addAuthenticationListener(new AuthenticationListener() {
 
-			@Override
-			public void authenticate(AuthenticationEvent event) {
-				// TODO Auto-generated method stub
-				event.user = user;
-				event.password = password;
-			}
-		});
-		browser.addLocationListener(new LocationListener() {
-			@Override
-			public void changing(LocationEvent event) {
-			}
+		try {
+			browser = new Browser(this, SWT.BORDER);
+		} catch (IllegalArgumentException e) {
+			browser = null;
+			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control", e);
+		} catch (SWTException e) {
+			browser = null;
+			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control", e);
+		} catch (SWTError e) {
+			browser = null;
+			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control");
+		}
+		if (browser != null) {
+			GridData layoutData = new GridData(GridData.FILL_BOTH);
+			layoutData.horizontalSpan = 4;
+			layoutData.verticalSpan = 1;
+			browser.setLayoutData(layoutData);
+			browser.addAuthenticationListener(new AuthenticationListener() {
 
-			@Override
-			public void changed(LocationEvent event) {
-				if (nextTreeItem != null && event.location.equals(nextUrl)) {
-					previousTreeItem = nextTreeItem;
-					nextTreeItem = null;
-				} else if (previousTreeItem != null) {
-					previousTreeItem.refresh();
-					previousTreeItem = null;
-				}
-			}
-		});
-
-		setUrl(null, "about:blank");
-
-		if (showAddressBar) {
-			browser.addProgressListener(new ProgressAdapter() {
 				@Override
-				public void completed(ProgressEvent event) {
-					String url = browser.getUrl();
-					for (int i = 0; i < comboUrl.getItemCount(); ++i)
-					{
-						if (comboUrl.getItem(i).equalsIgnoreCase(url)) {
-							comboUrl.select(i);
-							return;
-						}
-					}
-					comboUrl.add(browser.getUrl(), 0);
-					comboUrl.select(0);
+				public void authenticate(AuthenticationEvent event) {
+					// TODO Auto-generated method stub
+					event.user = user;
+					event.password = password;
 				}
 			});
+			browser.addLocationListener(new LocationListener() {
+				@Override
+				public void changing(LocationEvent event) {
+				}
+
+				@Override
+				public void changed(LocationEvent event) {
+					if (nextTreeItem != null && event.location.equals(nextUrl)) {
+						previousTreeItem = nextTreeItem;
+						nextTreeItem = null;
+					} else if (previousTreeItem != null) {
+						previousTreeItem.refresh();
+						previousTreeItem = null;
+					}
+				}
+			});
+
+			setUrl(null, "about:blank");
+
+			if (showAddressBar) {
+				browser.addProgressListener(new ProgressAdapter() {
+					@Override
+					public void completed(ProgressEvent event) {
+						String url = browser.getUrl();
+						for (int i = 0; i < comboUrl.getItemCount(); ++i)
+						{
+							if (comboUrl.getItem(i).equalsIgnoreCase(url)) {
+								comboUrl.select(i);
+								return;
+							}
+						}
+						comboUrl.add(browser.getUrl(), 0);
+						comboUrl.select(0);
+					}
+				});
+			}
+		} else {
+			SWTFactory.createLabel(this, "Warning:  Failed to create Web Browser, see Error Log for further details.", 1);
 		}
 	}
 
@@ -158,41 +182,43 @@ public class BrowserEx extends Composite {
 
 		nextUrl = url;
 		nextTreeItem = treeItem;
-		browser.setUrl(url);
-
-		/*  TODO:  We may want some URL parsing to help tree refreshing  --- 
-		int ipPos = url.indexOf("http://");
-		if (ipPos >= 0) {
-			ipPos += 7;
-			StringBuilder ipsb = new StringBuilder();
-			for (int i = ipPos; i < url.length(); ++i) {
-				char c = url.charAt(i);
-				if (c == '.' || Character.isDigit(c)) {
-					ipsb.append(url.charAt(i));
-				} else {
-					break;
-				}
-			}
-
-			Platform p = Data.get().GetPlatformNoCreate(ipsb.toString());
-			if (p != null) {
-				int wuidPos = url.indexOf("Wuid=");
-				if (wuidPos >= 0) {
-					wuidPos += 5;
-					StringBuilder wuidsb = new StringBuilder(url.substring(wuidPos, wuidPos + 16));
-					for (int i = wuidPos + 16; i < url.length(); ++i) {
-						char c = url.charAt(i);
-						if (c == '-' || Character.isDigit(c)) {
-							wuidsb.append(url.charAt(i));
-						} else {
-							break;
-						}
+		if (browser != null) {
+			browser.setUrl(url);
+	
+			/*  TODO:  We may want some URL parsing to help tree refreshing  --- 
+			int ipPos = url.indexOf("http://");
+			if (ipPos >= 0) {
+				ipPos += 7;
+				StringBuilder ipsb = new StringBuilder();
+				for (int i = ipPos; i < url.length(); ++i) {
+					char c = url.charAt(i);
+					if (c == '.' || Character.isDigit(c)) {
+						ipsb.append(url.charAt(i));
+					} else {
+						break;
 					}
-					String wuid =  wuidsb.toString();
-					//previousWU = p.getWorkunit(wuid);
+				}
+	
+				Platform p = Data.get().GetPlatformNoCreate(ipsb.toString());
+				if (p != null) {
+					int wuidPos = url.indexOf("Wuid=");
+					if (wuidPos >= 0) {
+						wuidPos += 5;
+						StringBuilder wuidsb = new StringBuilder(url.substring(wuidPos, wuidPos + 16));
+						for (int i = wuidPos + 16; i < url.length(); ++i) {
+							char c = url.charAt(i);
+							if (c == '-' || Character.isDigit(c)) {
+								wuidsb.append(url.charAt(i));
+							} else {
+								break;
+							}
+						}
+						String wuid =  wuidsb.toString();
+						//previousWU = p.getWorkunit(wuid);
+					}
 				}
 			}
+			 */
 		}
-		 */
 	}	
 }
