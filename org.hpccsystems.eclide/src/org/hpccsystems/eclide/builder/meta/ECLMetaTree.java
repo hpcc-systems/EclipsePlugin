@@ -184,10 +184,10 @@ public class ECLMetaTree implements Serializable {
 				children.put(name, new ECLMetaNode(this, name, data));
 			}
 			setChanged();
-			notifyObservers();
-			if (parent != null) {
-				parent.setChanged();
-				parent.notifyObservers();
+			ECLMetaNode parentNode = parent;
+			while (parentNode != null) {
+				parentNode.setChanged();
+				parentNode = parentNode.parent;
 			}
 			return children.get(name);
 		}

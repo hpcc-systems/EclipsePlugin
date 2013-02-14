@@ -96,12 +96,14 @@ class MetaSourceTreeItemContentProvider implements ITreeContentProvider, Observe
 			}
 		}
 
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				viewer.refresh(source);
-			}
-		});
+		if (arg0.equals(source)) {
+			Display.getDefault().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					viewer.refresh(source);
+				}
+			});
+		}
 	}
 
 }
