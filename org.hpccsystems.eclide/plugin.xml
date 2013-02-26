@@ -302,11 +302,17 @@
           id="org.hpccsystems.eclide.commands.category"
           name="ECL Category">
     </category>
-    <command
-          categoryId="org.hpccsystems.eclide.commands.category"
-          id="org.hpccsystems.eclide.commands.openDeclaration"
-          name="Open Declaration">
+    <command 
+    	categoryId="org.hpccsystems.eclide.commands.category"
+		id="org.hpccsystems.eclide.commands.openDeclaration"
+		name="Open Declaration">
     </command>
+	<command 
+		categoryId="org.hpccsystems.eclide.commands.category"
+		description="Turn comments on/off for a selection"
+		id="org.hpccsystems.eclide.commands.toggleComent"
+		name="Toggle Comment">
+	</command>
  </extension>
  <extension
        point="org.eclipse.ui.handlers">
@@ -314,25 +320,75 @@
           class="org.hpccsystems.eclide.handlers.OpenDeclarationHandler"
           commandId="org.eclipse.jdt.ui.edit.text.java.open.editor">
     </handler>
+    <handler
+          class="org.hpccsystems.eclide.handlers.ToggleCommentHandler"
+          commandId="org.hpccsystems.eclide.commands.toggleComent">
+    </handler>
  </extension>
  <extension point="org.eclipse.ui.menus">
-    <menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-       <menu id="edit" label="Edit" mnemonic="E">
-          <command commandId="org.eclipse.jdt.ui.edit.text.java.open.editor" id="org.hpccsystems.eclide.menus.openDeclaration">
-          </command>
-       </menu>
+	<menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+		<menu 
+			id="edit" 
+			label="Edit" 
+			mnemonic="E">
+			<command 
+				commandId="org.eclipse.jdt.ui.edit.text.java.open.editor" 
+				id="org.hpccsystems.eclide.menus.openDeclaration">
+			</command>
+		</menu>
+		<menu 
+			id="edit" 
+			label="Edit" 
+			mnemonic="E">
+			<command 
+				commandId="org.hpccsystems.eclide.commands.toggleComent" 
+				id="org.hpccsystems.eclide.menus.toggleComent"
+				label="Toggle Comment"
+				style="push">
+			</command>
+		</menu>
     </menuContribution>
-<menuContribution
-            locationURI="popup:org.eclipse.ui.popup.any?before=additions">
-         <command
-               commandId="org.eclipse.jdt.ui.edit.text.java.open.editor"
-               mnemonic="%contributions.view.edit.mnemonic">
-    <visibleWhen>
-       <with variable="selection">
-          <instanceof value="org.eclipse.jface.text.ITextSelection"/>
-       </with>            
-            </visibleWhen>
-         </command>
+	<menuContribution locationURI="popup:org.eclipse.ui.popup.any?before=additions">
+    	<command 
+    		commandId="org.eclipse.jdt.ui.edit.text.java.open.editor" 
+    		mnemonic="%contributions.view.edit.mnemonic">
+		    <visibleWhen>
+	       		<with variable="selection">
+	          		<instanceof value="org.eclipse.jface.text.ITextSelection"/>
+	       		</with>            
+			</visibleWhen>
+		</command>
+    	<command 
+    		commandId="org.hpccsystems.eclide.commands.toggleComent" 
+    		mnemonic="T">
+			<visibleWhen checkEnabled="false">
+				<with variable="activePartId">
+					<equals value="org.hpccsystems.eclide.editors.ECLWindow">
+					</equals>
+				</with>
+			</visibleWhen>
+		</command>
       </menuContribution>
    </extension>
+   <extension point="org.eclipse.ui.bindings">
+		<key
+        commandId="org.hpccsystems.eclide.commands.toggleComent"
+        contextId="org.hpccsystems.eclide.eclideScope"
+        schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+        sequence="Ctrl+Shift+C">
+		</key>
+		<key
+        commandId="org.hpccsystems.eclide.commands.toggleComent"
+        contextId="org.hpccsystems.eclide.eclideScope"
+        schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+        sequence="Ctrl+/">
+		</key>
+	</extension>
+	<extension point="org.eclipse.ui.contexts">
+		<context 
+			id="org.hpccsystems.eclide.eclideScope" 
+			name="ECL editor context" 
+			parentId="org.eclipse.ui.textEditorScope">
+		</context>
+	</extension>
 </plugin>

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.editors;
 
+import java.util.Arrays;
+
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.TextAttribute;
@@ -101,6 +103,10 @@ public class ECLConfiguration extends TextSourceViewerConfiguration {
 		return super.getAnnotationHover(sourceViewer);
 	}
 
+	public String[] getDefaultPrefixes( ISourceViewer viewer, String contentType ){
+		return new String[] { "//", "" };
+	}
+	
 	protected ECLScanner getECLScanner() {
 		if (scanner == null) {
 			scanner = new ECLScanner(colorManager);

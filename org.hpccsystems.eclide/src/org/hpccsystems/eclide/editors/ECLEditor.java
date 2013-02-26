@@ -52,6 +52,7 @@ public class ECLEditor extends TextEditor {
 		colorManager = new ECLColorManager();
 		setSourceViewerConfiguration(new ECLConfiguration(colorManager));
 		setDocumentProvider(new ECLDocumentProvider());
+		setKeyBindingScopes( new String[] { "org.hpccsystems.eclide.eclideScope" } );
 	}
 	
 	public void setReadonly() {
