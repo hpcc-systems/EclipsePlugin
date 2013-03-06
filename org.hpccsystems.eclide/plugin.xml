@@ -225,23 +225,6 @@
       </launchConfigurationTabGroup>
    </extension>
    <extension
-         point="org.eclipse.debug.ui.launchShortcuts">
-      <shortcut
-            class="org.hpccsystems.eclide.launchers.ECLLaunchShortcutLocal"
-            icon="icons/releng_gears.gif"
-            id="org.hpccsystems.eclide.launchers.ECLShortcut"
-            label="%shortcut.label"
-            modes="run">
-         <contextualLaunch>
-		 <enablement>
-           <with variable="selection">
-             <count value="1"/>
-             </with>
-             </enablement>
-         </contextualLaunch>
-      </shortcut>
-   </extension>
-   <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewerActionBinding viewerId="org.hpccsystems.eclide.navigator">
          <includes>
