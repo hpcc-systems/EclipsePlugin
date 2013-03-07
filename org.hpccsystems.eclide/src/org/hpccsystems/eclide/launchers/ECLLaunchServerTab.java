@@ -11,7 +11,6 @@
 package org.hpccsystems.eclide.launchers;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.internal.ui.SWTFactory;
@@ -21,8 +20,10 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.AuthenticationEvent;
 import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.CloseWindowListener;
 import org.eclipse.swt.browser.ProgressAdapter;
 import org.eclipse.swt.browser.ProgressEvent;
+import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,6 +33,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
@@ -118,8 +120,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		fPasswordText.addModifyListener(fListener);
 	}
 
-	protected void createBrowser(Composite parent) {
-		Group group = SWTFactory.createGroup(parent, "ECL Watch:", 3, 1, GridData.FILL_BOTH);
+	protected Browser createBrowser(final Composite parent) {
+		final Group group = SWTFactory.createGroup(parent, "ECL Watch:", 3, 1, GridData.FILL_BOTH);
 		SWTFactory.createLabel(group, "Address:  ", 1);
 		fAddressText = SWTFactory.createSingleText(group, 1);
 		fAddressText.addModifyListener(fListener);
@@ -143,6 +145,21 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 			gd.horizontalSpan = 3;
 			browser.setLayoutData(gd);
+			browser.addCloseWindowListener(new CloseWindowListener() {
+				@Override
+				public void close(WindowEvent event) {
+					group.dispose();
+					final Browser newBrowser = createBrowser(parent);
+					parent.pack();
+					refreshAddress();
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							newBrowser.setText("<html><body><h3>Authentication Failed...</h3></body></html>");
+						}
+					});
+				}
+			});
 			browser.addAuthenticationListener(new AuthenticationListener() {
 				@Override
 				public void authenticate(AuthenticationEvent event) {
@@ -154,6 +171,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		} else {
 			SWTFactory.createLabel(group, "Warning:  Failed to create Web Browser, see Error Log for further details.", 3);
 		}
+		return browser;
 	}
 
 	@Override
@@ -167,7 +185,6 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		createVerticalSpacer(projComp, 1);
 		createBrowser(projComp);
 		setControl(projComp);
-
 	}
 
 	@Override
