@@ -47,6 +47,12 @@ public class DataSingletonCollection extends Observable {
 		}
 		return null;
 	}
+	
+	public synchronized void remove(DataSingleton item) {
+		if (items.containsKey(item.hashCode())) {
+			items.remove(item);
+		}
+	}
 
 	public synchronized Collection<DataSingleton> getAll() {
 		return items.values();

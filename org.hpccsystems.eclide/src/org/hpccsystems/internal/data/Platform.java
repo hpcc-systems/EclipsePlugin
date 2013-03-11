@@ -19,6 +19,7 @@ import java.util.HashSet;
 import javax.xml.rpc.ServiceException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -77,6 +78,9 @@ public class Platform extends DataSingleton {
 
 		return (Platform)All.getNoCreate(new Platform(ip, port));
 	}
+	public static void remove(Platform p) {
+		All.remove(p);
+	}
 
 	public static final String P_DISABLED = "disabledConfig";
 	public static final String P_IP = "ipLaunchConfig";
@@ -88,6 +92,7 @@ public class Platform extends DataSingleton {
 	private ConfigurationPreferenceStore launchConfiguration;	
 	private String name;
 	private boolean isDisabled;
+	private boolean isTempDisabled;
 	private String ip;
 	private int port;
 	private Collection<Cluster> clusters;
@@ -103,6 +108,7 @@ public class Platform extends DataSingleton {
 		this.ip = ip;
 		this.port = port;
 		isDisabled = true;
+		isTempDisabled = true;
 		name = "";
 
 		clusters = new HashSet<Cluster>();
@@ -117,30 +123,43 @@ public class Platform extends DataSingleton {
 		launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
 		name = _launchConfiguration.getName();
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
+		isTempDisabled = isDisabled;
 		ip = launchConfiguration.getAttribute(P_IP, "");
 		port = launchConfiguration.getAttribute(P_PORT, 8010);
+	}
+
+	public boolean matches(ILaunchConfiguration _launchConfiguration) {
+		try {
+			return (ip.equals(_launchConfiguration.getAttribute(P_IP, "")) && port == _launchConfiguration.getAttribute(P_PORT, 8010));
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	synchronized void confirmDisable() {
 		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				if (!isDisabled) {
+				if (!isDisabled()) {
 					Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 					if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {
-						isDisabled = true;
+						isTempDisabled = true;
 					}
 				}
 			}
 		});
 	}
 
+	public void setTempDisabled(boolean disable) {
+		isTempDisabled = disable;
+	}
 	public boolean isDisabled() {
-		return isDisabled;
+		return isDisabled || isTempDisabled;
 	}
 
 	public boolean isEnabled() {
-		return !isDisabled;
+		return !isDisabled();
 	}
 
 	public String getIP() {

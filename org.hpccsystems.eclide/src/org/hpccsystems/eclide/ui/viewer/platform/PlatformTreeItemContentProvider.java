@@ -39,6 +39,7 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 		if (newInput != null && !newInput.equals(oldInput)) {
 			if (newInput instanceof Data) {
 				data = (Data)newInput;
+				data.addObserver(this);
 				children.start(new Runnable() {
 					@Override
 					public void run() {
@@ -116,10 +117,14 @@ class PlatformTreeItemContentProvider extends TreeItemContentProvider {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (o instanceof DataSingletonCollection) {
-			if (arg instanceof CollectionDelta) {
-				if (mergeChanges((CollectionDelta)arg)) {
-					refresh();
+		if (o instanceof Data) {
+			reloadChildren();
+		} else if (o instanceof DataSingletonCollection) {
+			if (o instanceof DataSingletonCollection) {
+				if (arg instanceof CollectionDelta) {
+					if (mergeChanges((CollectionDelta)arg)) {
+						refresh();
+					}
 				}
 			}
 		}
