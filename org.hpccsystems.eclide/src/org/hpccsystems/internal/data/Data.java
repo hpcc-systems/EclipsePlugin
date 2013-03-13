@@ -13,6 +13,7 @@ package org.hpccsystems.internal.data;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Observable;
 
 import org.eclipse.core.resources.IFile;
@@ -20,6 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationListener;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 
 public class Data extends Observable {
 	private static Data singletonFactory;
@@ -53,22 +55,74 @@ public class Data extends Observable {
 
 		//  Monitor platforms  ---
 		DebugPlugin.getDefault().getLaunchManager().addLaunchConfigurationListener(new ILaunchConfigurationListener() {
+			boolean mergeChanges() {
+				boolean retVal = false;
+				ILaunchConfiguration[] configs;
+				try {
+					configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
+
+					//  Find new configs  ---
+					for(int i = 0; i < configs.length; ++i) {
+						Iterator<Platform> itr = platforms.iterator(); 
+						boolean found = false;
+						while (itr.hasNext()) {
+							Platform platform = itr.next();
+							if (platform.matches(configs[i])) {
+								found = true;
+								break;
+							}
+						}
+						if (!found) {
+							Platform p = GetPlatform(configs[i]);
+							platforms.add(p);
+							retVal = true;
+						}
+					}
+					
+					//  Find obsolete platforms  ---
+					Iterator<Platform> itr = platforms.iterator(); 
+					while (itr.hasNext()) {
+						boolean found = false;
+						Platform platform = itr.next();
+						for(int i = 0; i < configs.length; ++i) {
+							if (platform.matches(configs[i])) {
+								found = true;
+								break;
+							}
+						}
+						if (!found) {
+							Platform.remove(platform);
+							platforms.remove(platform);
+							retVal = true;
+						}
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+				return retVal;
+			}
 
 			@Override
 			public void launchConfigurationRemoved(ILaunchConfiguration configuration) {
-				Platform p = GetPlatform(configuration);
-				if (platforms.contains(p)) {
-					platforms.remove(p);
+				if (configuration instanceof ILaunchConfigurationWorkingCopy)
+					return;
+				
+				if (mergeChanges()) {
 					setChanged();
+					notifyObservers();
 				}
-				notifyObservers();
 			}
 
 			@Override
 			public void launchConfigurationChanged(ILaunchConfiguration configuration) {
-				//  GetPlatform will update config information
-				Platform p = GetPlatform(configuration);
-				if (p != null) {
+				if (configuration instanceof ILaunchConfigurationWorkingCopy)
+					return;
+
+				if (mergeChanges()) {
+					Platform p = GetPlatformNoCreate(configuration);
+					if (p != null) {
+						p.setTempDisabled(false);
+					}
 					setChanged();
 					notifyObservers();
 				}
@@ -76,12 +130,11 @@ public class Data extends Observable {
 
 			@Override
 			public void launchConfigurationAdded(ILaunchConfiguration configuration) {
-				Platform p = GetPlatform(configuration);
-				if (p != null) {
-					if (!platforms.contains(p)) {
-						platforms.add(p);
-						setChanged();
-					}
+				if (configuration instanceof ILaunchConfigurationWorkingCopy)
+					return;
+
+				if (mergeChanges()) {
+					setChanged();
 					notifyObservers();
 				}
 			}
@@ -103,7 +156,7 @@ public class Data extends Observable {
 	}
 
 	//  Platform  ---
-	public Platform GetPlatform(ILaunchConfiguration launchConfiguration) {
+	public Platform GetPlatform(ILaunchConfiguration launchConfiguration, boolean noCreate) {
 		Platform retVal = null;
 		String ip = "";
 		int port = 0;
@@ -122,10 +175,22 @@ public class Data extends Observable {
 		}
 
 		if (!ip.isEmpty() && port != 0) {
-			retVal = Platform.get(ip, port);
+			if (noCreate) {
+				retVal = Platform.getNoCreate(ip, port);
+			} else {
+				retVal = Platform.get(ip, port);
+			}
 			retVal.update(launchConfiguration);	
 		}
 		return retVal;
+	}
+
+	public Platform GetPlatform(ILaunchConfiguration launchConfiguration) {
+		return GetPlatform(launchConfiguration, false);
+	}
+	
+	public Platform GetPlatformNoCreate(ILaunchConfiguration launchConfiguration) {
+		return GetPlatform(launchConfiguration, true);
 	}
 
 	public Platform GetPlatformNoCreate(String ip, int port) {
