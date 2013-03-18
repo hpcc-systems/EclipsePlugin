@@ -19,6 +19,7 @@ import java.util.HashSet;
 import javax.xml.rpc.ServiceException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -84,6 +85,7 @@ public class Platform extends DataSingleton {
 	public static final String P_USER = "userLaunchConfig";
 	public static final String P_PASSWORD = "passwordLaunchConfig";
 	public static final String P_CLUSTER = "clusterLaunchConfig";
+	public static final String P_COMPILEONLY = "compileOnly";
 
 	private ConfigurationPreferenceStore launchConfiguration;	
 	private String name;
@@ -188,6 +190,12 @@ public class Platform extends DataSingleton {
 					WUCreateAndUpdate request = new WUCreateAndUpdate();
 					request.setQueryText(archive);
 					request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
+					try {
+						if (configuration.getAttribute(P_COMPILEONLY, false)) {
+							request.setAction(1);
+						}
+					} catch (CoreException e) {
+					}
 					ApplicationValue[] appVals = new ApplicationValue[1];
 					appVals[0] = new ApplicationValue();
 					appVals[0].setApplication(Activator.PLUGIN_ID);

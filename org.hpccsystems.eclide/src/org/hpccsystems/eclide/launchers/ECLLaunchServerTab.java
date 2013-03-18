@@ -62,6 +62,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 				refreshBrowser();
 			} else if (source == disableButton) {
 				scheduleUpdateJob();
+			} else if (source == compileOnlyButton) {
+				scheduleUpdateJob();
 			}
 		}
 	}
@@ -74,6 +76,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	protected Text fIPText;
 	protected Text fPortText;
 	protected Text fClusterText;
+	protected Button compileOnlyButton;
 
 	protected Text fUserText;
 	protected Text fPasswordText;
@@ -107,6 +110,9 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		SWTFactory.createLabel(group, "Target:  ", 1);
 		fClusterText = SWTFactory.createSingleText(group, 1);
 		fClusterText.addModifyListener(fListener);
+		
+		compileOnlyButton = SWTFactory.createCheckButton(group, "Compile Only", null, false, 1);
+		compileOnlyButton.addSelectionListener(fListener);
 	}
 
 	protected void createCredentialsEditor(Composite parent) {
@@ -201,6 +207,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
 			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, 8010)));
 			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor"));
+			compileOnlyButton.setSelection(configuration.getAttribute(Platform.P_COMPILEONLY, false));
 
 			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
 			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
@@ -221,6 +228,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			configuration.setAttribute(Platform.P_PORT, 8010);
 		}
 		configuration.setAttribute(Platform.P_CLUSTER, fClusterText.getText());
+		configuration.setAttribute(Platform.P_COMPILEONLY, compileOnlyButton.getSelection());
 
 		configuration.setAttribute(Platform.P_USER, fUserText.getText());
 		configuration.setAttribute(Platform.P_PASSWORD, fPasswordText.getText());
