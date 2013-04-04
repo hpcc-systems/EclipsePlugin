@@ -46,7 +46,7 @@ public class PlatformView extends PlatformBaseView {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		return platform.getURL();
 	}
 

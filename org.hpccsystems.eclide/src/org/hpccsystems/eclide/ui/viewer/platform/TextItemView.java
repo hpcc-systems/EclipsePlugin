@@ -31,7 +31,7 @@ public class TextItemView extends PlatformBaseView {
 
 	@Override
 	public String getText() {
-		return "Submitted ECL";
+		return "ECL";
 	}
 
 	public String getQueryText() {
@@ -44,7 +44,10 @@ public class TextItemView extends PlatformBaseView {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("ECLSourceWidget", "ReadOnly=1&Wuid=" + workunit.getWuid());
+		}
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
 }

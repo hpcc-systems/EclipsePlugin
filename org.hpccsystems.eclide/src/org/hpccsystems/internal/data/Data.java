@@ -136,14 +136,14 @@ public class Data extends Observable {
 		return platforms.toArray(new Platform[0]);
 	}
 
-	public Collection<Workunit> getWorkunits(Platform platform, String cluster, String startDate, String endDate) {
+	public Collection<Workunit> getWorkunits(Platform platform, boolean userOnly, String cluster, String startDate, String endDate) {
 		Collection<Workunit> workunits = new HashSet<Workunit>();
 		try {
 			Workunit.All.pushTransaction("Data.getWorkunits");
 			for (Platform p : getPlatforms()) {
 				assert p != null;
 				if (platform == null || platform.equals(p)) {
-					workunits.addAll(p.getWorkunits(cluster, startDate, endDate));
+					workunits.addAll(p.getWorkunits(userOnly, cluster, startDate, endDate));
 				}
 			}
 		}

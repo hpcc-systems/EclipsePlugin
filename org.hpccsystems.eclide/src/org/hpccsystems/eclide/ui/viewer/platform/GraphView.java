@@ -42,7 +42,10 @@ public class GraphView extends PlatformBaseView implements Observer {
 	}
 	//http://192.168.2.68:8010/WsWorkunits/GVCAjaxGraph?Name=W20111103-233901&GraphName=graph1
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("GraphPageWidget", "Wuid=" + graph.getWuid() + "&GraphName=" + graph.getName());
+		}
 		return platform.getURL("WsWorkunits", "GVCAjaxGraph", "Name=" + graph.getWuid() + "&GraphName=" + graph.getName());
 	}
 

@@ -25,7 +25,10 @@ class GraphFolderView extends FolderItemView implements Observer  {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("GraphsWidget", "TabPosition=top&Wuid=" + workunit.getWuid());
+		}
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
 

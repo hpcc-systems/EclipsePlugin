@@ -35,7 +35,10 @@ public class ResultView extends PlatformBaseView implements Observer {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("ResultWidget", "Wuid=" + result.getWuid() + "&Sequence=" + result.getSequence());
+		}
 		return platform.getURL("WsWorkunits", "WUResult", "Wuid=" + result.getWuid() + "&Sequence=" + result.getSequence());
 	}
 

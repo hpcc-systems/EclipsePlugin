@@ -103,7 +103,10 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("DFUWUDetailsWidget", "Wuid=" + workunit.getID());
+		}
 		return platform.getURL("FileSpray", "GetDFUWorkunit", "wuid=" + workunit.getID());
 	}
 
