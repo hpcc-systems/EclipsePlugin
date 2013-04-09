@@ -21,6 +21,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
+import org.hpccsystems.eclide.builder.Version;
 import org.hpccsystems.eclide.launchers.ECLLaunchCompilerTab;
 import org.hpccsystems.internal.ConfigurationPreferenceStore;
 import org.hpccsystems.internal.OS;
@@ -101,12 +102,12 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		return retVal;
 	}
 
-	public ECLCompiler.Version getBuildVersion() {
+	public Version getBuildVersion() {
 		ECLCompiler compiler = getCompiler();
 		return compiler.getBuildVersion();
 	}
 
-	public ECLCompiler.Version getLanguageVersion() {
+	public Version getLanguageVersion() {
 		ECLCompiler compiler = getCompiler();
 		return compiler.getLanguageVersion();
 	}

@@ -368,7 +368,12 @@ public class PlatformViewer extends ViewPart {
 		}
 
 		try {
-			URL webPageURL = ti.getWebPageURL();
+			boolean hasNewEclWatch = false;
+			PlatformView platformView = ti.getPlatformAncestor();
+			if (platformView != null) {
+				hasNewEclWatch = platformView.getPlatform().getVersion().major >= 4;
+			}
+			URL webPageURL = ti.getWebPageURL(hasNewEclWatch);
 			if (htmlViewer != null && webPageURL != null) {
 				htmlViewer.showURL(ti, webPageURL.toString(), ti.getUser(), ti.getPassword(), bringToTop);
 			}

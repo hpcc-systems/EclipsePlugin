@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
+import org.hpccsystems.eclide.builder.Version;
 import org.hpccsystems.internal.ConfigurationPreferenceStore;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
 import org.hpccsystems.ws.filespray.FileSprayLocator;
@@ -61,6 +62,10 @@ import org.hpccsystems.ws.wsworkunits.WUSubmit;
 import org.hpccsystems.ws.wsworkunits.WUUpdateResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
+import org.hpccsystems.ws.wssmc.Activity;
+import org.hpccsystems.ws.wssmc.ActivityResponse;
+import org.hpccsystems.ws.wssmc.WsSMCLocator;
+import org.hpccsystems.ws.wssmc.WsSMCServiceSoap;
 
 public class Platform extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
@@ -92,10 +97,12 @@ public class Platform extends DataSingleton {
 
 	private ConfigurationPreferenceStore launchConfiguration;	
 	private String name;
+	private String owner;
 	private boolean isDisabled;
 	private boolean isTempDisabled;
 	private String ip;
 	private int port;
+	private Version version;
 	private Collection<Cluster> clusters;
 	private Collection<DropZone> dropZones;
 	private Collection<Workunit> workunits;	
@@ -111,6 +118,7 @@ public class Platform extends DataSingleton {
 		isDisabled = true;
 		isTempDisabled = true;
 		name = "";
+		owner = "";
 
 		clusters = new HashSet<Cluster>();
 		dropZones = new HashSet<DropZone>();
@@ -123,6 +131,7 @@ public class Platform extends DataSingleton {
 	public void update(ILaunchConfiguration _launchConfiguration) {
 		launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
 		name = _launchConfiguration.getName();
+		owner = launchConfiguration.getAttribute(P_USER, "");
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
 		isTempDisabled = isDisabled;
 		ip = launchConfiguration.getAttribute(P_IP, "");
@@ -178,6 +187,32 @@ public class Platform extends DataSingleton {
 	public String getPassword() {
 		return launchConfiguration.getAttribute(P_PASSWORD, "");
 	}
+	
+	public String getBuild() {
+		if (isDisabled) {
+			return "";
+		}
+		
+		WsSMCServiceSoap service = getWsSMCServiceSoap();
+		Activity request = new Activity();
+		try {
+			ActivityResponse response = service.activity(request);
+			return response.getBuild();
+		} catch (ArrayOfEspException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public Version getVersion() {
+		if (version == null) {
+			version = new Version(getBuild());
+		}
+		return version;
+	}
+	
 
 	/*
  enum WUAction
@@ -278,11 +313,14 @@ public class Platform extends DataSingleton {
 		return workunit;
 	}
 
-	Collection<Workunit> getWorkunits(String cluster, String startDate, String endDate) {
+	Collection<Workunit> getWorkunits(boolean userOnly, String cluster, String startDate, String endDate) {
 		if (isEnabled()) {
 			Workunit.All.pushTransaction("platform.getWorkunits");
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
 			WUQuery request = new WUQuery();
+			if (userOnly) {
+				request.setOwner(owner);
+			}
 			request.setCluster(cluster);
 			request.setStartDate(startDate);
 			request.setEndDate(startDate);
@@ -302,12 +340,12 @@ public class Platform extends DataSingleton {
 		return new HashSet<Workunit>(workunits);
 	}
 
-	public Collection<Workunit> getWorkunits(String cluster) {
-		return getWorkunits(cluster, "", "");
+	public Collection<Workunit> getWorkunits(boolean userOnly, String cluster) {
+		return getWorkunits(userOnly, cluster, "", "");
 	}
 
-	public Collection<Workunit> getWorkunits() {
-		return getWorkunits("", "", "");
+	public Collection<Workunit> getWorkunits(boolean userOnly) {
+		return getWorkunits(userOnly, "", "", "");
 	}
 	
 	boolean isValid(String wuid) {
@@ -402,7 +440,7 @@ public class Platform extends DataSingleton {
 				WUQuerysetsResponse response = service.WUQuerysets(request);
 				updateDataQuerySets(response.getQuerysets());
 			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
+				// TODO Auto-generated )catch block
 				e.printStackTrace();
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
@@ -578,6 +616,10 @@ public class Platform extends DataSingleton {
 		return getURL(service + "/" + method + "?" + params);
 	}
 
+	public URL getWidgetURL(String widget, String params) throws MalformedURLException {
+		return getURL("esp/files/stub.htm?Widget=" + widget + (params.isEmpty() ? "" : "&" + params));
+	}
+	
 	void initStub(org.apache.axis.client.Stub stub) {
 		stub.setUsername(getUser());
 		stub.setPassword(getPassword());
@@ -654,6 +696,23 @@ public class Platform extends DataSingleton {
 		WsTopologyLocator locator = new WsTopologyLocator();
 		try {
 			WsTopologyServiceSoap service = locator.getWsTopologyServiceSoap(getURL("WsTopology"));
+			initStub((org.apache.axis.client.Stub)service);
+			return service;
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;	
+	}
+
+	public WsSMCServiceSoap getWsSMCServiceSoap() {
+		latencyTest();
+		WsSMCLocator locator = new WsSMCLocator();
+		try {
+			WsSMCServiceSoap service = locator.getWsSMCServiceSoap(getURL("WsSMC"));
 			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {

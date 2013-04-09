@@ -201,7 +201,8 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		WorkunitTabItem tabItem = selectTab(workunit);
 		if (tabItem != null) {
 			try {
-				tabItem.navigateTo(item.getWebPageURL().toString(), item.getUser(), item.getPassword());
+				boolean hasNewEclWatch = workunit.getPlatform().getVersion().major >= 4;
+				tabItem.navigateTo(item.getWebPageURL(hasNewEclWatch).toString(), item.getUser(), item.getPassword());
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
@@ -372,7 +373,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		Workunit.All.deleteObserver(this);
 
 		CollectionDelta delta = new CollectionDelta("primeChildren", getCurrentWorkunits());
-		delta.calcChanges(data.getWorkunits(null, "", "", ""));
+		delta.calcChanges(data.getWorkunits(null, false, "", "", ""));
 		mergeChanges(delta);
 
 		Workunit.All.addObserver(this);

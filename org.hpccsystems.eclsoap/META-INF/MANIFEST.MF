@@ -31,6 +31,7 @@ Export-Package: org.hpccsystems.eclsoap;uses:="org.osgi.framework",
    org.apache.axis.encoding,
    javax.xml.rpc,
    javax.xml.namespace",
+ org.hpccsystems.ws.wssmc,
  org.hpccsystems.ws.wstopology;
   uses:="org.apache.axis.client,
    org.apache.axis,
