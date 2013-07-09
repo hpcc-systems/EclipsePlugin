@@ -133,6 +133,9 @@ class DropZoneFolderView extends FolderItemView {
 	//  http://192.168.2.68:8010/FileSpray/DropZoneFiles?ver_=1.03
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("LZBrowseWidget", "");
+		}
 		return platform.getURL("FileSpray", "DropZoneFiles");
 	}
 
@@ -307,7 +310,7 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		if (hasNewEclWatch) {
-			return platform.getWidgetURL("ResultsWidget", "TabPosition=top&SourceFiles=1&Wuid=" + workunit.getWuid());
+			return platform.getWidgetURL("SourceFilesWidget", "Wuid=" + workunit.getWuid());
 		}
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}

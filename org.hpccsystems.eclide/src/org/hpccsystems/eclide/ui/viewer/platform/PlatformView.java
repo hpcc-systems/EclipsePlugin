@@ -47,6 +47,9 @@ public class PlatformView extends PlatformBaseView {
 
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("HPCCPlatformWidget", "");
+		}
 		return platform.getURL();
 	}
 
