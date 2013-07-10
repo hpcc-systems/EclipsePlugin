@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Ecldoc
+Bundle-Name: ECL Documentation
 Bundle-SymbolicName: org.hpccsystems.ecldoc; singleton:=true
-Bundle-Version: 4.1.0.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Activator: org.hpccsystems.ecldoc.Activator
 Require-Bundle: org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
