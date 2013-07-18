@@ -22,6 +22,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationListener;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.hpccsystems.eclide.launchers.ECLLaunchCompilerTab;
 
 public class Data extends Observable {
 	private static Data singletonFactory;
@@ -44,7 +45,7 @@ public class Data extends Observable {
 					platforms.add(p);
 				}
 
-				ClientTools ct = ClientTools.get(configs[i]);
+				ClientTools ct = ClientTools.get(p, configs[i]);
 				if (!clientTools.contains(ct)) {
 					clientTools.add(ct);
 				}
@@ -188,7 +189,7 @@ public class Data extends Observable {
 	public Platform GetPlatform(ILaunchConfiguration launchConfiguration) {
 		return GetPlatform(launchConfiguration, false);
 	}
-	
+
 	public Platform GetPlatformNoCreate(ILaunchConfiguration launchConfiguration) {
 		return GetPlatform(launchConfiguration, true);
 	}
@@ -221,10 +222,5 @@ public class Data extends Observable {
 	//  ClientTools  ---
 	public ClientTools[] GetClientTools() {
 		return clientTools.toArray(new ClientTools[0]);
-	}
-
-	public ClientTools GetClientTools(IFile file) {
-		ILaunchConfiguration launchConfiguration = DebugPlugin.getDefault().getLaunchManager().getLaunchConfiguration(file);
-		return ClientTools.get(launchConfiguration);
 	}
 }

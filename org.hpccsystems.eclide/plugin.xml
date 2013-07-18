@@ -23,18 +23,11 @@
       </perspective>
    </extension>
    <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            class="org.hpccsystems.eclide.preferences.ECLCompilerPreferencePage"
-            id="org.hpccsystems.eclide.preferences.ECLCompilerPreferencePage"
-            name="%page.name.1">
-      </page>
-   </extension>
-   <extension
          id="eclBuilder"
          name="%extension.name.2"
          point="org.eclipse.core.resources.builders">
-      <builder hasNature="true">
+      <builder
+            hasNature="true">
          <run
                class="org.hpccsystems.eclide.builder.ECLBuilder">
          </run>

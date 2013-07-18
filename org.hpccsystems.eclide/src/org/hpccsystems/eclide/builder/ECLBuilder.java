@@ -108,7 +108,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 
 			checkedFiles.add(file);
 			monitor.subTask(file.getName());
-			ClientTools ct = Data.get().GetClientTools(file);
+			ClientTools ct = ClientTools.get();
 			IProject project = getProject();
 			ECLCompiler compiler = ct.getCompiler();
 			compiler.setProject(project);

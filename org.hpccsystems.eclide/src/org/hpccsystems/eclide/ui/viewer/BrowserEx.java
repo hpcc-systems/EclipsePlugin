@@ -114,7 +114,7 @@ public class BrowserEx extends Composite {
 			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control", e);
 		} catch (SWTError e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control");
+			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control:  " + e.getMessage());
 		}
 		if (browser != null) {
 			GridData layoutData = new GridData(GridData.FILL_BOTH);
