@@ -36,6 +36,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.hpccsystems.eclide.Workbench;
 
 public class ECLNewFileWizard extends Wizard implements INewWizard {
 	private ECLNewFileWizardPage page;
@@ -125,8 +126,7 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 		getShell().getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				IWorkbenchPage page =
-						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				IWorkbenchPage page = Workbench.getActivePage();
 				try {
 					IDE.openEditor(page, file, true);
 				} catch (PartInitException e) {

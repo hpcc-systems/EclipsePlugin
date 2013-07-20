@@ -18,9 +18,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.ide.IDE;
+import org.hpccsystems.eclide.Workbench;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 import org.hpccsystems.eclide.editors.ECLEditor;
 import org.hpccsystems.eclide.editors.ECLWindow;
@@ -58,7 +58,7 @@ public class OpenDeclarationHandler extends AbstractHandler {
 					if (filePath != null) {
 						IFile fileToBeOpened = Eclipse.findFile(filePath, editor.getProject());
 						try {
-							IEditorPart ep = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), fileToBeOpened, true);
+							IEditorPart ep = IDE.openEditor(Workbench.getActivePage(), fileToBeOpened, true);
 							((ECLWindow) ep).gotoLine(def.getLine());
 						} catch (PartInitException e) {
 							e.printStackTrace();

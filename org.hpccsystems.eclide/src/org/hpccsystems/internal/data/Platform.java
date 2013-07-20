@@ -23,8 +23,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.Workbench;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.eclide.builder.Version;
 import org.hpccsystems.internal.ConfigurationPreferenceStore;
@@ -148,11 +148,11 @@ public class Platform extends DataSingleton {
 	}
 
 	synchronized void confirmDisable() {
-		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+		Workbench.getDisplay().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				if (!isDisabled()) {
-					Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					Shell activeShell = Workbench.getShell();
 					if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {
 						isTempDisabled = true;
 					}
