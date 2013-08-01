@@ -83,7 +83,7 @@ public class ConfigurationPreferenceStore extends PreferenceStore {
 			}
 		}
 		if (contains(key)) {
-			return getString(key);
+			return super.getString(key);
 		}
 		if (globalStore.contains(key)) {
 			return globalStore.getString(key);
@@ -99,7 +99,7 @@ public class ConfigurationPreferenceStore extends PreferenceStore {
 			}
 		}
 		if (contains(key)) {
-			return getBoolean(key);
+			return super.getBoolean(key);
 		}
 		if (globalStore.contains(key)) {
 			return globalStore.getBoolean(key);
@@ -115,11 +115,24 @@ public class ConfigurationPreferenceStore extends PreferenceStore {
 			}
 		}
 		if (contains(key)) {
-			return getInt(key);
+			return super.getInt(key);
 		}
 		if (globalStore.contains(key)) {
 			return globalStore.getInt(key);
 		}
 		return defaultValue;
 	}
+	//  IPreference Like Calls  ---
+    public boolean getBoolean(String name) {
+    	return getAttribute(name, false);    	
+    }
+    
+    public int getInt(String name) {
+    	return getAttribute(name, 0);    	
+    }
+    
+    public String getString(String name) {
+    	return getAttribute(name, "");    	
+    }
+	
 }

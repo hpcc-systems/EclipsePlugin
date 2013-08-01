@@ -206,6 +206,10 @@ public class Platform extends DataSingleton {
 		return "";
 	}
 	
+	public Version getBuildVersion() {
+		return new Version(getBuild());
+	}
+	
 	public Version getVersion() {
 		if (version == null) {
 			version = new Version(getBuild());
@@ -213,7 +217,6 @@ public class Platform extends DataSingleton {
 		return version;
 	}
 	
-
 	/*
  enum WUAction
 {
@@ -228,9 +231,10 @@ public class Platform extends DataSingleton {
     WUActionSize = 8
 };
 	 */	
+
 	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
 		if (isEnabled()) {
-			ClientTools clientTools = ClientTools.get(configuration);
+			ClientTools clientTools = ClientTools.get(this, configuration);
 
 			ECLCompiler compiler = clientTools.getCompiler(); 
 			compiler.setProject(file.getProject());

@@ -12,8 +12,6 @@ import org.hpccsystems.internal.data.ClientTools;
 import org.hpccsystems.internal.data.Data;
 
 public class ECLContentProvider implements ITreeContentProvider {
-	Viewer viewer;
-
 	class ProjectClientToolsElement {
 		IProject project;
 		ClientTools clientTools;
@@ -23,28 +21,12 @@ public class ECLContentProvider implements ITreeContentProvider {
 			this.clientTools = clientTools;
 		}
 
-		IFolder getEclLibraryFolder() {
-			IFolder hiddenLibFolder = project.getFolder(clientTools.getLibraryFolderName());
-			if (!hiddenLibFolder.exists()) {
-				try {
-					hiddenLibFolder.createLink(clientTools.getEclLibraryPath(), IResource.HIDDEN, null);
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
-			}
-			return hiddenLibFolder;
+		Object getEclLibraryFolder() {
+			return new ShortcutFolder(project, clientTools.getLibraryFolderName(true), clientTools.getLibraryFolderName(false), clientTools.getEclLibraryPath());
 		}
 
-		IFolder getEclExampleFolder() {
-			IFolder hiddenExampleFolder = project.getFolder(clientTools.getExamplesFolderName());
-			if (!hiddenExampleFolder.exists()) {
-				try {
-					hiddenExampleFolder.createLink(clientTools.getEclExamplesPath(), IResource.HIDDEN, null);
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
-			}
-			return hiddenExampleFolder;
+		Object getEclExampleFolder() {
+			return new ShortcutFolder(project, clientTools.getExamplesFolderName(true), clientTools.getExamplesFolderName(false), clientTools.getEclExamplesPath());
 		}
 	}
 
@@ -54,7 +36,6 @@ public class ECLContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		this.viewer = viewer;
 	}
 
 	@Override
@@ -73,6 +54,8 @@ public class ECLContentProvider implements ITreeContentProvider {
 			ProjectClientToolsElement pct = (ProjectClientToolsElement)parentElement;
 			retVal.add(pct.getEclLibraryFolder());
 			retVal.add(pct.getEclExampleFolder());
+		} else if (parentElement instanceof ShortcutFolder) {
+			return ((ShortcutFolder)parentElement).getChildren();
 		}
 		return retVal.toArray();
 	}
@@ -94,6 +77,8 @@ public class ECLContentProvider implements ITreeContentProvider {
 			return true;
 		} else if (element instanceof ProjectClientToolsElement) {
 			return true;
+		} else if (element instanceof ShortcutFolder) {
+			return ((ShortcutFolder)element).hasChildren();
 		}
 		return false;
 	}
