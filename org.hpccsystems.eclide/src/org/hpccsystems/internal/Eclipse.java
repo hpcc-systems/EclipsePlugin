@@ -27,12 +27,12 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.ide.IDE;
+import org.hpccsystems.eclide.Workbench;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitsViewer;
 
@@ -131,7 +131,7 @@ public class Eclipse {
 	}
 
 	static public void showHtmlViewer() {
-		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+		IWorkbenchWindow[] windows = Workbench.getWorkbenchWindows();
 		for (int i = 0; i < windows.length; ++i) {
 			final IWorkbenchPage window = windows[i].getActivePage();
 			if (window != null) {
@@ -217,7 +217,7 @@ public class Eclipse {
 	//  Dirty Helpers  ---
 	static protected IResource[] getScopedDirtyResources(IProject[] projects) {
 		HashSet<IResource> dirtyres = new HashSet<IResource>();
-		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+		IWorkbenchWindow[] windows = Workbench.getWorkbenchWindows();
 		for (int l = 0; l < windows.length; l++) {
 			IWorkbenchPage[] pages = windows[l].getPages();
 			for (int i = 0; i < pages.length; i++) {
