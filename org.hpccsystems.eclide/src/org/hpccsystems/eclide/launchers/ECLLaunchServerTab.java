@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.launchers;
 
+import java.rmi.RemoteException;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -66,6 +68,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 				refreshAddress();
 			}
 			if (source == testButton) {
+				refreshServerVersion();
 				refreshBrowser();
 			} else if (source == disableButton) {
 				scheduleUpdateJob();
@@ -90,6 +93,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	protected Text fPasswordText;
 
 	protected Text fAddressText;
+	protected Text fServerVersionText;
+
 	private Button testButton;
 	private Browser browser;
 	
@@ -144,6 +149,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		fAddressText.addModifyListener(fListener);
 		testButton = SWTFactory.createPushButton(group, "Test", null);
 		testButton.addSelectionListener(fListener);
+		SWTFactory.createLabel(group, "Server Version:  ", 1);
+		fServerVersionText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY, 2);
 
 		try {
 			browser = new Browser(group, SWT.BORDER);
@@ -223,6 +230,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
 			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
+			fServerVersionText.setText("");
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -264,6 +272,20 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		url.append("://" + fIPText.getText());
 		url.append(":" + fPortText.getText() + "/");
 		fAddressText.setText(url.toString());
+	}
+
+	void refreshServerVersion() {
+		fServerVersionText.setText("");
+		
+		int port = Integer.parseInt(fPortText.getText());
+		
+		Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
+		try {
+			String build = platform.getBuild(fUserText.getText(), fPasswordText.getText());
+			fServerVersionText.setText(build);
+		} catch (RemoteException e) {
+			fServerVersionText.setText(e.getMessage());
+		}
 	}
 
 	void refreshBrowser() {
