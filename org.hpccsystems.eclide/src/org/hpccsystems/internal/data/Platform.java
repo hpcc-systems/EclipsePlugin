@@ -69,25 +69,26 @@ import org.hpccsystems.ws.wssmc.WsSMCServiceSoap;
 
 public class Platform extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
-	public static Platform get(String ip, int port) {
+	public static Platform get(boolean ssl, String ip, int port) {
 		if (ip == null || ip.isEmpty()) {
 			return null;
 		}
 
-		return (Platform)All.get(new Platform(ip, port));
+		return (Platform)All.get(new Platform(ssl, ip, port));
 	}
-	public static Platform getNoCreate(String ip, int port) {
+	public static Platform getNoCreate(boolean ssl, String ip, int port) {
 		if (ip == null || ip.isEmpty()) {
 			return null;
 		}
 
-		return (Platform)All.getNoCreate(new Platform(ip, port));
+		return (Platform)All.getNoCreate(new Platform(ssl, ip, port));
 	}
 	public static void remove(Platform p) {
 		All.remove(p);
 	}
 
 	public static final String P_DISABLED = "disabledConfig";
+	public static final String P_SSL = "sslConfig";
 	public static final String P_IP = "ipLaunchConfig";
 	public static final String P_PORT = "portLaunchConfig";
 	public static final String P_USER = "userLaunchConfig";
@@ -100,6 +101,7 @@ public class Platform extends DataSingleton {
 	private String owner;
 	private boolean isDisabled;
 	private boolean isTempDisabled;
+	private boolean ssl;
 	private String ip;
 	private int port;
 	private Version version;
@@ -112,7 +114,8 @@ public class Platform extends DataSingleton {
 
 	static int LATENCY_TEST = 0;
 
-	Platform(String ip, int port) {
+	Platform(boolean ssl, String ip, int port) {
+		this.ssl = ssl;
 		this.ip = ip;
 		this.port = port;
 		isDisabled = true;
@@ -134,6 +137,7 @@ public class Platform extends DataSingleton {
 		owner = launchConfiguration.getAttribute(P_USER, "");
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
 		isTempDisabled = isDisabled;
+		ssl = launchConfiguration.getAttribute(P_SSL, false);
 		ip = launchConfiguration.getAttribute(P_IP, "");
 		port = launchConfiguration.getAttribute(P_PORT, 8010);
 	}
@@ -170,6 +174,10 @@ public class Platform extends DataSingleton {
 
 	public boolean isEnabled() {
 		return !isDisabled();
+	}
+
+	public String getProtocol() {
+		return ssl ? "https" : "http";
 	}
 
 	public String getIP() {
@@ -609,7 +617,7 @@ public class Platform extends DataSingleton {
 	}
 
 	public URL getURL(String service) throws MalformedURLException {
-		return new URL("http", getIP(), getPort(), "/" + service);
+		return new URL(getProtocol(), getIP(), getPort(), "/" + service);
 	}
 
 	public URL getURL(String service, String method) throws MalformedURLException {
@@ -741,13 +749,15 @@ public class Platform extends DataSingleton {
 		Platform that = (Platform)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(getIP(), that.getIP()) &&
+		return 	EqualsUtil.areEqual(getProtocol(), that.getProtocol()) &&
+				EqualsUtil.areEqual(getIP(), that.getIP()) &&
 				EqualsUtil.areEqual(getPort(), that.getPort());
 	}
 
 	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
+		result = HashCodeUtil.hash(result, getProtocol());
 		result = HashCodeUtil.hash(result, getIP());
 		result = HashCodeUtil.hash(result, getPort());
 		return result;
