@@ -18,6 +18,7 @@ import java.util.HashSet;
 
 import javax.xml.rpc.ServiceException;
 
+import org.apache.axis.client.Stub;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -212,6 +213,13 @@ public class Platform extends DataSingleton {
 			e.printStackTrace();
 		}
 		return "";
+	}
+	
+	public String getBuild(String user, String password) throws org.hpccsystems.ws.wssmc.ArrayOfEspException, RemoteException {
+		WsSMCServiceSoap service = getWsSMCServiceSoap(user, password);
+		Activity request = new Activity();
+		ActivityResponse response = service.activity(request);
+		return response.getBuild();
 	}
 	
 	public Version getBuildVersion() {
@@ -632,9 +640,15 @@ public class Platform extends DataSingleton {
 		return getURL("esp/files/stub.htm?Widget=" + widget + (params.isEmpty() ? "" : "&" + params));
 	}
 	
-	void initStub(org.apache.axis.client.Stub stub) {
-		stub.setUsername(getUser());
-		stub.setPassword(getPassword());
+	private void initStub(Stub stub, String user, String password) {
+		stub.setUsername(user);
+		stub.setPassword(password);
+		stub.setTimeout(180 * 1000);
+		stub.setMaintainSession(true);
+	}
+	
+	void initStub(Stub stub) {
+		initStub(stub, getUser(), getPassword());
 		stub.setTimeout(180 * 1000);
 		stub.setMaintainSession(true);
 	}
@@ -720,21 +734,23 @@ public class Platform extends DataSingleton {
 		return null;	
 	}
 
-	public WsSMCServiceSoap getWsSMCServiceSoap() {
+	private WsSMCServiceSoap getWsSMCServiceSoap(String user, String password) {
 		latencyTest();
 		WsSMCLocator locator = new WsSMCLocator();
 		try {
 			WsSMCServiceSoap service = locator.getWsSMCServiceSoap(getURL("WsSMC"));
-			initStub((org.apache.axis.client.Stub)service);
+			initStub((org.apache.axis.client.Stub)service, user, password);
 			return service;
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;	
+	}
+
+	public WsSMCServiceSoap getWsSMCServiceSoap() {
+		return getWsSMCServiceSoap(getUser(), getPassword());
 	}
 
 	@Override 
