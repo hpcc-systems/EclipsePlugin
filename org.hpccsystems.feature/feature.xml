@@ -2,7 +2,7 @@
 <feature
       id="ECL_Language"
       label="ECL Language"
-      version="3.10.4.qualifier">
+      version="4.0.2.001">
 
    <description url="http://www.hpccsystems.com">
       Enterprise Control Language (ECL) is the query and control language developed to manage all aspects of the massive data joins, sorts and builds that truly differentiate HPCC (High Performance Computing Cluster) from other technologies in its ability to provide flexible data analysis on a massive scale.
