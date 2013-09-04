@@ -289,6 +289,12 @@
 		id="org.hpccsystems.eclide.commands.toggleComent"
 		name="Toggle Comment">
 	</command>
+	<command 
+		categoryId="org.hpccsystems.eclide.commands.category"
+		description="Check Syntax (Auto-save as necessary)"
+		id="org.hpccsystems.eclide.commands.checkSyntax"
+		name="Check Syntax">
+	</command>
  </extension>
  <extension
        point="org.eclipse.ui.handlers">
@@ -299,6 +305,10 @@
     <handler
           class="org.hpccsystems.eclide.handlers.ToggleCommentHandler"
           commandId="org.hpccsystems.eclide.commands.toggleComent">
+    </handler>
+    <handler
+          class="org.hpccsystems.eclide.handlers.CheckSyntaxHandler"
+          commandId="org.hpccsystems.eclide.commands.checkSyntax">
     </handler>
  </extension>
  <extension point="org.eclipse.ui.menus">
@@ -323,6 +333,17 @@
 				style="push">
 			</command>
 		</menu>
+		<menu 
+			id="edit" 
+			label="Edit" 
+			mnemonic="E">
+			<command 
+				commandId="org.hpccsystems.eclide.commands.checkSyntax" 
+				id="org.hpccsystems.eclide.menus.checkSyntax"
+				label="Check Syntax"
+				style="push">
+			</command>
+		</menu>
     </menuContribution>
 	<menuContribution locationURI="popup:org.eclipse.ui.popup.any?before=additions">
     	<command 
@@ -344,6 +365,16 @@
 				</with>
 			</visibleWhen>
 		</command>
+	<command 
+		commandId="org.hpccsystems.eclide.commands.checkSyntax" 
+		mnemonic="C">
+			<visibleWhen checkEnabled="false">
+				<with variable="activePartId">
+					<equals value="org.hpccsystems.eclide.editors.ECLWindow">
+					</equals>
+				</with>
+			</visibleWhen>
+		</command>
       </menuContribution>
    </extension>
    <extension point="org.eclipse.ui.bindings">
@@ -358,6 +389,12 @@
         contextId="org.hpccsystems.eclide.eclideScope"
         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
         sequence="Ctrl+/">
+		</key>
+		<key
+			commandId="org.hpccsystems.eclide.commands.checkSyntax"
+			contextId="org.hpccsystems.eclide.eclideScope"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			sequence="F7">
 		</key>
 	</extension>
 	<extension point="org.eclipse.ui.contexts">
