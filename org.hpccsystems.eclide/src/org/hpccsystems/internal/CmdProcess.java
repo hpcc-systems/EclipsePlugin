@@ -73,8 +73,8 @@ public class CmdProcess {
 			pb.directory(workingPath.toFile());
 			Process p = pb.start();
 
-			final BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			final BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream(), "UTF-8"));
+			final BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream(), "UTF-8"));
 
 			Runnable readStdIn = new Runnable() {
 				@Override
