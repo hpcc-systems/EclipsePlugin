@@ -404,4 +404,11 @@
 			parentId="org.eclipse.ui.textEditorScope">
 		</context>
 	</extension>
+    <extension point="org.eclipse.ui.ide.projectNatureImages">
+        <image
+            icon="icons/ecl.png"
+            id="org.hpccsystems.eclide.image"
+            natureId="org.hpccsystems.eclide.eclNature">
+        </image>
+    </extension>
 </plugin>

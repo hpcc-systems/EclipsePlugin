@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectNature;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.hpccsystems.internal.data.ClientTools;
@@ -49,8 +51,16 @@ public class ECLContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		if (parentElement instanceof IProject) {
-			for (ClientTools ct : Data.get().GetClientTools()) {
-				retVal.add(new ProjectClientToolsElement((IProject)parentElement, ct));
+			IProject project = (IProject)parentElement;
+			IProjectNature nature = null;
+			try {
+				nature = project.getNature("org.hpccsystems.eclide.eclNature");
+			} catch (CoreException e) {
+			}
+			if (nature != null) {
+				for (ClientTools ct : Data.get().GetClientTools()) {
+					retVal.add(new ProjectClientToolsElement((IProject)parentElement, ct));
+				}
 			}
 		} else if (parentElement instanceof ProjectClientToolsElement) {
 			ProjectClientToolsElement pct = (ProjectClientToolsElement)parentElement;
