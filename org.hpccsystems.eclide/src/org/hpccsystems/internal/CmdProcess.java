@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.console.MessageConsoleStream;
 
 public class CmdProcess {
@@ -36,7 +37,7 @@ public class CmdProcess {
 
 	public CmdProcess(IPath workingPath, IPath additionalPath, IProcessOutput handler, MessageConsoleStream consoleOut) {
 		if (workingPath == null) {
-			workingPath = additionalPath;
+			workingPath = new Path(System.getProperty("java.io.tmpdir"));
 		}
 		this.workingPath = workingPath;
 		this.additionalPath = additionalPath;

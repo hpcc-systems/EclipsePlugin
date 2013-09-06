@@ -13,10 +13,11 @@ package org.hpccsystems.eclide.builder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -41,6 +42,16 @@ public class ECLCompiler {
 	final static String noCompiler = "Error:  Unable to locate eclcc.";
 	final static String badConfigurationCode = "1004";
 	final static String badConfiguration = "Error:  Invalid compiler configuration (eclcc)";
+	
+	public final static String CL_PATH = "CL_PATH";
+	public final static String ECLBUNDLE_PATH = "ECLCC_ECLBUNDLE_PATH";
+	public final static String ECLINCLUDE_PATH = "ECLCC_ECLINCLUDE_PATH";
+	public final static String ECLLIBRARY_PATH = "ECLCC_ECLLIBRARY_PATH";
+	public final static String INCLUDE_PATH = "ECLCC_INCLUDE_PATH";
+	public final static String LIBRARY_PATH = "ECLCC_LIBRARY_PATH";
+	public final static String PLUGIN_PATH = "ECLCC_PLUGIN_PATH";
+	public final static String TPL_PATH = "ECLCC_TPL_PATH";
+	public final static String HPCC_FILEHOOKS_PATH = "HPCC_FILEHOOKS_PATH";
 
 	String QUOTE = "";
 
@@ -58,7 +69,8 @@ public class ECLCompiler {
 	IProject[] referencedProjects;
 	IPath projectPath;
 	IPath workingPath;
-	IPath rootFolder;	
+	IPath rootFolder;
+	Map<String, IPath> paths; 	
 
 	//  Prefs Info ---
 	String argsCommon;
@@ -400,20 +412,27 @@ public class ECLCompiler {
 		return "";
 	}
 
-	public IFolder getLibraryFolder() {
-		IFolder retVal = project.getFolder("ECL Library (" + getLanguageVersion() + ")");
-		if (!retVal.exists()) {
-			try {
-				if (OS.isWindowsPlatform()) {
-					retVal.createLink(binPath.append("ecllibrary"), IResource.HIDDEN, null);
-				} else {
-					retVal.createLink(binPath.append("../share/ecllibrary"), IResource.HIDDEN, null);
+	synchronized Map<String, IPath> getPaths() {
+		if (paths == null) {
+			paths = new HashMap<String, IPath>();
+
+			CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "-showpaths", "");
+			BasicHandler handler = new BasicHandler();
+			CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+			process.exec(cmdArgs);
+			String pathString = handler.sbOut.toString();
+			String[] pathArray = pathString.replace("\r\n", "\n").replace("\r", "\n").split("\n");
+			for(String path: pathArray) {
+				String[] pathPair = path.split("=");
+				if (pathPair.length == 2){
+					paths.put(pathPair[0], new Path(pathPair[1]));
 				}
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
-		return retVal;
+		return paths;
+	}
+	
+	public IPath getPath(String type) {
+		return getPaths().get(type);
 	}
 }
