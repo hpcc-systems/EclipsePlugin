@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.hpccsystems.internal.data.ClientTools;
@@ -27,6 +25,10 @@ public class ECLContentProvider implements ITreeContentProvider {
 
 		Object getEclExampleFolder() {
 			return new ShortcutFolder(project, clientTools.getExamplesFolderName(true), clientTools.getExamplesFolderName(false), clientTools.getEclExamplesPath());
+		}
+
+		public Object getEclBundlesFolder() {
+			return new ShortcutFolder(project, clientTools.getBundlesFolderName(true), clientTools.getBundlesFolderName(false), clientTools.getEclBundlesPath());
 		}
 	}
 
@@ -53,6 +55,7 @@ public class ECLContentProvider implements ITreeContentProvider {
 		} else if (parentElement instanceof ProjectClientToolsElement) {
 			ProjectClientToolsElement pct = (ProjectClientToolsElement)parentElement;
 			retVal.add(pct.getEclLibraryFolder());
+			retVal.add(pct.getEclBundlesFolder());
 			retVal.add(pct.getEclExampleFolder());
 		} else if (parentElement instanceof ShortcutFolder) {
 			return ((ShortcutFolder)parentElement).getChildren();
