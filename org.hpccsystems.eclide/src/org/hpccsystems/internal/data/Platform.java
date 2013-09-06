@@ -246,7 +246,19 @@ public class Platform extends DataSingleton {
     WUActionResume = 7, 
     WUActionSize = 8
 };
-	 */	
+	 */
+	protected String hackUnicodeInXMLForAxisOneAndESP(String src) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < src.length(); ++i) {
+			int charVal = src.codePointAt(i);
+			if (charVal > 127) {
+				sb.append("&#x" + Integer.toString(charVal, 16) + ";");
+			} else {
+				sb.append(src.charAt(i));
+			}
+		}
+		return sb.toString();
+	}
 
 	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
 		if (isEnabled()) {
@@ -261,7 +273,7 @@ public class Platform extends DataSingleton {
 					Workunit.All.pushTransaction("Platform.submit");
 					WsWorkunitsServiceSoap service = getWsWorkunitsService();
 					WUCreateAndUpdate request = new WUCreateAndUpdate();
-					request.setQueryText(archive);
+					request.setQueryText(hackUnicodeInXMLForAxisOneAndESP(archive));
 					request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
 					try {
 						if (configuration.getAttribute(P_COMPILEONLY, false)) {
