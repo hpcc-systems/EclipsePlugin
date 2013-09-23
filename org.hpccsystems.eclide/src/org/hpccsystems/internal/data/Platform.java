@@ -263,7 +263,9 @@ public class Platform extends DataSingleton {
 	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
 		if (isEnabled()) {
 			ClientTools clientTools = ClientTools.get(this, configuration);
-
+			if (clientTools == null) {
+				return null;
+			}
 			ECLCompiler compiler = clientTools.getCompiler(); 
 			compiler.setProject(file.getProject());
 			String archive = compiler.getArchive(file);

@@ -52,6 +52,9 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		} else {
 			ct = ClientTools.findBestMatch(p.getBuildVersion());
 		}
+		if (ct == null) {
+			return null;
+		}
 		return (ClientTools)All.get(ct);
 	}
 
@@ -282,13 +285,21 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 			return matched;
 		}
 
-		//  No good match, just return latest  ---
-		matched = knownClientTools.get(0);
-		try {
-			eclccConsoleWriter.write("Compiler/Server mismatch:\nCompiler:\t" + matched.getBuildVersion().toString() + "\nServer:\t" + version.toString() + 
-					"\n(To prevent this message from showing, either download and install the matching client tools package or override the default compiler settings in the preferences window)\n");
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (knownClientTools.isEmpty()) {
+			try {
+				eclccConsoleWriter.write("Unable to locate local eclcc.  Please download and install suitable ClientTools from hpccsystems.com.\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			//  No good match, just return latest  ---
+			matched = knownClientTools.get(0);
+			try {
+				eclccConsoleWriter.write("Compiler/Server mismatch:\nCompiler:\t" + matched.getBuildVersion().toString() + "\nServer:\t" + version.toString() + 
+						"\n(To prevent this message from showing, either download and install the matching client tools package or override the default compiler settings in the preferences window)\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return matched;
 	}

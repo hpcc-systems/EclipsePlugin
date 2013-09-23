@@ -59,7 +59,9 @@ public class ECLContentProvider implements ITreeContentProvider {
 			}
 			if (nature != null) {
 				for (ClientTools ct : Data.get().GetClientTools()) {
-					retVal.add(new ProjectClientToolsElement((IProject)parentElement, ct));
+					if (ct != null) {
+						retVal.add(new ProjectClientToolsElement((IProject)parentElement, ct));
+					}
 				}
 			}
 		} else if (parentElement instanceof ProjectClientToolsElement) {
