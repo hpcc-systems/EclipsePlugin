@@ -115,11 +115,15 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	}
 
 	public IPath getEclLibraryPath() {
-		return rootPath.append("share/ecllibrary");
+		return getCompiler().getPath(ECLCompiler.ECLLIBRARY_PATH);
 	}
 
 	public IPath getEclExamplesPath() {
 		return rootPath.append("examples");
+	}
+	
+	public IPath getEclBundlesPath() {
+		return getCompiler().getPath(ECLCompiler.ECLBUNDLE_PATH);
 	}
 
 	public ECLCompiler getCompiler() {
@@ -180,6 +184,10 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 
 	public String getLibraryFolderName(boolean includeVersion) {
 		return "ECL Library" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
+	}
+
+	public String getBundlesFolderName(boolean includeVersion) {
+		return "Bundles" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
 	}
 
 	public String getExamplesFolderName(boolean includeVersion) {

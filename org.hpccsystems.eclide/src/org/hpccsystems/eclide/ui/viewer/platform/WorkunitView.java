@@ -39,6 +39,9 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 	@Override
 	public String getText() {
 		if (workunit.isComplete()) {
+			if (!workunit.getJobname().isEmpty()) {
+				return workunit.getWuid() + " (" + workunit.getJobname() + ")";
+			}
 			return workunit.getWuid();
 		}
 		return workunit.getWuid() + " (" + workunit.getState() + ")";

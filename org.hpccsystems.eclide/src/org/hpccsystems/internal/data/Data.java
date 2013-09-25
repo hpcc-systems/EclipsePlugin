@@ -159,8 +159,14 @@ public class Data extends Observable {
 	//  Platform  ---
 	public Platform GetPlatform(ILaunchConfiguration launchConfiguration, boolean noCreate) {
 		Platform retVal = null;
+		boolean ssl = false;
 		String ip = "";
 		int port = 0;
+		try {
+			ssl = launchConfiguration.getAttribute(Platform.P_SSL, false);
+		} catch (CoreException e) {
+		} 
+		
 		try {
 			ip = launchConfiguration.getAttribute(Platform.P_IP, "");
 		} catch (CoreException e) {
@@ -177,9 +183,9 @@ public class Data extends Observable {
 
 		if (!ip.isEmpty() && port != 0) {
 			if (noCreate) {
-				retVal = Platform.getNoCreate(ip, port);
+				retVal = Platform.getNoCreate(ssl, ip, port);
 			} else {
-				retVal = Platform.get(ip, port);
+				retVal = Platform.get(ssl, ip, port);
 			}
 			retVal.update(launchConfiguration);	
 		}
@@ -194,8 +200,8 @@ public class Data extends Observable {
 		return GetPlatform(launchConfiguration, true);
 	}
 
-	public Platform GetPlatformNoCreate(String ip, int port) {
-		return Platform.getNoCreate(ip, port);
+	public Platform GetPlatformNoCreate(boolean ssl, String ip, int port) {
+		return Platform.getNoCreate(ssl, ip, port);
 	}
 
 	public final Platform[] getPlatforms() {

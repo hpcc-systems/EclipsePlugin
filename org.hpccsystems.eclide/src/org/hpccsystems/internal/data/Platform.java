@@ -18,6 +18,7 @@ import java.util.HashSet;
 
 import javax.xml.rpc.ServiceException;
 
+import org.apache.axis.client.Stub;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -69,25 +70,26 @@ import org.hpccsystems.ws.wssmc.WsSMCServiceSoap;
 
 public class Platform extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
-	public static Platform get(String ip, int port) {
+	public static Platform get(boolean ssl, String ip, int port) {
 		if (ip == null || ip.isEmpty()) {
 			return null;
 		}
 
-		return (Platform)All.get(new Platform(ip, port));
+		return (Platform)All.get(new Platform(ssl, ip, port));
 	}
-	public static Platform getNoCreate(String ip, int port) {
+	public static Platform getNoCreate(boolean ssl, String ip, int port) {
 		if (ip == null || ip.isEmpty()) {
 			return null;
 		}
 
-		return (Platform)All.getNoCreate(new Platform(ip, port));
+		return (Platform)All.getNoCreate(new Platform(ssl, ip, port));
 	}
 	public static void remove(Platform p) {
 		All.remove(p);
 	}
 
 	public static final String P_DISABLED = "disabledConfig";
+	public static final String P_SSL = "sslConfig";
 	public static final String P_IP = "ipLaunchConfig";
 	public static final String P_PORT = "portLaunchConfig";
 	public static final String P_USER = "userLaunchConfig";
@@ -100,6 +102,7 @@ public class Platform extends DataSingleton {
 	private String owner;
 	private boolean isDisabled;
 	private boolean isTempDisabled;
+	private boolean ssl;
 	private String ip;
 	private int port;
 	private Version version;
@@ -112,7 +115,8 @@ public class Platform extends DataSingleton {
 
 	static int LATENCY_TEST = 0;
 
-	Platform(String ip, int port) {
+	Platform(boolean ssl, String ip, int port) {
+		this.ssl = ssl;
 		this.ip = ip;
 		this.port = port;
 		isDisabled = true;
@@ -134,6 +138,7 @@ public class Platform extends DataSingleton {
 		owner = launchConfiguration.getAttribute(P_USER, "");
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
 		isTempDisabled = isDisabled;
+		ssl = launchConfiguration.getAttribute(P_SSL, false);
 		ip = launchConfiguration.getAttribute(P_IP, "");
 		port = launchConfiguration.getAttribute(P_PORT, 8010);
 	}
@@ -172,6 +177,10 @@ public class Platform extends DataSingleton {
 		return !isDisabled();
 	}
 
+	public String getProtocol() {
+		return ssl ? "https" : "http";
+	}
+
 	public String getIP() {
 		return ip;
 	}
@@ -206,6 +215,13 @@ public class Platform extends DataSingleton {
 		return "";
 	}
 	
+	public String getBuild(String user, String password) throws org.hpccsystems.ws.wssmc.ArrayOfEspException, RemoteException {
+		WsSMCServiceSoap service = getWsSMCServiceSoap(user, password);
+		Activity request = new Activity();
+		ActivityResponse response = service.activity(request);
+		return response.getBuild();
+	}
+	
 	public Version getBuildVersion() {
 		return new Version(getBuild());
 	}
@@ -230,7 +246,19 @@ public class Platform extends DataSingleton {
     WUActionResume = 7, 
     WUActionSize = 8
 };
-	 */	
+	 */
+	protected String hackUnicodeInXMLForAxisOneAndESP(String src) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < src.length(); ++i) {
+			int charVal = src.codePointAt(i);
+			if (charVal > 127) {
+				sb.append("&#x" + Integer.toString(charVal, 16) + ";");
+			} else {
+				sb.append(src.charAt(i));
+			}
+		}
+		return sb.toString();
+	}
 
 	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
 		if (isEnabled()) {
@@ -245,7 +273,7 @@ public class Platform extends DataSingleton {
 					Workunit.All.pushTransaction("Platform.submit");
 					WsWorkunitsServiceSoap service = getWsWorkunitsService();
 					WUCreateAndUpdate request = new WUCreateAndUpdate();
-					request.setQueryText(archive);
+					request.setQueryText(hackUnicodeInXMLForAxisOneAndESP(archive));
 					request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
 					try {
 						if (configuration.getAttribute(P_COMPILEONLY, false)) {
@@ -609,7 +637,7 @@ public class Platform extends DataSingleton {
 	}
 
 	public URL getURL(String service) throws MalformedURLException {
-		return new URL("http", getIP(), getPort(), "/" + service);
+		return new URL(getProtocol(), getIP(), getPort(), "/" + service);
 	}
 
 	public URL getURL(String service, String method) throws MalformedURLException {
@@ -624,9 +652,15 @@ public class Platform extends DataSingleton {
 		return getURL("esp/files/stub.htm?Widget=" + widget + (params.isEmpty() ? "" : "&" + params));
 	}
 	
-	void initStub(org.apache.axis.client.Stub stub) {
-		stub.setUsername(getUser());
-		stub.setPassword(getPassword());
+	private void initStub(Stub stub, String user, String password) {
+		stub.setUsername(user);
+		stub.setPassword(password);
+		stub.setTimeout(180 * 1000);
+		stub.setMaintainSession(true);
+	}
+	
+	void initStub(Stub stub) {
+		initStub(stub, getUser(), getPassword());
 		stub.setTimeout(180 * 1000);
 		stub.setMaintainSession(true);
 	}
@@ -712,21 +746,23 @@ public class Platform extends DataSingleton {
 		return null;	
 	}
 
-	public WsSMCServiceSoap getWsSMCServiceSoap() {
+	private WsSMCServiceSoap getWsSMCServiceSoap(String user, String password) {
 		latencyTest();
 		WsSMCLocator locator = new WsSMCLocator();
 		try {
 			WsSMCServiceSoap service = locator.getWsSMCServiceSoap(getURL("WsSMC"));
-			initStub((org.apache.axis.client.Stub)service);
+			initStub((org.apache.axis.client.Stub)service, user, password);
 			return service;
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;	
+	}
+
+	public WsSMCServiceSoap getWsSMCServiceSoap() {
+		return getWsSMCServiceSoap(getUser(), getPassword());
 	}
 
 	@Override 
@@ -741,13 +777,15 @@ public class Platform extends DataSingleton {
 		Platform that = (Platform)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(getIP(), that.getIP()) &&
+		return 	EqualsUtil.areEqual(getProtocol(), that.getProtocol()) &&
+				EqualsUtil.areEqual(getIP(), that.getIP()) &&
 				EqualsUtil.areEqual(getPort(), that.getPort());
 	}
 
 	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
+		result = HashCodeUtil.hash(result, getProtocol());
 		result = HashCodeUtil.hash(result, getIP());
 		result = HashCodeUtil.hash(result, getPort());
 		return result;

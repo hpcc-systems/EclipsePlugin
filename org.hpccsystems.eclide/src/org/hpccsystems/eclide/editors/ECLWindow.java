@@ -13,8 +13,6 @@ package org.hpccsystems.eclide.editors;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
@@ -42,8 +40,6 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IEditorInput;
@@ -58,6 +54,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
+import org.hpccsystems.eclide.editors.ECLWindow.ACTION;
 import org.hpccsystems.eclide.ui.viewer.ECLContentOutlinePage;
 import org.hpccsystems.eclide.ui.viewer.platform.GraphView;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions;
@@ -90,9 +87,16 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	boolean workunitsLoaded = false;	
 	private ItemView delayedShowItemView;	
 
-	Map<Workunit, WorkunitTabItem> workunitTabMap;
+	public static enum ACTION {
+		UNKNOWN,
+		CLOSE,
+		CLOSEOTHERS,
+		CLOSEALL,
+		LAST
+	}
 
 	PlatformActions actions;
+	ECLWindowActions thisActions;
 
 	public ECLWindow() {
 		super();
@@ -100,7 +104,6 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		data = null;
 		workunitFolder = null;
 		children = new LazyChildLoader<ItemView>();
-		workunitTabMap = new HashMap<Workunit, WorkunitTabItem>();
 
 		actions = new PlatformActions(new IPlatformUI() {
 
@@ -119,16 +122,16 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				return retVal;
 			}
 		});
+		thisActions = new ECLWindowActions(this);
 	}
 
-	WorkunitTabItem createItem(Control control, WorkunitView wuti) {
+	WorkunitTabItem createWorkunitTabItem(WorkunitView wuti) {
 		int index = getPageCount();
-		return createItem(index, control, wuti);
+		return createWorkunitTabItem(index, wuti);
 	}
 
-	WorkunitTabItem createItem(int index, Control control, WorkunitView wuView) {
-		WorkunitTabItem item = new WorkunitTabItem(workunitFolder, SWT.NONE, index, wuView);
-		return item;
+	WorkunitTabItem createWorkunitTabItem(int index, WorkunitView wuView) {
+		return new WorkunitTabItem(workunitFolder, SWT.CLOSE, index, wuView);
 	}
 
 	void createEditorPage() {
@@ -146,32 +149,50 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 					e.getStatus());
 		}
 	}
+	
+	WorkunitTabItem findWorkunitTabItem(Workunit workunit) {
+		for (int i = 0; i < workunitFolder.getItemCount(); ++i) {
+			CTabItem tabItem = workunitFolder.getItem(i);
+			if (tabItem instanceof WorkunitTabItem) {
+				WorkunitTabItem wuTabItem = (WorkunitTabItem)tabItem;
+				if (wuTabItem.getWorkunit().equals(workunit)) {
+					return wuTabItem;
+				}
+			}
+		}
+		return null;
+	}
+	
 
 	WorkunitTabItem createWorkunitPage(WorkunitView wuti, boolean addToEnd) {
-		if (workunitTabMap.containsKey(wuti.getWorkunit())) {
-			return workunitTabMap.get(wuti.getWorkunit());
+		WorkunitTabItem wuTabItem = findWorkunitTabItem(wuti.getWorkunit());
+		if (wuTabItem != null) {
+			return wuTabItem; 
 		}
-		return addToEnd ? createItem(getContainer(), wuti) : createItem(1, getContainer(), wuti);
+		return addToEnd ? createWorkunitTabItem(wuti) : createWorkunitTabItem(1, wuti);
 	}
 
-	WorkunitTabItem selectTab(Workunit workunit) {
-		if (workunitTabMap.containsKey(workunit)) {
-			WorkunitTabItem tabItem = workunitTabMap.get(workunit);
-			Composite container = getContainer();
-			if (container instanceof CTabFolder) {
-			}
-			workunitFolder.setSelection(tabItem);
-			return tabItem;
+	WorkunitTabItem selectTab(WorkunitView wuti, boolean createIfMissing) {
+		WorkunitTabItem retVal = findWorkunitTabItem(wuti.getWorkunit());
+		if (retVal != null) {
+			workunitFolder.setSelection(retVal);
+			return retVal;
+		}
+		if (createIfMissing) {
+			retVal = createWorkunitTabItem(1, wuti);
+			workunitFolder.setSelection(retVal);
+			return retVal;
 		}
 		return null;
 	}
 
-	public void showItemView(ItemView item, boolean createTab) {
+	public void showItemView(ItemView item, boolean createIfMissing) {
 		if (!workunitsLoaded) {
-			if (createTab) {
+			if (createIfMissing) {
 				WorkunitView wuView = item.getWorkunitAncestor();
-				if (!workunitTabMap.containsKey(wuView.getWorkunit())) {
-					workunitTabMap.put(wuView.getWorkunit(), new WorkunitTabItem(workunitFolder, SWT.NONE, 1, wuView));
+				WorkunitTabItem wuTabItem = findWorkunitTabItem(wuView.getWorkunit());
+				if (wuTabItem == null) {
+					createWorkunitTabItem(1, wuView);
 				}
 			} else {			
 				delayedShowItemView = item;
@@ -181,27 +202,21 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 		delayedShowItemView = null;
 		if (item instanceof WorkunitView) {
-			showEclWatch(((WorkunitView)(item)).getWorkunit(), item); 
-			return;
-		} else if (item instanceof ResultView) {
-			showEclWatch(((ResultView)item).getResult().getWorkunit(), item); 
-			return;
-		} else if (item instanceof GraphView) {
-			showEclWatch(((GraphView)item).getGraph().getWorkunit(), item);
+			showEclWatch((WorkunitView)(item), item, createIfMissing); 
 			return;
 		}
 		//  Descendant of WorkunitView?  ---
 		WorkunitView wuView = item.getWorkunitAncestor();
 		if (wuView != null) {
-			showEclWatch(wuView.getWorkunit(), item);
+			showEclWatch(wuView, item, createIfMissing);
 		}
 	}
 
-	void showEclWatch(Workunit workunit, ItemView item) {
-		WorkunitTabItem tabItem = selectTab(workunit);
+	void showEclWatch(WorkunitView wuView, ItemView item, boolean createIfMissing) {
+		WorkunitTabItem tabItem = selectTab(wuView, createIfMissing);
 		if (tabItem != null) {
 			try {
-				boolean hasNewEclWatch = workunit.getPlatform().getVersion().major >= 4;
+				boolean hasNewEclWatch = wuView.getWorkunit().getPlatform().getVersion().major >= 4;
 				tabItem.navigateTo(item.getWebPageURL(hasNewEclWatch).toString(), item.getUser(), item.getPassword());
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
@@ -210,7 +225,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	}
 
 	void showTextItem(TextItemView textItemView) {
-		WorkunitTabItem tabItem = selectTab(textItemView.getWorkunit());
+		WorkunitTabItem tabItem = selectTab(textItemView.getWorkunitAncestor(), false);
 		if (tabItem != null) {
 			tabItem.setQuery(textItemView.getQueryText());
 		}
@@ -464,8 +479,9 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 				for (Object item : children.get().clone()) {
 					if (item instanceof WorkunitView) {
 						WorkunitView wuView = (WorkunitView)item;
-						if (!workunitTabMap.containsKey(wuView.getWorkunit())) {
-							workunitTabMap.put(wuView.getWorkunit(), new WorkunitTabItem(workunitFolder, SWT.NONE, pos, wuView));
+						WorkunitTabItem wuTabItem = findWorkunitTabItem(wuView.getWorkunit());
+						if (wuTabItem == null) {
+							createWorkunitTabItem(1, wuView);
 						}
 						++pos;
 					}
@@ -506,7 +522,12 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		mgr.add(new Separator());
 		mgr.add(actions.cloneItemAction);
 		mgr.add(actions.deleteItemAction);
+		mgr.add(new Separator());
+		mgr.add(thisActions.close);
+		mgr.add(thisActions.closeOthers);
+		mgr.add(thisActions.closeAll);
 		actions.setState();
+		thisActions.setState();
 	}
 
 	public void gotoLine(int lineNumber) {
@@ -522,6 +543,54 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 					((ECLEditor)editor).selectAndReveal(lineInfo.getOffset(), 0);
 				}
 			}
+		}
+	}
+
+	public boolean canPerform(ACTION action) {
+		CTabItem tabItem = workunitFolder.getSelection();
+		switch(action) {
+		case CLOSE:
+			if (tabItem instanceof WorkunitTabItem) {
+				return true;
+			}
+			break;
+		case CLOSEOTHERS:
+			if (tabItem instanceof WorkunitTabItem) {
+				return workunitFolder.getItemCount() > 2;
+			}
+			return workunitFolder.getItemCount() > 1;
+		case CLOSEALL:
+			return workunitFolder.getItemCount() > 1;
+		}
+		return false;
+	}
+
+	public void perform(ACTION action) {
+		switch(action) {
+		case CLOSE:
+			CTabItem tabItem = workunitFolder.getSelection();
+			if (tabItem instanceof WorkunitTabItem) {
+				tabItem.dispose();
+			}
+			break;
+		case CLOSEOTHERS:
+			CTabItem selectedItem = workunitFolder.getSelection();
+			for (int i = workunitFolder.getItemCount(); i > 0 ; --i) {
+				CTabItem tabItem2 = workunitFolder.getItem(i - 1);
+				if (tabItem2 instanceof WorkunitTabItem && !tabItem2.equals(selectedItem)) {
+					tabItem2.dispose();
+				}
+			}
+			break;
+		case CLOSEALL:
+			workunitFolder.setSelection(0);
+			for (int i = workunitFolder.getItemCount(); i > 0 ; --i) {
+				CTabItem tabItem2 = workunitFolder.getItem(i - 1);
+				if (tabItem2 instanceof WorkunitTabItem) {
+					tabItem2.dispose();
+				}
+			}
+			break;
 		}
 	}
 }
