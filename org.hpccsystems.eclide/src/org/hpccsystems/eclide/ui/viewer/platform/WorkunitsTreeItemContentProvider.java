@@ -62,7 +62,7 @@ class WorkunitsTreeItemContentProvider extends TreeItemContentProvider {
 		Workunit.All.deleteObserver(this);
 
 		CollectionDelta delta = new CollectionDelta("primeChildren", getCurrentWorkunits());
-		delta.calcChanges(data.getWorkunits(null, "", "", ""));
+		delta.calcChanges(data.getWorkunits(null, true, "", "", ""));
 		mergeChanges(delta);
 
 		Workunit.All.addObserver(this);

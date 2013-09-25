@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -12,8 +12,6 @@ import org.hpccsystems.internal.data.ClientTools;
 import org.hpccsystems.internal.data.Data;
 
 public class ECLContentProvider implements ITreeContentProvider {
-	Viewer viewer;
-
 	class ProjectClientToolsElement {
 		IProject project;
 		ClientTools clientTools;
@@ -23,28 +21,16 @@ public class ECLContentProvider implements ITreeContentProvider {
 			this.clientTools = clientTools;
 		}
 
-		IFolder getEclLibraryFolder() {
-			IFolder hiddenLibFolder = project.getFolder(clientTools.getLibraryFolderName());
-			if (!hiddenLibFolder.exists()) {
-				try {
-					hiddenLibFolder.createLink(clientTools.getEclLibraryPath(), IResource.HIDDEN, null);
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
-			}
-			return hiddenLibFolder;
+		Object getEclLibraryFolder() {
+			return new ShortcutFolder(project, clientTools.getLibraryFolderName(true), clientTools.getLibraryFolderName(false), clientTools.getEclLibraryPath());
 		}
 
-		IFolder getEclExampleFolder() {
-			IFolder hiddenExampleFolder = project.getFolder(clientTools.getExamplesFolderName());
-			if (!hiddenExampleFolder.exists()) {
-				try {
-					hiddenExampleFolder.createLink(clientTools.getEclExamplesPath(), IResource.HIDDEN, null);
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
-			}
-			return hiddenExampleFolder;
+		Object getEclExampleFolder() {
+			return new ShortcutFolder(project, clientTools.getExamplesFolderName(true), clientTools.getExamplesFolderName(false), clientTools.getEclExamplesPath());
+		}
+
+		public Object getEclBundlesFolder() {
+			return new ShortcutFolder(project, clientTools.getBundlesFolderName(true), clientTools.getBundlesFolderName(false), clientTools.getEclBundlesPath());
 		}
 	}
 
@@ -54,7 +40,6 @@ public class ECLContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		this.viewer = viewer;
 	}
 
 	@Override
@@ -66,13 +51,24 @@ public class ECLContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		ArrayList<Object> retVal = new ArrayList<Object>();
 		if (parentElement instanceof IProject) {
-			for (ClientTools ct : Data.get().GetClientTools()) {
-				retVal.add(new ProjectClientToolsElement((IProject)parentElement, ct));
+			IProject project = (IProject)parentElement;
+			IProjectNature nature = null;
+			try {
+				nature = project.getNature("org.hpccsystems.eclide.eclNature");
+			} catch (CoreException e) {
+			}
+			if (nature != null) {
+				for (ClientTools ct : Data.get().GetClientTools()) {
+					retVal.add(new ProjectClientToolsElement((IProject)parentElement, ct));
+				}
 			}
 		} else if (parentElement instanceof ProjectClientToolsElement) {
 			ProjectClientToolsElement pct = (ProjectClientToolsElement)parentElement;
 			retVal.add(pct.getEclLibraryFolder());
+			retVal.add(pct.getEclBundlesFolder());
 			retVal.add(pct.getEclExampleFolder());
+		} else if (parentElement instanceof ShortcutFolder) {
+			return ((ShortcutFolder)parentElement).getChildren();
 		}
 		return retVal.toArray();
 	}
@@ -94,6 +90,8 @@ public class ECLContentProvider implements ITreeContentProvider {
 			return true;
 		} else if (element instanceof ProjectClientToolsElement) {
 			return true;
+		} else if (element instanceof ShortcutFolder) {
+			return ((ShortcutFolder)element).hasChildren();
 		}
 		return false;
 	}

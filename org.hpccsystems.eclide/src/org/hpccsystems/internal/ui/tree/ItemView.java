@@ -16,6 +16,7 @@ import java.net.URL;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.hpccsystems.eclide.ui.viewer.platform.PlatformView;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitView;
 import org.hpccsystems.internal.data.Result;
@@ -72,6 +73,18 @@ public class ItemView {
 		return wuView; 
 	}
 
+	public PlatformView getPlatformAncestor() {
+		PlatformView platformView = (PlatformView)walkAncestors(new ItemView.IVisitor() {
+			@Override
+			public boolean visit(ItemView item) {
+				if (item instanceof PlatformView) {
+					return true;
+				}
+				return false;
+			}
+		});
+		return platformView; 
+	}
 	public ItemView getParent() {
 		return parent;
 	}
@@ -96,7 +109,7 @@ public class ItemView {
 		return null;
 	}
 
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		return new URL ("about:blank");
 	}
 

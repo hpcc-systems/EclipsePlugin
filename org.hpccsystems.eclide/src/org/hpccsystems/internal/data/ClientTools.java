@@ -11,6 +11,7 @@
 package org.hpccsystems.internal.data;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,22 +20,39 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.console.MessageConsole;
+import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
+import org.hpccsystems.eclide.builder.Version;
 import org.hpccsystems.eclide.launchers.ECLLaunchCompilerTab;
 import org.hpccsystems.internal.ConfigurationPreferenceStore;
+import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.OS;
 
 public class ClientTools extends DataSingleton implements Comparable<ClientTools>{
 	public static DataSingletonCollection All = new DataSingletonCollection();	
+	public static ClientTools Recent = null;	
 	public static ClientTools get() {
-		return (ClientTools)All.get(new ClientTools());
+		if (Recent == null) {
+			Recent = (ClientTools)All.get(new ClientTools(findNewest()));
+		}
+		return Recent;
 	}
 	public static ClientTools getNoCreate() {
 		return (ClientTools)All.getNoCreate(new ClientTools());
 	}
-	public static ClientTools get(ILaunchConfiguration launchConfiguration) {
-		return (ClientTools)All.get(new ClientTools(launchConfiguration));
+	public static ClientTools get(Platform p, ILaunchConfiguration launchConfiguration) {
+		return get(p, new ConfigurationPreferenceStore(launchConfiguration));
+	}
+	public static ClientTools get(Platform p, ConfigurationPreferenceStore preferences) {
+		ClientTools ct = null;
+		if (preferences.getAttribute(ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS, "false").equals("true")) {
+			ct = new ClientTools(preferences);
+		} else {
+			ct = ClientTools.findBestMatch(p.getBuildVersion());
+		}
+		return (ClientTools)All.get(ct);
 	}
 
 	public static final String P_KNOWNTOOLSPATH = "knownToolsPathPreference";
@@ -75,10 +93,19 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		rootPath = new Path(path);
 	}
 
+	ClientTools(ConfigurationPreferenceStore _preferences) {
+		init(_preferences);
+	}
+
 	ClientTools(ILaunchConfiguration _launchConfiguration) {
-		preferences = new ConfigurationPreferenceStore(_launchConfiguration);
-		if (!preferences.getBoolean(ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS)) {
+		init(new ConfigurationPreferenceStore(_launchConfiguration));
+	}
+	
+	void init(ConfigurationPreferenceStore _preferences) {
+		if (!_preferences.getAttribute(ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS,  "false").equals("true")) {
 			preferences = Activator.getDefault().getPreferenceStore();
+		} else {
+			preferences = _preferences;
 		}
 		rootPath = new Path(preferences.getString(ClientTools.P_TOOLSPATH));
 	}
@@ -88,25 +115,30 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	}
 
 	public IPath getEclLibraryPath() {
-		return rootPath.append("share/ecllibrary");
+		return getCompiler().getPath(ECLCompiler.ECLLIBRARY_PATH);
 	}
 
 	public IPath getEclExamplesPath() {
 		return rootPath.append("examples");
 	}
+	
+	public IPath getEclBundlesPath() {
+		return getCompiler().getPath(ECLCompiler.ECLBUNDLE_PATH);
+	}
 
 	public ECLCompiler getCompiler() {
+		Recent = this;
 		ECLCompiler retVal = new ECLCompiler(rootPath);
 		retVal.setPreferences(preferences);
 		return retVal;
 	}
 
-	public ECLCompiler.Version getBuildVersion() {
+	public Version getBuildVersion() {
 		ECLCompiler compiler = getCompiler();
 		return compiler.getBuildVersion();
 	}
 
-	public ECLCompiler.Version getLanguageVersion() {
+	public Version getLanguageVersion() {
 		ECLCompiler compiler = getCompiler();
 		return compiler.getLanguageVersion();
 	}
@@ -136,7 +168,7 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		ClientTools that = (ClientTools)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(rootPath, that.rootPath);
+		return EqualsUtil.areEqual(rootPath, that.rootPath);
 	}
 
 	@Override
@@ -146,12 +178,20 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		return result;
 	}
 	
-	public String getLibraryFolderName() {
-		return "ECL Library";
+	public String getFolderName(boolean includeVersion) {
+		return "Client Tools" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
 	}
 
-	public String getExamplesFolderName() {
-		return "Examples";
+	public String getLibraryFolderName(boolean includeVersion) {
+		return "ECL Library" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
+	}
+
+	public String getBundlesFolderName(boolean includeVersion) {
+		return "Bundles" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
+	}
+
+	public String getExamplesFolderName(boolean includeVersion) {
+		return "Examples" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
 	}
 
 	public static List<ClientTools> findClientTools() {
@@ -173,6 +213,10 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		if (!rootFolder.isEmpty()) {
 			File hpccSystemsFolder = new Path(rootFolder).append("HPCCSystems").toFile();
 			if (hpccSystemsFolder.exists() && hpccSystemsFolder.isDirectory()) {
+				if (!OS.isWindowsPlatform()) {
+					//  Check for server installation  ---
+					retVal.add(new ClientTools(hpccSystemsFolder.toString()));					
+				}
 				File[] versionFolders = hpccSystemsFolder.listFiles();
 				for (File versionFolder : versionFolders) {
 					File clientToolsPath = new Path(hpccSystemsFolder.toString()).append(versionFolder.getName()).append("clienttools").toFile();
@@ -192,15 +236,69 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		return retVal;
 	}
 
-	public static String findNewestClientTool() {
+	public static String findNewest() {
 		List<ClientTools> knownClientTools = findClientTools();
 		if (knownClientTools.isEmpty())
 			return "";
 		return knownClientTools.get(0).getRootPath();
 	}
 	
+	public static ClientTools findBestMatch(Version version) {
+		ClientTools matched = null;
+		ClientTools bestMatched_before = null;
+		ClientTools bestMatched_after = null;
+		List<ClientTools> knownClientTools = findClientTools();
+		for(int i = knownClientTools.size() - 1; i >= 0; --i) {
+			ClientTools ct = knownClientTools.get(i);
+			if (ct.compareTo(version) == 0) {
+				matched = ct;
+				break;
+			} else if (ct.compareTo(version) < 0) {
+				bestMatched_after = ct;
+				break;
+			}
+			bestMatched_before = ct;
+		}
+
+		if (matched != null)
+			return matched;
+		
+		if (bestMatched_after != null && Version.distance(version, bestMatched_after.getBuildVersion()) < Version.DISTANCE_POINT)
+			matched = bestMatched_after;
+
+		if (bestMatched_before != null && Version.distance(version, bestMatched_before.getBuildVersion()) < Version.DISTANCE_POINT)
+			matched = bestMatched_before;
+
+		MessageConsole eclccConsole = Eclipse.findConsole("eclcc");
+		MessageConsoleStream eclccConsoleWriter = eclccConsole.newMessageStream();
+
+		if (matched != null)
+		{
+			try {
+				eclccConsoleWriter.write("Compiler/Server mismatch:\nCompiler:\t" + matched.getBuildVersion().toString() + "\nServer:\t" + version.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return matched;
+		}
+
+		//  No good match, just return latest  ---
+		matched = knownClientTools.get(0);
+		try {
+			eclccConsoleWriter.write("Compiler/Server mismatch:\nCompiler:\t" + matched.getBuildVersion().toString() + "\nServer:\t" + version.toString() + 
+					"\n(To prevent this message from showing, either download and install the matching client tools package or override the default compiler settings in the preferences window)\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return matched;
+	}
+
 	@Override
 	public int compareTo(ClientTools other) {
-		return getBuildVersion().compareTo(other.getBuildVersion());
+		return compareTo(other.getBuildVersion());
+	}
+
+	public int compareTo(Version other) {
+		return getBuildVersion().compareTo(other);
 	}
 }

@@ -39,6 +39,9 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 	@Override
 	public String getText() {
 		if (workunit.isComplete()) {
+			if (!workunit.getJobname().isEmpty()) {
+				return workunit.getWuid() + " (" + workunit.getJobname() + ")";
+			}
 			return workunit.getWuid();
 		}
 		return workunit.getWuid() + " (" + workunit.getState() + ")";
@@ -87,7 +90,10 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("WUDetailsWidget", "Wuid=" + workunit.getWuid());
+		}
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
 

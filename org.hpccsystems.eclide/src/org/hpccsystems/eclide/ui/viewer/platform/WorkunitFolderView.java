@@ -36,7 +36,10 @@ public class WorkunitFolderView extends FolderItemView implements Observer {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("WUQueryWidget", clusterName.isEmpty() ? "" : "Cluster=" + clusterName);
+		}
 		if (clusterName.isEmpty()) {
 			return platform.getURL("WsWorkunits", "WUQuery");
 		}
@@ -48,7 +51,7 @@ public class WorkunitFolderView extends FolderItemView implements Observer {
 		Workunit.All.deleteObserver(this);
 
 		CollectionDelta monitor = new CollectionDelta("primeChildren", getCurrentWorkunits());
-		monitor.calcChanges(platform.getWorkunits(clusterName));
+		monitor.calcChanges(platform.getWorkunits(false, clusterName));
 		mergeChanges(monitor);
 
 		Workunit.All.addObserver(this);

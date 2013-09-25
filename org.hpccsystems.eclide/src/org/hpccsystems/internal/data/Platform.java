@@ -18,14 +18,16 @@ import java.util.HashSet;
 
 import javax.xml.rpc.ServiceException;
 
+import org.apache.axis.client.Stub;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.Workbench;
 import org.hpccsystems.eclide.builder.ECLCompiler;
+import org.hpccsystems.eclide.builder.Version;
 import org.hpccsystems.internal.ConfigurationPreferenceStore;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
 import org.hpccsystems.ws.filespray.FileSprayLocator;
@@ -61,28 +63,33 @@ import org.hpccsystems.ws.wsworkunits.WUSubmit;
 import org.hpccsystems.ws.wsworkunits.WUUpdateResponse;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsLocator;
 import org.hpccsystems.ws.wsworkunits.WsWorkunitsServiceSoap;
+import org.hpccsystems.ws.wssmc.Activity;
+import org.hpccsystems.ws.wssmc.ActivityResponse;
+import org.hpccsystems.ws.wssmc.WsSMCLocator;
+import org.hpccsystems.ws.wssmc.WsSMCServiceSoap;
 
 public class Platform extends DataSingleton {
 	public static DataSingletonCollection All = new DataSingletonCollection();	
-	public static Platform get(String ip, int port) {
+	public static Platform get(boolean ssl, String ip, int port) {
 		if (ip == null || ip.isEmpty()) {
 			return null;
 		}
 
-		return (Platform)All.get(new Platform(ip, port));
+		return (Platform)All.get(new Platform(ssl, ip, port));
 	}
-	public static Platform getNoCreate(String ip, int port) {
+	public static Platform getNoCreate(boolean ssl, String ip, int port) {
 		if (ip == null || ip.isEmpty()) {
 			return null;
 		}
 
-		return (Platform)All.getNoCreate(new Platform(ip, port));
+		return (Platform)All.getNoCreate(new Platform(ssl, ip, port));
 	}
 	public static void remove(Platform p) {
 		All.remove(p);
 	}
 
 	public static final String P_DISABLED = "disabledConfig";
+	public static final String P_SSL = "sslConfig";
 	public static final String P_IP = "ipLaunchConfig";
 	public static final String P_PORT = "portLaunchConfig";
 	public static final String P_USER = "userLaunchConfig";
@@ -92,10 +99,13 @@ public class Platform extends DataSingleton {
 
 	private ConfigurationPreferenceStore launchConfiguration;	
 	private String name;
+	private String owner;
 	private boolean isDisabled;
 	private boolean isTempDisabled;
+	private boolean ssl;
 	private String ip;
 	private int port;
+	private Version version;
 	private Collection<Cluster> clusters;
 	private Collection<DropZone> dropZones;
 	private Collection<Workunit> workunits;	
@@ -105,12 +115,14 @@ public class Platform extends DataSingleton {
 
 	static int LATENCY_TEST = 0;
 
-	Platform(String ip, int port) {
+	Platform(boolean ssl, String ip, int port) {
+		this.ssl = ssl;
 		this.ip = ip;
 		this.port = port;
 		isDisabled = true;
 		isTempDisabled = true;
 		name = "";
+		owner = "";
 
 		clusters = new HashSet<Cluster>();
 		dropZones = new HashSet<DropZone>();
@@ -123,8 +135,10 @@ public class Platform extends DataSingleton {
 	public void update(ILaunchConfiguration _launchConfiguration) {
 		launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
 		name = _launchConfiguration.getName();
+		owner = launchConfiguration.getAttribute(P_USER, "");
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
 		isTempDisabled = isDisabled;
+		ssl = launchConfiguration.getAttribute(P_SSL, false);
 		ip = launchConfiguration.getAttribute(P_IP, "");
 		port = launchConfiguration.getAttribute(P_PORT, 8010);
 	}
@@ -139,11 +153,11 @@ public class Platform extends DataSingleton {
 	}
 
 	synchronized void confirmDisable() {
-		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+		Workbench.getDisplay().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				if (!isDisabled()) {
-					Shell activeShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					Shell activeShell = Workbench.getShell();
 					if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {
 						isTempDisabled = true;
 					}
@@ -163,6 +177,10 @@ public class Platform extends DataSingleton {
 		return !isDisabled();
 	}
 
+	public String getProtocol() {
+		return ssl ? "https" : "http";
+	}
+
 	public String getIP() {
 		return ip;
 	}
@@ -178,7 +196,43 @@ public class Platform extends DataSingleton {
 	public String getPassword() {
 		return launchConfiguration.getAttribute(P_PASSWORD, "");
 	}
-
+	
+	public String getBuild() {
+		if (isDisabled) {
+			return "";
+		}
+		
+		WsSMCServiceSoap service = getWsSMCServiceSoap();
+		Activity request = new Activity();
+		try {
+			ActivityResponse response = service.activity(request);
+			return response.getBuild();
+		} catch (ArrayOfEspException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public String getBuild(String user, String password) throws org.hpccsystems.ws.wssmc.ArrayOfEspException, RemoteException {
+		WsSMCServiceSoap service = getWsSMCServiceSoap(user, password);
+		Activity request = new Activity();
+		ActivityResponse response = service.activity(request);
+		return response.getBuild();
+	}
+	
+	public Version getBuildVersion() {
+		return new Version(getBuild());
+	}
+	
+	public Version getVersion() {
+		if (version == null) {
+			version = new Version(getBuild());
+		}
+		return version;
+	}
+	
 	/*
  enum WUAction
 {
@@ -192,10 +246,23 @@ public class Platform extends DataSingleton {
     WUActionResume = 7, 
     WUActionSize = 8
 };
-	 */	
+	 */
+	protected String hackUnicodeInXMLForAxisOneAndESP(String src) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < src.length(); ++i) {
+			int charVal = src.codePointAt(i);
+			if (charVal > 127) {
+				sb.append("&#x" + Integer.toString(charVal, 16) + ";");
+			} else {
+				sb.append(src.charAt(i));
+			}
+		}
+		return sb.toString();
+	}
+
 	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
 		if (isEnabled()) {
-			ClientTools clientTools = ClientTools.get(configuration);
+			ClientTools clientTools = ClientTools.get(this, configuration);
 
 			ECLCompiler compiler = clientTools.getCompiler(); 
 			compiler.setProject(file.getProject());
@@ -206,7 +273,7 @@ public class Platform extends DataSingleton {
 					Workunit.All.pushTransaction("Platform.submit");
 					WsWorkunitsServiceSoap service = getWsWorkunitsService();
 					WUCreateAndUpdate request = new WUCreateAndUpdate();
-					request.setQueryText(archive);
+					request.setQueryText(hackUnicodeInXMLForAxisOneAndESP(archive));
 					request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
 					try {
 						if (configuration.getAttribute(P_COMPILEONLY, false)) {
@@ -278,11 +345,14 @@ public class Platform extends DataSingleton {
 		return workunit;
 	}
 
-	Collection<Workunit> getWorkunits(String cluster, String startDate, String endDate) {
+	Collection<Workunit> getWorkunits(boolean userOnly, String cluster, String startDate, String endDate) {
 		if (isEnabled()) {
 			Workunit.All.pushTransaction("platform.getWorkunits");
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
 			WUQuery request = new WUQuery();
+			if (userOnly) {
+				request.setOwner(owner);
+			}
 			request.setCluster(cluster);
 			request.setStartDate(startDate);
 			request.setEndDate(startDate);
@@ -302,12 +372,12 @@ public class Platform extends DataSingleton {
 		return new HashSet<Workunit>(workunits);
 	}
 
-	public Collection<Workunit> getWorkunits(String cluster) {
-		return getWorkunits(cluster, "", "");
+	public Collection<Workunit> getWorkunits(boolean userOnly, String cluster) {
+		return getWorkunits(userOnly, cluster, "", "");
 	}
 
-	public Collection<Workunit> getWorkunits() {
-		return getWorkunits("", "", "");
+	public Collection<Workunit> getWorkunits(boolean userOnly) {
+		return getWorkunits(userOnly, "", "", "");
 	}
 	
 	boolean isValid(String wuid) {
@@ -402,7 +472,7 @@ public class Platform extends DataSingleton {
 				WUQuerysetsResponse response = service.WUQuerysets(request);
 				updateDataQuerySets(response.getQuerysets());
 			} catch (ArrayOfEspException e) {
-				// TODO Auto-generated catch block
+				// TODO Auto-generated )catch block
 				e.printStackTrace();
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
@@ -567,7 +637,7 @@ public class Platform extends DataSingleton {
 	}
 
 	public URL getURL(String service) throws MalformedURLException {
-		return new URL("http", getIP(), getPort(), "/" + service);
+		return new URL(getProtocol(), getIP(), getPort(), "/" + service);
 	}
 
 	public URL getURL(String service, String method) throws MalformedURLException {
@@ -578,9 +648,19 @@ public class Platform extends DataSingleton {
 		return getURL(service + "/" + method + "?" + params);
 	}
 
-	void initStub(org.apache.axis.client.Stub stub) {
-		stub.setUsername(getUser());
-		stub.setPassword(getPassword());
+	public URL getWidgetURL(String widget, String params) throws MalformedURLException {
+		return getURL("esp/files/stub.htm?Widget=" + widget + (params.isEmpty() ? "" : "&" + params));
+	}
+	
+	private void initStub(Stub stub, String user, String password) {
+		stub.setUsername(user);
+		stub.setPassword(password);
+		stub.setTimeout(180 * 1000);
+		stub.setMaintainSession(true);
+	}
+	
+	void initStub(Stub stub) {
+		initStub(stub, getUser(), getPassword());
 		stub.setTimeout(180 * 1000);
 		stub.setMaintainSession(true);
 	}
@@ -666,6 +746,25 @@ public class Platform extends DataSingleton {
 		return null;	
 	}
 
+	private WsSMCServiceSoap getWsSMCServiceSoap(String user, String password) {
+		latencyTest();
+		WsSMCLocator locator = new WsSMCLocator();
+		try {
+			WsSMCServiceSoap service = locator.getWsSMCServiceSoap(getURL("WsSMC"));
+			initStub((org.apache.axis.client.Stub)service, user, password);
+			return service;
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+		return null;	
+	}
+
+	public WsSMCServiceSoap getWsSMCServiceSoap() {
+		return getWsSMCServiceSoap(getUser(), getPassword());
+	}
+
 	@Override 
 	public boolean equals(Object aThat) {
 		if ( this == aThat ) {
@@ -678,13 +777,15 @@ public class Platform extends DataSingleton {
 		Platform that = (Platform)aThat;
 
 		//now a proper field-by-field evaluation can be made
-		return 	EqualsUtil.areEqual(getIP(), that.getIP()) &&
+		return 	EqualsUtil.areEqual(getProtocol(), that.getProtocol()) &&
+				EqualsUtil.areEqual(getIP(), that.getIP()) &&
 				EqualsUtil.areEqual(getPort(), that.getPort());
 	}
 
 	@Override
 	public int hashCode() {
 		int result = HashCodeUtil.SEED;
+		result = HashCodeUtil.hash(result, getProtocol());
 		result = HashCodeUtil.hash(result, getIP());
 		result = HashCodeUtil.hash(result, getPort());
 		return result;

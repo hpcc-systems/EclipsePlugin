@@ -36,7 +36,10 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("GetDFUWorkunitsWidget", clusterName.isEmpty() ? "" : "ClusterName=" + clusterName);
+		}
 		if (clusterName.isEmpty()) {
 			return platform.getURL("FileSpray", "GetDFUWorkunits");
 		}

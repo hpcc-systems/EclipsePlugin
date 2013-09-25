@@ -35,7 +35,7 @@ public class ECLPreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		
-		store.setDefault(ClientTools.P_TOOLSPATH, ClientTools.findNewestClientTool());
+		store.setDefault(ClientTools.P_TOOLSPATH, ClientTools.findNewest());
 
 		store.setDefault(ClientTools.P_ARGSCOMMON, "");
 		store.setDefault(ClientTools.P_ARGSSYNTAX, "-fsyntaxcheck=1");

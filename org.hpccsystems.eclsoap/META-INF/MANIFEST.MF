@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Eclsoap
 Bundle-SymbolicName: org.hpccsystems.eclsoap
-Bundle-Version: 3.10.4.qualifier
+Bundle-Version: 4.1.0.qualifier
 Bundle-Activator: org.hpccsystems.eclsoap.Activator
 Require-Bundle: org.eclipse.core.runtime,
  javax.xml.rpc;visibility:=reexport,
@@ -31,6 +31,7 @@ Export-Package: org.hpccsystems.eclsoap;uses:="org.osgi.framework",
    org.apache.axis.encoding,
    javax.xml.rpc,
    javax.xml.namespace",
+ org.hpccsystems.ws.wssmc,
  org.hpccsystems.ws.wstopology;
   uses:="org.apache.axis.client,
    org.apache.axis,

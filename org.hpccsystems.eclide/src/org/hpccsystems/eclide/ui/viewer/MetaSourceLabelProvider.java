@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.builder.meta.ECLDefinition;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 
 public class MetaSourceLabelProvider implements ILabelProvider {
@@ -53,9 +54,12 @@ public class MetaSourceLabelProvider implements ILabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element instanceof ECLMetaNode) {
-			ECLMetaNode node = (ECLMetaNode)element;			
-			String type = (node.getData()).getType();
-			return (node.getData()).getName() + (type.isEmpty() ? "" : " (" + type.toUpperCase() + ")");
+			ECLMetaNode node = (ECLMetaNode)element;
+			ECLDefinition def = node.getData();
+			String type = def.getType();
+			String retVal = def.getName() + (type.isEmpty() ? "" : " (" + type.toUpperCase() + ")");
+			retVal += " [" + def.getOffset() + ", " + def.getLength() + "]";
+			return retVal;
 		}
 		return null;
 	}

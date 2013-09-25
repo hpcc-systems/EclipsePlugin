@@ -71,7 +71,7 @@ class TargetFolderView extends FolderItemView {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		return platform.getURL("WsTopology", "TpTargetClusterQuery");
 	}
 
@@ -105,7 +105,7 @@ class ClusterView extends PlatformBaseView {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		return platform.getURL("WsTopology", "TpTargetClusterQuery");
 	}
 
@@ -132,7 +132,7 @@ class DropZoneFolderView extends FolderItemView {
 
 	//  http://192.168.2.68:8010/FileSpray/DropZoneFiles?ver_=1.03
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		return platform.getURL("FileSpray", "DropZoneFiles");
 	}
 
@@ -165,7 +165,7 @@ class DropZoneView extends PlatformBaseView {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		//http://192.168.2.68:8010/FileSpray/FileList?Netaddr=192.168.2.68&OS=1&Path=/var/lib/HPCCSystems/mydropzone
 		return platform.getURL("FileSpray", "FileList", "Netaddr=" + dropZone.getIP() + "&OS=" + dropZone.getOS() + "&Path=" + dropZone.getDirectory());
 	}
@@ -193,7 +193,7 @@ class QuerySetFolderView extends FolderItemView {
 
 	//http://192.168.2.68:8010/WsWorkunits/WUQuerySets	
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUQuerySets");
 	}
 
@@ -227,7 +227,7 @@ class DataQuerySetView extends PlatformBaseView {
 
 	//http://192.168.2.68:8010/WsWorkunits/WUQuerysetDetails?QuerySetName=myroxie
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUQuerysetDetails", "QuerySetName=" + querySet.getName());
 	}
 
@@ -269,7 +269,10 @@ class LogicalFileFolderView extends FolderItemView {
 
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("DFUQueryWidget", clusterName.isEmpty() ? "" : "ClusterName=" + clusterName);
+		}
 		if (clusterName.isEmpty()) {
 			return platform.getURL("WsDfu", "DFUQuery");
 		}
@@ -297,12 +300,15 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 
 	@Override
 	public String getText() {
-		return "Source Files";
+		return "Inputs";
 	}
 
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("ResultsWidget", "TabPosition=top&SourceFiles=1&Wuid=" + workunit.getWuid());
+		}
 		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
 	}
 
@@ -346,7 +352,10 @@ class LogicalFileView extends PlatformBaseView {
 
 	//http://192.168.2.68:8010/WsDfu/DFUInfo?Name=tutorial::g::originalperson
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("LFDetailsWidget", "Name=" + file.getName());
+		}
 		return platform.getURL("WsDfu", "DFUInfo", "Name=" + file.getName());
 	}
 
@@ -398,7 +407,10 @@ class LogicalFileContentsView extends PlatformBaseView {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
+		if (hasNewEclWatch) {
+			return platform.getWidgetURL("ResultWidget", "LogicalName=" + file.getName());
+		}
 		return platform.getURL("WsWorkunits", "WUResult", "LogicalName=" + file.getName());
 	}
 }
@@ -443,7 +455,7 @@ class ResultViewView extends PlatformBaseView {
 	}
 
 	@Override
-	public URL getWebPageURL() throws MalformedURLException {
+	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		return platform.getURL("WsWorkunits", "WUResultView", "Wuid=" + result.getWuid() + "&ResultName=" + result.getResultName() + "&ViewName=" + viewName);
 	}
 }

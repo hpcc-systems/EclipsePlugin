@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.launchers;
 
+import java.rmi.RemoteException;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -47,9 +49,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		public void modifyText(ModifyEvent e) {
 			scheduleUpdateJob();
 			Object source= e.getSource();
-			if (source == fIPText) {
-				refreshAddress();
-			} else if (source == fPortText) {
+			if (source == fIPText ||
+				source == fPortText) {
 				refreshAddress();
 			} else if (source == fAddressText) {
 			}
@@ -58,7 +59,16 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
+			if (source == sslButton) {
+				if (sslButton.getSelection() && fPortText.getText().matches("8010")) {
+					fPortText.setText("18010");
+				} else if (!sslButton.getSelection() && fPortText.getText().matches("18010")) {
+					fPortText.setText("8010");
+				}
+				refreshAddress();
+			}
 			if (source == testButton) {
+				refreshServerVersion();
 				refreshBrowser();
 			} else if (source == disableButton) {
 				scheduleUpdateJob();
@@ -73,6 +83,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	Image image;
 
 	private Button disableButton;
+	protected Button sslButton;
 	protected Text fIPText;
 	protected Text fPortText;
 	protected Text fClusterText;
@@ -82,6 +93,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	protected Text fPasswordText;
 
 	protected Text fAddressText;
+	protected Text fServerVersionText;
+
 	private Button testButton;
 	private Browser browser;
 	
@@ -99,6 +112,9 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		disableButton.addSelectionListener(fListener);
 
 		Group group = SWTFactory.createGroup(parent, "Server:", 2, 1, GridData.FILL_HORIZONTAL);
+		sslButton = SWTFactory.createCheckButton(group, "SSL", null, false, 2);
+		sslButton.addSelectionListener(fListener);
+
 		SWTFactory.createLabel(group, "IP Address:  ", 1);
 		fIPText = SWTFactory.createSingleText(group, 1);
 		fIPText.addModifyListener(fListener);
@@ -133,6 +149,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		fAddressText.addModifyListener(fListener);
 		testButton = SWTFactory.createPushButton(group, "Test", null);
 		testButton.addSelectionListener(fListener);
+		SWTFactory.createLabel(group, "Server Version:  ", 1);
+		fServerVersionText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY, 2);
 
 		try {
 			browser = new Browser(group, SWT.BORDER);
@@ -204,6 +222,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		try {
 			disableButton.setSelection(configuration.getAttribute(Platform.P_DISABLED, false));
 
+			sslButton.setSelection(configuration.getAttribute(Platform.P_SSL, false));
 			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
 			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, 8010)));
 			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor"));
@@ -211,6 +230,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
 			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
+			fServerVersionText.setText("");
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -221,6 +241,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(Platform.P_DISABLED, disableButton.getSelection());
 
+		configuration.setAttribute(Platform.P_SSL, sslButton.getSelection());
 		configuration.setAttribute(Platform.P_IP, fIPText.getText());
 		try {
 			configuration.setAttribute(Platform.P_PORT, Integer.parseInt(fPortText.getText()));
@@ -244,10 +265,27 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	}
 
 	void refreshAddress() {
-		StringBuilder url = new StringBuilder("http://");
-		url.append(fIPText.getText());
+		StringBuilder url = new StringBuilder("http");
+		if (sslButton.getSelection()) {
+			url.append("s");
+		}
+		url.append("://" + fIPText.getText());
 		url.append(":" + fPortText.getText() + "/");
 		fAddressText.setText(url.toString());
+	}
+
+	void refreshServerVersion() {
+		fServerVersionText.setText("");
+		
+		int port = Integer.parseInt(fPortText.getText());
+		
+		Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
+		try {
+			String build = platform.getBuild(fUserText.getText(), fPasswordText.getText());
+			fServerVersionText.setText(build);
+		} catch (RemoteException e) {
+			fServerVersionText.setText(e.getMessage());
+		}
 	}
 
 	void refreshBrowser() {

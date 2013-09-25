@@ -47,10 +47,12 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
+import org.hpccsystems.eclide.Workbench;
 import org.hpccsystems.eclide.editors.ECLWindow;
+import org.hpccsystems.eclide.perspectives.ECLPerspective;
+import org.hpccsystems.eclide.perspectives.ECLWatch;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions.IPlatformUI;
 import org.hpccsystems.internal.Eclipse;
@@ -289,32 +291,33 @@ public class PlatformViewer extends ViewPart {
 						if (next instanceof ItemView) {
 							ItemView item  = (ItemView)next;
 
-							//  Editor View  ---
-							WorkunitView wuView = item.getWorkunitAncestor();
-							if (wuView != null) {
-								//WorkunitEditorInput workunitEditorInput = getWorkunitEditorInput(wuView);
-								WorkunitInput workunitInput = new WorkunitInput(wuView.getWorkunit());
-								IEditorPart ep = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-								if (ep != null) {
-									IEditorInput input = ep.getEditorInput();
-									if (input.equals(workunitInput)) {
-										PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(ep);
-										((ECLWindow) ep).showItemView((ItemView)next, false);
-									} else if (input instanceof IFileEditorInput) {
-										IFileEditorInput fileInput = (IFileEditorInput)input; 
-										IFile file = fileInput.getFile();
-										String editorPath = file.getFullPath().toPortableString();
-										String workunitPath = workunitInput.getOrigonalFilePath();
-										if (editorPath.compareTo(workunitPath) == 0) {
-											PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(ep);
+							if (Workbench.getActivePerspective().getId().equals(ECLPerspective.PERSPECTIVE_ID)) {
+								WorkunitView wuView = item.getWorkunitAncestor();
+								if (wuView != null) {
+									//WorkunitEditorInput workunitEditorInput = getWorkunitEditorInput(wuView);
+									WorkunitInput workunitInput = new WorkunitInput(wuView.getWorkunit());
+									IEditorPart ep = Workbench.getActiveEditor();
+									if (ep != null) {
+										IEditorInput input = ep.getEditorInput();
+										if (input.equals(workunitInput)) {
+											Workbench.getActivePage().activate(ep);
 											((ECLWindow) ep).showItemView((ItemView)next, false);
+										} else if (input instanceof IFileEditorInput) {
+											IFileEditorInput fileInput = (IFileEditorInput)input; 
+											IFile file = fileInput.getFile();
+											String editorPath = file.getFullPath().toPortableString();
+											String workunitPath = workunitInput.getOrigonalFilePath();
+											if (editorPath.compareTo(workunitPath) == 0) {
+												Workbench.getActivePage().activate(ep);
+												((ECLWindow) ep).showItemView((ItemView)next, false);
+											}
 										}
 									}
 								}
+							} else if(Workbench.getActivePerspective().getId().equals(ECLWatch.PERSPECTIVE_ID)) {
+								showWebPage(item, true);
 							}
-
-							//  ECL Watch View  ---
-							showWebPage(item, true);
+							break;
 						}
 					}
 				}
@@ -329,21 +332,24 @@ public class PlatformViewer extends ViewPart {
 					if (selection.size() >= 1) {
 						if (selection.getFirstElement() instanceof ItemView) {
 							ItemView item = (ItemView) selection.getFirstElement();
-							WorkunitView wuView = item.getWorkunitAncestor();
-							if (wuView != null) {
-								WorkunitInput workunitInput = new WorkunitInput(wuView.getWorkunit());
-								try {
-									IEditorPart ep = null;
-									if (workunitInput.origonalFileExists()) {
-										ep = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), workunitInput.getOrigonalFile(), true);
-									} else {
-										ep = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), workunitInput, "org.hpccsystems.eclide.editors.ECLWindow");
+
+							if (Workbench.getActivePerspective().getId().equals(ECLPerspective.PERSPECTIVE_ID)) {
+								WorkunitView wuView = item.getWorkunitAncestor();
+								if (wuView != null) {
+									WorkunitInput workunitInput = new WorkunitInput(wuView.getWorkunit());
+									try {
+										IEditorPart ep = null;
+										if (workunitInput.origonalFileExists()) {
+											ep = IDE.openEditor(Workbench.getActivePage(), workunitInput.getOrigonalFile(), true);
+										} else {
+											ep = IDE.openEditor(Workbench.getActivePage(), workunitInput, "org.hpccsystems.eclide.editors.ECLWindow");
+										}
+										if (ep instanceof ECLWindow) {
+											((ECLWindow) ep).showItemView(item, true);
+										}
+									} catch (PartInitException e) {
+										e.printStackTrace();
 									}
-									if (ep instanceof ECLWindow) {
-										((ECLWindow) ep).showItemView(item, true);
-									}
-								} catch (PartInitException e) {
-									e.printStackTrace();
 								}
 							}
 						}
@@ -368,7 +374,12 @@ public class PlatformViewer extends ViewPart {
 		}
 
 		try {
-			URL webPageURL = ti.getWebPageURL();
+			boolean hasNewEclWatch = false;
+			PlatformView platformView = ti.getPlatformAncestor();
+			if (platformView != null) {
+				hasNewEclWatch = platformView.getPlatform().getVersion().major >= 4;
+			}
+			URL webPageURL = ti.getWebPageURL(hasNewEclWatch);
 			if (htmlViewer != null && webPageURL != null) {
 				htmlViewer.showURL(ti, webPageURL.toString(), ti.getUser(), ti.getPassword(), bringToTop);
 			}

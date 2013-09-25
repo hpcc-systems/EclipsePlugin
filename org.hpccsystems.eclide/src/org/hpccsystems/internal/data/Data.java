@@ -22,6 +22,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationListener;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.hpccsystems.eclide.launchers.ECLLaunchCompilerTab;
 
 public class Data extends Observable {
 	private static Data singletonFactory;
@@ -44,7 +45,7 @@ public class Data extends Observable {
 					platforms.add(p);
 				}
 
-				ClientTools ct = ClientTools.get(configs[i]);
+				ClientTools ct = ClientTools.get(p, configs[i]);
 				if (!clientTools.contains(ct)) {
 					clientTools.add(ct);
 				}
@@ -158,8 +159,14 @@ public class Data extends Observable {
 	//  Platform  ---
 	public Platform GetPlatform(ILaunchConfiguration launchConfiguration, boolean noCreate) {
 		Platform retVal = null;
+		boolean ssl = false;
 		String ip = "";
 		int port = 0;
+		try {
+			ssl = launchConfiguration.getAttribute(Platform.P_SSL, false);
+		} catch (CoreException e) {
+		} 
+		
 		try {
 			ip = launchConfiguration.getAttribute(Platform.P_IP, "");
 		} catch (CoreException e) {
@@ -176,9 +183,9 @@ public class Data extends Observable {
 
 		if (!ip.isEmpty() && port != 0) {
 			if (noCreate) {
-				retVal = Platform.getNoCreate(ip, port);
+				retVal = Platform.getNoCreate(ssl, ip, port);
 			} else {
-				retVal = Platform.get(ip, port);
+				retVal = Platform.get(ssl, ip, port);
 			}
 			retVal.update(launchConfiguration);	
 		}
@@ -188,27 +195,27 @@ public class Data extends Observable {
 	public Platform GetPlatform(ILaunchConfiguration launchConfiguration) {
 		return GetPlatform(launchConfiguration, false);
 	}
-	
+
 	public Platform GetPlatformNoCreate(ILaunchConfiguration launchConfiguration) {
 		return GetPlatform(launchConfiguration, true);
 	}
 
-	public Platform GetPlatformNoCreate(String ip, int port) {
-		return Platform.getNoCreate(ip, port);
+	public Platform GetPlatformNoCreate(boolean ssl, String ip, int port) {
+		return Platform.getNoCreate(ssl, ip, port);
 	}
 
 	public final Platform[] getPlatforms() {
 		return platforms.toArray(new Platform[0]);
 	}
 
-	public Collection<Workunit> getWorkunits(Platform platform, String cluster, String startDate, String endDate) {
+	public Collection<Workunit> getWorkunits(Platform platform, boolean userOnly, String cluster, String startDate, String endDate) {
 		Collection<Workunit> workunits = new HashSet<Workunit>();
 		try {
 			Workunit.All.pushTransaction("Data.getWorkunits");
 			for (Platform p : getPlatforms()) {
 				assert p != null;
 				if (platform == null || platform.equals(p)) {
-					workunits.addAll(p.getWorkunits(cluster, startDate, endDate));
+					workunits.addAll(p.getWorkunits(userOnly, cluster, startDate, endDate));
 				}
 			}
 		}
@@ -221,10 +228,5 @@ public class Data extends Observable {
 	//  ClientTools  ---
 	public ClientTools[] GetClientTools() {
 		return clientTools.toArray(new ClientTools[0]);
-	}
-
-	public ClientTools GetClientTools(IFile file) {
-		ILaunchConfiguration launchConfiguration = DebugPlugin.getDefault().getLaunchManager().getLaunchConfiguration(file);
-		return ClientTools.get(launchConfiguration);
 	}
 }
