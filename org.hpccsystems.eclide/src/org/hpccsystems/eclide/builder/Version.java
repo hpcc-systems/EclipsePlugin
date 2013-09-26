@@ -51,10 +51,10 @@ public class Version implements Comparable<Version> {
 		}
 		String postfixIntStr = "";
 		for (char c : postfix.toCharArray()) {
-			if (Character.isAlphabetic(c)) {
-				postfixStr += c;
-			} else {
+			if (Character.isDigit(c)) {
 				postfixIntStr += c;
+			} else {
+				postfixStr += c;
 			}
 		}
 		postfixInt = Integer.parseInt(postfixIntStr);
