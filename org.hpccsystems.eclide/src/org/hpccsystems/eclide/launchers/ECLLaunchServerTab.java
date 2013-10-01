@@ -98,6 +98,9 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	private Button testButton;
 	private Browser browser;
 	
+	private static String DisableButtonText = "Disable Server"; 
+	private static String DisableButtonTempDiabledText = DisableButtonText + " (Temporarily Disabled)."; 
+	
 	ECLLaunchServerTab() {
 		fListener = new WidgetListener();
 	}
@@ -108,7 +111,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	}
 
 	protected void createServerEditor(Composite parent) {
-		disableButton = SWTFactory.createCheckButton(parent, "Disable Server", null, false, 1);
+		disableButton = SWTFactory.createCheckButton(parent, DisableButtonText, null, false, 1);
 		disableButton.addSelectionListener(fListener);
 
 		Group group = SWTFactory.createGroup(parent, "Server:", 2, 1, GridData.FILL_HORIZONTAL);
@@ -230,7 +233,17 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
 			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
-			fServerVersionText.setText("");
+
+			int port = Integer.parseInt(fPortText.getText());
+			Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
+			if (platform.isDisabled()) {
+				fServerVersionText.setText("Unable to Connect (Temporarily Disabled).");
+				disableButton.setText(DisableButtonTempDiabledText);
+			} else {
+				fServerVersionText.setText("");
+				disableButton.setText(DisableButtonText);
+			}
+			
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -280,11 +293,14 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		int port = Integer.parseInt(fPortText.getText());
 		
 		Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
+		platform.clearTempDisabled();
 		try {
 			String build = platform.getBuild(fUserText.getText(), fPasswordText.getText());
 			fServerVersionText.setText(build);
+			disableButton.setText(DisableButtonText);
 		} catch (RemoteException e) {
 			fServerVersionText.setText(e.getMessage());
+			disableButton.setText(DisableButtonTempDiabledText);
 		}
 	}
 
