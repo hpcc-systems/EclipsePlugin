@@ -292,7 +292,7 @@ public class Platform extends DataSingleton {
 		return sb.toString();
 	}
 
-	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
+	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster, boolean compileOnly) {
 		if (!isEnabled()) {
 			Workbench.getDisplay().syncExec(new Runnable() {
 				@Override
@@ -317,12 +317,8 @@ public class Platform extends DataSingleton {
 					WUCreateAndUpdate request = new WUCreateAndUpdate();
 					request.setQueryText(hackUnicodeInXMLForAxisOneAndESP(archive));
 					request.setJobname(file.getFullPath().removeFileExtension().lastSegment());
-					try {
-						if (configuration.getAttribute(P_COMPILEONLY, false)) {
-							request.setAction(1);
-						}
-					} catch (CoreException e) {
-					}
+					if (compileOnly)
+						request.setAction(1);
 					ApplicationValue[] appVals = new ApplicationValue[1];
 					appVals[0] = new ApplicationValue();
 					appVals[0].setApplication(Activator.PLUGIN_ID);
@@ -360,6 +356,18 @@ public class Platform extends DataSingleton {
 			}
 		}
 		return null;
+	}
+
+	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
+		boolean compileOnly = false;
+		try {
+			if (configuration.getAttribute(P_COMPILEONLY, false)) {
+				compileOnly = true;
+			}
+		} catch (CoreException e) {
+		}
+		
+		return submit(configuration, file, cluster, compileOnly);
 	}
 
 	@Override
