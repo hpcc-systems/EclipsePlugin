@@ -122,7 +122,7 @@ public class Data extends Observable {
 				if (mergeChanges()) {
 					Platform p = GetPlatformNoCreate(configuration);
 					if (p != null) {
-						p.setTempDisabled(false);
+						p.clearTempDisabled();
 					}
 					setChanged();
 					notifyObservers();

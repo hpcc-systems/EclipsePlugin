@@ -100,11 +100,19 @@ public class Platform extends DataSingleton {
 	private ConfigurationPreferenceStore launchConfiguration;	
 	private String name;
 	private String owner;
+	private enum SERVER_EXISTS {
+		UNKNOWN,
+		TESTING,
+		FALSE,
+		TRUE
+	}
+	private SERVER_EXISTS serverExists = SERVER_EXISTS.UNKNOWN; 
 	private boolean isDisabled;
 	private boolean isTempDisabled;
 	private boolean ssl;
 	private String ip;
 	private int port;
+	private String build = "";
 	private Version version;
 	private Collection<Cluster> clusters;
 	private Collection<DropZone> dropZones;
@@ -137,7 +145,6 @@ public class Platform extends DataSingleton {
 		name = _launchConfiguration.getName();
 		owner = launchConfiguration.getAttribute(P_USER, "");
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
-		isTempDisabled = isDisabled;
 		ssl = launchConfiguration.getAttribute(P_SSL, false);
 		ip = launchConfiguration.getAttribute(P_IP, "");
 		port = launchConfiguration.getAttribute(P_PORT, 8010);
@@ -153,23 +160,45 @@ public class Platform extends DataSingleton {
 	}
 
 	synchronized void confirmDisable() {
-		Workbench.getDisplay().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				if (!isDisabled()) {
+		if (!isDisabled()) {
+			Workbench.getDisplay().syncExec(new Runnable() {
+				@Override
+				public void run() {
 					Shell activeShell = Workbench.getShell();
 					if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {
 						isTempDisabled = true;
 					}
 				}
-			}
-		});
+			});
+		}
 	}
 
-	public void setTempDisabled(boolean disable) {
-		isTempDisabled = disable;
+	public void clearTempDisabled() {
+		isTempDisabled = false;
+		serverExists = SERVER_EXISTS.UNKNOWN;
+		build="";
 	}
+
+	protected synchronized void testServer() {
+		if (serverExists == SERVER_EXISTS.UNKNOWN) {
+			serverExists = SERVER_EXISTS.TESTING;
+			try {
+				build = getBuild(getUser(), getPassword());
+				serverExists = SERVER_EXISTS.TRUE;
+			} catch (org.hpccsystems.ws.wssmc.ArrayOfEspException e) {
+			} catch (RemoteException e) {
+			}
+			if (build.isEmpty()) {
+				serverExists = SERVER_EXISTS.FALSE;
+				isTempDisabled = true;
+			} else { 
+				serverExists = SERVER_EXISTS.TRUE;
+			}
+		}
+	}
+
 	public boolean isDisabled() {
+		testServer();
 		return isDisabled || isTempDisabled;
 	}
 
@@ -197,29 +226,32 @@ public class Platform extends DataSingleton {
 		return launchConfiguration.getAttribute(P_PASSWORD, "");
 	}
 	
-	public String getBuild() {
-		if (isDisabled) {
-			return "";
+	protected String getBuild() {
+		if (isEnabled() && build.isEmpty()) {
+			WsSMCServiceSoap service = getWsSMCServiceSoap();
+			Activity request = new Activity();
+			try {
+				ActivityResponse response = service.activity(request);
+				build = response.getBuild();
+			} catch (ArrayOfEspException e) {
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				confirmDisable();
+			}
 		}
-		
-		WsSMCServiceSoap service = getWsSMCServiceSoap();
-		Activity request = new Activity();
-		try {
-			ActivityResponse response = service.activity(request);
-			return response.getBuild();
-		} catch (ArrayOfEspException e) {
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		return "";
+		return build;
 	}
 	
-	public String getBuild(String user, String password) throws org.hpccsystems.ws.wssmc.ArrayOfEspException, RemoteException {
-		WsSMCServiceSoap service = getWsSMCServiceSoap(user, password);
-		Activity request = new Activity();
-		ActivityResponse response = service.activity(request);
-		return response.getBuild();
+	public synchronized String getBuild(String user, String password) throws org.hpccsystems.ws.wssmc.ArrayOfEspException, RemoteException {
+		//  Special call used to verify if server is active  ---
+		if (build.isEmpty()) {
+			WsSMCServiceSoap service = getWsSMCServiceSoap(user, password);
+			((org.apache.axis.client.Stub) service).setTimeout(3 * 1000);
+			Activity request = new Activity();
+			ActivityResponse response = service.activity(request);
+			build = response.getBuild();
+		}
+		return build;
 	}
 	
 	public Version getBuildVersion() {
@@ -261,7 +293,15 @@ public class Platform extends DataSingleton {
 	}
 
 	public Workunit submit(ILaunchConfiguration configuration, IFile file, String cluster) {
-		if (isEnabled()) {
+		if (!isEnabled()) {
+			Workbench.getDisplay().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					Shell activeShell = Workbench.getShell();
+					MessageDialog.openInformation(activeShell, "Unable to Submit ECL:  ECL Plug-in", "\"" + name + "\" is Unreachable.");
+				}
+			});
+		} else {
 			ClientTools clientTools = ClientTools.get(this, configuration);
 			if (clientTools == null) {
 				return null;
@@ -312,8 +352,7 @@ public class Platform extends DataSingleton {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						confirmDisable();
 					}
 				} finally {
 					Workunit.All.popTransaction();
@@ -338,7 +377,10 @@ public class Platform extends DataSingleton {
 
 	//  Workunit  ---
 	public Workunit getWorkunit(String wuid) {
-		return Workunit.get(this, wuid);
+		if (isEnabled()) {
+			return Workunit.get(this, wuid);
+		}
+		return null;
 	}
 
 	public Workunit getWorkunit(ECLWorkunit wu) {
@@ -367,7 +409,6 @@ public class Platform extends DataSingleton {
 				e.printStackTrace();
 			} catch (RemoteException e) {
 				confirmDisable();
-				e.printStackTrace();
 			}
 			Workunit.All.popTransaction();
 		}
@@ -433,8 +474,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				confirmDisable();
 			}
 			//TODO notifyObservers(monitor.calcChanges(fileSprayWorkunits));
 		}
@@ -477,8 +517,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated )catch block
 				e.printStackTrace();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				confirmDisable();
 			}
 			//TODO notifyObservers(monitor.calcChanges(dataQuerySets));
 		}
@@ -527,8 +566,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				confirmDisable();
 			}
 			//TODO notifyObservers(monitor.calcChanges(logicalFiles));
 		}
@@ -571,8 +609,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				confirmDisable();
 			}
 			//TODO notifyObservers(monitor.calcChanges(clusters));
 		}
@@ -611,8 +648,7 @@ public class Platform extends DataSingleton {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				confirmDisable();
 			}
 			//TODO notifyObservers(monitor.calcChanges(clusters));
 		}
