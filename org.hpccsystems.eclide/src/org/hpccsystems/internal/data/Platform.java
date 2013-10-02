@@ -13,8 +13,13 @@ package org.hpccsystems.internal.data;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.TimeZone;
 
 import javax.xml.rpc.ServiceException;
 
@@ -182,17 +187,11 @@ public class Platform extends DataSingleton {
 	protected synchronized void testServer() {
 		if (serverExists == SERVER_EXISTS.UNKNOWN) {
 			serverExists = SERVER_EXISTS.TESTING;
-			try {
-				build = getBuild(getUser(), getPassword());
+			if (pingServer(getUser(), getPassword())) {
 				serverExists = SERVER_EXISTS.TRUE;
-			} catch (org.hpccsystems.ws.wssmc.ArrayOfEspException e) {
-			} catch (RemoteException e) {
-			}
-			if (build.isEmpty()) {
+			} else {
 				serverExists = SERVER_EXISTS.FALSE;
 				isTempDisabled = true;
-			} else { 
-				serverExists = SERVER_EXISTS.TRUE;
 			}
 		}
 	}
@@ -242,18 +241,35 @@ public class Platform extends DataSingleton {
 		return build;
 	}
 	
+	public synchronized boolean pingServer(String user, String password) {
+		//  Special call used to verify if server is active  ---
+		WsWorkunitsServiceSoap service = getWsWorkunitsService(user, password);
+		int oldTimeout = ((org.apache.axis.client.Stub) service).getTimeout();
+		((org.apache.axis.client.Stub) service).setTimeout(3 * 1000);
+		WUQuery request = new WUQuery();
+		request.setWuid("XXX");
+		try {
+			WUQueryResponse response = service.WUQuery(request);
+			return true;
+		} catch (org.hpccsystems.ws.wssmc.ArrayOfEspException e) {
+		} catch (RemoteException e) {
+		} finally {
+			((org.apache.axis.client.Stub) service).setTimeout(oldTimeout);
+		}
+		return false;
+	}
+	
 	public synchronized String getBuild(String user, String password) throws org.hpccsystems.ws.wssmc.ArrayOfEspException, RemoteException {
 		//  Special call used to verify if server is active  ---
 		if (build.isEmpty()) {
 			WsSMCServiceSoap service = getWsSMCServiceSoap(user, password);
-			((org.apache.axis.client.Stub) service).setTimeout(3 * 1000);
 			Activity request = new Activity();
 			ActivityResponse response = service.activity(request);
 			build = response.getBuild();
 		}
 		return build;
 	}
-	
+
 	public Version getBuildVersion() {
 		return new Version(getBuild());
 	}
@@ -398,6 +414,14 @@ public class Platform extends DataSingleton {
 	}
 
 	Collection<Workunit> getWorkunits(boolean userOnly, String cluster, String startDate, String endDate) {
+		return getWorkunits(userOnly, cluster, startDate, endDate, "", "", "");
+	}
+	
+	Collection<Workunit> getWorkunits(boolean userOnly, String cluster, String startDate, String endDate, String jobname) {
+		return getWorkunits(userOnly, cluster, startDate, endDate, jobname, "", "");
+	}
+	
+	Collection<Workunit> getWorkunits(boolean userOnly, String cluster, String startDate, String endDate, String jobname, String appKey, String appData) {
 		if (isEnabled()) {
 			Workunit.All.pushTransaction("platform.getWorkunits");
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
@@ -405,9 +429,19 @@ public class Platform extends DataSingleton {
 			if (userOnly) {
 				request.setOwner(owner);
 			}
-			request.setCluster(cluster);
-			request.setStartDate(startDate);
-			request.setEndDate(startDate);
+			if (!cluster.isEmpty())
+				request.setCluster(cluster);
+			if (!jobname.isEmpty())
+				request.setJobname(jobname);
+			if (!startDate.isEmpty())
+				request.setStartDate(startDate);
+			if (!endDate.isEmpty())
+				request.setEndDate(endDate);
+			if (!appKey.isEmpty()) {
+				request.setApplicationName(Activator.PLUGIN_ID);
+				request.setApplicationKey(appKey);
+				request.setApplicationData(appData);
+			}
 			request.setCount(100);
 			try {
 				WUQueryResponse response = service.WUQuery(request);
@@ -419,8 +453,49 @@ public class Platform extends DataSingleton {
 				confirmDisable();
 			}
 			Workunit.All.popTransaction();
+			return new HashSet<Workunit>(workunits);
 		}
-		return new HashSet<Workunit>(workunits);
+		return new HashSet<Workunit>();
+	}
+
+	public static String toESPString(GregorianCalendar _calendar) {
+		//2013-10-02T23:00:00Z
+		Calendar now = GregorianCalendar.getInstance();
+		Calendar nowUTC = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+		int delta = nowUTC.get(Calendar.HOUR_OF_DAY) - now.get(Calendar.HOUR_OF_DAY);
+		GregorianCalendar calendar = (GregorianCalendar)_calendar.clone();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		calendar.add(Calendar.HOUR_OF_DAY, delta);
+		return df.format(calendar.getTime());
+	}
+
+	public Collection<Workunit> getWorkunits(String owner, String cluster, GregorianCalendar startDate, GregorianCalendar endDate) {
+		if (isEnabled()) {
+			Workunit.All.pushTransaction("platform.getWorkunits");
+			WsWorkunitsServiceSoap service = getWsWorkunitsService();
+			WUQuery request = new WUQuery();
+			if (owner != null)
+				request.setOwner(owner);
+			if (cluster != null)
+				request.setCluster(cluster);
+			if (startDate != null)
+				request.setStartDate(toESPString(startDate));
+			if (endDate != null)
+				request.setEndDate(toESPString(endDate));
+			request.setCount(100);
+			try {
+				WUQueryResponse response = service.WUQuery(request);
+				updateWorkunits(response.getWorkunits());
+			} catch (ArrayOfEspException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RemoteException e) {
+				confirmDisable();
+			}
+			Workunit.All.popTransaction();
+			return new HashSet<Workunit>(workunits);
+		}
+		return new HashSet<Workunit>();
 	}
 
 	public Collection<Workunit> getWorkunits(boolean userOnly, String cluster) {
@@ -724,12 +799,12 @@ public class Platform extends DataSingleton {
 		}
 	}
 
-	public WsWorkunitsServiceSoap getWsWorkunitsService() {
+	public WsWorkunitsServiceSoap getWsWorkunitsService(String user, String password) {
 		latencyTest();
 		WsWorkunitsLocator locator = new WsWorkunitsLocator();
 		try {
 			WsWorkunitsServiceSoap service = locator.getWsWorkunitsServiceSoap(getURL("WsWorkunits"));
-			initStub((org.apache.axis.client.Stub)service);
+			initStub((org.apache.axis.client.Stub)service, user, password);
 			return service;
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -739,6 +814,10 @@ public class Platform extends DataSingleton {
 			e.printStackTrace();
 		}
 		return null;	
+	}
+
+	public WsWorkunitsServiceSoap getWsWorkunitsService() {
+		return getWsWorkunitsService(getUser(), getPassword());		
 	}
 
 	public WsDfuServiceSoap getWsDfuService() {

@@ -16,21 +16,21 @@ import java.util.Comparator;
 
 public class LazyChildLoader<T> {
 	public enum CalcState {
-		UNKNOWN,
-		STARTED,
-		FINISHED
+		PREFETCH_UNKNOWN,
+		PREFETCH_STARTED,
+		PREFETCH_FINISHED
 	}
 
 	private CalcState state;
 	private ArrayList<T> children;
 
 	public LazyChildLoader() {
-		this.state = CalcState.UNKNOWN;
+		this.state = CalcState.PREFETCH_UNKNOWN;
 		this.children = new ArrayList<T>();
 	}
 
 	public synchronized void clear() {
-		state = CalcState.UNKNOWN;
+		state = CalcState.PREFETCH_UNKNOWN;
 		this.children.clear();
 	}
 
@@ -49,7 +49,7 @@ public class LazyChildLoader<T> {
 				this.children.add(o);
 			}
 		}
-		state = CalcState.FINISHED;
+		state = CalcState.PREFETCH_FINISHED;
 	}
 
 	public synchronized Object[] get() {
@@ -58,7 +58,7 @@ public class LazyChildLoader<T> {
 
 	public synchronized void add(T newChild) {
 		this.children.add(newChild);
-		state = CalcState.FINISHED;
+		state = CalcState.PREFETCH_FINISHED;
 	}
 
 	public synchronized void add(T[] newChildren) {
@@ -67,7 +67,7 @@ public class LazyChildLoader<T> {
 				this.children.add(o);
 			}
 		}
-		state = CalcState.FINISHED;
+		state = CalcState.PREFETCH_FINISHED;
 	}
 
 	public synchronized void remove(T[] oldChildren) {
@@ -87,14 +87,17 @@ public class LazyChildLoader<T> {
 	}
 
 	public synchronized void start(final Runnable childrenFetcher) {
-		assert(state == CalcState.UNKNOWN);
-		state = CalcState.STARTED;
+		state = CalcState.PREFETCH_STARTED;
 		Thread thread = new Thread(childrenFetcher);
 		thread.start();
 	}
 
 	public synchronized void sort(Comparator<T> comparator) {
 		Collections.sort(children, comparator);
+	}
+
+	public boolean isLoaded() {
+		return state == CalcState.PREFETCH_FINISHED;
 	}
 }
 

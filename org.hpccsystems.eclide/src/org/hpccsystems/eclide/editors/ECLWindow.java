@@ -54,12 +54,9 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
-import org.hpccsystems.eclide.editors.ECLWindow.ACTION;
 import org.hpccsystems.eclide.ui.viewer.ECLContentOutlinePage;
-import org.hpccsystems.eclide.ui.viewer.platform.GraphView;
-import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions;
-import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions.IPlatformUI;
-import org.hpccsystems.eclide.ui.viewer.platform.ResultView;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions.IPlatformUI;
 import org.hpccsystems.eclide.ui.viewer.platform.TextItemView;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTabItem;
@@ -95,7 +92,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		LAST
 	}
 
-	PlatformActions actions;
+	WorkunitActions actions;
 	ECLWindowActions thisActions;
 
 	public ECLWindow() {
@@ -105,7 +102,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		workunitFolder = null;
 		children = new LazyChildLoader<ItemView>();
 
-		actions = new PlatformActions(new IPlatformUI() {
+		actions = new WorkunitActions(new IPlatformUI() {
 
 			@Override
 			public void refresh() {
@@ -388,8 +385,11 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		Workunit.All.deleteObserver(this);
 
 		CollectionDelta delta = new CollectionDelta("primeChildren", getCurrentWorkunits());
-		delta.calcChanges(data.getWorkunits(null, false, "", "", ""));
-		mergeChanges(delta);
+		//  Workaround for:  HPCC-10299  ---
+		//  delta.calcChanges(data.getWorkunits(null, true, "", "", "", "path", getFilePath()));
+		delta.calcChanges(data.getWorkunits(null, true, "", "", "", getFileName()));
+		//  Workaround for:  HPCC-10299  ---
+		mergeChanges(delta, false);
 
 		Workunit.All.addObserver(this);
 	}
@@ -410,8 +410,35 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 		return retVal;
 	}
+	
+	IFile getFile() {
+		IEditorInput input = getEditorInput(); 
+		if (input instanceof IFileEditorInput) {
+			IFileEditorInput fileInput = (IFileEditorInput) getEditorInput(); 
+			return fileInput.getFile();
+		}
+		return null;
+	}
 
-	boolean mergeChanges(CollectionDelta delta) {
+	String getFileName() {
+		IFile file = getFile();
+		if (file != null) {
+			String ext = file.getFileExtension();
+			String name = file.getName();
+			return name.substring(0, name.length() - ext.length() - 1);
+		}
+		return "";
+	}
+
+	String getFilePath() {
+		IFile file = getFile();
+		if (file != null) {
+			return file.getFullPath().toPortableString();
+		}
+		return "";
+	}
+
+	boolean mergeChanges(CollectionDelta delta, boolean checkFilePath) {
 		boolean changed = false;
 		for (Object item : children.get().clone()) {
 			if (item instanceof WorkunitView) {
@@ -426,19 +453,27 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		}
 
 		//  Add new workunits  ---
-		IEditorInput input = getEditorInput(); 
-		if (input instanceof IFileEditorInput) {
-			IFileEditorInput fileInput = (IFileEditorInput) getEditorInput(); 
-			IFile file = fileInput.getFile();
-			String filePath = file.getFullPath().toPortableString();
+		if (checkFilePath) {
+			String filePath = getFilePath();
+			if (!filePath.isEmpty()) {
+				for (DataSingleton ds : delta.getAdded()) {
+					if (ds instanceof Workunit) {
+						Workunit wu = (Workunit)ds;
+						if (wu.getOwner().equals(wu.getPlatform().getUser())) {
+							if (filePath.compareTo(wu.getApplicationValue("path")) == 0) {
+								children.add(new WorkunitView(this, null, wu));
+								changed = true;
+							}
+						}
+					}
+				}
+			}
+		} else {
 			for (DataSingleton ds : delta.getAdded()) {
 				if (ds instanceof Workunit) {
 					Workunit wu = (Workunit)ds;
-	
-					if (filePath.compareTo(wu.getApplicationValue("path")) == 0) {
-						children.add(new WorkunitView(this, null, wu));
-						changed = true;
-					}
+					children.add(new WorkunitView(this, null, wu));
+					changed = true;
 				}
 			}
 		}
@@ -454,7 +489,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	public void update(Observable o, Object arg) {
 		if (o instanceof DataSingletonCollection) {
 			if (arg instanceof CollectionDelta) {
-				if (mergeChanges((CollectionDelta)arg)) {
+				if (mergeChanges((CollectionDelta)arg, true)) {
 					refresh();
 				}
 			}
