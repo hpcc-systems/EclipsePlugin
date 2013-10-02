@@ -17,17 +17,25 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.debug.internal.ui.SWTFactory;
 import org.eclipse.help.IContextProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.ide.ResourceUtil;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree;
@@ -43,6 +51,9 @@ public class ECLEditor extends TextEditor {
     /** The ID of the editor ruler context menu */
     public static final String RULER_CONTEXT = EDITOR_CONTEXT + ".ruler";
 	
+	private IFile sourceFile;
+
+	private ECLEditorToolbar toolbar;
 	private ECLColorManager colorManager;
 	private boolean readOnly;
 
@@ -59,10 +70,42 @@ public class ECLEditor extends TextEditor {
 		readOnly = true;
 		setPartName(getPartName() + " (Read-Only)");
 	}
+	
+	@Override
+	public void createPartControl(Composite parent) {
+		FillLayout fillLayout = new FillLayout();
+		fillLayout.marginHeight = 0;
+		fillLayout.marginWidth = 0;
+		parent.setLayout(fillLayout);
 
+		Composite outer = new Composite(parent, SWT.NONE);
+		FormLayout formLayout = new FormLayout();
+		formLayout.marginHeight = 0;
+		formLayout.marginWidth = 0;
+		formLayout.spacing = 5;
+		outer.setLayout(formLayout);
+
+		toolbar = new ECLEditorToolbar(sourceFile, outer, SWT.NONE);
+
+		Composite innerBottom = new Composite(outer, SWT.NONE);
+		fillLayout = new FillLayout();
+		fillLayout.marginHeight = 0;
+		fillLayout.marginWidth = 0;
+		innerBottom.setLayout(fillLayout);
+		FormData fData = new FormData();
+		fData.top = new FormAttachment(toolbar);
+		fData.left = new FormAttachment(0);
+		fData.right = new FormAttachment(100);
+		fData.bottom = new FormAttachment(100);
+		innerBottom.setLayoutData(fData);
+
+		super.createPartControl(innerBottom);
+	}
+	
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
+		sourceFile = ResourceUtil.getFile(input);
 		if (input instanceof IStorageEditorInput) {
 			try {
 				IStorage storage = ((IStorageEditorInput)input).getStorage();

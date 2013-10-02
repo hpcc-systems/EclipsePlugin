@@ -11,10 +11,13 @@
 package org.hpccsystems.eclide;
 
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -84,5 +87,13 @@ public class Activator extends AbstractUIPlugin {
 
 	public static void log(String msg, Exception e) {
 	      plugin.getLog().log(new Status(Status.INFO, PLUGIN_ID, Status.OK, msg, e));
+	}
+	
+	public static IEclipsePreferences getPreferences() {
+		return ConfigurationScope.INSTANCE.getNode(PLUGIN_ID);
+	}
+
+	public static Preferences getPreferences(String subNode) {
+		return getPreferences().node(subNode);
 	}
 }
