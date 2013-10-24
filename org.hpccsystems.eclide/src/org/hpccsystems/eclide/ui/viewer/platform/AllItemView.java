@@ -30,12 +30,14 @@ import org.hpccsystems.internal.ui.tree.ItemView;
 
 class PlatformBaseView extends ItemView {
 	Platform platform;
-	String clusterName;
+	String clusterName = "";
 
-	PlatformBaseView(TreeItemOwner treeViewer, PlatformBaseView parent, Platform platform) {
+	PlatformBaseView(TreeItemOwner treeViewer, ItemView parent, Platform platform) {
 		super(treeViewer, parent);
 		this.platform = platform;
-		clusterName = parent != null ? parent.clusterName : "";
+		if (parent instanceof PlatformBaseView) {
+			clusterName = ((PlatformBaseView)parent).clusterName;
+		}
 	}
 
 	@Override

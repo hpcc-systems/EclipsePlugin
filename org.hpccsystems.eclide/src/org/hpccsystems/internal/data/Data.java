@@ -209,13 +209,21 @@ public class Data extends Observable {
 	}
 
 	public Collection<Workunit> getWorkunits(Platform platform, boolean userOnly, String cluster, String startDate, String endDate) {
+		return getWorkunits(platform, userOnly, cluster, startDate, endDate, "", "", "");
+	}
+
+	public Collection<Workunit> getWorkunits(Platform platform, boolean userOnly, String cluster, String startDate, String endDate, String jobname) {
+		return getWorkunits(platform, userOnly, cluster, startDate, endDate, jobname, "", "");
+	}
+
+	public Collection<Workunit> getWorkunits(Platform platform, boolean userOnly, String cluster, String startDate, String endDate, String jobname, String appKey, String appValue) {
 		Collection<Workunit> workunits = new HashSet<Workunit>();
 		try {
 			Workunit.All.pushTransaction("Data.getWorkunits");
 			for (Platform p : getPlatforms()) {
 				assert p != null;
 				if (platform == null || platform.equals(p)) {
-					workunits.addAll(p.getWorkunits(userOnly, cluster, startDate, endDate));
+					workunits.addAll(p.getWorkunits(userOnly, cluster, startDate, endDate, jobname, appKey, appValue));
 				}
 			}
 		}
