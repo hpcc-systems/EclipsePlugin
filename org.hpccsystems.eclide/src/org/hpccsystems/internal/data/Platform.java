@@ -128,7 +128,7 @@ public class Platform extends DataSingleton {
 		this.ip = ip;
 		this.port = port;
 		isDisabled = true;
-		isTempDisabled = true;
+		isTempDisabled = false;
 		name = "";
 		owner = "";
 
