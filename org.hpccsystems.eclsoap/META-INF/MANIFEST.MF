@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Eclsoap
 Bundle-SymbolicName: org.hpccsystems.eclsoap
-Bundle-Version: 4.2.0.3
+Bundle-Version: 4.2.0.101
 Bundle-Activator: org.hpccsystems.eclsoap.Activator
 Require-Bundle: org.eclipse.core.runtime,
  javax.xml.rpc;visibility:=reexport,
