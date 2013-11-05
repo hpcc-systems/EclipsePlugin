@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plugin name="ECLR.for.ECLIPSE" id="ECLR.Eclipse.plugin" version="1.0" provider-name="HPCC Systems">
    <extension point="org.eclipse.help.toc">
-      <toc file="toc.xml"
-            primary="true"/>
+      <toc file="toc.xml" primary="true"/>
    </extension>
    <extension point="org.eclipse.help.index">
       <index file="index.xml"/>
