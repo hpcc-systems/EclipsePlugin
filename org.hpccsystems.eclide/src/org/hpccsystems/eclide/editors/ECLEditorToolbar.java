@@ -218,22 +218,24 @@ public class ECLEditorToolbar extends Composite {
 		ILaunchConfiguration configuration = getSelectedConfiguration();
 		if (configuration != null) {
 			Platform platform = Data.get().GetPlatform(configuration);
-			Cluster[] clusters = platform.getClusters();
-			int currentTargetSel = -1;
-			int defaultTargetSel = -1;
-			for (int i = 0; i < clusters.length; ++i) {
-				String name = clusters[i].getName();
-				comboTarget.add(name);
-				if (name.equals(currentTarget))
-					currentTargetSel = i;
-				if (name.equals(defaultTarget))
-					defaultTargetSel = i;
+			if (platform != null) {
+				Cluster[] clusters = platform.getClusters();
+				int currentTargetSel = -1;
+				int defaultTargetSel = -1;
+				for (int i = 0; i < clusters.length; ++i) {
+					String name = clusters[i].getName();
+					comboTarget.add(name);
+					if (name.equals(currentTarget))
+						currentTargetSel = i;
+					if (name.equals(defaultTarget))
+						defaultTargetSel = i;
+				}
+		
+				if (currentTargetSel >= 0)
+					comboTarget.select(currentTargetSel);
+				else if (defaultTargetSel >= 0)
+					comboTarget.select(defaultTargetSel);
 			}
-	
-			if (currentTargetSel >= 0)
-				comboTarget.select(currentTargetSel);
-			else if (defaultTargetSel >= 0)
-				comboTarget.select(defaultTargetSel);
 		}
 	}
 

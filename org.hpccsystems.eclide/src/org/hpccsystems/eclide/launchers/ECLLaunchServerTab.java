@@ -43,6 +43,10 @@ import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 import org.hpccsystems.internal.data.Platform;
 
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
+	public static final int P_PORT = 8010;
+	public static final int P_SSLPORT = 18010;
+	public static final String P_PORT_STR = "8010";
+	public static final String P_SSLPORT_STR = "18010";
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
 		@Override
@@ -60,10 +64,10 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
 			if (source == sslButton) {
-				if (sslButton.getSelection() && fPortText.getText().matches("8010")) {
-					fPortText.setText("18010");
-				} else if (!sslButton.getSelection() && fPortText.getText().matches("18010")) {
-					fPortText.setText("8010");
+				if (sslButton.getSelection() && fPortText.getText().matches(P_PORT_STR)) {
+					fPortText.setText(P_SSLPORT_STR);
+				} else if (!sslButton.getSelection() && fPortText.getText().matches(P_SSLPORT_STR)) {
+					fPortText.setText(P_PORT_STR);
 				}
 				refreshAddress();
 			}
@@ -227,14 +231,18 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 			sslButton.setSelection(configuration.getAttribute(Platform.P_SSL, false));
 			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
-			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, 8010)));
+			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, P_PORT)));
 			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor"));
 			compileOnlyButton.setSelection(configuration.getAttribute(Platform.P_COMPILEONLY, false));
 
 			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
 			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
 
-			int port = Integer.parseInt(fPortText.getText());
+			int port = P_PORT;
+			try {
+				port = new Integer(fPortText.getText());
+			} catch (NumberFormatException e) {
+			}
 			Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
 			if (platform.isDisabled()) {
 				fServerVersionText.setText("Unable to Connect (Temporarily Disabled).");
@@ -259,7 +267,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		try {
 			configuration.setAttribute(Platform.P_PORT, Integer.parseInt(fPortText.getText()));
 		} catch (NumberFormatException e) {
-			configuration.setAttribute(Platform.P_PORT, 8010);
+			configuration.setAttribute(Platform.P_PORT, P_PORT);
 		}
 		configuration.setAttribute(Platform.P_CLUSTER, fClusterText.getText());
 		configuration.setAttribute(Platform.P_COMPILEONLY, compileOnlyButton.getSelection());
@@ -290,7 +298,11 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	void refreshServerVersion() {
 		fServerVersionText.setText("");
 		
-		int port = Integer.parseInt(fPortText.getText());
+		int port = P_PORT;
+		try {
+			port = new Integer(fPortText.getText());
+		} catch (NumberFormatException e) {
+		}
 		
 		Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
 		platform.clearTempDisabled();
