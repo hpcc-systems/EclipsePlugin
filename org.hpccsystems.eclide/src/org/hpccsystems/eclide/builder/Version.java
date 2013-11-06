@@ -32,15 +32,15 @@ public class Version implements Comparable<Version> {
 		try {
 			String[] parts = version.split("\\.");
 			if (parts.length >= 1) {
-				major = Integer.parseInt(parts[0]);
+				major = new Integer(parts[0]);
 			}
 			if (parts.length >= 2) {
-				minor = Integer.parseInt(parts[1]);
+				minor = new Integer(parts[1]);
 			}
 			if (parts.length >= 3) {
-				point = Integer.parseInt(parts[2]);
+				point = new Integer(parts[2]);
 			}
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 		}
 	}
 
@@ -57,7 +57,10 @@ public class Version implements Comparable<Version> {
 				postfixStr += c;
 			}
 		}
-		postfixInt = Integer.parseInt(postfixIntStr);
+		try {
+			postfixInt = new Integer(postfixIntStr);
+		} catch (NumberFormatException e) {
+		}		
 	}
 
 	@Override
