@@ -47,7 +47,7 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	}
 	public static ClientTools get(Platform p, ConfigurationPreferenceStore preferences) {
 		ClientTools ct = null;
-		if (preferences.getAttribute(ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS, "false").equals("true")) {
+		if (preferences.getAttribute(ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS, ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS_DEFAULT)) {
 			ct = new ClientTools(preferences);
 		} else {
 			ct = ClientTools.findBestMatch(p.getBuildVersion());
@@ -76,7 +76,7 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	public static final String P_ARGSWULOCAL_DEFAULT = "";
 
 	public static final String P_INLINERESULTLIMIT = "inlineResultLimit";
-	public static final int P_INLINERESULTLIMIT_DEFAULT = 0;
+	public static final int P_INLINERESULTLIMIT_DEFAULT = 100;
 	public static final String P_MONITORDEPENDEES = "monitorDependeesPreference";
 	public static final boolean P_MONITORDEPENDEES_DEFAULT = true;
 	public static final String P_SUPRESSSECONDERROR = "supressSecondErrorPreference";
@@ -105,7 +105,7 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	}
 	
 	void init(ConfigurationPreferenceStore _preferences) {
-		if (!_preferences.getAttribute(ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS,  "false").equals("true")) {
+		if (!_preferences.getAttribute(ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS, ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS_DEFAULT)) {
 			preferences = Activator.getDefault().getPreferenceStore();
 		} else {
 			preferences = _preferences;

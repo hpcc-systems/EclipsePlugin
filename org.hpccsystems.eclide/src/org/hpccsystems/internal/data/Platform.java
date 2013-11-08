@@ -95,8 +95,14 @@ public class Platform extends DataSingleton {
 
 	public static final String P_DISABLED = "disabledConfig";
 	public static final String P_SSL = "sslConfig";
+	public static final boolean P_SSL_DEFAULT = false;
 	public static final String P_IP = "ipLaunchConfig";
+	public static final String P_IP_DEFAULT = "localhost";
 	public static final String P_PORT = "portLaunchConfig";
+	public static final int P_PORT_DEFAULT = 8010;
+	public static final int P_SSLPORT_DEFAULT = 18010;
+	public static final String P_PORT_DEFAULT_STR = "8010";
+	public static final String P_SSLPORT_DEFAULT_STR = "18010";
 	public static final String P_USER = "userLaunchConfig";
 	public static final String P_PASSWORD = "passwordLaunchConfig";
 	public static final String P_CLUSTER = "clusterLaunchConfig";
@@ -104,7 +110,8 @@ public class Platform extends DataSingleton {
 
 	private ConfigurationPreferenceStore launchConfiguration;	
 	private String name;
-	private String owner;
+	private String user;
+	private String password;
 	private enum SERVER_EXISTS {
 		UNKNOWN,
 		TESTING,
@@ -135,7 +142,8 @@ public class Platform extends DataSingleton {
 		isDisabled = true;
 		isTempDisabled = false;
 		name = "";
-		owner = "";
+		user = "";
+		password = "";
 
 		clusters = new HashSet<Cluster>();
 		dropZones = new HashSet<DropZone>();
@@ -148,7 +156,8 @@ public class Platform extends DataSingleton {
 	public void update(ILaunchConfiguration _launchConfiguration) {
 		launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
 		name = _launchConfiguration.getName();
-		owner = launchConfiguration.getAttribute(P_USER, "");
+		user = launchConfiguration.getAttribute(P_USER, "");
+		password = launchConfiguration.getAttribute(P_PASSWORD, "");
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
 		ssl = launchConfiguration.getAttribute(P_SSL, false);
 		ip = launchConfiguration.getAttribute(P_IP, "");
@@ -218,11 +227,11 @@ public class Platform extends DataSingleton {
 	}
 
 	public String getUser() {
-		return launchConfiguration.getAttribute(P_USER, "");
+		return user;
 	}
 
 	public String getPassword() {
-		return launchConfiguration.getAttribute(P_PASSWORD, "");
+		return password;
 	}
 	
 	protected String getBuild() {
@@ -249,7 +258,7 @@ public class Platform extends DataSingleton {
 		WUQuery request = new WUQuery();
 		request.setWuid("XXX");
 		try {
-			WUQueryResponse response = service.WUQuery(request);
+			service.WUQuery(request);
 			return true;
 		} catch (org.hpccsystems.ws.wssmc.ArrayOfEspException e) {
 		} catch (RemoteException e) {
@@ -427,7 +436,7 @@ public class Platform extends DataSingleton {
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
 			WUQuery request = new WUQuery();
 			if (userOnly) {
-				request.setOwner(owner);
+				request.setOwner(user);
 			}
 			if (!cluster.isEmpty())
 				request.setCluster(cluster);
