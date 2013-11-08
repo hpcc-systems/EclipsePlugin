@@ -18,14 +18,12 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.progress.WorkbenchJob;
 
 public abstract class ECLLaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 	private Job fRereshJob;	
 
-	protected ConfigurationPreferenceStore store;
 	class FieldEditorRef{
 		Group parent;
 		FieldEditor item;
@@ -85,6 +83,5 @@ public abstract class ECLLaunchConfigurationTab extends AbstractLaunchConfigurat
 
 	protected void addField(Group parent, FieldEditor field) {
 		fieldMap.put(field.getPreferenceName(), new FieldEditorRef(parent, field));
-		store.addField(field);
 	}
 }

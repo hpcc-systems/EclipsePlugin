@@ -16,13 +16,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Observable;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationListener;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.hpccsystems.eclide.launchers.ECLLaunchCompilerTab;
 
 public class Data extends Observable {
 	private static Data singletonFactory;
@@ -43,11 +41,10 @@ public class Data extends Observable {
 				Platform p = GetPlatform(configs[i]);
 				if (p != null && !platforms.contains(p)) {
 					platforms.add(p);
-				}
-
-				ClientTools ct = ClientTools.get(p, configs[i]);
-				if (!clientTools.contains(ct)) {
-					clientTools.add(ct);
+					ClientTools ct = ClientTools.get(p, configs[i]);
+					if (!clientTools.contains(ct)) {
+						clientTools.add(ct);
+					}
 				}
 			}
 		} catch (CoreException e) {
@@ -61,42 +58,43 @@ public class Data extends Observable {
 				ILaunchConfiguration[] configs;
 				try {
 					configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
-
-					//  Find new configs  ---
-					for(int i = 0; i < configs.length; ++i) {
-						Iterator<Platform> itr = platforms.iterator(); 
-						boolean found = false;
-						while (itr.hasNext()) {
-							Platform platform = itr.next();
-							if (platform.matches(configs[i])) {
-								found = true;
-								break;
-							}
-						}
-						if (!found) {
-							Platform p = GetPlatform(configs[i]);
-							platforms.add(p);
-							retVal = true;
-						}
-					}
-					
-					//  Find obsolete platforms  ---
-					Iterator<Platform> itr = platforms.iterator(); 
-					while (itr.hasNext()) {
-						boolean found = false;
-						Platform platform = itr.next();
+						//  Find new configs  ---
 						for(int i = 0; i < configs.length; ++i) {
-							if (platform.matches(configs[i])) {
-								found = true;
-								break;
+							Iterator<Platform> itr = platforms.iterator(); 
+							boolean found = false;
+							while (itr.hasNext()) {
+								Platform platform = itr.next();
+								if (platform.matches(configs[i])) {
+									found = true;
+									break;
+								}
+							}
+							if (!found) {
+								Platform p = GetPlatform(configs[i]);
+								if (p != null && !platforms.contains(p)) {
+									platforms.add(p);
+									retVal = true;
+								}
 							}
 						}
-						if (!found) {
-							Platform.remove(platform);
-							platforms.remove(platform);
-							retVal = true;
+						
+						//  Find obsolete platforms  ---
+						Iterator<Platform> itr = platforms.iterator(); 
+						while (itr.hasNext()) {
+							boolean found = false;
+							Platform platform = itr.next();
+							for(int i = 0; i < configs.length; ++i) {
+								if (platform.matches(configs[i])) {
+									found = true;
+									break;
+								}
+							}
+							if (!found) {
+								Platform.remove(platform);
+								platforms.remove(platform);
+								retVal = true;
+							}
 						}
-					}
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
