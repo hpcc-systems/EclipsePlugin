@@ -71,7 +71,7 @@ import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class PlatformViewer extends ViewPart {
 
-	static final String WUTempFolder = "WU Temp Files";
+	static final String WUTempFolder = Messages.PlatformViewer_0;
 	
 	class MyTreeViewer extends TreeViewer {
 
@@ -140,8 +140,8 @@ public class PlatformViewer extends ViewPart {
 		
 		WorkunitStorage(Workunit workunit) {
 			this.workunit = workunit;
-			if (this.workunit.hasApplicationValue("path")) {
-				String filePath = workunit.getApplicationValue("path");
+			if (this.workunit.hasApplicationValue("path")) { //$NON-NLS-1$
+				String filePath = workunit.getApplicationValue("path"); //$NON-NLS-1$
 				file = Eclipse.findFile(new Path(filePath));
 			}
 		}
@@ -218,7 +218,7 @@ public class PlatformViewer extends ViewPart {
 			if (origonalFile != null) {
 				return origonalFile.getFullPath().toPortableString();
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 
 		@Override 
@@ -250,7 +250,7 @@ public class PlatformViewer extends ViewPart {
 		public String getToolTipText() {
 			String tooltip = storage.getWorkunit().getJobname();
 			if (!tooltip.isEmpty()) {
-				tooltip += " - ";
+				tooltip += " - "; //$NON-NLS-1$
 			}
 			tooltip += storage.getWorkunit().getWuid();
 			return tooltip;
@@ -351,7 +351,7 @@ public class PlatformViewer extends ViewPart {
 										if (workunitInput.origonalFileExists()) {
 											ep = IDE.openEditor(Workbench.getActivePage(), workunitInput.getOrigonalFile(), true);
 										} else {
-											ep = IDE.openEditor(Workbench.getActivePage(), workunitInput, "org.hpccsystems.eclide.editors.ECLWindow");
+											ep = IDE.openEditor(Workbench.getActivePage(), workunitInput, "org.hpccsystems.eclide.editors.ECLWindow"); //$NON-NLS-1$
 										}
 										if (ep instanceof ECLWindow) {
 											((ECLWindow) ep).showItemView(item, true);
@@ -398,7 +398,7 @@ public class PlatformViewer extends ViewPart {
 	}
 
 	public void createActions() {
-		showWebItemAction = new Action("Show ECL Watch") {
+		showWebItemAction = new Action(Messages.PlatformViewer_6) {
 			@Override
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
@@ -413,7 +413,7 @@ public class PlatformViewer extends ViewPart {
 			}
 		};
 
-		updateItemAction = new Action("Update") {
+		updateItemAction = new Action(Messages.PlatformViewer_7) {
 			@Override
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
@@ -427,14 +427,14 @@ public class PlatformViewer extends ViewPart {
 			}
 		};
 
-	    refreshListAction = new Action("Refresh", Activator.getImageDescriptor("icons/refresh.png")) {
+	    refreshListAction = new Action(Messages.PlatformViewer_8, Activator.getImageDescriptor("icons/refresh.png")) { //$NON-NLS-2$
 			@Override
 			public void run() {
 				contentProvider.reloadChildren();
 			}
 		};
 		
-		refreshEachItemAction = new Action("Refresh Eeach Item") {
+		refreshEachItemAction = new Action(Messages.PlatformViewer_10) {
 			@Override
 			public void run() {
 				contentProvider.refreshChildren();

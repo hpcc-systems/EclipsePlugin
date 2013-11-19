@@ -105,8 +105,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	private Button testButton;
 	private Browser browser;
 	
-	private static String DisableButtonText = "Disable Server"; 
-	private static String DisableButtonTempDiabledText = DisableButtonText + " (Temporarily Disabled)."; 
+	private static String DisableButtonText = Messages.ECLLaunchServerTab_0; 
+	private static String DisableButtonTempDiabledText = DisableButtonText + Messages.ECLLaunchServerTab_1; 
 	
 	ECLLaunchServerTab() {
 		fListener = new WidgetListener();
@@ -123,63 +123,63 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		disableButton = SWTFactory.createCheckButton(parent, DisableButtonText, null, false, 1);
 		disableButton.addSelectionListener(fListener);
 
-		Group group = SWTFactory.createGroup(parent, "Server:", 2, 1, GridData.FILL_HORIZONTAL);
-		sslButton = SWTFactory.createCheckButton(group, "SSL", null, false, 2);
+		Group group = SWTFactory.createGroup(parent, Messages.ECLLaunchServerTab_2, 2, 1, GridData.FILL_HORIZONTAL);
+		sslButton = SWTFactory.createCheckButton(group, Messages.ECLLaunchServerTab_3, null, false, 2);
 		sslButton.addSelectionListener(fListener);
 
-		SWTFactory.createLabel(group, "IP Address:  ", 1);
+		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_4, 1);
 		fIPText = SWTFactory.createSingleText(group, 1);
 		fIPText.addModifyListener(fListener);
 
-		SWTFactory.createLabel(group, "Port:  ", 1);
+		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_5, 1);
 		fPortText = SWTFactory.createSingleText(group, 1);
 		fPortText.addModifyListener(fListener);
 
-		SWTFactory.createLabel(group, "Target:  ", 1);
+		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_6, 1);
 		fClusterText = SWTFactory.createSingleText(group, 1);
 		fClusterText.addModifyListener(fListener);
 		
-		compileOnlyButton = SWTFactory.createCheckButton(group, "Compile Only", null, false, 1);
+		compileOnlyButton = SWTFactory.createCheckButton(group, Messages.ECLLaunchServerTab_7, null, false, 1);
 		compileOnlyButton.addSelectionListener(fListener);
 	}
 
 	protected void createCredentialsEditor(Composite parent) {
-		Group group = SWTFactory.createGroup(parent, "Credentials:", 2, 1, GridData.FILL_HORIZONTAL);
-		SWTFactory.createLabel(group, "User:  ", 1);
+		Group group = SWTFactory.createGroup(parent, Messages.ECLLaunchServerTab_8, 2, 1, GridData.FILL_HORIZONTAL);
+		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_9, 1);
 		fUserText = SWTFactory.createSingleText(group, 1);
 		fUserText.addModifyListener(fListener);
 
-		SWTFactory.createLabel(group, "Password:  ", 1);
+		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_10, 1);
 		fPasswordText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD, 1);
 		fPasswordText.addModifyListener(fListener);
 	}
 
 	protected Browser createBrowser(final Composite parent) {
-		final Group group = SWTFactory.createGroup(parent, "ECL Watch:", 3, 1, GridData.FILL_BOTH);
-		SWTFactory.createLabel(group, "Address:  ", 1);
+		final Group group = SWTFactory.createGroup(parent, Messages.ECLLaunchServerTab_11, 3, 1, GridData.FILL_BOTH);
+		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_12, 1);
 		fAddressText = SWTFactory.createSingleText(group, 1);
 		fAddressText.addModifyListener(fListener);
-		testButton = SWTFactory.createPushButton(group, "Test", null);
+		testButton = SWTFactory.createPushButton(group, Messages.ECLLaunchServerTab_13, null);
 		testButton.addSelectionListener(fListener);
-		SWTFactory.createLabel(group, "Server Version:  ", 1);
+		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_14, 1);
 		fServerVersionText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY, 2);
-		SWTFactory.createLabel(group, "Compiler Version:  ", 1);
+		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_15, 1);
 		fCompilerVersionText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY, 2);
 
 		try {
 			browser = new Browser(group, SWT.BORDER);
 		} catch (IllegalArgumentException e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control", e);
+			org.hpccsystems.eclide.Activator.log(Messages.ECLLaunchServerTab_16, e);
 		} catch (SWTException e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control", e);
+			org.hpccsystems.eclide.Activator.log(Messages.ECLLaunchServerTab_17, e);
 		} catch (SWTError e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control");
+			org.hpccsystems.eclide.Activator.log(Messages.ECLLaunchServerTab_18);
 		}
 		if (browser != null) {
-			browser.setUrl("about:blank");
+			browser.setUrl("about:blank"); //$NON-NLS-1$
 			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 			gd.horizontalSpan = 3;
 			browser.setLayoutData(gd);
@@ -193,7 +193,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							newBrowser.setText("<html><body><h3>Authentication Failed...</h3></body></html>");
+							newBrowser.setText(Messages.ECLLaunchServerTab_20);
 						}
 					});
 				}
@@ -207,7 +207,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 				}
 			});
 		} else {
-			SWTFactory.createLabel(group, "Warning:  Failed to create Web Browser, see Error Log for further details.", 3);
+			SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_21, 3);
 		}
 		return browser;
 	}
@@ -237,11 +237,11 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			sslButton.setSelection(configuration.getAttribute(Platform.P_SSL, Platform.P_SSL_DEFAULT));
 			fIPText.setText(configuration.getAttribute(Platform.P_IP, Platform.P_IP_DEFAULT));
 			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, Platform.P_PORT_DEFAULT)));
-			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor"));
+			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor")); //$NON-NLS-1$
 			compileOnlyButton.setSelection(configuration.getAttribute(Platform.P_COMPILEONLY, false));
 
-			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
-			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
+			fUserText.setText(configuration.getAttribute(Platform.P_USER, "")); //$NON-NLS-1$
+			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, "")); //$NON-NLS-1$
 
 			int port = Platform.P_PORT_DEFAULT;
 			try {
@@ -250,12 +250,12 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			}
 			Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
 			if (platform.isDisabled()) {
-				fServerVersionText.setText("Unable to Connect (Temporarily Disabled).");
+				fServerVersionText.setText(Messages.ECLLaunchServerTab_25);
 				disableButton.setText(DisableButtonTempDiabledText);
-				fCompilerVersionText.setText("");
+				fCompilerVersionText.setText(""); //$NON-NLS-1$
 			} else {
-				fServerVersionText.setText("");
-				fCompilerVersionText.setText("");
+				fServerVersionText.setText(""); //$NON-NLS-1$
+				fCompilerVersionText.setText(""); //$NON-NLS-1$
 				disableButton.setText(DisableButtonText);
 			}
 			
@@ -283,7 +283,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		configuration.setAttribute(Platform.P_PASSWORD, fPasswordText.getText());
 		
 		try {
-			if (!fCompilerPath.isEmpty() && configuration.getAttribute(ClientTools.P_TOOLSPATH, "").isEmpty()) {
+			if (!fCompilerPath.isEmpty() && configuration.getAttribute(ClientTools.P_TOOLSPATH, "").isEmpty()) { //$NON-NLS-1$
 				configuration.setAttribute(ClientTools.P_TOOLSPATH, fCompilerPath);
 			}
 		} catch (CoreException e) {
@@ -300,18 +300,18 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	}
 
 	void refreshAddress() {
-		StringBuilder url = new StringBuilder("http");
+		StringBuilder url = new StringBuilder("http"); //$NON-NLS-1$
 		if (sslButton.getSelection()) {
-			url.append("s");
+			url.append("s"); //$NON-NLS-1$
 		}
-		url.append("://" + fIPText.getText());
-		url.append(":" + fPortText.getText() + "/");
+		url.append("://" + fIPText.getText()); //$NON-NLS-1$
+		url.append(":" + fPortText.getText() + "/"); //$NON-NLS-1$ //$NON-NLS-2$
 		fAddressText.setText(url.toString());
 	}
 
 	void refreshServerVersion() {
-		fServerVersionText.setText("");
-		fCompilerVersionText.setText("");
+		fServerVersionText.setText(""); //$NON-NLS-1$
+		fCompilerVersionText.setText(""); //$NON-NLS-1$
 		
 		int port = Platform.P_PORT_DEFAULT;
 		try {
@@ -351,13 +351,13 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 					browser.setUrl(fAddressText.getText());
 				}
 			});
-			browser.setText("<html><body><h3>Loading (" + fAddressText.getText() + ")...</h3></body></html>");
+			browser.setText(Messages.ECLLaunchServerTab_37 + fAddressText.getText() + Messages.ECLLaunchServerTab_38);
 		}
 	}
 
 	@Override
 	public String getName() {
-		return "HPCC Platform";
+		return Messages.ECLLaunchServerTab_39;
 	}
 
 	@Override

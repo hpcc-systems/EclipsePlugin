@@ -28,7 +28,7 @@ public class QuickFix implements IMarkerResolution {
 
 	@Override
 	public void run(IMarker marker) {
-		MessageDialog.openInformation(null, "QuickFix Demo",
-				"This quick-fix is not yet implemented");
+		MessageDialog.openInformation(null, Messages.QuickFix_0,
+				Messages.QuickFix_1);
 	}
 }

@@ -1,4 +1,4 @@
-set JARSIGNER=c:\Program Files\Java\jdk1.7.0_25\bin\jarsigner.exe
+set JARSIGNER=c:\Program Files\Java\jdk1.7.0_40\bin\jarsigner.exe
 set KEYSTORE=..\sign\hpcc_code_signing.pfx
 set TSA=https://timestamp.geotrust.com/tsa
 set STOREPASS=%1

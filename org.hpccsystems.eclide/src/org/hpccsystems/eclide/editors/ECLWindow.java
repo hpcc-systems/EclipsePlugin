@@ -137,11 +137,11 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			int index = addPage(editor, getEditorInput());
 			setPartName(editor.getTitle());
 			setPageText(index, "ECL");
-			setPageImage(index, Activator.getImage("icons/doc.png"));
+			setPageImage(index, Activator.getImage("icons/doc.png")); //$NON-NLS-1$
 		} catch (PartInitException e) {
 			ErrorDialog.openError(
 					getSite().getShell(),
-					"Error creating nested text editor",
+					Messages.ECLWindow_2,
 					null,
 					e.getStatus());
 		}
@@ -307,7 +307,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	public void init(IEditorSite site, IEditorInput editorInput)
 			throws PartInitException {
 		if (!(editorInput instanceof IEditorInput)) {
-			throw new PartInitException("Invalid Input: Must be IEditorInput");
+			throw new PartInitException(Messages.ECLWindow_3);
 		}
 		super.init(site, editorInput);
 	}
@@ -384,10 +384,10 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	public void refreshChildren() {
 		Workunit.All.deleteObserver(this);
 
-		CollectionDelta delta = new CollectionDelta("primeChildren", getCurrentWorkunits());
+		CollectionDelta delta = new CollectionDelta("primeChildren", getCurrentWorkunits()); //$NON-NLS-1$
 		//  Workaround for:  HPCC-10299  ---
 		//  delta.calcChanges(data.getWorkunits(null, true, "", "", "", "path", getFilePath()));
-		delta.calcChanges(data.getWorkunits(null, true, "", "", "", getFileName()));
+		delta.calcChanges(data.getWorkunits(null, true, "", "", "", getFileName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		//  Workaround for:  HPCC-10299  ---
 		mergeChanges(delta, false);
 
@@ -427,7 +427,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			String name = file.getName();
 			return name.substring(0, name.length() - ext.length() - 1);
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	String getFilePath() {
@@ -435,7 +435,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		if (file != null) {
 			return file.getFullPath().toPortableString();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	boolean mergeChanges(CollectionDelta delta, boolean checkFilePath) {
@@ -460,7 +460,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 					if (ds instanceof Workunit) {
 						Workunit wu = (Workunit)ds;
 						if (wu.getOwner().equals(wu.getPlatform().getUser())) {
-							if (filePath.compareTo(wu.getApplicationValue("path")) == 0) {
+							if (filePath.compareTo(wu.getApplicationValue("path")) == 0) { //$NON-NLS-1$
 								children.add(new WorkunitView(this, null, wu));
 								changed = true;
 							}

@@ -93,20 +93,20 @@ public class Platform extends DataSingleton {
 		All.remove(p);
 	}
 
-	public static final String P_DISABLED = "disabledConfig";
-	public static final String P_SSL = "sslConfig";
+	public static final String P_DISABLED = "disabledConfig"; //$NON-NLS-1$
+	public static final String P_SSL = "sslConfig"; //$NON-NLS-1$
 	public static final boolean P_SSL_DEFAULT = false;
-	public static final String P_IP = "ipLaunchConfig";
-	public static final String P_IP_DEFAULT = "localhost";
-	public static final String P_PORT = "portLaunchConfig";
+	public static final String P_IP = "ipLaunchConfig"; //$NON-NLS-1$
+	public static final String P_IP_DEFAULT = "localhost"; //$NON-NLS-1$
+	public static final String P_PORT = "portLaunchConfig"; //$NON-NLS-1$
 	public static final int P_PORT_DEFAULT = 8010;
 	public static final int P_SSLPORT_DEFAULT = 18010;
-	public static final String P_PORT_DEFAULT_STR = "8010";
-	public static final String P_SSLPORT_DEFAULT_STR = "18010";
-	public static final String P_USER = "userLaunchConfig";
-	public static final String P_PASSWORD = "passwordLaunchConfig";
-	public static final String P_CLUSTER = "clusterLaunchConfig";
-	public static final String P_COMPILEONLY = "compileOnly";
+	public static final String P_PORT_DEFAULT_STR = "8010"; //$NON-NLS-1$
+	public static final String P_SSLPORT_DEFAULT_STR = "18010"; //$NON-NLS-1$
+	public static final String P_USER = "userLaunchConfig"; //$NON-NLS-1$
+	public static final String P_PASSWORD = "passwordLaunchConfig"; //$NON-NLS-1$
+	public static final String P_CLUSTER = "clusterLaunchConfig"; //$NON-NLS-1$
+	public static final String P_COMPILEONLY = "compileOnly"; //$NON-NLS-1$
 
 	private ConfigurationPreferenceStore launchConfiguration;	
 	private String name;
@@ -124,7 +124,7 @@ public class Platform extends DataSingleton {
 	private boolean ssl;
 	private String ip;
 	private int port;
-	private String build = "";
+	private String build = ""; //$NON-NLS-1$
 	private Version version;
 	private Collection<Cluster> clusters;
 	private Collection<DropZone> dropZones;
@@ -141,9 +141,9 @@ public class Platform extends DataSingleton {
 		this.port = port;
 		isDisabled = true;
 		isTempDisabled = false;
-		name = "";
-		user = "";
-		password = "";
+		name = ""; //$NON-NLS-1$
+		user = ""; //$NON-NLS-1$
+		password = ""; //$NON-NLS-1$
 
 		clusters = new HashSet<Cluster>();
 		dropZones = new HashSet<DropZone>();
@@ -156,17 +156,17 @@ public class Platform extends DataSingleton {
 	public void update(ILaunchConfiguration _launchConfiguration) {
 		launchConfiguration = new ConfigurationPreferenceStore(_launchConfiguration);
 		name = _launchConfiguration.getName();
-		user = launchConfiguration.getAttribute(P_USER, "");
-		password = launchConfiguration.getAttribute(P_PASSWORD, "");
+		user = launchConfiguration.getAttribute(P_USER, ""); //$NON-NLS-1$
+		password = launchConfiguration.getAttribute(P_PASSWORD, ""); //$NON-NLS-1$
 		isDisabled = launchConfiguration.getAttribute(P_DISABLED, true);
 		ssl = launchConfiguration.getAttribute(P_SSL, false);
-		ip = launchConfiguration.getAttribute(P_IP, "");
+		ip = launchConfiguration.getAttribute(P_IP, ""); //$NON-NLS-1$
 		port = launchConfiguration.getAttribute(P_PORT, 8010);
 	}
 
 	public boolean matches(ILaunchConfiguration _launchConfiguration) {
 		try {
-			return (ip.equals(_launchConfiguration.getAttribute(P_IP, "")) && port == _launchConfiguration.getAttribute(P_PORT, 8010));
+			return (ip.equals(_launchConfiguration.getAttribute(P_IP, "")) && port == _launchConfiguration.getAttribute(P_PORT, 8010)); //$NON-NLS-1$
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -179,7 +179,7 @@ public class Platform extends DataSingleton {
 				@Override
 				public void run() {
 					Shell activeShell = Workbench.getShell();
-					if (MessageDialog.openConfirm(activeShell, "ECL Plug-in", "\"" + name + "\" is Unreachable.  Disable for current session?\n(Can be permanently disabled in the Launch Configuration)")) {
+					if (MessageDialog.openConfirm(activeShell, Messages.Platform_19, Messages.Platform_0 + name + Messages.Platform_21)) {
 						isTempDisabled = true;
 					}
 				}
@@ -190,7 +190,7 @@ public class Platform extends DataSingleton {
 	public void clearTempDisabled() {
 		isTempDisabled = false;
 		serverExists = SERVER_EXISTS.UNKNOWN;
-		build="";
+		build=""; //$NON-NLS-1$
 	}
 
 	protected synchronized void testServer() {
@@ -215,7 +215,7 @@ public class Platform extends DataSingleton {
 	}
 
 	public String getProtocol() {
-		return ssl ? "https" : "http";
+		return ssl ? "https" : "http"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public String getIP() {
@@ -256,7 +256,7 @@ public class Platform extends DataSingleton {
 		int oldTimeout = ((org.apache.axis.client.Stub) service).getTimeout();
 		((org.apache.axis.client.Stub) service).setTimeout(3 * 1000);
 		WUQuery request = new WUQuery();
-		request.setWuid("XXX");
+		request.setWuid("XXX"); //$NON-NLS-1$
 		try {
 			service.WUQuery(request);
 			return true;
@@ -309,7 +309,7 @@ public class Platform extends DataSingleton {
 		for (int i = 0; i < src.length(); ++i) {
 			int charVal = src.codePointAt(i);
 			if (charVal > 127) {
-				sb.append("&#x" + Integer.toString(charVal, 16) + ";");
+				sb.append("&#x" + Integer.toString(charVal, 16) + ";"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				sb.append(src.charAt(i));
 			}
@@ -323,7 +323,7 @@ public class Platform extends DataSingleton {
 				@Override
 				public void run() {
 					Shell activeShell = Workbench.getShell();
-					MessageDialog.openInformation(activeShell, "Unable to Submit ECL:  ECL Plug-in", "\"" + name + "\" is Unreachable.");
+					MessageDialog.openInformation(activeShell, Messages.Platform_28, "\"" + name + Messages.Platform_30); //$NON-NLS-2$
 				}
 			});
 		} else {
@@ -337,7 +337,7 @@ public class Platform extends DataSingleton {
 			if (!archive.isEmpty())
 			{
 				try {
-					Workunit.All.pushTransaction("Platform.submit");
+					Workunit.All.pushTransaction("Platform.submit"); //$NON-NLS-1$
 					WsWorkunitsServiceSoap service = getWsWorkunitsService();
 					WUCreateAndUpdate request = new WUCreateAndUpdate();
 					request.setQueryText(hackUnicodeInXMLForAxisOneAndESP(archive));
@@ -347,7 +347,7 @@ public class Platform extends DataSingleton {
 					ApplicationValue[] appVals = new ApplicationValue[1];
 					appVals[0] = new ApplicationValue();
 					appVals[0].setApplication(Activator.PLUGIN_ID);
-					appVals[0].setName("path");
+					appVals[0].setName("path"); //$NON-NLS-1$
 					appVals[0].setValue(file.getFullPath().toPortableString());
 					request.setApplicationValues(appVals);
 
@@ -423,16 +423,16 @@ public class Platform extends DataSingleton {
 	}
 
 	Collection<Workunit> getWorkunits(boolean userOnly, String cluster, String startDate, String endDate) {
-		return getWorkunits(userOnly, cluster, startDate, endDate, "", "", "");
+		return getWorkunits(userOnly, cluster, startDate, endDate, "", "", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	Collection<Workunit> getWorkunits(boolean userOnly, String cluster, String startDate, String endDate, String jobname) {
-		return getWorkunits(userOnly, cluster, startDate, endDate, jobname, "", "");
+		return getWorkunits(userOnly, cluster, startDate, endDate, jobname, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	Collection<Workunit> getWorkunits(boolean userOnly, String cluster, String startDate, String endDate, String jobname, String appKey, String appData) {
 		if (isEnabled()) {
-			Workunit.All.pushTransaction("platform.getWorkunits");
+			Workunit.All.pushTransaction("platform.getWorkunits"); //$NON-NLS-1$
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
 			WUQuery request = new WUQuery();
 			if (userOnly) {
@@ -470,17 +470,17 @@ public class Platform extends DataSingleton {
 	public static String toESPString(GregorianCalendar _calendar) {
 		//2013-10-02T23:00:00Z
 		Calendar now = GregorianCalendar.getInstance();
-		Calendar nowUTC = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+		Calendar nowUTC = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
 		int delta = nowUTC.get(Calendar.HOUR_OF_DAY) - now.get(Calendar.HOUR_OF_DAY);
 		GregorianCalendar calendar = (GregorianCalendar)_calendar.clone();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); //$NON-NLS-1$
 		calendar.add(Calendar.HOUR_OF_DAY, delta);
 		return df.format(calendar.getTime());
 	}
 
 	public Collection<Workunit> getWorkunits(String owner, String cluster, GregorianCalendar startDate, GregorianCalendar endDate) {
 		if (isEnabled()) {
-			Workunit.All.pushTransaction("platform.getWorkunits");
+			Workunit.All.pushTransaction("platform.getWorkunits"); //$NON-NLS-1$
 			WsWorkunitsServiceSoap service = getWsWorkunitsService();
 			WUQuery request = new WUQuery();
 			if (owner != null)
@@ -508,17 +508,17 @@ public class Platform extends DataSingleton {
 	}
 
 	public Collection<Workunit> getWorkunits(boolean userOnly, String cluster) {
-		return getWorkunits(userOnly, cluster, "", "");
+		return getWorkunits(userOnly, cluster, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public Collection<Workunit> getWorkunits(boolean userOnly) {
-		return getWorkunits(userOnly, "", "", "");
+		return getWorkunits(userOnly, "", "", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	boolean isValid(String wuid) {
 		//W20120816-100734
 		if (wuid.length() >= 16) {
-			if (wuid.startsWith("W")) {
+			if (wuid.startsWith("W")) { //$NON-NLS-1$
 				for (int i = 1; i < 8; ++i) {
 					if (!Character.isDigit(wuid.charAt(i)))
 						return false;
@@ -574,7 +574,7 @@ public class Platform extends DataSingleton {
 	}
 
 	public FileSprayWorkunit[] getFileSprayWorkunits() {
-		return getFileSprayWorkunits("");
+		return getFileSprayWorkunits(""); //$NON-NLS-1$
 	}
 
 	synchronized void updateFileSprayWorkunits(DFUWorkunit[] rawWorkunits) {
@@ -666,7 +666,7 @@ public class Platform extends DataSingleton {
 	}
 
 	public LogicalFile[] getLogicalFiles() {
-		return getLogicalFiles("");
+		return getLogicalFiles(""); //$NON-NLS-1$
 	}
 
 	synchronized void updateLogicalFiles(DFULogicalFile[] rawLogicalFiles) {
@@ -732,7 +732,7 @@ public class Platform extends DataSingleton {
 			//TODO CollectionDelta monitor = new CollectionDelta("getClusters", clusters);
 			WsTopologyServiceSoap service = getWsTopologyService();
 			TpServiceQueryRequest request = new TpServiceQueryRequest();
-			request.setType("ALLSERVICES");
+			request.setType("ALLSERVICES"); //$NON-NLS-1$
 			try {
 				TpServiceQueryResponse response = service.tpServiceQuery(request);
 				updateServices(response.getServiceList());
@@ -763,23 +763,23 @@ public class Platform extends DataSingleton {
 
 	//  SOAP Stub Helpers  ---
 	public URL getURL() throws MalformedURLException {
-		return getURL("");
+		return getURL(""); //$NON-NLS-1$
 	}
 
 	public URL getURL(String service) throws MalformedURLException {
-		return new URL(getProtocol(), getIP(), getPort(), "/" + service);
+		return new URL(getProtocol(), getIP(), getPort(), "/" + service); //$NON-NLS-1$
 	}
 
 	public URL getURL(String service, String method) throws MalformedURLException {
-		return getURL(service + "/" + method);
+		return getURL(service + "/" + method); //$NON-NLS-1$
 	}
 
 	public URL getURL(String service, String method, String params) throws MalformedURLException {
-		return getURL(service + "/" + method + "?" + params);
+		return getURL(service + "/" + method + "?" + params); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public URL getWidgetURL(String widget, String params) throws MalformedURLException {
-		return getURL("esp/files/stub.htm?Widget=" + widget + (params.isEmpty() ? "" : "&" + params));
+		return getURL("esp/files/stub.htm?Widget=" + widget + (params.isEmpty() ? "" : "&" + params)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	private void initStub(Stub stub, String user, String password) {
@@ -812,7 +812,7 @@ public class Platform extends DataSingleton {
 		latencyTest();
 		WsWorkunitsLocator locator = new WsWorkunitsLocator();
 		try {
-			WsWorkunitsServiceSoap service = locator.getWsWorkunitsServiceSoap(getURL("WsWorkunits"));
+			WsWorkunitsServiceSoap service = locator.getWsWorkunitsServiceSoap(getURL("WsWorkunits")); //$NON-NLS-1$
 			initStub((org.apache.axis.client.Stub)service, user, password);
 			return service;
 		} catch (MalformedURLException e) {
@@ -833,7 +833,7 @@ public class Platform extends DataSingleton {
 		latencyTest();
 		WsDfuLocator locator = new WsDfuLocator();
 		try {
-			WsDfuServiceSoap service = locator.getWsDfuServiceSoap(getURL("WsDfu"));
+			WsDfuServiceSoap service = locator.getWsDfuServiceSoap(getURL("WsDfu")); //$NON-NLS-1$
 			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
@@ -850,7 +850,7 @@ public class Platform extends DataSingleton {
 		latencyTest();
 		FileSprayLocator locator = new FileSprayLocator();
 		try {
-			FileSprayServiceSoap service = locator.getFileSprayServiceSoap(getURL("FileSpray"));
+			FileSprayServiceSoap service = locator.getFileSprayServiceSoap(getURL("FileSpray")); //$NON-NLS-1$
 			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
@@ -867,7 +867,7 @@ public class Platform extends DataSingleton {
 		latencyTest();
 		WsTopologyLocator locator = new WsTopologyLocator();
 		try {
-			WsTopologyServiceSoap service = locator.getWsTopologyServiceSoap(getURL("WsTopology"));
+			WsTopologyServiceSoap service = locator.getWsTopologyServiceSoap(getURL("WsTopology")); //$NON-NLS-1$
 			initStub((org.apache.axis.client.Stub)service);
 			return service;
 		} catch (MalformedURLException e) {
@@ -884,7 +884,7 @@ public class Platform extends DataSingleton {
 		latencyTest();
 		WsSMCLocator locator = new WsSMCLocator();
 		try {
-			WsSMCServiceSoap service = locator.getWsSMCServiceSoap(getURL("WsSMC"));
+			WsSMCServiceSoap service = locator.getWsSMCServiceSoap(getURL("WsSMC")); //$NON-NLS-1$
 			initStub((org.apache.axis.client.Stub)service, user, password);
 			return service;
 		} catch (MalformedURLException e) {

@@ -20,10 +20,10 @@ public class QuickFixer implements IMarkerResolutionGenerator {
 	@Override
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try {
-			Object problem = marker.getAttribute("WhatsUp");
+			Object problem = marker.getAttribute("WhatsUp"); //$NON-NLS-1$
 			return new IMarkerResolution[] {
-					new QuickFix("Fix #1 for "+problem),
-					new QuickFix("Fix #2 for "+problem),
+					new QuickFix(Messages.QuickFixer_1+problem),
+					new QuickFix(Messages.QuickFixer_2+problem),
 			};
 		}
 		catch (CoreException e) {

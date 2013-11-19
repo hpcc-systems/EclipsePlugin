@@ -30,7 +30,7 @@ import org.hpccsystems.internal.ui.tree.ItemView;
 
 class PlatformBaseView extends ItemView {
 	Platform platform;
-	String clusterName = "";
+	String clusterName = ""; //$NON-NLS-1$
 
 	PlatformBaseView(TreeItemOwner treeViewer, ItemView parent, Platform platform) {
 		super(treeViewer, parent);
@@ -59,7 +59,7 @@ class TargetFolderView extends FolderItemView {
 
 	@Override
 	public String getText() {
-		return "Targets";
+		return Messages.AllItemView_1;
 	}
 
 	@Override
@@ -74,7 +74,7 @@ class TargetFolderView extends FolderItemView {
 
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
-		return platform.getURL("WsTopology", "TpTargetClusterQuery");
+		return platform.getURL("WsTopology", "TpTargetClusterQuery"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -103,12 +103,12 @@ class ClusterView extends PlatformBaseView {
 
 	@Override
 	public Image getImage() {
-		return Activator.getImage("icons/cluster.png"); 
+		return Activator.getImage("icons/cluster.png");  //$NON-NLS-1$
 	}
 
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
-		return platform.getURL("WsTopology", "TpTargetClusterQuery");
+		return platform.getURL("WsTopology", "TpTargetClusterQuery"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -129,13 +129,13 @@ class DropZoneFolderView extends FolderItemView {
 
 	@Override
 	public String getText() {
-		return "Drop Zones";
+		return Messages.AllItemView_7;
 	}
 
 	//  http://192.168.2.68:8010/FileSpray/DropZoneFiles?ver_=1.03
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
-		return platform.getURL("FileSpray", "DropZoneFiles");
+		return platform.getURL("FileSpray", "DropZoneFiles"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -163,13 +163,13 @@ class DropZoneView extends PlatformBaseView {
 
 	@Override
 	public Image getImage() {
-		return Activator.getImage("icons/cluster.png"); 
+		return Activator.getImage("icons/cluster.png");  //$NON-NLS-1$
 	}
 
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		//http://192.168.2.68:8010/FileSpray/FileList?Netaddr=192.168.2.68&OS=1&Path=/var/lib/HPCCSystems/mydropzone
-		return platform.getURL("FileSpray", "FileList", "Netaddr=" + dropZone.getIP() + "&OS=" + dropZone.getOS() + "&Path=" + dropZone.getDirectory());
+		return platform.getURL("FileSpray", "FileList", "Netaddr=" + dropZone.getIP() + "&OS=" + dropZone.getOS() + "&Path=" + dropZone.getDirectory()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 
 	@Override
@@ -190,13 +190,13 @@ class QuerySetFolderView extends FolderItemView {
 
 	@Override
 	public String getText() {
-		return "Query Sets";
+		return Messages.AllItemView_16;
 	}
 
 	//http://192.168.2.68:8010/WsWorkunits/WUQuerySets	
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
-		return platform.getURL("WsWorkunits", "WUQuerySets");
+		return platform.getURL("WsWorkunits", "WUQuerySets"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -224,13 +224,13 @@ class DataQuerySetView extends PlatformBaseView {
 
 	@Override
 	public Image getImage() {
-		return Activator.getImage("icons/file.png"); 
+		return Activator.getImage("icons/file.png");  //$NON-NLS-1$
 	}
 
 	//http://192.168.2.68:8010/WsWorkunits/WUQuerysetDetails?QuerySetName=myroxie
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
-		return platform.getURL("WsWorkunits", "WUQuerysetDetails", "QuerySetName=" + querySet.getName());
+		return platform.getURL("WsWorkunits", "WUQuerysetDetails", "QuerySetName=" + querySet.getName()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
@@ -266,19 +266,19 @@ class LogicalFileFolderView extends FolderItemView {
 
 	@Override
 	public String getText() {
-		return "Files";
+		return Messages.AllItemView_23;
 	}
 
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		if (hasNewEclWatch) {
-			return platform.getWidgetURL("DFUQueryWidget", clusterName.isEmpty() ? "" : "ClusterName=" + clusterName);
+			return platform.getWidgetURL("DFUQueryWidget", clusterName.isEmpty() ? "" : "ClusterName=" + clusterName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		if (clusterName.isEmpty()) {
-			return platform.getURL("WsDfu", "DFUQuery");
+			return platform.getURL("WsDfu", "DFUQuery"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return platform.getURL("WsDfu", "DFUQuery", "ClusterName=" + clusterName);
+		return platform.getURL("WsDfu", "DFUQuery", "ClusterName=" + clusterName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
@@ -302,16 +302,16 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 
 	@Override
 	public String getText() {
-		return "Inputs";
+		return Messages.AllItemView_32;
 	}
 
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		if (hasNewEclWatch) {
-			return platform.getWidgetURL("ResultsWidget", "TabPosition=top&SourceFiles=1&Wuid=" + workunit.getWuid());
+			return platform.getWidgetURL("ResultsWidget", "TabPosition=top&SourceFiles=1&Wuid=" + workunit.getWuid()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
+		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
@@ -349,16 +349,16 @@ class LogicalFileView extends PlatformBaseView {
 
 	@Override
 	public Image getImage() {
-		return Activator.getImage("icons/file.png"); 
+		return Activator.getImage("icons/file.png");  //$NON-NLS-1$
 	}
 
 	//http://192.168.2.68:8010/WsDfu/DFUInfo?Name=tutorial::g::originalperson
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		if (hasNewEclWatch) {
-			return platform.getWidgetURL("LFDetailsWidget", "Name=" + file.getName());
+			return platform.getWidgetURL("LFDetailsWidget", "Name=" + file.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return platform.getURL("WsDfu", "DFUInfo", "Name=" + file.getName());
+		return platform.getURL("WsDfu", "DFUInfo", "Name=" + file.getName()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
@@ -405,15 +405,15 @@ class LogicalFileContentsView extends PlatformBaseView {
 
 	@Override
 	public Image getImage() {
-		return Activator.getImage("icons/filecontent.png"); 
+		return Activator.getImage("icons/filecontent.png");  //$NON-NLS-1$
 	}
 
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		if (hasNewEclWatch) {
-			return platform.getWidgetURL("ResultWidget", "LogicalName=" + file.getName());
+			return platform.getWidgetURL("ResultWidget", "LogicalName=" + file.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return platform.getURL("WsWorkunits", "WUResult", "LogicalName=" + file.getName());
+		return platform.getURL("WsWorkunits", "WUResult", "LogicalName=" + file.getName()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 }
 
@@ -432,7 +432,7 @@ class LandingZoneFileView extends PlatformBaseView {
 
 	@Override
 	public Image getImage() {
-		return Activator.getImage("icons/filecontent.png"); 
+		return Activator.getImage("icons/filecontent.png");  //$NON-NLS-1$
 	}
 }
 
@@ -453,12 +453,12 @@ class ResultViewView extends PlatformBaseView {
 
 	@Override
 	public Image getImage() {
-		return Activator.getImage("icons/chart.png"); 
+		return Activator.getImage("icons/chart.png");  //$NON-NLS-1$
 	}
 
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
-		return platform.getURL("WsWorkunits", "WUResultView", "Wuid=" + result.getWuid() + "&ResultName=" + result.getResultName() + "&ViewName=" + viewName);
+		return platform.getURL("WsWorkunits", "WUResultView", "Wuid=" + result.getWuid() + "&ResultName=" + result.getResultName() + "&ViewName=" + viewName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 }
 
@@ -479,6 +479,6 @@ class MessageItemView extends ItemView {
 class RecursiveItemView extends MessageItemView {
 
 	RecursiveItemView(TreeItemOwner treeViewer, ItemView parent) {
-		super(treeViewer, parent, "...recursive expansion...");
+		super(treeViewer, parent, Messages.AllItemView_57);
 	}
 }

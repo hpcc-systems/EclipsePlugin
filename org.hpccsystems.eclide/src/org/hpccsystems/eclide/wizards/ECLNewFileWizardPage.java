@@ -51,9 +51,9 @@ public class ECLNewFileWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public ECLNewFileWizardPage(ISelection selection) {
-		super("wizardPage");
-		setTitle("Multi-page Editor File");
-		setDescription("This wizard creates a new file with *.ecl extension that can be opened by a multi-page editor.");
+		super("wizardPage"); //$NON-NLS-1$
+		setTitle(Messages.ECLNewFileWizardPage_1);
+		setDescription(Messages.ECLNewFileWizardPage_2);
 		this.selection = selection;
 	}
 
@@ -68,7 +68,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 		Label label = new Label(container, SWT.NULL);
-		label.setText("&Container:");
+		label.setText(Messages.ECLNewFileWizardPage_3);
 
 		containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -81,7 +81,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 		});
 
 		Button button = new Button(container, SWT.PUSH);
-		button.setText("Browse...");
+		button.setText(Messages.ECLNewFileWizardPage_4);
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -89,7 +89,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 			}
 		});
 		label = new Label(container, SWT.NULL);
-		label.setText("&File name:");
+		label.setText(Messages.ECLNewFileWizardPage_5);
 
 		fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -127,7 +127,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
-		fileText.setText("new_file.ecl");
+		fileText.setText(Messages.ECLNewFileWizardPage_0);
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 	private void handleBrowse() {
 		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
 				getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
-				"Select new file container");
+				Messages.ECLNewFileWizardPage_7);
 		if (dialog.open() == Window.OK) {
 			Object[] result = dialog.getResult();
 			if (result.length == 1) {
@@ -157,31 +157,31 @@ public class ECLNewFileWizardPage extends WizardPage {
 		String fileName = getFileName();
 
 		if (getContainerName().length() == 0) {
-			updateStatus("File container must be specified");
+			updateStatus(Messages.ECLNewFileWizardPage_8);
 			return;
 		}
 		if (container == null
 				|| (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
-			updateStatus("File container must exist");
+			updateStatus(Messages.ECLNewFileWizardPage_9);
 			return;
 		}
 		if (!container.isAccessible()) {
-			updateStatus("Project must be writable");
+			updateStatus(Messages.ECLNewFileWizardPage_10);
 			return;
 		}
 		if (fileName.length() == 0) {
-			updateStatus("File name must be specified");
+			updateStatus(Messages.ECLNewFileWizardPage_11);
 			return;
 		}
 		if (fileName.replace('\\', '/').indexOf('/', 1) > 0) {
-			updateStatus("File name must be valid");
+			updateStatus(Messages.ECLNewFileWizardPage_12);
 			return;
 		}
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
 			String ext = fileName.substring(dotLoc + 1);
-			if (ext.equalsIgnoreCase("ecl") == false) {
-				updateStatus("File extension must be \"ecl\"");
+			if (ext.equalsIgnoreCase("ecl") == false) { //$NON-NLS-1$
+				updateStatus(Messages.ECLNewFileWizardPage_6);
 				return;
 			}
 		}

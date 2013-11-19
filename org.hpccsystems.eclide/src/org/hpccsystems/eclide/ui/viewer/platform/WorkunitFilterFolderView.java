@@ -36,7 +36,7 @@ public class WorkunitFilterFolderView extends ItemView implements Observer {
 	class LoadingItemView extends MessageItemView {
 
 		LoadingItemView(TreeItemOwner treeViewer, ItemView parent) {
-			super(treeViewer, parent, "...loading...");
+			super(treeViewer, parent, Messages.WorkunitFilterFolderView_0);
 		}
 	}
 	
@@ -79,8 +79,8 @@ public class WorkunitFilterFolderView extends ItemView implements Observer {
 	}
 	
 	public void setDateRange(GregorianCalendar from, GregorianCalendar to) {
-		String sFrom = Integer.toString(from.get(Calendar.YEAR)) + "/" + Integer.toString(from.get(Calendar.MONTH)) + "/" + Integer.toString(from.get(Calendar.DAY_OF_MONTH)); 
-		String sTo = Integer.toString(to.get(Calendar.YEAR)) + "/" + Integer.toString(to.get(Calendar.MONTH)) + "/" + Integer.toString(to.get(Calendar.DAY_OF_MONTH)); 
+		String sFrom = Integer.toString(from.get(Calendar.YEAR)) + "/" + Integer.toString(from.get(Calendar.MONTH)) + "/" + Integer.toString(from.get(Calendar.DAY_OF_MONTH));  //$NON-NLS-1$ //$NON-NLS-2$
+		String sTo = Integer.toString(to.get(Calendar.YEAR)) + "/" + Integer.toString(to.get(Calendar.MONTH)) + "/" + Integer.toString(to.get(Calendar.DAY_OF_MONTH));  //$NON-NLS-1$ //$NON-NLS-2$
 		this.from = from;
 		this.to = to;
 	}
@@ -133,21 +133,21 @@ public class WorkunitFilterFolderView extends ItemView implements Observer {
 	public String getStateText() {
 		switch(children.getState()) {
 		case PREFETCH_UNKNOWN:
-			return "";
+			return ""; //$NON-NLS-1$
 		case PREFETCH_STARTED:
-			return " (...calculating...)";
+			return Messages.WorkunitFilterFolderView_6;
 		case PREFETCH_FINISHED:
 			if (children.getCount() > 0) {
-				return " (" + children.getCount() + ")";
+				return " (" + children.getCount() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			break;
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	@Override
 	public Image getImage() {
-		return Activator.getImage("icons/folder.png"); 
+		return Activator.getImage("icons/folder.png");  //$NON-NLS-1$
 	}
 
 	@Override
@@ -186,10 +186,10 @@ public class WorkunitFilterFolderView extends ItemView implements Observer {
 
 		ArrayList<Workunit> workunits = new ArrayList<Workunit>();		
 		if (platform != null) {
-			workunits.addAll(platform.getWorkunits(getOwner(platform), cluster != null ? cluster.getName() : "", from, to));
+			workunits.addAll(platform.getWorkunits(getOwner(platform), cluster != null ? cluster.getName() : "", from, to)); //$NON-NLS-1$
 		} else {
 			for(Platform platform : data.getPlatforms()) {
-				workunits.addAll(platform.getWorkunits(getOwner(platform), cluster != null ? cluster.getName() : "", from, to));
+				workunits.addAll(platform.getWorkunits(getOwner(platform), cluster != null ? cluster.getName() : "", from, to)); //$NON-NLS-1$
 			}
 		}
 		ArrayList<WorkunitView> workunitViews = new ArrayList<WorkunitView>();

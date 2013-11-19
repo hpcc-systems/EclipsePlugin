@@ -30,7 +30,7 @@ import org.hpccsystems.internal.data.ClientTools;
 
 @SuppressWarnings("restriction")
 public class ECLLaunchCompilerTab extends ECLLaunchConfigurationTab {
-	public static final String P_OVERRIDEDEFAULTS = "overrideDefaultsPreference";
+	public static final String P_OVERRIDEDEFAULTS = "overrideDefaultsPreference"; //$NON-NLS-1$
 	public static final boolean P_OVERRIDEDEFAULTS_DEFAULT = false;
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
@@ -90,50 +90,50 @@ public class ECLLaunchCompilerTab extends ECLLaunchConfigurationTab {
 	}
 	
 	public void createCompilerEditor(Composite _parent) {
-		compilerGroup = SWTFactory.createGroup(_parent, "Location:", 1, 1, GridData.FILL_HORIZONTAL);
+		compilerGroup = SWTFactory.createGroup(_parent, Messages.ECLLaunchCompilerTab_1, 1, 1, GridData.FILL_HORIZONTAL);
 
-		clientToolsPathFieldEditor = new DirectoryFieldEditor(ClientTools.P_TOOLSPATH, "&HPCC Client Tools:", compilerGroup);
+		clientToolsPathFieldEditor = new DirectoryFieldEditor(ClientTools.P_TOOLSPATH, Messages.ECLLaunchCompilerTab_2, compilerGroup);
 		clientToolsPathFieldEditor.getTextControl(compilerGroup).addModifyListener(fListener);
 	}
 
 	public void createCompilerArgumentsEditor(Composite _parent) {
-		Group compilerArgsGroup = SWTFactory.createGroup(_parent, "Compiler Arguments:", 1, 1, GridData.FILL_HORIZONTAL);
+		Group compilerArgsGroup = SWTFactory.createGroup(_parent, Messages.ECLLaunchCompilerTab_3, 1, 1, GridData.FILL_HORIZONTAL);
 
-		SWTFactory.createLabel(compilerArgsGroup, "&Common:  ", 1);
+		SWTFactory.createLabel(compilerArgsGroup, Messages.ECLLaunchCompilerTab_4, 1);
 		commonArgsFieldEditor = SWTFactory.createSingleText(compilerArgsGroup, 1);
 		commonArgsFieldEditor.addModifyListener(fListener);
 
-		SWTFactory.createLabel(compilerArgsGroup, "&Syntax Check:  ", 1);
+		SWTFactory.createLabel(compilerArgsGroup, Messages.ECLLaunchCompilerTab_5, 1);
 		syntaxArgsFieldEditor = SWTFactory.createSingleText(compilerArgsGroup, 1);
 		syntaxArgsFieldEditor.addModifyListener(fListener);
 
-		SWTFactory.createLabel(compilerArgsGroup, "&Local Compile:  ", 1);
+		SWTFactory.createLabel(compilerArgsGroup, Messages.ECLLaunchCompilerTab_6, 1);
 		compileArgsFieldEditor = SWTFactory.createSingleText(compilerArgsGroup, 1);
 		compileArgsFieldEditor.addModifyListener(fListener);
 
-		SWTFactory.createLabel(compilerArgsGroup, "&Remote Compile:  ", 1);
+		SWTFactory.createLabel(compilerArgsGroup, Messages.ECLLaunchCompilerTab_7, 1);
 		remoteCompileArgsFieldEditor = SWTFactory.createSingleText(compilerArgsGroup, 1);
 		remoteCompileArgsFieldEditor.addModifyListener(fListener);
 	}
 
 	public void createWorkunitArgumentsEditor(Composite _parent) {
-		Group workunitArgsGroup = SWTFactory.createGroup(_parent, "Workunit Arguments:", 1, 1, GridData.FILL_HORIZONTAL);
+		Group workunitArgsGroup = SWTFactory.createGroup(_parent, Messages.ECLLaunchCompilerTab_8, 1, 1, GridData.FILL_HORIZONTAL);
 
-		SWTFactory.createLabel(workunitArgsGroup, "&Local:  ", 1);
+		SWTFactory.createLabel(workunitArgsGroup, Messages.ECLLaunchCompilerTab_9, 1);
 		workunitArgsFieldEditor = SWTFactory.createSingleText(workunitArgsGroup, 1);
 		workunitArgsFieldEditor.addModifyListener(fListener);
 	}
 
 	public void createMiscellaneousEditor(Composite _parent) {
-		miscGroup = SWTFactory.createGroup(_parent, "Workunit Arguments:", 1, 1, GridData.FILL_HORIZONTAL);
+		miscGroup = SWTFactory.createGroup(_parent, Messages.ECLLaunchCompilerTab_10, 1, 1, GridData.FILL_HORIZONTAL);
 
-		SWTFactory.createLabel(miscGroup, "&Inline Result Limit:  ", 1);
-		inlineResultSetLimitFieldEditor = new IntegerFieldEditor(ClientTools.P_INLINERESULTLIMIT, "&Inline Result Limit:  ", miscGroup);
+		SWTFactory.createLabel(miscGroup, Messages.ECLLaunchCompilerTab_11, 1);
+		inlineResultSetLimitFieldEditor = new IntegerFieldEditor(ClientTools.P_INLINERESULTLIMIT, Messages.ECLLaunchCompilerTab_12, miscGroup);
 		inlineResultSetLimitFieldEditor.getTextControl(miscGroup).addModifyListener(fListener);
 
-		monitorDependeesFieldEditor = SWTFactory.createCheckButton(miscGroup, "&Monitor Dependees (requires manual \"Project/Clean...\")", null, false, 1);
+		monitorDependeesFieldEditor = SWTFactory.createCheckButton(miscGroup, Messages.ECLLaunchCompilerTab_13, null, false, 1);
 		monitorDependeesFieldEditor.addSelectionListener(fListener);
-		supressSubsequentErrorsFieldEditor = SWTFactory.createCheckButton(miscGroup, "&Supress Subsequent Errors", null, false, 1);
+		supressSubsequentErrorsFieldEditor = SWTFactory.createCheckButton(miscGroup, Messages.ECLLaunchCompilerTab_14, null, false, 1);
 		supressSubsequentErrorsFieldEditor.addSelectionListener(fListener);
 	}
 
@@ -142,7 +142,7 @@ public class ECLLaunchCompilerTab extends ECLLaunchConfigurationTab {
 		Composite projComp = SWTFactory.createComposite(parent, parent.getFont(), 1, 1, GridData.FILL_BOTH);
 
 		createVerticalSpacer(projComp, 1);
-		overrideGlobalFieldEditor = SWTFactory.createCheckButton(projComp, "&Override Defaults", null, false, 1);
+		overrideGlobalFieldEditor = SWTFactory.createCheckButton(projComp, Messages.ECLLaunchCompilerTab_15, null, false, 1);
 		overrideGlobalFieldEditor.addSelectionListener(fListener);
 
 		createVerticalSpacer(projComp, 1);
@@ -202,6 +202,6 @@ public class ECLLaunchCompilerTab extends ECLLaunchConfigurationTab {
 
 	@Override
 	public String getName() {
-		return "ECLCC Compiler";
+		return Messages.ECLLaunchCompilerTab_16;
 	}
 }

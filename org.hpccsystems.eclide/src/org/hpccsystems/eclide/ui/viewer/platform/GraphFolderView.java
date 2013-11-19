@@ -21,15 +21,15 @@ class GraphFolderView extends FolderItemView implements Observer  {
 
 	@Override
 	public String getText() {
-		return "Graphs";
+		return Messages.GraphFolderView_0;
 	}
 
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		if (hasNewEclWatch) {
-			return platform.getWidgetURL("GraphsWidget", "TabPosition=top&Wuid=" + workunit.getWuid());
+			return platform.getWidgetURL("GraphsWidget", "TabPosition=top&Wuid=" + workunit.getWuid()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid());
+		return platform.getURL("WsWorkunits", "WUInfo", "Wuid=" + workunit.getWuid()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override

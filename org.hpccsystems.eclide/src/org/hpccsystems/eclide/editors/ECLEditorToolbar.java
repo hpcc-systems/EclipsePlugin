@@ -58,7 +58,7 @@ public class ECLEditorToolbar extends Composite {
 		setLayoutData(fData);
 
 		submitButton = new SplitButton(this, SWT.NONE);
-		submitButton.setText("Submit");
+		submitButton.setText(Messages.ECLEditorToolbar_6);
 		GridData gd = new GridData();
 		submitButton.setLayoutData(gd);
 		SWTFactory.setButtonDimensionHint(submitButton);
@@ -75,12 +75,12 @@ public class ECLEditorToolbar extends Composite {
 			}
 		});
 
-		SWTFactory.createLabel(this, "Server:", 1);
+		SWTFactory.createLabel(this, Messages.ECLEditorToolbar_1, 1);
 		comboServer = SWTFactory.createCombo(this, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY, 1, null);
 		comboServer.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Preferences prefs = Activator.getPreferences("ECLEditorToolbar");
+				Preferences prefs = Activator.getPreferences("ECLEditorToolbar"); //$NON-NLS-1$
 				prefs.put("comboServer", comboServer.getText());
 				refreshTarget(true);
 				try {
@@ -89,12 +89,12 @@ public class ECLEditorToolbar extends Composite {
 				}
 			}
 		});
-		SWTFactory.createLabel(this, "Target:", 1);
+		SWTFactory.createLabel(this, Messages.ECLEditorToolbar_4, 1);
 		comboTarget = SWTFactory.createCombo(this, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY, 1, null);
 		comboTarget.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Preferences prefs = Activator.getPreferences("ECLEditorToolbar");
+				Preferences prefs = Activator.getPreferences("ECLEditorToolbar"); //$NON-NLS-1$
 				prefs.put(comboServer.getText(), comboTarget.getText());
 				try {
 					prefs.flush();
@@ -132,7 +132,7 @@ public class ECLEditorToolbar extends Composite {
 		}
 
 		MenuItem submit = new MenuItem(menu, SWT.PUSH);
-		submit.setText("Submit");
+		submit.setText(Messages.ECLEditorToolbar_6);
 		submit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -141,7 +141,7 @@ public class ECLEditorToolbar extends Composite {
 		});
 
 		MenuItem compile = new MenuItem(menu, SWT.PUSH);
-		compile.setText("Compile");
+		compile.setText(Messages.ECLEditorToolbar_7);
 		compile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -150,7 +150,7 @@ public class ECLEditorToolbar extends Composite {
 		});
 
 		MenuItem debug = new MenuItem(menu, SWT.PUSH);
-		debug.setText("Debug");
+		debug.setText(Messages.ECLEditorToolbar_8);
 		debug.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -208,12 +208,12 @@ public class ECLEditorToolbar extends Composite {
 	}
 
 	private void refreshServers(boolean ignoreCurrent) {
-		Preferences prefs = Activator.getPreferences("ECLEditorToolbar");
-		refreshServers(prefs.get("comboServer", ""), ignoreCurrent);
+		Preferences prefs = Activator.getPreferences("ECLEditorToolbar"); //$NON-NLS-1$
+		refreshServers(prefs.get("comboServer", ""), ignoreCurrent); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private void refreshTarget(String defaultTarget, boolean ignoreCurrent) {
-		String currentTarget = ignoreCurrent ? "" : comboServer.getText();
+		String currentTarget = ignoreCurrent ? "" : comboServer.getText(); //$NON-NLS-1$
 		comboTarget.removeAll();
 		ILaunchConfiguration configuration = getSelectedConfiguration();
 		if (configuration != null) {
@@ -230,7 +230,7 @@ public class ECLEditorToolbar extends Composite {
 					if (name.equals(defaultTarget))
 						defaultTargetSel = i;
 				}
-		
+
 				if (currentTargetSel >= 0)
 					comboTarget.select(currentTargetSel);
 				else if (defaultTargetSel >= 0)
@@ -240,13 +240,13 @@ public class ECLEditorToolbar extends Composite {
 	}
 
 	private void refreshTarget(boolean ignoreCurrent) {
-		Preferences prefs = Activator.getPreferences("ECLEditorToolbar");
-		String defaultTarget = prefs.get(comboServer.getText(), "");
+		Preferences prefs = Activator.getPreferences("ECLEditorToolbar"); //$NON-NLS-1$
+		String defaultTarget = prefs.get(comboServer.getText(), ""); //$NON-NLS-1$
 		if (defaultTarget.isEmpty()) {
 			try {
 				ILaunchConfiguration configuration = getSelectedConfiguration();
 				if (configuration != null) {
-					defaultTarget = configuration.getAttribute(Platform.P_CLUSTER, "");
+					defaultTarget = configuration.getAttribute(Platform.P_CLUSTER, ""); //$NON-NLS-1$
 				}
 			} catch (CoreException e) {
 			}

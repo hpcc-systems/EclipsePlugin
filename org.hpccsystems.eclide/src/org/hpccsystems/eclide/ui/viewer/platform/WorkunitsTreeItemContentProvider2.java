@@ -38,7 +38,7 @@ class WorkunitsTreeItemContentProvider2 extends TreeItemContentProvider {
 	WorkunitsTreeItemContentProvider2(TreeViewer treeViewer) {
 		super(treeViewer);
 		Calendar now = GregorianCalendar.getInstance();
-		today = createDayFolder(now, "Today");
+		today = createDayFolder(now, Messages.WorkunitsTreeItemContentProvider2_0);
 		children = new LazyChildLoader<ItemView>();
 	}
 
@@ -112,7 +112,7 @@ class WorkunitsTreeItemContentProvider2 extends TreeItemContentProvider {
 		//  Days of this week
 		for (int i = now.get(Calendar.DAY_OF_WEEK); i > 1; --i) {
 			now.add(Calendar.DATE,  -1);
-			SimpleDateFormat df = new SimpleDateFormat("EEEE");
+			SimpleDateFormat df = new SimpleDateFormat("EEEE"); //$NON-NLS-1$
 			children.add(createDayFolder(now, df.format(now.getTime())));
 		}
 
@@ -122,9 +122,9 @@ class WorkunitsTreeItemContentProvider2 extends TreeItemContentProvider {
 		for (int i = 1; i <= weeksInMonth; ++i) {
 			now.add(Calendar.WEEK_OF_MONTH,  -1);
 			if (i == 1) {
-				children.add(createWeekFolder(now, "Last Week"));
+				children.add(createWeekFolder(now, Messages.WorkunitsTreeItemContentProvider2_2));
 			} else {
-				children.add(createWeekFolder(now, Integer.toString(i) + " Weeks ago"));
+				children.add(createWeekFolder(now, Integer.toString(i) + Messages.WorkunitsTreeItemContentProvider2_3));
 			}
 		}
 		
@@ -132,7 +132,7 @@ class WorkunitsTreeItemContentProvider2 extends TreeItemContentProvider {
 		now.set(Calendar.DAY_OF_MONTH, 1);
 		for (int i = now.get(Calendar.MONTH); i > 0; --i) {
 			now.add(Calendar.MONTH,  -1);
-			SimpleDateFormat df = new SimpleDateFormat("MMMM");
+			SimpleDateFormat df = new SimpleDateFormat("MMMM"); //$NON-NLS-1$
 			children.add(createMonthFolder(now, df.format(now.getTime())));
 		}
 		while (now.get(Calendar.YEAR) > 2004) {

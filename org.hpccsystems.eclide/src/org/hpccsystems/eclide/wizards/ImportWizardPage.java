@@ -60,7 +60,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 	public ImportWizardPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 		setTitle(pageName); //NON-NLS-1
-		setDescription("Import an entire Repository from a remote legacy server into the workspace."); //NON-NLS-1
+		setDescription(Messages.ImportWizardPage_0); //NON-NLS-1
 	}
 
 	/* (non-Javadoc)
@@ -82,12 +82,12 @@ public class ImportWizardPage extends WizardResourceImportPage {
 		fileSelectionLayout.marginHeight = 0;
 		fileSelectionArea.setLayout(fileSelectionLayout);
 
-		fIPText = new StringFieldEditor("IPSelect", "Server IP:  ", fileSelectionArea);
-		fIPText.setStringValue("10.173.84.202");
-		fUserText = new StringFieldEditor("User", "User:  ", fileSelectionArea);
-		fUserText.setStringValue("");
-		fPasswordText = new PasswordFieldEditor("Password", "Password:  ", fileSelectionArea);
-		fPasswordText.setStringValue("");
+		fIPText = new StringFieldEditor("IPSelect", Messages.ImportWizardPage_2, fileSelectionArea); //$NON-NLS-1$
+		fIPText.setStringValue(Messages.ImportWizardPage_3);
+		fUserText = new StringFieldEditor("User", Messages.ImportWizardPage_5, fileSelectionArea); //$NON-NLS-1$
+		fUserText.setStringValue(""); //$NON-NLS-1$
+		fPasswordText = new PasswordFieldEditor("Password", Messages.ImportWizardPage_8, fileSelectionArea); //$NON-NLS-1$
+		fPasswordText.setStringValue(""); //$NON-NLS-1$
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 
 		WsAttributesLocator locator = new WsAttributesLocator();
 		try {
-			final WsAttributesServiceSoap service = locator.getWsAttributesServiceSoap(new URL("http", fIPText.getStringValue(), 8145, "/WsAttributes"));
+			final WsAttributesServiceSoap service = locator.getWsAttributesServiceSoap(new URL("http", fIPText.getStringValue(), 8145, "/WsAttributes")); //$NON-NLS-1$ //$NON-NLS-2$
 			org.apache.axis.client.Stub stub = (org.apache.axis.client.Stub)service;
 			stub.setUsername(fUserText.getStringValue());
 			stub.setPassword(fPasswordText.getStringValue());
@@ -115,12 +115,12 @@ public class ImportWizardPage extends WizardResourceImportPage {
 			final GetModulesResponse response = service.getModules(request);
 			if (response.getOutModules() != null) {
 
-				Job job = new Job("Importing Attributes") {
+				Job job = new Job(Messages.ImportWizardPage_12) {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask("Importing", response.getOutModules().length);
+						monitor.beginTask(Messages.ImportWizardPage_13, response.getOutModules().length);
 						for (final ECLModule module : response.getOutModules()) {
-							if (module.getName().equalsIgnoreCase("Trash")) {
+							if (module.getName().equalsIgnoreCase(Messages.ImportWizardPage_14)) {
 								continue;
 							}
 							monitor.subTask(module.getName());
@@ -134,10 +134,10 @@ public class ImportWizardPage extends WizardResourceImportPage {
 									ExecutorService threadPool = Executors.newFixedThreadPool(MAX_THREAD);
 									for (final ECLAttribute attribute : response2.getOutAttributes()) {
 										String modPath = attribute.getModuleName();
-										modPath.replaceAll(".", "/");
-										String attrPath = attribute.getName() + ".ecl";
+										modPath.replaceAll(".", "/"); //$NON-NLS-1$ //$NON-NLS-2$
+										String attrPath = attribute.getName() + ".ecl"; //$NON-NLS-1$
 										IPath targetPath = targetFolder.getLocation();
-										IPath fullPath = targetPath.append(modPath + "/" + attrPath).makeAbsolute();
+										IPath fullPath = targetPath.append(modPath + "/" + attrPath).makeAbsolute(); //$NON-NLS-1$
 										final File targetFile = new File(fullPath.toOSString());
 
 										try {
@@ -163,7 +163,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 																	// TODO Auto-generated catch block
 																	e.printStackTrace();
 																}
-																System.out.println(attribute2.getModuleName() + "." + attribute2.getName());
+																System.out.println(attribute2.getModuleName() + "." + attribute2.getName()); //$NON-NLS-1$
 															}
 														} catch (ArrayOfEspException e) {
 															// TODO Auto-generated catch block

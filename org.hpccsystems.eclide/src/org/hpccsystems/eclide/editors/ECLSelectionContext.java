@@ -71,6 +71,6 @@ public class ECLSelectionContext implements IContext {
 
 	@Override
 	public String getText() {
-		return "The ECL editor provides you with ECL specific text editing support.";
+		return Messages.ECLSelectionContext_0;
 	}
 }

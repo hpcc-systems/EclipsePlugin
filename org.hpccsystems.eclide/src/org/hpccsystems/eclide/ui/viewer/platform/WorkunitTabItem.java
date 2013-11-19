@@ -50,12 +50,12 @@ public class WorkunitTabItem extends CTabItem implements Observer {
 		browserTab = new CTabItem(detailsContainer, SWT.NONE);
 		browser = new BrowserEx(detailsContainer, false);
 		browserTab.setControl(browser);
-		browserTab.setText("ECL Watch");
+		browserTab.setText(Messages.WorkunitTabItem_0);
 
 		textTab = new CTabItem(detailsContainer, SWT.NONE);
 		text = new TextEx(detailsContainer);
 		textTab.setControl(text);
-		textTab.setText("Query");
+		textTab.setText(Messages.WorkunitTabItem_1);
 
 		setText(wuView.getText());
 		setImage(wuView.getImage());
