@@ -13,7 +13,10 @@ package org.hpccsystems.internal.data;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +66,8 @@ public class Workunit extends DataSingleton {
 		RESULTS,
 		GRAPHS,
 		SOURCEFILES, 
-		JOBNAME
+		JOBNAME,
+		OWNER
 	}
 
 	private Workunit(Platform platform, String wuid) {
@@ -154,7 +158,17 @@ public class Workunit extends DataSingleton {
 			fastRefresh();
 		}
 		return info.getState() != null ? info.getState() : "Unknown";
+	}
 
+	public GregorianCalendar getDate() {
+		String wuid = getWuid();
+		int year = Integer.parseInt(wuid.substring(1, 5));
+		int month = Integer.parseInt(wuid.substring(5, 7)) - 1;
+		int date = Integer.parseInt(wuid.substring(7, 9));
+		int hour = Integer.parseInt(wuid.substring(10, 12));
+		int min = Integer.parseInt(wuid.substring(12, 14));
+		int sec = Integer.parseInt(wuid.substring(14, 16));
+		return new GregorianCalendar(year, month, date, hour, min, sec);
 	}
 
 	public String[] getResultViews() {
@@ -243,6 +257,15 @@ public class Workunit extends DataSingleton {
 		}
 		return retVal;
 	}
+	
+	public String getOwner() {
+		String retVal = info.getOwner();
+		if (retVal == null) {
+			return "";
+		}
+		return retVal;
+	}
+	
 	//  Actions  ---
 	public void abort() {
 		WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
@@ -414,6 +437,10 @@ public class Workunit extends DataSingleton {
 				retVal = true;
 				notifyObservers(Notification.WORKUNIT);
 			}
+			if (updateOwner(wu.getOwner())) {
+				retVal = true;
+				notifyObservers(Notification.OWNER);
+			}
 			if (updateJobname(wu.getJobname())) {
 				retVal = true;
 				notifyObservers(Notification.JOBNAME);
@@ -463,6 +490,15 @@ public class Workunit extends DataSingleton {
 	synchronized boolean updateCluster(String cluster) {
 		if (cluster != null && EqualsUtil.hasChanged(info.getCluster(), cluster)) {
 			info.setCluster(cluster);
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+
+	synchronized boolean updateOwner(String owner) {
+		if (owner != null && EqualsUtil.hasChanged(info.getOwner(), owner)) {
+			info.setOwner(owner);
 			setChanged();
 			return true;
 		}

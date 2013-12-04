@@ -10,92 +10,141 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.launchers;
 
-import java.util.HashMap;
-
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.internal.ui.SWTFactory;
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
-import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
-import org.eclipse.jface.preference.StringFieldEditor;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.ConfigurationPreferenceStore;
+import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 import org.hpccsystems.internal.data.ClientTools;
 
+@SuppressWarnings("restriction")
 public class ECLLaunchCompilerTab extends ECLLaunchConfigurationTab {
 	public static final String P_OVERRIDEDEFAULTS = "overrideDefaultsPreference";
 	public static final boolean P_OVERRIDEDEFAULTS_DEFAULT = false;
 
-	private class WidgetListener implements IPropertyChangeListener {
+	private class WidgetListener extends SelectionAdapter implements ModifyListener {
 		@Override
-		public void propertyChange(PropertyChangeEvent event) {
+		public void modifyText(ModifyEvent e) {
+			scheduleUpdateJob();
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
 			scheduleUpdateJob();
 		}
 	}
-	WidgetListener fListener;
 
-	BooleanFieldEditor overrideGlobalFieldEditor;
+	private WidgetListener fListener;
+
+	private Group compilerGroup;
+	private Button overrideGlobalFieldEditor;
+	private DirectoryFieldEditor clientToolsPathFieldEditor;
+	
+	private Text commonArgsFieldEditor;
+	private Text syntaxArgsFieldEditor;
+	private Text compileArgsFieldEditor;
+	private Text remoteCompileArgsFieldEditor;
+	
+	private Text workunitArgsFieldEditor;	
+
+	Group miscGroup;
+	private IntegerFieldEditor inlineResultSetLimitFieldEditor;
+	private Button monitorDependeesFieldEditor;
+	private Button supressSubsequentErrorsFieldEditor;
 
 	ECLLaunchCompilerTab() {
 		super();
 		fListener = new WidgetListener();
-		store = new ConfigurationPreferenceStore(fListener);
 	}
 	
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
-		for (String field: fieldMap.keySet()) {
-			refreshEnabled(field, overrideGlobalFieldEditor.getBooleanValue());
-		}
-		return super.isValid(launchConfig);
+		boolean retVal = super.isValid(launchConfig);
+
+		boolean enableOverrides = overrideGlobalFieldEditor.getSelection();
+		clientToolsPathFieldEditor.setEnabled(enableOverrides, compilerGroup);
+		
+		commonArgsFieldEditor.setEnabled(enableOverrides);
+		syntaxArgsFieldEditor.setEnabled(enableOverrides);
+		compileArgsFieldEditor.setEnabled(enableOverrides);
+		remoteCompileArgsFieldEditor.setEnabled(enableOverrides);
+		
+		workunitArgsFieldEditor.setEnabled(enableOverrides);
+
+		inlineResultSetLimitFieldEditor.setEnabled(enableOverrides, miscGroup);
+		monitorDependeesFieldEditor.setEnabled(enableOverrides);
+		supressSubsequentErrorsFieldEditor.setEnabled(enableOverrides);
+		
+		return retVal;
 	}
 	
 	public void createCompilerEditor(Composite _parent) {
-		Group parent = SWTFactory.createGroup(_parent, "Location:", 1, 1, GridData.FILL_HORIZONTAL);
+		compilerGroup = SWTFactory.createGroup(_parent, "Location:", 1, 1, GridData.FILL_HORIZONTAL);
 
-		addField(parent, new DirectoryFieldEditor(ClientTools.P_TOOLSPATH, "&HPCC Client Tools:", parent));
+		clientToolsPathFieldEditor = new DirectoryFieldEditor(ClientTools.P_TOOLSPATH, "&HPCC Client Tools:", compilerGroup);
+		clientToolsPathFieldEditor.getTextControl(compilerGroup).addModifyListener(fListener);
 	}
 
 	public void createCompilerArgumentsEditor(Composite _parent) {
-		Group parent = SWTFactory.createGroup(_parent, "Compiler Arguments:", 1, 1, GridData.FILL_HORIZONTAL);
+		Group compilerArgsGroup = SWTFactory.createGroup(_parent, "Compiler Arguments:", 1, 1, GridData.FILL_HORIZONTAL);
 
-		addField(parent, new StringFieldEditor(ClientTools.P_ARGSCOMMON, "&Common:", parent));
-		addField(parent, new StringFieldEditor(ClientTools.P_ARGSSYNTAX, "&Syntax Check:", parent));
-		addField(parent, new StringFieldEditor(ClientTools.P_ARGSCOMPILE, "&Local Compile:", parent));
-		addField(parent, new StringFieldEditor(ClientTools.P_ARGSCOMPILEREMOTE, "&Remote Compile:", parent));
+		SWTFactory.createLabel(compilerArgsGroup, "&Common:  ", 1);
+		commonArgsFieldEditor = SWTFactory.createSingleText(compilerArgsGroup, 1);
+		commonArgsFieldEditor.addModifyListener(fListener);
+
+		SWTFactory.createLabel(compilerArgsGroup, "&Syntax Check:  ", 1);
+		syntaxArgsFieldEditor = SWTFactory.createSingleText(compilerArgsGroup, 1);
+		syntaxArgsFieldEditor.addModifyListener(fListener);
+
+		SWTFactory.createLabel(compilerArgsGroup, "&Local Compile:  ", 1);
+		compileArgsFieldEditor = SWTFactory.createSingleText(compilerArgsGroup, 1);
+		compileArgsFieldEditor.addModifyListener(fListener);
+
+		SWTFactory.createLabel(compilerArgsGroup, "&Remote Compile:  ", 1);
+		remoteCompileArgsFieldEditor = SWTFactory.createSingleText(compilerArgsGroup, 1);
+		remoteCompileArgsFieldEditor.addModifyListener(fListener);
 	}
 
 	public void createWorkunitArgumentsEditor(Composite _parent) {
-		Group parent = SWTFactory.createGroup(_parent, "Workunit Arguments:", 1, 1, GridData.FILL_HORIZONTAL);
+		Group workunitArgsGroup = SWTFactory.createGroup(_parent, "Workunit Arguments:", 1, 1, GridData.FILL_HORIZONTAL);
 
-		addField(parent, new StringFieldEditor(ClientTools.P_ARGSWULOCAL, "&Local:", parent));
+		SWTFactory.createLabel(workunitArgsGroup, "&Local:  ", 1);
+		workunitArgsFieldEditor = SWTFactory.createSingleText(workunitArgsGroup, 1);
+		workunitArgsFieldEditor.addModifyListener(fListener);
 	}
 
 	public void createMiscellaneousEditor(Composite _parent) {
-		Group parent = SWTFactory.createGroup(_parent, "Workunit Arguments:", 1, 1, GridData.FILL_HORIZONTAL);
+		miscGroup = SWTFactory.createGroup(_parent, "Workunit Arguments:", 1, 1, GridData.FILL_HORIZONTAL);
 
-		addField(parent, new IntegerFieldEditor(ClientTools.P_INLINERESULTLIMIT, "&Inline Result Limit:", parent));
-		addField(parent, new BooleanFieldEditor(ClientTools.P_MONITORDEPENDEES, "&Monitor Dependees (requires manual \"Project/Clean...\")", parent));
-		addField(parent, new BooleanFieldEditor(ClientTools.P_SUPRESSSECONDERROR, "&Supress Subsequent Errors", parent));
+		SWTFactory.createLabel(miscGroup, "&Inline Result Limit:  ", 1);
+		inlineResultSetLimitFieldEditor = new IntegerFieldEditor(ClientTools.P_INLINERESULTLIMIT, "&Inline Result Limit:  ", miscGroup);
+		inlineResultSetLimitFieldEditor.getTextControl(miscGroup).addModifyListener(fListener);
+
+		monitorDependeesFieldEditor = SWTFactory.createCheckButton(miscGroup, "&Monitor Dependees (requires manual \"Project/Clean...\")", null, false, 1);
+		monitorDependeesFieldEditor.addSelectionListener(fListener);
+		supressSubsequentErrorsFieldEditor = SWTFactory.createCheckButton(miscGroup, "&Supress Subsequent Errors", null, false, 1);
+		supressSubsequentErrorsFieldEditor.addSelectionListener(fListener);
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 		Composite projComp = SWTFactory.createComposite(parent, parent.getFont(), 1, 1, GridData.FILL_BOTH);
-		// ((GridLayout)projComp.getLayout()).verticalSpacing = 0;
 
 		createVerticalSpacer(projComp, 1);
-		overrideGlobalFieldEditor = new BooleanFieldEditor(P_OVERRIDEDEFAULTS, "&Override Defaults", projComp); 
-		store.addField(overrideGlobalFieldEditor);
+		overrideGlobalFieldEditor = SWTFactory.createCheckButton(projComp, "&Override Defaults", null, false, 1);
+		overrideGlobalFieldEditor.addSelectionListener(fListener);
+
 		createVerticalSpacer(projComp, 1);
 		createCompilerEditor(projComp);
 		createVerticalSpacer(projComp, 1);
@@ -110,32 +159,45 @@ public class ECLLaunchCompilerTab extends ECLLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		store.setDefault(P_OVERRIDEDEFAULTS, P_OVERRIDEDEFAULTS_DEFAULT);
-
-		IPreferenceStore globalPreferences = Activator.getDefault().getPreferenceStore();
-		store.setDefault(ClientTools.P_TOOLSPATH, globalPreferences.getString(ClientTools.P_TOOLSPATH));
-
-		store.setDefault(ClientTools.P_ARGSCOMMON, globalPreferences.getString(ClientTools.P_ARGSCOMMON));
-		store.setDefault(ClientTools.P_ARGSSYNTAX, globalPreferences.getString(ClientTools.P_ARGSSYNTAX));
-		store.setDefault(ClientTools.P_ARGSCOMPILE, globalPreferences.getString(ClientTools.P_ARGSCOMPILE));
-		store.setDefault(ClientTools.P_ARGSCOMPILEREMOTE, globalPreferences.getString(ClientTools.P_ARGSCOMPILEREMOTE));
-
-		store.setDefault(ClientTools.P_ARGSWULOCAL, globalPreferences.getString(ClientTools.P_ARGSWULOCAL));
-
-		store.setDefault(ClientTools.P_INLINERESULTLIMIT, globalPreferences.getInt(ClientTools.P_INLINERESULTLIMIT));
-		store.setDefault(ClientTools.P_MONITORDEPENDEES, globalPreferences.getBoolean(ClientTools.P_MONITORDEPENDEES));
-		store.setDefault(ClientTools.P_SUPRESSSECONDERROR, globalPreferences.getBoolean(ClientTools.P_SUPRESSSECONDERROR));
-		store.setDefault(ClientTools.P_ENABLEMETAPROCESSING, globalPreferences.getBoolean(ClientTools.P_ENABLEMETAPROCESSING));
 	}
 
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
-		store.loadFields(configuration);
+		try {
+			overrideGlobalFieldEditor.setSelection(configuration.getAttribute(P_OVERRIDEDEFAULTS, P_OVERRIDEDEFAULTS_DEFAULT));
+			
+			clientToolsPathFieldEditor.setStringValue(configuration.getAttribute(ClientTools.P_TOOLSPATH, ClientTools.P_TOOLSPATH_DEFAULT));
+			commonArgsFieldEditor.setText(configuration.getAttribute(ClientTools.P_ARGSCOMMON, ClientTools.P_ARGSCOMMON_DEFAULT));
+			syntaxArgsFieldEditor.setText(configuration.getAttribute(ClientTools.P_ARGSSYNTAX, ClientTools.P_ARGSSYNTAX_DEFAULT));
+			compileArgsFieldEditor.setText(configuration.getAttribute(ClientTools.P_ARGSCOMPILE, ClientTools.P_ARGSCOMPILE_DEFAULT));
+			remoteCompileArgsFieldEditor.setText(configuration.getAttribute(ClientTools.P_ARGSCOMPILEREMOTE, ClientTools.P_ARGSCOMPILEREMOTE_DEFAULT));
+			
+			workunitArgsFieldEditor.setText(configuration.getAttribute(ClientTools.P_ARGSWULOCAL, ClientTools.P_ARGSWULOCAL_DEFAULT));
+
+			inlineResultSetLimitFieldEditor.setStringValue(Integer.toString(configuration.getAttribute(ClientTools.P_INLINERESULTLIMIT, ClientTools.P_INLINERESULTLIMIT_DEFAULT)));
+			monitorDependeesFieldEditor.setSelection(configuration.getAttribute(ClientTools.P_MONITORDEPENDEES, ClientTools.P_MONITORDEPENDEES_DEFAULT));
+			supressSubsequentErrorsFieldEditor.setSelection(configuration.getAttribute(ClientTools.P_SUPRESSSECONDERROR, ClientTools.P_SUPRESSSECONDERROR_DEFAULT));
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		store.saveFields(configuration);
+		configuration.setAttribute(P_OVERRIDEDEFAULTS, overrideGlobalFieldEditor.getSelection());
+		
+		configuration.setAttribute(ClientTools.P_TOOLSPATH, clientToolsPathFieldEditor.getStringValue());
+		
+		configuration.setAttribute(ClientTools.P_ARGSCOMMON, commonArgsFieldEditor.getText());
+		configuration.setAttribute(ClientTools.P_ARGSSYNTAX, syntaxArgsFieldEditor.getText());
+		configuration.setAttribute(ClientTools.P_ARGSCOMPILE, compileArgsFieldEditor.getText());
+		configuration.setAttribute(ClientTools.P_ARGSCOMPILEREMOTE, remoteCompileArgsFieldEditor.getText());
+		
+		configuration.setAttribute(ClientTools.P_ARGSWULOCAL, workunitArgsFieldEditor.getText());
+		
+		configuration.setAttribute(ClientTools.P_INLINERESULTLIMIT, inlineResultSetLimitFieldEditor.getIntValue());
+		configuration.setAttribute(ClientTools.P_MONITORDEPENDEES, monitorDependeesFieldEditor.getSelection());
+		configuration.setAttribute(ClientTools.P_SUPRESSSECONDERROR, supressSubsequentErrorsFieldEditor.getSelection());
 	}
 
 	@Override

@@ -39,9 +39,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
+import org.hpccsystems.internal.data.ClientTools;
 import org.hpccsystems.internal.data.Platform;
 
+@SuppressWarnings("restriction")
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	private class WidgetListener extends SelectionAdapter implements ModifyListener {
@@ -60,10 +63,10 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
 			if (source == sslButton) {
-				if (sslButton.getSelection() && fPortText.getText().matches("8010")) {
-					fPortText.setText("18010");
-				} else if (!sslButton.getSelection() && fPortText.getText().matches("18010")) {
-					fPortText.setText("8010");
+				if (sslButton.getSelection() && fPortText.getText().matches(Platform.P_PORT_DEFAULT_STR)) {
+					fPortText.setText(Platform.P_SSLPORT_DEFAULT_STR);
+				} else if (!sslButton.getSelection() && fPortText.getText().matches(Platform.P_SSLPORT_DEFAULT_STR)) {
+					fPortText.setText(Platform.P_PORT_DEFAULT_STR);
 				}
 				refreshAddress();
 			}
@@ -79,6 +82,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	}
 
 	private WidgetListener fListener;
+	private ILaunchConfiguration testConfig;
 
 	Image image;
 
@@ -93,7 +97,10 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	protected Text fPasswordText;
 
 	protected Text fAddressText;
+	protected String fCompilerPath;
+
 	protected Text fServerVersionText;
+	protected Text fCompilerVersionText;
 
 	private Button testButton;
 	private Browser browser;
@@ -103,10 +110,12 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	
 	ECLLaunchServerTab() {
 		fListener = new WidgetListener();
+		fCompilerPath = new String();
 	}
 
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
+		testConfig = launchConfig;
 		return super.isValid(launchConfig);
 	}
 
@@ -154,6 +163,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		testButton.addSelectionListener(fListener);
 		SWTFactory.createLabel(group, "Server Version:  ", 1);
 		fServerVersionText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY, 2);
+		SWTFactory.createLabel(group, "Compiler Version:  ", 1);
+		fCompilerVersionText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY, 2);
 
 		try {
 			browser = new Browser(group, SWT.BORDER);
@@ -216,8 +227,6 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		//		ip.setText("localhost");
-		//		cluster.setText("hthor");
 	}
 
 	@Override
@@ -225,22 +234,28 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		try {
 			disableButton.setSelection(configuration.getAttribute(Platform.P_DISABLED, false));
 
-			sslButton.setSelection(configuration.getAttribute(Platform.P_SSL, false));
-			fIPText.setText(configuration.getAttribute(Platform.P_IP, "localhost"));
-			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, 8010)));
+			sslButton.setSelection(configuration.getAttribute(Platform.P_SSL, Platform.P_SSL_DEFAULT));
+			fIPText.setText(configuration.getAttribute(Platform.P_IP, Platform.P_IP_DEFAULT));
+			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, Platform.P_PORT_DEFAULT)));
 			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor"));
 			compileOnlyButton.setSelection(configuration.getAttribute(Platform.P_COMPILEONLY, false));
 
 			fUserText.setText(configuration.getAttribute(Platform.P_USER, ""));
 			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, ""));
 
-			int port = Integer.parseInt(fPortText.getText());
+			int port = Platform.P_PORT_DEFAULT;
+			try {
+				port = new Integer(fPortText.getText());
+			} catch (NumberFormatException e) {
+			}
 			Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
 			if (platform.isDisabled()) {
 				fServerVersionText.setText("Unable to Connect (Temporarily Disabled).");
 				disableButton.setText(DisableButtonTempDiabledText);
+				fCompilerVersionText.setText("");
 			} else {
 				fServerVersionText.setText("");
+				fCompilerVersionText.setText("");
 				disableButton.setText(DisableButtonText);
 			}
 			
@@ -259,13 +274,20 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		try {
 			configuration.setAttribute(Platform.P_PORT, Integer.parseInt(fPortText.getText()));
 		} catch (NumberFormatException e) {
-			configuration.setAttribute(Platform.P_PORT, 8010);
+			configuration.setAttribute(Platform.P_PORT, Platform.P_PORT_DEFAULT);
 		}
 		configuration.setAttribute(Platform.P_CLUSTER, fClusterText.getText());
 		configuration.setAttribute(Platform.P_COMPILEONLY, compileOnlyButton.getSelection());
 
 		configuration.setAttribute(Platform.P_USER, fUserText.getText());
 		configuration.setAttribute(Platform.P_PASSWORD, fPasswordText.getText());
+		
+		try {
+			if (!fCompilerPath.isEmpty() && configuration.getAttribute(ClientTools.P_TOOLSPATH, "").isEmpty()) {
+				configuration.setAttribute(ClientTools.P_TOOLSPATH, fCompilerPath);
+			}
+		} catch (CoreException e) {
+		}
 	}
 
 	protected void handleProjectButtonSelected() {
@@ -289,14 +311,29 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	void refreshServerVersion() {
 		fServerVersionText.setText("");
+		fCompilerVersionText.setText("");
 		
-		int port = Integer.parseInt(fPortText.getText());
+		int port = Platform.P_PORT_DEFAULT;
+		try {
+			port = new Integer(fPortText.getText());
+		} catch (NumberFormatException e) {
+		}
 		
 		Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
 		platform.clearTempDisabled();
 		try {
 			String build = platform.getBuild(fUserText.getText(), fPasswordText.getText());
 			fServerVersionText.setText(build);
+			
+			ClientTools clientTools = ClientTools.get(platform, testConfig);
+			if (clientTools != null) {
+				fCompilerPath = clientTools.getRootPath();
+				ECLCompiler compiler = clientTools.getCompiler();
+				if (compiler != null) {
+					fCompilerVersionText.setText(compiler.getVersion());
+				}
+			}
+			
 			disableButton.setText(DisableButtonText);
 		} catch (RemoteException e) {
 			fServerVersionText.setText(e.getMessage());
