@@ -159,10 +159,20 @@ public class ECLEditorToolbar extends Composite {
 		debug.setEnabled(false);
 	}
 
+	ILaunchConfiguration getSelectedConfiguration() {
+		int selIndex = comboServer.getSelectionIndex();
+		if (selIndex >= 0 && selIndex < configurations.length) {
+			return configurations[comboServer.getSelectionIndex()];
+		}
+		return null;
+	}
+
 	void submit(boolean compileOnly) {
-		ILaunchConfiguration configuration = configurations[comboServer.getSelectionIndex()];
-		Platform platform = Data.get().GetPlatform(configuration);
-		platform.submit(configuration, file, comboTarget.getText(), compileOnly);
+		ILaunchConfiguration configuration = getSelectedConfiguration();
+		if (configuration != null) {
+			Platform platform = Data.get().GetPlatform(configuration);
+			platform.submit(configuration, file, comboTarget.getText(), compileOnly);
+		}
 	}
 
 	private void refreshLaunchConfigurations(boolean ignoreCurrent) {
@@ -192,6 +202,8 @@ public class ECLEditorToolbar extends Composite {
 			comboServer.select(currentServerSel);
 		else if (defaultServerSel >= 0)
 			comboServer.select(defaultServerSel);
+		else
+			comboServer.select(0);
 		refreshTarget(ignoreCurrent);
 	}
 
@@ -203,24 +215,28 @@ public class ECLEditorToolbar extends Composite {
 	private void refreshTarget(String defaultTarget, boolean ignoreCurrent) {
 		String currentTarget = ignoreCurrent ? "" : comboServer.getText();
 		comboTarget.removeAll();
-		ILaunchConfiguration configuration = configurations[comboServer.getSelectionIndex()];
-		Platform platform = Data.get().GetPlatform(configuration);
-		Cluster[] clusters = platform.getClusters();
-		int currentTargetSel = -1;
-		int defaultTargetSel = -1;
-		for (int i = 0; i < clusters.length; ++i) {
-			String name = clusters[i].getName();
-			comboTarget.add(name);
-			if (name.equals(currentTarget))
-				currentTargetSel = i;
-			if (name.equals(defaultTarget))
-				defaultTargetSel = i;
+		ILaunchConfiguration configuration = getSelectedConfiguration();
+		if (configuration != null) {
+			Platform platform = Data.get().GetPlatform(configuration);
+			if (platform != null) {
+				Cluster[] clusters = platform.getClusters();
+				int currentTargetSel = -1;
+				int defaultTargetSel = -1;
+				for (int i = 0; i < clusters.length; ++i) {
+					String name = clusters[i].getName();
+					comboTarget.add(name);
+					if (name.equals(currentTarget))
+						currentTargetSel = i;
+					if (name.equals(defaultTarget))
+						defaultTargetSel = i;
+				}
+		
+				if (currentTargetSel >= 0)
+					comboTarget.select(currentTargetSel);
+				else if (defaultTargetSel >= 0)
+					comboTarget.select(defaultTargetSel);
+			}
 		}
-
-		if (currentTargetSel >= 0)
-			comboTarget.select(currentTargetSel);
-		else if (defaultTargetSel >= 0)
-			comboTarget.select(defaultTargetSel);
 	}
 
 	private void refreshTarget(boolean ignoreCurrent) {
@@ -228,8 +244,10 @@ public class ECLEditorToolbar extends Composite {
 		String defaultTarget = prefs.get(comboServer.getText(), "");
 		if (defaultTarget.isEmpty()) {
 			try {
-				ILaunchConfiguration configuration = configurations[comboServer.getSelectionIndex()];
-				defaultTarget = configuration.getAttribute(Platform.P_CLUSTER, "");
+				ILaunchConfiguration configuration = getSelectedConfiguration();
+				if (configuration != null) {
+					defaultTarget = configuration.getAttribute(Platform.P_CLUSTER, "");
+				}
 			} catch (CoreException e) {
 			}
 		}

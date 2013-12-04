@@ -12,10 +12,14 @@ package org.hpccsystems.internal.ui.tree;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.hpccsystems.eclide.ui.viewer.platform.FolderItemView;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformView;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitView;
@@ -93,6 +97,23 @@ public class ItemView {
 		return "TODO";
 	}
 
+	public String getStateText() {
+		switch(children.getState()) {
+		case PREFETCH_UNKNOWN:
+			return " (...loading...)";
+		case PREFETCH_STARTED:
+			return " (...calculating...)";
+		case PREFETCH_FINISHED:
+			if (this instanceof FolderItemView) {
+				if (children.getCount() > 0) {
+					return " (" + children.getCount() + ")";
+				}
+			}
+			break;
+		}
+		return "";
+	}
+
 	public Image getImage() {
 		return null;
 	}
@@ -141,20 +162,20 @@ public class ItemView {
 
 	public boolean hasChildren() {
 		switch (children.getState()) {
-		case UNKNOWN:
+		case PREFETCH_UNKNOWN:
 			final ItemView self = this;
 			children.start(new Runnable() {
 				@Override
 				public void run() {
 					refreshChildren();
-					children.setState(CalcState.FINISHED);
+					children.setState(CalcState.PREFETCH_FINISHED);
 					treeViewer.refresh(self);
 				}
 			});
 			break;
-		case STARTED:
+		case PREFETCH_STARTED:
 			break;
-		case FINISHED:
+		case PREFETCH_FINISHED:
 			break;
 		}
 		return children.get() == null ? false : children.get().length > 0;
@@ -169,6 +190,18 @@ public class ItemView {
 
 	public void refreshChildren() {
 		children.set(new ItemView[0]);
+	}
+	
+	public TreePath getTreePath() {
+		final List<ItemView> ancestors = new ArrayList<ItemView>();
+		walkAncestors(new ItemView.IVisitor() {
+			@Override
+			public boolean visit(ItemView item) {
+				ancestors.add(0, item);
+				return false;
+			}
+		});
+		return new TreePath(ancestors.toArray(new Object[ancestors.size()]));
 	}
 
 	public boolean canPerform(ACTION action) {

@@ -27,7 +27,7 @@ import org.hpccsystems.internal.ui.tree.ItemView;
 public class WorkunitView extends PlatformBaseView implements Observer {
 	Workunit workunit;
 
-	public WorkunitView(TreeItemOwner treeViewer, PlatformBaseView parent, Workunit wu) {
+	public WorkunitView(TreeItemOwner treeViewer, ItemView parent, Workunit wu) {
 		super(treeViewer, parent, wu.getPlatform());
 		workunit = wu;
 		workunit.addObserver(this);

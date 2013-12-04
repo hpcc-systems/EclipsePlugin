@@ -24,23 +24,7 @@ public class PlatformTreeItemLabelProvider extends TreeItemLabelFontProvider {
 	public String getText(Object element) {
 		if (element instanceof ItemView) {
 			final ItemView treeItem = (ItemView)element; 
-			switch(treeItem.children.getState()) {
-			case UNKNOWN:
-				return treeItem.getText() + " (Loading...)";
-			case STARTED:
-				return treeItem.getText() + " (Calculating...)";
-			case FINISHED:
-				if (treeItem instanceof FolderItemView) {
-					//if (!treeViewer.getExpandedState(element)) {
-					if (treeItem.children.getCount() > 0)
-					 {
-						return treeItem.getText() + " (" + treeItem.children.get().length + ")";
-					//}
-					}
-				}
-				break;
-			}
-			return super.getText(element);
+			return treeItem.getText() + treeItem.getStateText();
 		}
 		if (element instanceof PlatformView) {
 			return "PTODO";

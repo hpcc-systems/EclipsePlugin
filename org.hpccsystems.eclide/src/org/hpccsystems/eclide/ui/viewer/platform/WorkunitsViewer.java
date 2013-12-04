@@ -11,7 +11,6 @@
 package org.hpccsystems.eclide.ui.viewer.platform;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
@@ -31,12 +30,20 @@ public class WorkunitsViewer extends PlatformViewer {
 
 	public void select(Workunit workunit) {
 		for (Object o : treeViewer.getElements()) {
-			if (o instanceof WorkunitView) {
-				if (((WorkunitView)o).getWorkunit() == workunit) {
-					Object[] path = new Object[1];
-					path[0] = o;
-					treeViewer.setSelection(new TreeSelection(new TreePath(path)), true);
-					treeViewer.expandToLevel(o, 2);
+			if (o instanceof WorkunitFilterFolderView) {
+				WorkunitFilterFolderView folderView = (WorkunitFilterFolderView)o;
+				WorkunitView wuView = folderView.ensureLoaded(workunit);
+				if (wuView != null) {
+					treeViewer.setSelection(new TreeSelection(wuView.getTreePath()), true);
+					treeViewer.expandToLevel(wuView, 1);
+					break;
+				}
+			} else if (o instanceof WorkunitView) {
+				WorkunitView workunitView = (WorkunitView)o; 
+				if (workunitView.getWorkunit() == workunit) {
+					treeViewer.setSelection(new TreeSelection(workunitView.getTreePath()), true);
+					treeViewer.expandToLevel(workunitView, 1);
+					break;
 				}
 			}
 		}
@@ -44,7 +51,7 @@ public class WorkunitsViewer extends PlatformViewer {
 
 	@Override
 	synchronized TreeItemContentProvider getContentProvider() {
-		return new WorkunitsTreeItemContentProvider(treeViewer);
+		return new WorkunitsTreeItemContentProvider2(treeViewer);
 	}
 
 	public IStructuredSelection getSelection() {

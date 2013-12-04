@@ -10,13 +10,8 @@
  ******************************************************************************/
 package org.hpccsystems.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -27,8 +22,6 @@ public class ConfigurationPreferenceStore extends PreferenceStore {
 	IPreferenceStore globalStore;
 	ILaunchConfiguration configuration;
 	IPropertyChangeListener listener;
-
-	private List<FieldEditor> fields = null;
 
 	public ConfigurationPreferenceStore() {
 		super();
@@ -44,35 +37,6 @@ public class ConfigurationPreferenceStore extends PreferenceStore {
 		this();
 		this.configuration = configuration;
 	}
-
-	public void addField(FieldEditor editor) {
-		if (fields == null) {
-			fields = new ArrayList<FieldEditor>();
-		}
-		fields.add(editor);
-		editor.setPreferenceStore(this);
-		editor.setPropertyChangeListener(listener);
-	}
-
-	public void loadFields(ILaunchConfiguration configuration) {
-		for (FieldEditor field : fields) {
-			String key = field.getPreferenceName();
-			try {
-				super.setValue(key, configuration.getAttribute(key, globalStore.getString(key)));
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-			field.load();
-		}
-	}
-
-	public void saveFields(ILaunchConfigurationWorkingCopy configuration) {
-		for (FieldEditor field : fields) {
-			field.store();
-			String key = field.getPreferenceName();
-			configuration.setAttribute(key, super.getString(key));
-		}
-	}   
 
 	//  ILaunchConfiguration like calls  ---
 	public String getAttribute(String key, String defaultValue) {
@@ -134,5 +98,4 @@ public class ConfigurationPreferenceStore extends PreferenceStore {
     public String getString(String name) {
     	return getAttribute(name, "");    	
     }
-	
 }

@@ -25,6 +25,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ControlContribution;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -37,8 +39,13 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IEditorInput;
@@ -49,12 +56,13 @@ import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
+import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.Workbench;
 import org.hpccsystems.eclide.editors.ECLWindow;
 import org.hpccsystems.eclide.perspectives.ECLPerspective;
 import org.hpccsystems.eclide.perspectives.ECLWatch;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
-import org.hpccsystems.eclide.ui.viewer.platform.PlatformActions.IPlatformUI;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions.IPlatformUI;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Workunit;
@@ -90,15 +98,16 @@ public class PlatformViewer extends ViewPart {
 
 	Action showWebItemAction;
 	Action updateItemAction;
-	Action reloadAction;
-	Action refreshAction;
+	Action refreshListAction;
+	Action refreshEachItemAction;
+	Action testAction;
 
-	PlatformActions actions;	
+	WorkunitActions actions;	
 
 	public PlatformViewer() {
 		contentProvider = null;
 
-		actions = new PlatformActions(new IPlatformUI() {
+		actions = new WorkunitActions(new IPlatformUI() {
 
 			@Override
 			public void refresh() {
@@ -418,15 +427,14 @@ public class PlatformViewer extends ViewPart {
 			}
 		};
 
-		reloadAction = new Action("Reload") {
+	    refreshListAction = new Action("Refresh", Activator.getImageDescriptor("icons/refresh.png")) {
 			@Override
 			public void run() {
 				contentProvider.reloadChildren();
 			}
 		};
-
-
-		refreshAction = new Action("Refresh") {
+		
+		refreshEachItemAction = new Action("Refresh Eeach Item") {
 			@Override
 			public void run() {
 				contentProvider.refreshChildren();
@@ -439,8 +447,8 @@ public class PlatformViewer extends ViewPart {
 	 */
 	protected void createToolbar() {
 		IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
-		mgr.add(refreshAction);
-		mgr.add(reloadAction);
+
+		mgr.add(refreshListAction);
 	}
 
 	protected void createContextMenu() {
