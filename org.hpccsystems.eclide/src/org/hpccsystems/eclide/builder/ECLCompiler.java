@@ -342,6 +342,24 @@ public class ECLCompiler {
 			ancestors = handler.getAncestors(file);
 		}
 	}
+	
+	protected IPath autoFindManifest(IFile file) {
+		IPath manifestPath = file.getLocation().removeFileExtension();
+		manifestPath = manifestPath.addFileExtension("manifest"); //$NON-NLS-1$
+		if (manifestPath.toFile().exists()) {
+			return manifestPath;
+		}
+
+		String[] manifestFolders = {"files"}; //$NON-NLS-1$
+		for (int i = 0; i < manifestFolders.length; ++i) {
+			manifestPath = file.getLocation().removeLastSegments(1);
+			manifestPath = manifestPath.append(manifestFolders[i]).append("manifest.xml"); //$NON-NLS-1$
+			if (manifestPath.toFile().exists()) {
+				return manifestPath;
+			}
+		}
+		return null;
+	}
 
 	public String getArchive(IFile file) {
 		Eclipse.deleteMarkers(file);
@@ -356,10 +374,8 @@ public class ECLCompiler {
 		GetIncludeArgs(cmdArgs);
 
 		if (!argsCompileRemote.contains("manifest=")) { //$NON-NLS-1$
-			IPath manifestPath = file.getLocation().removeLastSegments(1);
-			manifestPath = manifestPath.append("files"); //$NON-NLS-1$
-			manifestPath = manifestPath.append("manifest.xml"); //$NON-NLS-1$
-			if (manifestPath.toFile().exists()) {
+			IPath manifestPath = autoFindManifest(file);
+			if (manifestPath != null) {
 				cmdArgs.Append("manifest=", manifestPath.toOSString()); //$NON-NLS-1$
 			}
 		}
