@@ -13,6 +13,7 @@ package org.hpccsystems.eclide.handlers;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -27,7 +28,6 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.TextOperationAction;
-import org.hpccsystems.eclide.Messages;
 
 public class ToggleCommentHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -60,7 +60,7 @@ public class ToggleCommentHandler extends AbstractHandler {
 		}
 
 		IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
-		ResourceBundle b = Messages.getResourceBundle();
+		ResourceBundle b = ResourceBundle.getBundle("org.hpccsystems.eclide.resources.messages");
 		Action action;
 		if (addComment(document, ts)) {
 			action = new TextOperationAction(b, "", textEditor, ITextOperationTarget.PREFIX);

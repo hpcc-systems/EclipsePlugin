@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.data.Graph;
 import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;

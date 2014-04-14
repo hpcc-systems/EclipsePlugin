@@ -33,6 +33,7 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.Workbench;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.eclide.builder.Version;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.ConfigurationPreferenceStore;
 import org.hpccsystems.ws.filespray.DFUWorkunit;
 import org.hpccsystems.ws.filespray.FileSprayLocator;

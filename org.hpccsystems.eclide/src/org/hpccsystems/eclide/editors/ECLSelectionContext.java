@@ -9,6 +9,7 @@ import org.eclipse.help.IHelpResource;
 import org.eclipse.help.IIndex;
 import org.eclipse.help.IIndexEntry;
 import org.eclipse.help.ITopic;
+import org.hpccsystems.eclide.resources.Messages;
 
 public class ECLSelectionContext implements IContext {
 

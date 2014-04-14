@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.eclipse.jface.action.Action;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
 public class WorkunitActions {

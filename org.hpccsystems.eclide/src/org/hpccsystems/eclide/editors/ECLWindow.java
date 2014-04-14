@@ -54,6 +54,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.eclide.ui.viewer.ECLContentOutlinePage;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions.IPlatformUI;

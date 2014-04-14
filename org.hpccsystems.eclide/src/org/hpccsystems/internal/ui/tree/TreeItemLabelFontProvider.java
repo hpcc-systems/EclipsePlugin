@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.hpccsystems.eclide.resources.Messages;
 
 public class TreeItemLabelFontProvider implements ILabelProvider, IFontProvider, IColorProvider {
 	protected TreeViewer treeViewer;

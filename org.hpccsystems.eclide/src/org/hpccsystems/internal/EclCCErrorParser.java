@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.ui.console.MessageConsoleStream;
+import org.hpccsystems.eclide.resources.Messages;
 
 public class EclCCErrorParser {
 	public int errorCount = 0;

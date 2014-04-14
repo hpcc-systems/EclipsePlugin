@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
+import org.hpccsystems.eclide.resources.Messages;
 
 public class ImportWizard extends Wizard implements IImportWizard {
 
@@ -36,9 +37,9 @@ public class ImportWizard extends Wizard implements IImportWizard {
 	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle(Messages.ImportWizard_0); //NON-NLS-1
+		setWindowTitle(Messages.Wizard_ImportWizard_0); //NON-NLS-1
 		setNeedsProgressMonitor(true);
-		mainPage = new ImportWizardPage(Messages.ImportWizard_1, selection); //NON-NLS-1
+		mainPage = new ImportWizardPage(Messages.Wizard_ImportWizard_1, selection); //NON-NLS-1
 	}
 
 	/* (non-Javadoc)

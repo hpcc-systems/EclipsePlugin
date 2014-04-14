@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.hpccsystems.eclide.resources.Messages;
 
 public class ECLAnnotationHover implements IAnnotationHover {
 

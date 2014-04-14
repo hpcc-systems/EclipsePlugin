@@ -61,6 +61,7 @@ import org.hpccsystems.eclide.Workbench;
 import org.hpccsystems.eclide.editors.ECLWindow;
 import org.hpccsystems.eclide.perspectives.ECLPerspective;
 import org.hpccsystems.eclide.perspectives.ECLWatch;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.eclide.ui.viewer.HtmlViewer;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions.IPlatformUI;
 import org.hpccsystems.internal.Eclipse;

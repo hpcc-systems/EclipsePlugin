@@ -37,6 +37,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.hpccsystems.eclide.Workbench;
+import org.hpccsystems.eclide.resources.Messages;
 
 public class ECLNewFileWizard extends Wizard implements INewWizard {
 	private ECLNewFileWizardPage page;
