@@ -50,7 +50,7 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	@Override
 	public void init(IWorkbench workbench) {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Compiler preferences.");
+		setDescription(Messages.ECLCompilerPreferencePage_0);
 	}
 
 	/**
@@ -62,26 +62,26 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	@Override
 	public void createFieldEditors() {
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Location:", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(ClientTools.P_TOOLSPATH, "&HPCC Client Tools:", getFieldEditorParent()));
+		addField(new LabelFieldEditor(Messages.ECLCompilerPreferencePage_1, getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(ClientTools.P_TOOLSPATH, Messages.ECLCompilerPreferencePage_2, getFieldEditorParent()));
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Compiler Arguments:", getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSCOMMON, "&Common:", getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSSYNTAX, "&Syntax Check:", getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILE, "&Local Compile:", getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILEREMOTE, "&Remote Compile:", getFieldEditorParent()));
+		addField(new LabelFieldEditor(Messages.ECLCompilerPreferencePage_3, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSCOMMON, Messages.ECLCompilerPreferencePage_4, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSSYNTAX, Messages.ECLCompilerPreferencePage_5, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILE, Messages.ECLCompilerPreferencePage_6, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILEREMOTE, Messages.ECLCompilerPreferencePage_7, getFieldEditorParent()));
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Workunit Arguments:", getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSWULOCAL, "&Local:", getFieldEditorParent()));
+		addField(new LabelFieldEditor(Messages.ECLCompilerPreferencePage_8, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSWULOCAL, Messages.ECLCompilerPreferencePage_9, getFieldEditorParent()));
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("Miscellaneous:", getFieldEditorParent()));
-		addField(new IntegerFieldEditor(ClientTools.P_INLINERESULTLIMIT, "&Inline Result Limit:", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(ClientTools.P_MONITORDEPENDEES, "&Monitor Dependees (requires manual \"Project/Clean...\")", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(ClientTools.P_SUPRESSSECONDERROR, "&Supress Subsequent Errors", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(ClientTools.P_ENABLEMETAPROCESSING, "&Enable Meta Processing", getFieldEditorParent()));
+		addField(new LabelFieldEditor(Messages.ECLCompilerPreferencePage_10, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(ClientTools.P_INLINERESULTLIMIT, Messages.ECLCompilerPreferencePage_11, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(ClientTools.P_MONITORDEPENDEES, Messages.ECLCompilerPreferencePage_12, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(ClientTools.P_SUPRESSSECONDERROR, Messages.ECLCompilerPreferencePage_13, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(ClientTools.P_ENABLEMETAPROCESSING, Messages.ECLCompilerPreferencePage_14, getFieldEditorParent()));
 	}
 
 }

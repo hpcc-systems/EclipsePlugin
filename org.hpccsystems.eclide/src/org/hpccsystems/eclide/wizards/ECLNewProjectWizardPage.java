@@ -39,9 +39,9 @@ public class ECLNewProjectWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public ECLNewProjectWizardPage(ISelection selection) {
-		super("wizardPage");
-		setTitle("Multi-page Editor File");
-		setDescription("This wizard creates a new file with *.ecl extension that can be opened by the ECL editor.");
+		super("wizardPage"); //$NON-NLS-1$
+		setTitle(Messages.ECLNewProjectWizardPage_1);
+		setDescription(Messages.ECLNewProjectWizardPage_2);
 		this.selection = selection;
 	}
 
@@ -57,7 +57,7 @@ public class ECLNewProjectWizardPage extends WizardPage {
 		layout.verticalSpacing = 9;
 
 		Label label = new Label(container, SWT.NULL);
-		label.setText("&Project name:");
+		label.setText(Messages.ECLNewProjectWizardPage_3);
 
 		projectText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -85,18 +85,18 @@ public class ECLNewProjectWizardPage extends WizardPage {
 				return;
 			}
 		}
-		projectText.setText("new_project");
+		projectText.setText("new_project"); //$NON-NLS-1$
 	}
 
 	private void dialogChanged() {
 		String projectName = getProjectName();
 
 		if (projectName.length() == 0) {
-			updateStatus("Project name must be specified");
+			updateStatus(Messages.ECLNewProjectWizardPage_5);
 			return;
 		}
 		if (projectName.replace('\\', '/').indexOf('/', 1) > 0) {
-			updateStatus("Project name must be valid");
+			updateStatus(Messages.ECLNewProjectWizardPage_6);
 			return;
 		}
 		updateStatus(null);

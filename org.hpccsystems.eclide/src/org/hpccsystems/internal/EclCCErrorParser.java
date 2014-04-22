@@ -28,7 +28,7 @@ public class EclCCErrorParser {
 		try {
 			while ((errorLine = reader.readLine()) != null) {
 				if (eclccConsoleWriter != null) {
-					eclccConsoleWriter.print("Err: ");
+					eclccConsoleWriter.print(Messages.EclCCErrorParser_0);
 					eclccConsoleWriter.println(errorLine);
 				}
 

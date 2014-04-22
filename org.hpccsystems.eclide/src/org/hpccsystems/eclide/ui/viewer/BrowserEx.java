@@ -51,8 +51,8 @@ public class BrowserEx extends Composite {
 
 		if (showAddressBar) {
 			final Button backButton = new Button(this, SWT.PUSH);
-			backButton.setImage(Activator.getImage("icons/left.png"));
-			backButton.setToolTipText("Back");
+			backButton.setImage(Activator.getImage("icons/left.png")); //$NON-NLS-1$
+			backButton.setToolTipText(Messages.BrowserEx_1);
 			backButton.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -67,8 +67,8 @@ public class BrowserEx extends Composite {
 			});
 	
 			final Button forwardButton = new Button(this, SWT.PUSH);
-			forwardButton.setImage(Activator.getImage("icons/right.png"));
-			forwardButton.setToolTipText("Forward");
+			forwardButton.setImage(Activator.getImage("icons/right.png")); //$NON-NLS-1$
+			forwardButton.setToolTipText(Messages.BrowserEx_3);
 			forwardButton.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -87,8 +87,8 @@ public class BrowserEx extends Composite {
 			comboUrl.setLayoutData(layoutData);
 	
 			Button refreshButton = new Button(this, SWT.PUSH);
-			refreshButton.setImage(Activator.getImage("icons/refresh.png"));
-			refreshButton.setToolTipText("Refresh");
+			refreshButton.setImage(Activator.getImage("icons/refresh.png")); //$NON-NLS-1$
+			refreshButton.setToolTipText(Messages.BrowserEx_5);
 			refreshButton.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -108,13 +108,13 @@ public class BrowserEx extends Composite {
 			browser = new Browser(this, SWT.BORDER);
 		} catch (IllegalArgumentException e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control", e);
+			org.hpccsystems.eclide.Activator.log(Messages.BrowserEx_6, e);
 		} catch (SWTException e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control", e);
+			org.hpccsystems.eclide.Activator.log(Messages.BrowserEx_7, e);
 		} catch (SWTError e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log("Failed to create Browser Control:  " + e.getMessage());
+			org.hpccsystems.eclide.Activator.log(Messages.BrowserEx_8 + e.getMessage());
 		}
 		if (browser != null) {
 			GridData layoutData = new GridData(GridData.FILL_BOTH);
@@ -147,7 +147,7 @@ public class BrowserEx extends Composite {
 				}
 			});
 
-			setUrl(null, "about:blank");
+			setUrl(null, "about:blank"); //$NON-NLS-1$
 
 			if (showAddressBar) {
 				browser.addProgressListener(new ProgressAdapter() {
@@ -167,12 +167,12 @@ public class BrowserEx extends Composite {
 				});
 			}
 		} else {
-			SWTFactory.createLabel(this, "Warning:  Failed to create Web Browser, see Error Log for further details.", 1);
+			SWTFactory.createLabel(this, Messages.BrowserEx_10, 1);
 		}
 	}
 
 	void setUrl(ItemView treeItem, String url) {
-		setUrl(treeItem, url, "", "");
+		setUrl(treeItem, url, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}	
 
 	public void setUrl(ItemView treeItem, String url, String user, String password) {

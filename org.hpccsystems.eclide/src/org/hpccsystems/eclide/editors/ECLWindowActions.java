@@ -40,21 +40,21 @@ public class ECLWindowActions {
 	}
 
 	public void createActions() {
-		close = new Action("Close") {
+		close = new Action(Messages.ECLWindowActions_0) {
 			@Override
 			public void run() {
 				perform(ECLWindow.ACTION.CLOSE);
 			}
 		};
 
-		closeOthers = new Action("Close Other Workunits") {
+		closeOthers = new Action(Messages.ECLWindowActions_1) {
 			@Override
 			public void run() {
 				perform(ECLWindow.ACTION.CLOSEOTHERS);
 			}
 		};
 
-		closeAll = new Action("Close All Workunits") {
+		closeAll = new Action(Messages.ECLWindowActions_2) {
 			@Override
 			public void run() {
 				perform(ECLWindow.ACTION.CLOSEALL);

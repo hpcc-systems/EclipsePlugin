@@ -69,49 +69,49 @@ public class WorkunitActions {
 	}
 
 	public void createActions() {
-		abortItemAction = new Action("Abort") {
+		abortItemAction = new Action(Messages.WorkunitActions_0) {
 			@Override
 			public void run() {
 				perform(ItemView.ACTION.ABORT);
 			}
 		};
 
-		deleteItemAction = new Action("Delete") {
+		deleteItemAction = new Action(Messages.WorkunitActions_1) {
 			@Override
 			public void run() {
 				perform(ItemView.ACTION.DELETE);
 			}
 		};
 
-		resubmitItemAction = new Action("Resubmit") {
+		resubmitItemAction = new Action(Messages.WorkunitActions_2) {
 			@Override
 			public void run() {
 				perform(ItemView.ACTION.RESUBMIT);
 			}
 		};
 
-		restartItemAction = new Action("Restart") {
+		restartItemAction = new Action(Messages.WorkunitActions_3) {
 			@Override
 			public void run() {
 				perform(ItemView.ACTION.RESTART);
 			}
 		};
 
-		cloneItemAction = new Action("Clone") {
+		cloneItemAction = new Action(Messages.WorkunitActions_4) {
 			@Override
 			public void run() {
 				perform(ItemView.ACTION.CLONE);
 			}
 		};
 
-		publishItemAction = new Action("Publish") {
+		publishItemAction = new Action(Messages.WorkunitActions_5) {
 			@Override
 			public void run() {
 				perform(ItemView.ACTION.PUBLISH);
 			}
 		};
 
-		refreshItemAction = new Action("Refresh") {
+		refreshItemAction = new Action(Messages.WorkunitActions_6) {
 			@Override
 			public void run() { 
 				Vector<ItemView> sel = owner.getSelection();

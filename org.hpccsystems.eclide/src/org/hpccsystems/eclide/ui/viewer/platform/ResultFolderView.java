@@ -21,15 +21,15 @@ public class ResultFolderView extends FolderItemView implements Observer {
 
 	@Override
 	public String getText() {
-		return "Outputs";
+		return Messages.ResultFolderView_0;
 	}
 
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		if (hasNewEclWatch) {
-			return platform.getWidgetURL("ResultsWidget", "TabPosition=top&Wuid=" + workunit.getWuid());
+			return platform.getWidgetURL("ResultsWidget", "TabPosition=top&Wuid=" + workunit.getWuid()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return platform.getURL("esp/files", "ECLPlaygroundResults.htm", "Wuid=" + workunit.getWuid());
+		return platform.getURL("esp/files", "ECLPlaygroundResults.htm", "Wuid=" + workunit.getWuid()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override

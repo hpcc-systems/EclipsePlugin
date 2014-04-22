@@ -25,7 +25,7 @@ public class ECLAnnotationHover implements IAnnotationHover {
 		//			Annotation annotation = itr.next();
 		//			int i = annotation.hashCode();
 		//		}
-		return "Nothing to see move along...";
+		return Messages.ECLAnnotationHover_0;
 	}
 
 }

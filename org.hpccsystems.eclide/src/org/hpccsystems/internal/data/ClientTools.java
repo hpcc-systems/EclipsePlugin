@@ -58,30 +58,30 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		return (ClientTools)All.get(ct);
 	}
 
-	public static final String P_KNOWNTOOLSPATH = "knownToolsPathPreference";
-	public static final String P_TOOLSPATH = "toolsPathPreference";
-	public static final String P_TOOLSPATH_DEFAULT = "";
+	public static final String P_KNOWNTOOLSPATH = "knownToolsPathPreference"; //$NON-NLS-1$
+	public static final String P_TOOLSPATH = "toolsPathPreference"; //$NON-NLS-1$
+	public static final String P_TOOLSPATH_DEFAULT = ""; //$NON-NLS-1$
 
-	public static final String P_ARGSCOMMON = "argsCommonPreference";
-	public static final String P_ARGSCOMMON_DEFAULT = "";
-	public static final String P_ARGSSYNTAX = "argsSyntaxPreference";
-	public static final String P_ARGSSYNTAX_DEFAULT = "-fsyntaxcheck=1";
-	public static final String P_ARGSCOMPILE = "argsCompilePreference";
-	public static final String P_ARGSCOMPILE_DEFAULT = "";
-	public static final String P_ARGSCOMPILEREMOTE = "argsCompileRemotePreference";
-	public static final String P_ARGSCOMPILEREMOTE_DEFAULT = "-E";
+	public static final String P_ARGSCOMMON = "argsCommonPreference"; //$NON-NLS-1$
+	public static final String P_ARGSCOMMON_DEFAULT = ""; //$NON-NLS-1$
+	public static final String P_ARGSSYNTAX = "argsSyntaxPreference"; //$NON-NLS-1$
+	public static final String P_ARGSSYNTAX_DEFAULT = "-fsyntaxcheck=1"; //$NON-NLS-1$
+	public static final String P_ARGSCOMPILE = "argsCompilePreference"; //$NON-NLS-1$
+	public static final String P_ARGSCOMPILE_DEFAULT = ""; //$NON-NLS-1$
+	public static final String P_ARGSCOMPILEREMOTE = "argsCompileRemotePreference"; //$NON-NLS-1$
+	public static final String P_ARGSCOMPILEREMOTE_DEFAULT = "-E"; //$NON-NLS-1$
 
 	//  Local command line options
-	public static final String P_ARGSWULOCAL = "argsWorkunitLocalPreference";
-	public static final String P_ARGSWULOCAL_DEFAULT = "";
+	public static final String P_ARGSWULOCAL = "argsWorkunitLocalPreference"; //$NON-NLS-1$
+	public static final String P_ARGSWULOCAL_DEFAULT = ""; //$NON-NLS-1$
 
-	public static final String P_INLINERESULTLIMIT = "inlineResultLimit";
+	public static final String P_INLINERESULTLIMIT = "inlineResultLimit"; //$NON-NLS-1$
 	public static final int P_INLINERESULTLIMIT_DEFAULT = 100;
-	public static final String P_MONITORDEPENDEES = "monitorDependeesPreference";
+	public static final String P_MONITORDEPENDEES = "monitorDependeesPreference"; //$NON-NLS-1$
 	public static final boolean P_MONITORDEPENDEES_DEFAULT = true;
-	public static final String P_SUPRESSSECONDERROR = "supressSecondErrorPreference";
+	public static final String P_SUPRESSSECONDERROR = "supressSecondErrorPreference"; //$NON-NLS-1$
 	public static final boolean P_SUPRESSSECONDERROR_DEFAULT = false;
-	public static final String P_ENABLEMETAPROCESSING = "enableMetaProcessing";
+	public static final String P_ENABLEMETAPROCESSING = "enableMetaProcessing"; //$NON-NLS-1$
 	public static final boolean P_ENABLEMETAPROCESSING_DEFAULT = true;
 
 	private IPreferenceStore preferences;	
@@ -122,7 +122,7 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	}
 
 	public IPath getEclExamplesPath() {
-		return rootPath.append("examples");
+		return rootPath.append("examples"); //$NON-NLS-1$
 	}
 	
 	public IPath getEclBundlesPath() {
@@ -182,39 +182,39 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	}
 	
 	public String getFolderName(boolean includeVersion) {
-		return "Client Tools" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
+		return Messages.ClientTools_17 + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	public String getLibraryFolderName(boolean includeVersion) {
-		return "ECL Library" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
+		return Messages.ClientTools_22 + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	public String getBundlesFolderName(boolean includeVersion) {
-		return "Bundles" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
+		return Messages.ClientTools_26 + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	public String getExamplesFolderName(boolean includeVersion) {
-		return "Examples" + (includeVersion ? " (" + getBuildVersion().toString() + ")" : "");
+		return Messages.ClientTools_30 + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	public static List<ClientTools> findClientTools() {
 		List<ClientTools> retVal = new ArrayList<ClientTools>();
 		
-		String rootFolder = "";
+		String rootFolder = ""; //$NON-NLS-1$
 		if (OS.isWindowsPlatform()) {
-			rootFolder = System.getenv("ProgramFiles(x86)");
+			rootFolder = System.getenv("ProgramFiles(x86)"); //$NON-NLS-1$
 			if (rootFolder == null || rootFolder.isEmpty()) {
-				rootFolder = System.getenv("ProgramFiles");
+				rootFolder = System.getenv("ProgramFiles"); //$NON-NLS-1$
 			}
 			if (rootFolder == null || rootFolder.isEmpty()) {
-				rootFolder = "c:\\Program Files (x86)";
+				rootFolder = "c:\\Program Files (x86)"; //$NON-NLS-1$
 			}
 		} else {
-			rootFolder = "/opt";
+			rootFolder = "/opt"; //$NON-NLS-1$
 		}
 		
 		if (!rootFolder.isEmpty()) {
-			File hpccSystemsFolder = new Path(rootFolder).append("HPCCSystems").toFile();
+			File hpccSystemsFolder = new Path(rootFolder).append("HPCCSystems").toFile(); //$NON-NLS-1$
 			if (hpccSystemsFolder.exists() && hpccSystemsFolder.isDirectory()) {
 				if (!OS.isWindowsPlatform()) {
 					//  Check for server installation  ---
@@ -222,10 +222,10 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 				}
 				File[] versionFolders = hpccSystemsFolder.listFiles();
 				for (File versionFolder : versionFolders) {
-					File clientToolsPath = new Path(hpccSystemsFolder.toString()).append(versionFolder.getName()).append("clienttools").toFile();
+					File clientToolsPath = new Path(hpccSystemsFolder.toString()).append(versionFolder.getName()).append("clienttools").toFile(); //$NON-NLS-1$
 					if (clientToolsPath.exists() && clientToolsPath.isDirectory()) {
 						String name = versionFolder.getName();
-						String[] parts = name.split("\\.");
+						String[] parts = name.split("\\."); //$NON-NLS-1$
 						if (parts.length == 3) {
 							retVal.add(new ClientTools(clientToolsPath.toString()));
 						}
@@ -242,7 +242,7 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	public static String findNewest() {
 		List<ClientTools> knownClientTools = findClientTools();
 		if (knownClientTools.isEmpty())
-			return "";
+			return ""; //$NON-NLS-1$
 		return knownClientTools.get(0).getRootPath();
 	}
 	
@@ -272,13 +272,13 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		if (bestMatched_before != null && Version.distance(version, bestMatched_before.getBuildVersion()) < Version.DISTANCE_POINT)
 			matched = bestMatched_before;
 
-		MessageConsole eclccConsole = Eclipse.findConsole("eclcc");
+		MessageConsole eclccConsole = Eclipse.findConsole("eclcc"); //$NON-NLS-1$
 		MessageConsoleStream eclccConsoleWriter = eclccConsole.newMessageStream();
 
 		if (matched != null)
 		{
 			try {
-				eclccConsoleWriter.write("Compiler/Server mismatch:\nCompiler:\t" + matched.getBuildVersion().toString() + "\nServer:\t" + version.toString());
+				eclccConsoleWriter.write(Messages.ClientTools_44 + matched.getBuildVersion().toString() + Messages.ClientTools_45 + version.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -287,7 +287,7 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 
 		if (knownClientTools.isEmpty()) {
 			try {
-				eclccConsoleWriter.write("Unable to locate local eclcc.  Please download and install suitable ClientTools from hpccsystems.com.\n");
+				eclccConsoleWriter.write(Messages.ClientTools_46);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -295,8 +295,8 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 			//  No good match, just return latest  ---
 			matched = knownClientTools.get(0);
 			try {
-				eclccConsoleWriter.write("Compiler/Server mismatch:\nCompiler:\t" + matched.getBuildVersion().toString() + "\nServer:\t" + version.toString() + 
-						"\n(To prevent this message from showing, either download and install the matching client tools package or override the default compiler settings in the preferences window)\n");
+				eclccConsoleWriter.write(Messages.ClientTools_47 + matched.getBuildVersion().toString() + Messages.ClientTools_48 + version.toString() + 
+						Messages.ClientTools_49);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

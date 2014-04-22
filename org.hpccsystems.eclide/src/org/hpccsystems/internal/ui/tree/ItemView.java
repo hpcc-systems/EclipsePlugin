@@ -94,24 +94,24 @@ public class ItemView {
 	}
 
 	public String getText() {
-		return "TODO";
+		return Messages.ItemView_0;
 	}
 
 	public String getStateText() {
 		switch(children.getState()) {
 		case PREFETCH_UNKNOWN:
-			return " (...loading...)";
+			return Messages.ItemView_1;
 		case PREFETCH_STARTED:
-			return " (...calculating...)";
+			return Messages.ItemView_2;
 		case PREFETCH_FINISHED:
 			if (this instanceof FolderItemView) {
 				if (children.getCount() > 0) {
-					return " (" + children.getCount() + ")";
+					return " (" + children.getCount() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			break;
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	public Image getImage() {
@@ -131,7 +131,7 @@ public class ItemView {
 	}
 
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
-		return new URL ("about:blank");
+		return new URL ("about:blank"); //$NON-NLS-1$
 	}
 
 	public Result getResult() {
@@ -139,11 +139,11 @@ public class ItemView {
 	}
 
 	public String getUser() {
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	public String getPassword() {
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	public void update(final String[] properties) {

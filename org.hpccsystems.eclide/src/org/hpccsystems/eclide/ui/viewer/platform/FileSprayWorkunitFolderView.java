@@ -32,25 +32,25 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 
 	@Override
 	public String getText() {
-		return "File Sprays";
+		return Messages.FileSprayWorkunitFolderView_0;
 	}
 
 	@Override
 	public URL getWebPageURL(boolean hasNewEclWatch) throws MalformedURLException {
 		if (hasNewEclWatch) {
-			return platform.getWidgetURL("GetDFUWorkunitsWidget", clusterName.isEmpty() ? "" : "ClusterName=" + clusterName);
+			return platform.getWidgetURL("GetDFUWorkunitsWidget", clusterName.isEmpty() ? "" : "ClusterName=" + clusterName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		if (clusterName.isEmpty()) {
-			return platform.getURL("FileSpray", "GetDFUWorkunits");
+			return platform.getURL("FileSpray", "GetDFUWorkunits"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return platform.getURL("FileSpray", "GetDFUWorkunits", "Cluster=" + clusterName);
+		return platform.getURL("FileSpray", "GetDFUWorkunits", "Cluster=" + clusterName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
 	public void refreshChildren() {
 		FileSprayWorkunit.All.deleteObserver(this);
 
-		CollectionDelta monitor = new CollectionDelta("primeChildren", getCurrentWorkunits());
+		CollectionDelta monitor = new CollectionDelta("primeChildren", getCurrentWorkunits()); //$NON-NLS-1$
 		monitor.calcChanges(platform.getFileSprayWorkunits(clusterName));
 		mergeChanges(monitor);
 

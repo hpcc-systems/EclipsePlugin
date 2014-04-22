@@ -97,7 +97,7 @@ public class Workunit extends DataSingleton {
 		if (info.getQuery() != null && info.getQuery().getText() != null) {
 			return info.getQuery().getText();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	public Object getClusterName() {
@@ -157,7 +157,7 @@ public class Workunit extends DataSingleton {
 		if (info.getState() == null) {
 			fastRefresh();
 		}
-		return info.getState() != null ? info.getState() : "Unknown";
+		return info.getState() != null ? info.getState() : Messages.Workunit_1;
 	}
 
 	public GregorianCalendar getDate() {
@@ -195,7 +195,7 @@ public class Workunit extends DataSingleton {
 		if (applicationValues.containsKey(key)) {
 			return applicationValues.get(key);
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 	//  Results  ---
 	public synchronized Result getResult(Integer sequence) {
@@ -253,7 +253,7 @@ public class Workunit extends DataSingleton {
 	public String getJobname() {
 		String retVal = info.getJobname();
 		if (retVal == null) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		return retVal;
 	}
@@ -261,7 +261,7 @@ public class Workunit extends DataSingleton {
 	public String getOwner() {
 		String retVal = info.getOwner();
 		if (retVal == null) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		return retVal;
 	}
@@ -406,7 +406,7 @@ public class Workunit extends DataSingleton {
 				WUInfoResponse response = service.WUInfo(request);
 				if (response.getWorkunit() == null) {	//  Call succeeded, but no response...
 					for (EspException e : response.getExceptions().getException()) {
-						if (e.getCode().equals("20082") || e.getCode().equals("20080")) {	//  No longer exists...
+						if (e.getCode().equals("20082") || e.getCode().equals("20080")) {	//  No longer exists... //$NON-NLS-1$ //$NON-NLS-2$
 							info.setStateID(999);	
 							setChanged();
 							notifyObservers(Notification.WORKUNIT);

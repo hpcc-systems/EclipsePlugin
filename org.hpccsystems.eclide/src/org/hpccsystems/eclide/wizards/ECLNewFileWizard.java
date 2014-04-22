@@ -85,7 +85,7 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 			return false;
 		} catch (InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
+			MessageDialog.openError(getShell(), Messages.ECLNewFileWizard_0, realException.getMessage());
 			return false;
 		}
 		return true;
@@ -103,11 +103,11 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 			IProgressMonitor monitor)
 					throws CoreException {
 		// create a sample file
-		monitor.beginTask("Creating " + fileName, 2);
+		monitor.beginTask(Messages.ECLNewFileWizard_1 + fileName, 2);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
 		if (!resource.exists() || !(resource instanceof IContainer)) {
-			throwCoreException("Container \"" + containerName + "\" does not exist.");
+			throwCoreException(Messages.ECLNewFileWizard_2 + containerName + Messages.ECLNewFileWizard_3);
 		}
 		IContainer container = (IContainer) resource;
 		final IFile file = container.getFile(new Path(fileName));
@@ -122,7 +122,7 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 		} catch (IOException e) {
 		}
 		monitor.worked(1);
-		monitor.setTaskName("Opening file for editing...");
+		monitor.setTaskName(Messages.ECLNewFileWizard_4);
 		getShell().getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -141,7 +141,7 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 			return null;
 		} 
 
-		int pos = str.lastIndexOf("."); 
+		int pos = str.lastIndexOf(".");  //$NON-NLS-1$
 		if (pos == -1) {
 			return str;
 		} 
@@ -150,13 +150,13 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 	} 
 
 	private InputStream openContentStream(String fileName) {
-		String contents = "export " + stripExtension(fileName) + " := 'todo';";
+		String contents = "export " + stripExtension(fileName) + " := 'todo';"; //$NON-NLS-1$ //$NON-NLS-2$
 		return new ByteArrayInputStream(contents.getBytes());
 	}
 
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status =
-				new Status(IStatus.ERROR, "org.hpccsystems.eclide", IStatus.OK, message, null);
+				new Status(IStatus.ERROR, "org.hpccsystems.eclide", IStatus.OK, message, null); //$NON-NLS-1$
 		throw new CoreException(status);
 	}
 }

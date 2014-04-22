@@ -36,9 +36,9 @@ public class ImportWizard extends Wizard implements IImportWizard {
 	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		setWindowTitle("File Import Wizard"); //NON-NLS-1
+		setWindowTitle(Messages.ImportWizard_0); //NON-NLS-1
 		setNeedsProgressMonitor(true);
-		mainPage = new ImportWizardPage("Import Repository", selection); //NON-NLS-1
+		mainPage = new ImportWizardPage(Messages.ImportWizard_1, selection); //NON-NLS-1
 	}
 
 	/* (non-Javadoc)

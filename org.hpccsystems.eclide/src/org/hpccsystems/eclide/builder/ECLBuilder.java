@@ -78,12 +78,12 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	public static final String BUILDER_ID = "org.hpccsystems.eclide.eclBuilder";
+	public static final String BUILDER_ID = "org.hpccsystems.eclide.eclBuilder"; //$NON-NLS-1$
 	Set<IFile> checkedFiles;
 
 	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
-		monitor.setTaskName("Checking Syntax");
+		monitor.setTaskName(Messages.ECLBuilder_1);
 		checkedFiles = new HashSet<IFile>();
 		if (kind == FULL_BUILD) {
 			fullBuild(monitor);
@@ -100,7 +100,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	}
 
 	void checkItem(IResource resource, IProgressMonitor monitor) {
-		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) {
+		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) { //$NON-NLS-1$
 			IFile file = (IFile) resource;
 			if (checkedFiles.contains(file)) {
 				return;
