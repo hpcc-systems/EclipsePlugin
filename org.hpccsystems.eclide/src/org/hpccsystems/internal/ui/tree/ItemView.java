@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.eclide.ui.viewer.platform.FolderItemView;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformView;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;

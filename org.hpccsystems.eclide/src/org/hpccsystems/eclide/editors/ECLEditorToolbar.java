@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;

@@ -20,6 +20,7 @@ import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.data.ClientTools;
 import org.hpccsystems.internal.ui.LabelFieldEditor;
 import org.hpccsystems.internal.ui.SpacerFieldEditor;

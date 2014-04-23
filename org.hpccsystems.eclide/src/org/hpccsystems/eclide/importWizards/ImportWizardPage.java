@@ -37,6 +37,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.WizardResourceImportPage;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.ws.WsAttributes.ArrayOfEspException;
 import org.hpccsystems.ws.WsAttributes.ECLAttribute;

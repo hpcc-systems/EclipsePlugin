@@ -20,6 +20,7 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
+import org.hpccsystems.eclide.resources.Messages;
 
 public class ECLTextHover implements ITextHover {
 	ISourceViewer sourceViewer;

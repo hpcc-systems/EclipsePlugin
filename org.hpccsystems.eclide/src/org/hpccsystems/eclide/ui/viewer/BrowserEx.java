@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
 public class BrowserEx extends Composite {

@@ -18,6 +18,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.eclide.ui.viewer.BrowserEx;
 import org.hpccsystems.eclide.ui.viewer.TableEx;
 import org.hpccsystems.eclide.ui.viewer.TextEx;

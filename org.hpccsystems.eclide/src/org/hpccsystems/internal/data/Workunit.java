@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.ws.wsworkunits.ApplicationValue;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLGraph;

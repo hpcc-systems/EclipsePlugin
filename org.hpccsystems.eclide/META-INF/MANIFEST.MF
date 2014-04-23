@@ -139,3 +139,4 @@ Export-Package: org.hpccsystems.eclide;
  org.hpccsystems.internal.data;x-internal:=true,
  org.hpccsystems.internal.ui;x-internal:=true,
  org.hpccsystems.internal.ui.tree;x-internal:=true
+Bundle-Localization: src/org/hpccsystems/eclide/resources/messages

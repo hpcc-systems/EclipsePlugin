@@ -26,6 +26,7 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.eclide.builder.Version;
 import org.hpccsystems.eclide.launchers.ECLLaunchCompilerTab;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.ConfigurationPreferenceStore;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.OS;

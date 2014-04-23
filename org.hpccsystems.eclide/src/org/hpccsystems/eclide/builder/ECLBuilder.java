@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.data.ClientTools;
 import org.hpccsystems.internal.data.Data;
 

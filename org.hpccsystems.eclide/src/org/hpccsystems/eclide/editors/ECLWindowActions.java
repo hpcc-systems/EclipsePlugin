@@ -12,6 +12,7 @@ package org.hpccsystems.eclide.editors;
 
 import org.eclipse.jface.action.Action;
 import org.hpccsystems.eclide.editors.ECLWindow;
+import org.hpccsystems.eclide.resources.Messages;
 
 public class ECLWindowActions {
 	ECLWindow owner;

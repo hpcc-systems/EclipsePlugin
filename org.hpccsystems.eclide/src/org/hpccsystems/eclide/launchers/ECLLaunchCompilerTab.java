@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 import org.hpccsystems.internal.data.ClientTools;
 

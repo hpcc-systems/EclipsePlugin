@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.data.CollectionDelta;
 import org.hpccsystems.internal.data.DataSingleton;
 import org.hpccsystems.internal.data.DataSingletonCollection;

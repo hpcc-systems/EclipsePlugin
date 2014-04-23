@@ -13,6 +13,7 @@ package org.hpccsystems.eclide.problem;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IMarkerResolution;
+import org.hpccsystems.eclide.resources.Messages;
 
 public class QuickFix implements IMarkerResolution {
 	String label;

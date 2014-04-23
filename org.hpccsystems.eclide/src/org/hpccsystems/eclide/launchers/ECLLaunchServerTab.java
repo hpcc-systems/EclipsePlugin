@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 import org.hpccsystems.internal.data.ClientTools;
 import org.hpccsystems.internal.data.Platform;

@@ -21,6 +21,7 @@ import java.util.Observer;
 
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
+import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.CollectionDelta;
 import org.hpccsystems.internal.data.Data;
