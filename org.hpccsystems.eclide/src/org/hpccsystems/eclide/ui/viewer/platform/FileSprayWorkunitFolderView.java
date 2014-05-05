@@ -33,7 +33,7 @@ public class FileSprayWorkunitFolderView extends FolderItemView implements Obser
 
 	@Override
 	public String getText() {
-		return Messages.FileSprayWorkunitFolderView_0;
+		return Messages.FileSprays;
 	}
 
 	@Override

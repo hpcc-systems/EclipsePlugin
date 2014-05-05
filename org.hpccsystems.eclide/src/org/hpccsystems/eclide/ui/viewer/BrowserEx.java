@@ -53,7 +53,7 @@ public class BrowserEx extends Composite {
 		if (showAddressBar) {
 			final Button backButton = new Button(this, SWT.PUSH);
 			backButton.setImage(Activator.getImage("icons/left.png")); //$NON-NLS-1$
-			backButton.setToolTipText(Messages.BrowserEx_1);
+			backButton.setToolTipText(Messages.Back);
 			backButton.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -69,7 +69,7 @@ public class BrowserEx extends Composite {
 	
 			final Button forwardButton = new Button(this, SWT.PUSH);
 			forwardButton.setImage(Activator.getImage("icons/right.png")); //$NON-NLS-1$
-			forwardButton.setToolTipText(Messages.BrowserEx_3);
+			forwardButton.setToolTipText(Messages.Forward);
 			forwardButton.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -89,7 +89,7 @@ public class BrowserEx extends Composite {
 	
 			Button refreshButton = new Button(this, SWT.PUSH);
 			refreshButton.setImage(Activator.getImage("icons/refresh.png")); //$NON-NLS-1$
-			refreshButton.setToolTipText(Messages.BrowserEx_5);
+			refreshButton.setToolTipText(Messages.Refresh);
 			refreshButton.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -109,13 +109,13 @@ public class BrowserEx extends Composite {
 			browser = new Browser(this, SWT.BORDER);
 		} catch (IllegalArgumentException e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log(Messages.BrowserEx_6, e);
+			org.hpccsystems.eclide.Activator.log(Messages.Error_BrowserControl, e);
 		} catch (SWTException e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log(Messages.BrowserEx_7, e);
+			org.hpccsystems.eclide.Activator.log(Messages.Error_BrowserControl, e);
 		} catch (SWTError e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log(Messages.BrowserEx_8 + e.getMessage());
+			org.hpccsystems.eclide.Activator.log(Messages.Error_BrowserControl + e.getMessage());
 		}
 		if (browser != null) {
 			GridData layoutData = new GridData(GridData.FILL_BOTH);
@@ -168,7 +168,7 @@ public class BrowserEx extends Composite {
 				});
 			}
 		} else {
-			SWTFactory.createLabel(this, Messages.BrowserEx_10, 1);
+			SWTFactory.createLabel(this, Messages.Warning_WebBrowser_Creation_Failed, 1);
 		}
 	}
 

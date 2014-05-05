@@ -46,21 +46,21 @@ public class ECLTextHover implements ITextHover {
 			IFile file = ((ECLDocument)doc).getFile();
 			source = meta.getSource(file);
 			if (source == null) {
-				return Messages.ECLTextHover_0;
+				return Messages.TextHover_No_Meta;
 			}
 		}
 
 		final String text = ECLEditor.getHoverWord(doc, hoverRegion.getOffset());
-		StringBuilder hover = new StringBuilder(Messages.ECLTextHover_1);
-		hover.append(Messages.ECLTextHover_2 + text);
+		StringBuilder hover = new StringBuilder(Messages.TextHover_SearchInfo);
+		hover.append(Messages.TextHover_SearchFor + text);
 
 		ECLMetaNode context = source.getContext(hoverRegion.getOffset());
-		hover.append(Messages.ECLTextHover_3 + context.getName());
+		hover.append(Messages.TextHover_Context + context.getName());
 		
 		ECLMetaNode found = context.findDefinition(text, false);
 		if (found != null) {
-			hover.append(Messages.ECLTextHover_4);
-			hover.append(Messages.ECLTextHover_5 + found.getQualifiedName());// + " (" + def.getOffset() + ", " + def.getLength() + ")");
+			hover.append(Messages.TextHover_Match);
+			hover.append(Messages.TextHover_Definition + found.getQualifiedName());// + " (" + def.getOffset() + ", " + def.getLength() + ")");
 		}
 
 		return hover.toString();

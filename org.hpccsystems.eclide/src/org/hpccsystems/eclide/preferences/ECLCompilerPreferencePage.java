@@ -51,7 +51,7 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	@Override
 	public void init(IWorkbench workbench) {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription(Messages.ECLCompilerPreferencePage_0);
+		setDescription(Messages.CompilerPreferences);
 	}
 
 	/**
@@ -63,26 +63,26 @@ public class ECLCompilerPreferencePage extends FieldEditorPreferencePage impleme
 	@Override
 	public void createFieldEditors() {
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor(Messages.ECLCompilerPreferencePage_1, getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(ClientTools.P_TOOLSPATH, Messages.ECLCompilerPreferencePage_2, getFieldEditorParent()));
+		addField(new LabelFieldEditor(Messages.Location, getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(ClientTools.P_TOOLSPATH, Messages.HpccClientTools, getFieldEditorParent()));
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor(Messages.ECLCompilerPreferencePage_3, getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSCOMMON, Messages.ECLCompilerPreferencePage_4, getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSSYNTAX, Messages.ECLCompilerPreferencePage_5, getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILE, Messages.ECLCompilerPreferencePage_6, getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILEREMOTE, Messages.ECLCompilerPreferencePage_7, getFieldEditorParent()));
+		addField(new LabelFieldEditor(Messages.CompilerArguments, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSCOMMON, Messages.Common, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSSYNTAX, Messages.SyntaxCheck, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILE, Messages.LocalCompile, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSCOMPILEREMOTE, Messages.RemoteCompile, getFieldEditorParent()));
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor(Messages.ECLCompilerPreferencePage_8, getFieldEditorParent()));
-		addField(new StringFieldEditor(ClientTools.P_ARGSWULOCAL, Messages.ECLCompilerPreferencePage_9, getFieldEditorParent()));
+		addField(new LabelFieldEditor(Messages.WorkunitArguments, getFieldEditorParent()));
+		addField(new StringFieldEditor(ClientTools.P_ARGSWULOCAL, Messages.Local, getFieldEditorParent()));
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor(Messages.ECLCompilerPreferencePage_10, getFieldEditorParent()));
-		addField(new IntegerFieldEditor(ClientTools.P_INLINERESULTLIMIT, Messages.ECLCompilerPreferencePage_11, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(ClientTools.P_MONITORDEPENDEES, Messages.ECLCompilerPreferencePage_12, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(ClientTools.P_SUPRESSSECONDERROR, Messages.ECLCompilerPreferencePage_13, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(ClientTools.P_ENABLEMETAPROCESSING, Messages.ECLCompilerPreferencePage_14, getFieldEditorParent()));
+		addField(new LabelFieldEditor(Messages.Miscellaneous, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(ClientTools.P_INLINERESULTLIMIT, Messages.InlineResultLimit, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(ClientTools.P_MONITORDEPENDEES, Messages.MonitorDependees, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(ClientTools.P_SUPRESSSECONDERROR, Messages.SupressErrors, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(ClientTools.P_ENABLEMETAPROCESSING, Messages.EnableMetaProcessing, getFieldEditorParent()));
 	}
 
 }

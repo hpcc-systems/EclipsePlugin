@@ -22,7 +22,7 @@ public class ResultFolderView extends FolderItemView implements Observer {
 
 	@Override
 	public String getText() {
-		return Messages.ResultFolderView_0;
+		return Messages.Outputs;
 	}
 
 	@Override

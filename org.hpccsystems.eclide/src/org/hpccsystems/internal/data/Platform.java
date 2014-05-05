@@ -180,7 +180,7 @@ public class Platform extends DataSingleton {
 				@Override
 				public void run() {
 					Shell activeShell = Workbench.getShell();
-					if (MessageDialog.openConfirm(activeShell, Messages.Platform_19, Messages.Platform_0 + name + Messages.Platform_21)) {
+					if (MessageDialog.openConfirm(activeShell, Messages.EclPlugin, Messages.Double_Quote + name + Messages.DisableCurrentSession)) {
 						isTempDisabled = true;
 					}
 				}
@@ -324,7 +324,7 @@ public class Platform extends DataSingleton {
 				@Override
 				public void run() {
 					Shell activeShell = Workbench.getShell();
-					MessageDialog.openInformation(activeShell, Messages.Platform_28, "\"" + name + Messages.Platform_30); //$NON-NLS-2$
+					MessageDialog.openInformation(activeShell, Messages.UnableToSubmitECL, "\"" + name + Messages.Msg_Unreachable); //$NON-NLS-2$
 				}
 			});
 		} else {

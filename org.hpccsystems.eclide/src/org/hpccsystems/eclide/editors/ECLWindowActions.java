@@ -41,21 +41,21 @@ public class ECLWindowActions {
 	}
 
 	public void createActions() {
-		close = new Action(Messages.ECLWindowActions_0) {
+		close = new Action(Messages.Close) {
 			@Override
 			public void run() {
 				perform(ECLWindow.ACTION.CLOSE);
 			}
 		};
 
-		closeOthers = new Action(Messages.ECLWindowActions_1) {
+		closeOthers = new Action(Messages.CloseOtherWorkunits) {
 			@Override
 			public void run() {
 				perform(ECLWindow.ACTION.CLOSEOTHERS);
 			}
 		};
 
-		closeAll = new Action(Messages.ECLWindowActions_2) {
+		closeAll = new Action(Messages.CloseAllWorkunits) {
 			@Override
 			public void run() {
 				perform(ECLWindow.ACTION.CLOSEALL);

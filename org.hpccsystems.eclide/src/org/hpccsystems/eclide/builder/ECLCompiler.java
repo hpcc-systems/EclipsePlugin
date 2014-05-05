@@ -40,9 +40,9 @@ import org.hpccsystems.internal.OS;
 import org.hpccsystems.internal.data.ClientTools;
 
 public class ECLCompiler {
-	final static String noCompiler = Messages.ECLCompiler_0;
+	final static String noCompiler = Messages.Error_Eclcc_Not_Found;
 	final static String badConfigurationCode = "1004"; //$NON-NLS-1$
-	final static String badConfiguration = Messages.ECLCompiler_2;
+	final static String badConfiguration = Messages.Error_Compiler_Config;
 	
 	public final static String CL_PATH = "CL_PATH"; //$NON-NLS-1$
 	public final static String ECLBUNDLE_PATH = "ECLCC_ECLBUNDLE_PATH"; //$NON-NLS-1$
@@ -200,7 +200,7 @@ public class ECLCompiler {
 			String stdIn = null;
 			try {
 				while ((stdIn = reader.readLine()) != null) {
-					eclccConsoleWriter.print(Messages.ECLCompiler_13);
+					eclccConsoleWriter.print(Messages.Eclcc_Console_Output);
 					eclccConsoleWriter.println(stdIn);
 					int lastSpace = stdIn.lastIndexOf(' ');
 					if (lastSpace != -1) {

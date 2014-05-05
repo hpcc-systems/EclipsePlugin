@@ -61,7 +61,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 	public ImportWizardPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 		setTitle(pageName); //NON-NLS-1
-		setDescription(Messages.Wizard_ImportWizardPage_0); //NON-NLS-1
+		setDescription(Messages.ImportRepositoryFromRemoteServer); //NON-NLS-1
 	}
 
 	/* (non-Javadoc)
@@ -83,11 +83,11 @@ public class ImportWizardPage extends WizardResourceImportPage {
 		fileSelectionLayout.marginHeight = 0;
 		fileSelectionArea.setLayout(fileSelectionLayout);
 
-		fIPText = new StringFieldEditor("IPSelect", Messages.Wizard_ImportWizardPage_2, fileSelectionArea); //$NON-NLS-1$
-		fIPText.setStringValue(Messages.Wizard_ImportWizardPage_3);
-		fUserText = new StringFieldEditor("User", Messages.Wizard_ImportWizardPage_5, fileSelectionArea); //$NON-NLS-1$
+		fIPText = new StringFieldEditor("IPSelect", Messages.ServerIP, fileSelectionArea); //$NON-NLS-1$
+		fIPText.setStringValue(Messages.DummyValue);
+		fUserText = new StringFieldEditor("User", Messages.User, fileSelectionArea); //$NON-NLS-1$
 		fUserText.setStringValue(""); //$NON-NLS-1$
-		fPasswordText = new PasswordFieldEditor("Password", Messages.Wizard_ImportWizardPage_8, fileSelectionArea); //$NON-NLS-1$
+		fPasswordText = new PasswordFieldEditor("Password", Messages.Password, fileSelectionArea); //$NON-NLS-1$
 		fPasswordText.setStringValue(""); //$NON-NLS-1$
 	}
 
@@ -116,12 +116,12 @@ public class ImportWizardPage extends WizardResourceImportPage {
 			final GetModulesResponse response = service.getModules(request);
 			if (response.getOutModules() != null) {
 
-				Job job = new Job(Messages.Wizard_ImportWizardPage_12) {
+				Job job = new Job(Messages.ImportingAttributes) {
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
-						monitor.beginTask(Messages.Wizard_ImportWizardPage_13, response.getOutModules().length);
+						monitor.beginTask(Messages.Importing, response.getOutModules().length);
 						for (final ECLModule module : response.getOutModules()) {
-							if (module.getName().equalsIgnoreCase(Messages.Wizard_ImportWizardPage_14)) {
+							if (module.getName().equalsIgnoreCase(Messages.Trash)) {
 								continue;
 							}
 							monitor.subTask(module.getName());

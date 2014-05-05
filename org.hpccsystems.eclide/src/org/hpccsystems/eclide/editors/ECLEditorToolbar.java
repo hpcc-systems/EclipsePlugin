@@ -59,7 +59,7 @@ public class ECLEditorToolbar extends Composite {
 		setLayoutData(fData);
 
 		submitButton = new SplitButton(this, SWT.NONE);
-		submitButton.setText(Messages.ECLEditorToolbar_6);
+		submitButton.setText(Messages.Submit);
 		GridData gd = new GridData();
 		submitButton.setLayoutData(gd);
 		SWTFactory.setButtonDimensionHint(submitButton);
@@ -76,7 +76,7 @@ public class ECLEditorToolbar extends Composite {
 			}
 		});
 
-		SWTFactory.createLabel(this, Messages.ECLEditorToolbar_1, 1);
+		SWTFactory.createLabel(this, Messages.Server, 1);
 		comboServer = SWTFactory.createCombo(this, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY, 1, null);
 		comboServer.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -90,7 +90,7 @@ public class ECLEditorToolbar extends Composite {
 				}
 			}
 		});
-		SWTFactory.createLabel(this, Messages.ECLEditorToolbar_4, 1);
+		SWTFactory.createLabel(this, Messages.Target, 1);
 		comboTarget = SWTFactory.createCombo(this, SWT.VERTICAL | SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY, 1, null);
 		comboTarget.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -133,7 +133,7 @@ public class ECLEditorToolbar extends Composite {
 		}
 
 		MenuItem submit = new MenuItem(menu, SWT.PUSH);
-		submit.setText(Messages.ECLEditorToolbar_6);
+		submit.setText(Messages.Submit);
 		submit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -142,7 +142,7 @@ public class ECLEditorToolbar extends Composite {
 		});
 
 		MenuItem compile = new MenuItem(menu, SWT.PUSH);
-		compile.setText(Messages.ECLEditorToolbar_7);
+		compile.setText(Messages.Compile);
 		compile.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -151,7 +151,7 @@ public class ECLEditorToolbar extends Composite {
 		});
 
 		MenuItem debug = new MenuItem(menu, SWT.PUSH);
-		debug.setText(Messages.ECLEditorToolbar_8);
+		debug.setText(Messages.Debug);
 		debug.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {

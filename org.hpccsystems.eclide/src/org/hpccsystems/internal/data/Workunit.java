@@ -158,7 +158,7 @@ public class Workunit extends DataSingleton {
 		if (info.getState() == null) {
 			fastRefresh();
 		}
-		return info.getState() != null ? info.getState() : Messages.Workunit_1;
+		return info.getState() != null ? info.getState() : Messages.Unknown;
 	}
 
 	public GregorianCalendar getDate() {
