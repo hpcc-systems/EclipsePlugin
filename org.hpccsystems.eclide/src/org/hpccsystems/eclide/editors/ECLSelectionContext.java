@@ -72,6 +72,6 @@ public class ECLSelectionContext implements IContext {
 
 	@Override
 	public String getText() {
-		return Messages.ECLSelectionContext_0;
+		return Messages.ECLEditorTextMessage;
 	}
 }

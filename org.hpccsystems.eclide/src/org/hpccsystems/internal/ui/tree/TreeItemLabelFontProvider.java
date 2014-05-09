@@ -85,6 +85,6 @@ public class TreeItemLabelFontProvider implements ILabelProvider, IFontProvider,
 		if (element instanceof ItemView) {
 			return ((ItemView)element).getText();
 		}
-		return Messages.TreeItemLabelFontProvider_0;
+		return Messages.TODO;
 	}
 }	

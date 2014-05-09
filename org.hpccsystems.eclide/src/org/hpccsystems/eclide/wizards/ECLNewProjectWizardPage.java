@@ -41,8 +41,8 @@ public class ECLNewProjectWizardPage extends WizardPage {
 	 */
 	public ECLNewProjectWizardPage(ISelection selection) {
 		super("wizardPage"); //$NON-NLS-1$
-		setTitle(Messages.ECLNewProjectWizardPage_1);
-		setDescription(Messages.ECLNewProjectWizardPage_2);
+		setTitle(Messages.MultiPageEditorFile);
+		setDescription(Messages.Msg_NewFile_2);
 		this.selection = selection;
 	}
 
@@ -58,7 +58,7 @@ public class ECLNewProjectWizardPage extends WizardPage {
 		layout.verticalSpacing = 9;
 
 		Label label = new Label(container, SWT.NULL);
-		label.setText(Messages.ECLNewProjectWizardPage_3);
+		label.setText(Messages.ProjectName);
 
 		projectText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -93,11 +93,11 @@ public class ECLNewProjectWizardPage extends WizardPage {
 		String projectName = getProjectName();
 
 		if (projectName.length() == 0) {
-			updateStatus(Messages.ECLNewProjectWizardPage_5);
+			updateStatus(Messages.Msg_ProjectNameMustBeSpecified);
 			return;
 		}
 		if (projectName.replace('\\', '/').indexOf('/', 1) > 0) {
-			updateStatus(Messages.ECLNewProjectWizardPage_6);
+			updateStatus(Messages.Msg_ValidProjectName);
 			return;
 		}
 		updateStatus(null);

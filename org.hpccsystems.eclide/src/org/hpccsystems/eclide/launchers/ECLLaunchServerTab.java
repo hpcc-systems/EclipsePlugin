@@ -106,8 +106,8 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	private Button testButton;
 	private Browser browser;
 	
-	private static String DisableButtonText = Messages.ECLLaunchServerTab_0; 
-	private static String DisableButtonTempDiabledText = DisableButtonText + Messages.ECLLaunchServerTab_1; 
+	private static String DisableButtonText = Messages.DisableServer; 
+	private static String DisableButtonTempDiabledText = DisableButtonText + Messages.TemporarilyDisabled; 
 	
 	ECLLaunchServerTab() {
 		fListener = new WidgetListener();
@@ -124,60 +124,60 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		disableButton = SWTFactory.createCheckButton(parent, DisableButtonText, null, false, 1);
 		disableButton.addSelectionListener(fListener);
 
-		Group group = SWTFactory.createGroup(parent, Messages.ECLLaunchServerTab_2, 2, 1, GridData.FILL_HORIZONTAL);
-		sslButton = SWTFactory.createCheckButton(group, Messages.ECLLaunchServerTab_3, null, false, 2);
+		Group group = SWTFactory.createGroup(parent, Messages.Server, 2, 1, GridData.FILL_HORIZONTAL);
+		sslButton = SWTFactory.createCheckButton(group, Messages.SSL, null, false, 2);
 		sslButton.addSelectionListener(fListener);
 
-		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_4, 1);
+		SWTFactory.createLabel(group, Messages.IP_Address, 1);
 		fIPText = SWTFactory.createSingleText(group, 1);
 		fIPText.addModifyListener(fListener);
 
-		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_5, 1);
+		SWTFactory.createLabel(group, Messages.Port, 1);
 		fPortText = SWTFactory.createSingleText(group, 1);
 		fPortText.addModifyListener(fListener);
 
-		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_6, 1);
+		SWTFactory.createLabel(group, Messages.Target, 1);
 		fClusterText = SWTFactory.createSingleText(group, 1);
 		fClusterText.addModifyListener(fListener);
 		
-		compileOnlyButton = SWTFactory.createCheckButton(group, Messages.ECLLaunchServerTab_7, null, false, 1);
+		compileOnlyButton = SWTFactory.createCheckButton(group, Messages.CompileOnly, null, false, 1);
 		compileOnlyButton.addSelectionListener(fListener);
 	}
 
 	protected void createCredentialsEditor(Composite parent) {
-		Group group = SWTFactory.createGroup(parent, Messages.ECLLaunchServerTab_8, 2, 1, GridData.FILL_HORIZONTAL);
-		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_9, 1);
+		Group group = SWTFactory.createGroup(parent, Messages.Credentials, 2, 1, GridData.FILL_HORIZONTAL);
+		SWTFactory.createLabel(group, Messages.User, 1);
 		fUserText = SWTFactory.createSingleText(group, 1);
 		fUserText.addModifyListener(fListener);
 
-		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_10, 1);
+		SWTFactory.createLabel(group, Messages.Password, 1);
 		fPasswordText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD, 1);
 		fPasswordText.addModifyListener(fListener);
 	}
 
 	protected Browser createBrowser(final Composite parent) {
-		final Group group = SWTFactory.createGroup(parent, Messages.ECLLaunchServerTab_11, 3, 1, GridData.FILL_BOTH);
-		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_12, 1);
+		final Group group = SWTFactory.createGroup(parent, Messages.EclWatch, 3, 1, GridData.FILL_BOTH);
+		SWTFactory.createLabel(group, Messages.Address, 1);
 		fAddressText = SWTFactory.createSingleText(group, 1);
 		fAddressText.addModifyListener(fListener);
-		testButton = SWTFactory.createPushButton(group, Messages.ECLLaunchServerTab_13, null);
+		testButton = SWTFactory.createPushButton(group, Messages.Test, null);
 		testButton.addSelectionListener(fListener);
-		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_14, 1);
+		SWTFactory.createLabel(group, Messages.ServerVersion, 1);
 		fServerVersionText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY, 2);
-		SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_15, 1);
+		SWTFactory.createLabel(group, Messages.CompilerVersion, 1);
 		fCompilerVersionText = SWTFactory.createText(group, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY, 2);
 
 		try {
 			browser = new Browser(group, SWT.BORDER);
 		} catch (IllegalArgumentException e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log(Messages.ECLLaunchServerTab_16, e);
+			org.hpccsystems.eclide.Activator.log(Messages.Error_BrowserControl, e);
 		} catch (SWTException e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log(Messages.ECLLaunchServerTab_17, e);
+			org.hpccsystems.eclide.Activator.log(Messages.Error_BrowserControl, e);
 		} catch (SWTError e) {
 			browser = null;
-			org.hpccsystems.eclide.Activator.log(Messages.ECLLaunchServerTab_18);
+			org.hpccsystems.eclide.Activator.log(Messages.Error_BrowserControl);
 		}
 		if (browser != null) {
 			browser.setUrl("about:blank"); //$NON-NLS-1$
@@ -194,7 +194,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							newBrowser.setText(Messages.ECLLaunchServerTab_20);
+							newBrowser.setText(Messages.Error_AuthenticationFailed);
 						}
 					});
 				}
@@ -208,7 +208,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 				}
 			});
 		} else {
-			SWTFactory.createLabel(group, Messages.ECLLaunchServerTab_21, 3);
+			SWTFactory.createLabel(group, Messages.Warning_WebBrowser_Creation_Failed, 3);
 		}
 		return browser;
 	}
@@ -251,7 +251,7 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 			}
 			Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
 			if (platform.isDisabled()) {
-				fServerVersionText.setText(Messages.ECLLaunchServerTab_25);
+				fServerVersionText.setText(Messages.UnableToConnect);
 				disableButton.setText(DisableButtonTempDiabledText);
 				fCompilerVersionText.setText(""); //$NON-NLS-1$
 			} else {
@@ -352,13 +352,13 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 					browser.setUrl(fAddressText.getText());
 				}
 			});
-			browser.setText(Messages.ECLLaunchServerTab_37 + fAddressText.getText() + Messages.ECLLaunchServerTab_38);
+			browser.setText(Messages.Html_Message_Loading + fAddressText.getText() + Messages.Html_Message_End);
 		}
 	}
 
 	@Override
 	public String getName() {
-		return Messages.ECLLaunchServerTab_39;
+		return Messages.HpccPlatform;
 	}
 
 	@Override

@@ -84,7 +84,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 
 	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
-		monitor.setTaskName(Messages.ECLBuilder_1);
+		monitor.setTaskName(Messages.CheckingSyntax);
 		checkedFiles = new HashSet<IFile>();
 		if (kind == FULL_BUILD) {
 			fullBuild(monitor);

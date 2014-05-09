@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %Bundle-Name.0
+Bundle-Name: %Bundle_Name.0
 Bundle-SymbolicName: org.hpccsystems.eclide;singleton:=true
 Bundle-Version: 4.3.0.1
 Bundle-Activator: org.hpccsystems.eclide.Activator

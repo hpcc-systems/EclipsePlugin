@@ -37,7 +37,7 @@ public class WorkunitFilterFolderView extends ItemView implements Observer {
 	class LoadingItemView extends MessageItemView {
 
 		LoadingItemView(TreeItemOwner treeViewer, ItemView parent) {
-			super(treeViewer, parent, Messages.WorkunitFilterFolderView_0);
+			super(treeViewer, parent, Messages.Msg_Loading);
 		}
 	}
 	
@@ -136,7 +136,7 @@ public class WorkunitFilterFolderView extends ItemView implements Observer {
 		case PREFETCH_UNKNOWN:
 			return ""; //$NON-NLS-1$
 		case PREFETCH_STARTED:
-			return Messages.WorkunitFilterFolderView_6;
+			return Messages.Msg_Calculating;
 		case PREFETCH_FINISHED:
 			if (children.getCount() > 0) {
 				return " (" + children.getCount() + ")"; //$NON-NLS-1$ //$NON-NLS-2$

@@ -183,19 +183,19 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	}
 	
 	public String getFolderName(boolean includeVersion) {
-		return Messages.ClientTools_17 + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return Messages.ClientTools + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	public String getLibraryFolderName(boolean includeVersion) {
-		return Messages.ClientTools_22 + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return Messages.ECLLibrary + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	public String getBundlesFolderName(boolean includeVersion) {
-		return Messages.ClientTools_26 + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return Messages.Bundles + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	public String getExamplesFolderName(boolean includeVersion) {
-		return Messages.ClientTools_30 + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return Messages.Examples + (includeVersion ? " (" + getBuildVersion().toString() + ")" : ""); //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 	public static List<ClientTools> findClientTools() {
@@ -279,7 +279,7 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		if (matched != null)
 		{
 			try {
-				eclccConsoleWriter.write(Messages.ClientTools_44 + matched.getBuildVersion().toString() + Messages.ClientTools_45 + version.toString());
+				eclccConsoleWriter.write(Messages.CompilerMismatch + matched.getBuildVersion().toString() + Messages.Lbl_Server + version.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -288,7 +288,7 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 
 		if (knownClientTools.isEmpty()) {
 			try {
-				eclccConsoleWriter.write(Messages.ClientTools_46);
+				eclccConsoleWriter.write(Messages.Msg_Eclcc_Not_Found);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -296,8 +296,8 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 			//  No good match, just return latest  ---
 			matched = knownClientTools.get(0);
 			try {
-				eclccConsoleWriter.write(Messages.ClientTools_47 + matched.getBuildVersion().toString() + Messages.ClientTools_48 + version.toString() + 
-						Messages.ClientTools_49);
+				eclccConsoleWriter.write(Messages.CompilerMismatch + matched.getBuildVersion().toString() + Messages.Lbl_Server + version.toString() + 
+						Messages.Msg_MatchingClientTools);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

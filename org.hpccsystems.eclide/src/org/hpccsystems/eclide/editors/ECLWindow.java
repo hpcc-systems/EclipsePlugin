@@ -142,7 +142,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 		} catch (PartInitException e) {
 			ErrorDialog.openError(
 					getSite().getShell(),
-					Messages.ECLWindow_2,
+					Messages.Error_NestedTextEditor,
 					null,
 					e.getStatus());
 		}
@@ -308,7 +308,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 	public void init(IEditorSite site, IEditorInput editorInput)
 			throws PartInitException {
 		if (!(editorInput instanceof IEditorInput)) {
-			throw new PartInitException(Messages.ECLWindow_3);
+			throw new PartInitException(Messages.Error_IEditorInput);
 		}
 		super.init(site, editorInput);
 	}

@@ -29,7 +29,7 @@ public class QuickFix implements IMarkerResolution {
 
 	@Override
 	public void run(IMarker marker) {
-		MessageDialog.openInformation(null, Messages.QuickFix_0,
-				Messages.QuickFix_1);
+		MessageDialog.openInformation(null, Messages.QuickFixDemo,
+				Messages.QuickFix_NotImplemented);
 	}
 }

@@ -72,7 +72,7 @@ import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class PlatformViewer extends ViewPart {
 
-	static final String WUTempFolder = Messages.PlatformViewer_0;
+	static final String WUTempFolder = Messages.WorkunitTempFiles;
 	
 	class MyTreeViewer extends TreeViewer {
 
@@ -399,7 +399,7 @@ public class PlatformViewer extends ViewPart {
 	}
 
 	public void createActions() {
-		showWebItemAction = new Action(Messages.PlatformViewer_6) {
+		showWebItemAction = new Action(Messages.ShowECLWatch) {
 			@Override
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
@@ -414,7 +414,7 @@ public class PlatformViewer extends ViewPart {
 			}
 		};
 
-		updateItemAction = new Action(Messages.PlatformViewer_7) {
+		updateItemAction = new Action(Messages.Update) {
 			@Override
 			public void run() { 
 				IStructuredSelection sel = (IStructuredSelection)treeViewer.getSelection();
@@ -428,14 +428,14 @@ public class PlatformViewer extends ViewPart {
 			}
 		};
 
-	    refreshListAction = new Action(Messages.PlatformViewer_8, Activator.getImageDescriptor("icons/refresh.png")) { //$NON-NLS-2$
+	    refreshListAction = new Action(Messages.Refresh, Activator.getImageDescriptor("icons/refresh.png")) { //$NON-NLS-2$
 			@Override
 			public void run() {
 				contentProvider.reloadChildren();
 			}
 		};
 		
-		refreshEachItemAction = new Action(Messages.PlatformViewer_10) {
+		refreshEachItemAction = new Action(Messages.RefreshEachItem) {
 			@Override
 			public void run() {
 				contentProvider.refreshChildren();

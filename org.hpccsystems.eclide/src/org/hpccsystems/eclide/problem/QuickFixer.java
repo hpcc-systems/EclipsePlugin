@@ -23,8 +23,8 @@ public class QuickFixer implements IMarkerResolutionGenerator {
 		try {
 			Object problem = marker.getAttribute("WhatsUp"); //$NON-NLS-1$
 			return new IMarkerResolution[] {
-					new QuickFix(Messages.QuickFixer_1+problem),
-					new QuickFix(Messages.QuickFixer_2+problem),
+					new QuickFix(Messages.QuickFix_1+problem),
+					new QuickFix(Messages.QuickFix_2+problem),
 			};
 		}
 		catch (CoreException e) {

@@ -22,7 +22,7 @@ class GraphFolderView extends FolderItemView implements Observer  {
 
 	@Override
 	public String getText() {
-		return Messages.GraphFolderView_0;
+		return Messages.Graphs;
 	}
 
 	@Override

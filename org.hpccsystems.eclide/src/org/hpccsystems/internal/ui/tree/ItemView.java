@@ -95,15 +95,15 @@ public class ItemView {
 	}
 
 	public String getText() {
-		return Messages.ItemView_0;
+		return Messages.TODO;
 	}
 
 	public String getStateText() {
 		switch(children.getState()) {
 		case PREFETCH_UNKNOWN:
-			return Messages.ItemView_1;
+			return Messages.Msg_Loading_2;
 		case PREFETCH_STARTED:
-			return Messages.ItemView_2;
+			return Messages.Msg_Calculating;
 		case PREFETCH_FINISHED:
 			if (this instanceof FolderItemView) {
 				if (children.getCount() > 0) {

@@ -60,7 +60,7 @@ class TargetFolderView extends FolderItemView {
 
 	@Override
 	public String getText() {
-		return Messages.AllItemView_1;
+		return Messages.Targets;
 	}
 
 	@Override
@@ -130,7 +130,7 @@ class DropZoneFolderView extends FolderItemView {
 
 	@Override
 	public String getText() {
-		return Messages.AllItemView_7;
+		return Messages.DropZones;
 	}
 
 	//  http://192.168.2.68:8010/FileSpray/DropZoneFiles?ver_=1.03
@@ -191,7 +191,7 @@ class QuerySetFolderView extends FolderItemView {
 
 	@Override
 	public String getText() {
-		return Messages.AllItemView_16;
+		return Messages.QuerySets;
 	}
 
 	//http://192.168.2.68:8010/WsWorkunits/WUQuerySets	
@@ -267,7 +267,7 @@ class LogicalFileFolderView extends FolderItemView {
 
 	@Override
 	public String getText() {
-		return Messages.AllItemView_23;
+		return Messages.Files;
 	}
 
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
@@ -303,7 +303,7 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 
 	@Override
 	public String getText() {
-		return Messages.AllItemView_32;
+		return Messages.Inputs;
 	}
 
 	//http://192.168.2.68:8010/WsDfu/DFUQuery
@@ -480,6 +480,6 @@ class MessageItemView extends ItemView {
 class RecursiveItemView extends MessageItemView {
 
 	RecursiveItemView(TreeItemOwner treeViewer, ItemView parent) {
-		super(treeViewer, parent, Messages.AllItemView_57);
+		super(treeViewer, parent, Messages.RecursiveExpansion);
 	}
 }

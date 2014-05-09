@@ -39,7 +39,7 @@ class WorkunitsTreeItemContentProvider2 extends TreeItemContentProvider {
 	WorkunitsTreeItemContentProvider2(TreeViewer treeViewer) {
 		super(treeViewer);
 		Calendar now = GregorianCalendar.getInstance();
-		today = createDayFolder(now, Messages.WorkunitsTreeItemContentProvider2_0);
+		today = createDayFolder(now, Messages.Today);
 		children = new LazyChildLoader<ItemView>();
 	}
 
@@ -123,9 +123,9 @@ class WorkunitsTreeItemContentProvider2 extends TreeItemContentProvider {
 		for (int i = 1; i <= weeksInMonth; ++i) {
 			now.add(Calendar.WEEK_OF_MONTH,  -1);
 			if (i == 1) {
-				children.add(createWeekFolder(now, Messages.WorkunitsTreeItemContentProvider2_2));
+				children.add(createWeekFolder(now, Messages.LastWeek));
 			} else {
-				children.add(createWeekFolder(now, Integer.toString(i) + Messages.WorkunitsTreeItemContentProvider2_3));
+				children.add(createWeekFolder(now, Integer.toString(i) + Messages.WeeksAgo));
 			}
 		}
 		

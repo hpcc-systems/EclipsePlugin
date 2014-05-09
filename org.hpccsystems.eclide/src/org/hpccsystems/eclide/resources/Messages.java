@@ -6,209 +6,167 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.hpccsystems.eclide.resources.messages"; //$NON-NLS-1$
 	
 	//Properties from org.hpccsystems.eclide.builder package
-	public static String ECLBuilder_1;
-	public static String ECLCompiler_0;
-	public static String ECLCompiler_13;
-	public static String ECLCompiler_2;
-	
-	//Properties from org.hpccsystems.eclide.editors package
-	public static String ECLAnnotationHover_0;
-	public static String ECLEditorToolbar_1;
-	public static String ECLEditorToolbar_4;
-	public static String ECLEditorToolbar_6;
-	public static String ECLEditorToolbar_7;
-	public static String ECLEditorToolbar_8;
-	public static String ECLSelectionContext_0;
-	public static String ECLTextHover_0;
-	public static String ECLTextHover_1;
-	public static String ECLTextHover_2;
-	public static String ECLTextHover_3;
-	public static String ECLTextHover_4;
-	public static String ECLTextHover_5;
-	public static String ECLWindow_2;
-	public static String ECLWindow_3;
-	public static String ECLWindowActions_0;
-	public static String ECLWindowActions_1;
-	public static String ECLWindowActions_2;
-	
-	//Properties from org.hpccsystems.eclide.importWizards package
-	public static String ImportWizard_0;
-	public static String ImportWizard_1;
-	public static String ImportWizardPage_0;
-	public static String ImportWizardPage_12;
-	public static String ImportWizardPage_13;
-	public static String ImportWizardPage_14;
-	public static String ImportWizardPage_2;
-	public static String ImportWizardPage_5;
-	public static String ImportWizardPage_8;
-	
-	//Properties from org.hpccsystems.eclide.launchers package
-	public static String ECLLaunchCompilerTab_1;
-	public static String ECLLaunchCompilerTab_10;
-	public static String ECLLaunchCompilerTab_11;
-	public static String ECLLaunchCompilerTab_12;
-	public static String ECLLaunchCompilerTab_13;
-	public static String ECLLaunchCompilerTab_14;
-	public static String ECLLaunchCompilerTab_15;
-	public static String ECLLaunchCompilerTab_16;
-	public static String ECLLaunchCompilerTab_2;
-	public static String ECLLaunchCompilerTab_3;
-	public static String ECLLaunchCompilerTab_4;
-	public static String ECLLaunchCompilerTab_5;
-	public static String ECLLaunchCompilerTab_6;
-	public static String ECLLaunchCompilerTab_7;
-	public static String ECLLaunchCompilerTab_8;
-	public static String ECLLaunchCompilerTab_9;
-	public static String ECLLaunchServerTab_0;
-	public static String ECLLaunchServerTab_1;
-	public static String ECLLaunchServerTab_10;
-	public static String ECLLaunchServerTab_11;
-	public static String ECLLaunchServerTab_12;
-	public static String ECLLaunchServerTab_13;
-	public static String ECLLaunchServerTab_14;
-	public static String ECLLaunchServerTab_15;
-	public static String ECLLaunchServerTab_16;
-	public static String ECLLaunchServerTab_17;
-	public static String ECLLaunchServerTab_18;
-	public static String ECLLaunchServerTab_2;
-	public static String ECLLaunchServerTab_20;
-	public static String ECLLaunchServerTab_21;
-	public static String ECLLaunchServerTab_25;
-	public static String ECLLaunchServerTab_3;
-	public static String ECLLaunchServerTab_37;
-	public static String ECLLaunchServerTab_38;
-	public static String ECLLaunchServerTab_39;
-	public static String ECLLaunchServerTab_4;
-	public static String ECLLaunchServerTab_5;
-	public static String ECLLaunchServerTab_6;
-	public static String ECLLaunchServerTab_7;
-	public static String ECLLaunchServerTab_8;
-	public static String ECLLaunchServerTab_9;
-	
-	
-	//Properties from org.hpccsystems.eclide.preferences
-	public static String ECLCompilerPreferencePage_0;
-	public static String ECLCompilerPreferencePage_1;
-	public static String ECLCompilerPreferencePage_10;
-	public static String ECLCompilerPreferencePage_11;
-	public static String ECLCompilerPreferencePage_12;
-	public static String ECLCompilerPreferencePage_13;
-	public static String ECLCompilerPreferencePage_14;
-	public static String ECLCompilerPreferencePage_2;
-	public static String ECLCompilerPreferencePage_3;
-	public static String ECLCompilerPreferencePage_4;
-	public static String ECLCompilerPreferencePage_5;
-	public static String ECLCompilerPreferencePage_6;
-	public static String ECLCompilerPreferencePage_7;
-	public static String ECLCompilerPreferencePage_8;
-	public static String ECLCompilerPreferencePage_9;
-	
-	//Properties from org.hpccsystems.eclide.problem package
-	public static String QuickFix_0;
+	public static String CheckingSyntax;
+	public static String Error_Eclcc_Not_Found;
+	public static String Eclcc_Console_Output;
+	public static String Error_Compiler_Config;
+
+	// Properties from org.hpccsystems.eclide.editors package
+	public static String AnnotationHover;
+	public static String Server;
+	public static String Target;
+	public static String Submit;
+	public static String Compile;
+	public static String Debug;
+	public static String ECLEditorTextMessage;
+	public static String TextHover_No_Meta;
+	public static String TextHover_SearchInfo;
+	public static String TextHover_SearchFor;
+	public static String TextHover_Context;
+	public static String TextHover_Match;
+	public static String TextHover_Definition;
+	public static String Error_NestedTextEditor;
+	public static String Error_IEditorInput;
+	public static String Close;
+	public static String CloseOtherWorkunits;
+	public static String CloseAllWorkunits;
+
+	// Properties from org.hpccsystems.eclide.importWizards package
+	public static String FileImportWizard;
+	public static String ImportRepository;
+	public static String ImportRepositoryFromRemoteServer;
+	public static String ImportingAttributes;
+	public static String Importing;
+	public static String Trash;
+	public static String ServerIP;
+	public static String User;
+	public static String Password;
+
+	// Properties from org.hpccsystems.eclide.launchers package
+	public static String Location;
+	public static String WorkunitArguments;
+	public static String InlineResultLimit;
+	public static String MonitorDependees;
+	public static String SupressErrors;
+	public static String OverrideDefaults;
+	public static String Eclcc_Compiler;
+	public static String HpccClientTools;
+	public static String CompilerArguments;
+	public static String Common;
+	public static String SyntaxCheck;
+	public static String LocalCompile;
+	public static String RemoteCompile;
+	public static String Local;
+	public static String DisableServer;
+	public static String TemporarilyDisabled;
+	public static String EclWatch;
+	public static String Address;
+	public static String Test;
+	public static String ServerVersion;
+	public static String CompilerVersion;
+	public static String Error_BrowserControl;
+	public static String Error_AuthenticationFailed;
+	public static String Warning_WebBrowser_Creation_Failed;
+	public static String UnableToConnect;
+	public static String SSL;
+	public static String Html_Message_Loading;
+	public static String Html_Message_End;
+	public static String HpccPlatform;
+	public static String IP_Address;
+	public static String Port;
+	public static String CompileOnly;
+	public static String Credentials;
+
+	// Properties from org.hpccsystems.eclide.preferences
+	public static String CompilerPreferences;
+	public static String Miscellaneous;
+	public static String EnableMetaProcessing;
+
+	// Properties from org.hpccsystems.eclide.problem package
+	public static String QuickFixDemo;
+	public static String QuickFix_NotImplemented;
 	public static String QuickFix_1;
-	public static String QuickFixer_1;
-	public static String QuickFixer_2;
-	
-	//Properties from org.hpccsystems.eclide.ui.viewer package
-	public static String BrowserEx_1;
-	public static String BrowserEx_10;
-	public static String BrowserEx_3;
-	public static String BrowserEx_5;
-	public static String BrowserEx_6;
-	public static String BrowserEx_7;
-	public static String BrowserEx_8;
-	
-	//Properties from org.hpccsystems.eclide.ui.viewer.platform package
-	public static String AllItemView_1;
-	public static String AllItemView_16;
-	public static String AllItemView_23;
-	public static String AllItemView_32;
-	public static String AllItemView_57;
-	public static String AllItemView_7;
-	public static String FileSprayWorkunitFolderView_0;
-	public static String GraphFolderView_0;
-	public static String PlatformViewer_0;
-	public static String PlatformViewer_10;
-	public static String PlatformViewer_6;
-	public static String PlatformViewer_7;
-	public static String PlatformViewer_8;
-	public static String ResultFolderView_0;
-	public static String WorkunitActions_0;
-	public static String WorkunitActions_1;
-	public static String WorkunitActions_2;
-	public static String WorkunitActions_3;
-	public static String WorkunitActions_4;
-	public static String WorkunitActions_5;
-	public static String WorkunitActions_6;
-	public static String WorkunitFilterFolderView_0;
-	public static String WorkunitFilterFolderView_6;
-	public static String WorkunitsTreeItemContentProvider2_0;
-	public static String WorkunitsTreeItemContentProvider2_2;
-	public static String WorkunitsTreeItemContentProvider2_3;
-	public static String WorkunitTabItem_0;
-	public static String WorkunitTabItem_1;
-	
-	//Properties from org.hpccsystems.eclide.wizards package
-	public static String ECLNewFileWizard_0;
-	public static String ECLNewFileWizard_1;
-	public static String ECLNewFileWizard_2;
-	public static String ECLNewFileWizard_3;
-	public static String ECLNewFileWizard_4;
-	public static String ECLNewFileWizardPage_0;
-	public static String ECLNewFileWizardPage_1;
-	public static String ECLNewFileWizardPage_10;
-	public static String ECLNewFileWizardPage_11;
-	public static String ECLNewFileWizardPage_12;
-	public static String ECLNewFileWizardPage_2;
-	public static String ECLNewFileWizardPage_3;
-	public static String ECLNewFileWizardPage_4;
-	public static String ECLNewFileWizardPage_5;
-	public static String ECLNewFileWizardPage_6;
-	public static String ECLNewFileWizardPage_7;
-	public static String ECLNewFileWizardPage_8;
-	public static String ECLNewFileWizardPage_9;
-	public static String ECLNewProjectWizardPage_1;
-	public static String ECLNewProjectWizardPage_2;
-	public static String ECLNewProjectWizardPage_3;
-	public static String ECLNewProjectWizardPage_5;
-	public static String ECLNewProjectWizardPage_6;
-	public static String Wizard_ImportWizard_0;
-	public static String Wizard_ImportWizard_1;
-	public static String Wizard_ImportWizardPage_0;
-	public static String Wizard_ImportWizardPage_12;
-	public static String Wizard_ImportWizardPage_13;
-	public static String Wizard_ImportWizardPage_14;
-	public static String Wizard_ImportWizardPage_2;
-	public static String Wizard_ImportWizardPage_3;
-	public static String Wizard_ImportWizardPage_5;
-	public static String Wizard_ImportWizardPage_8;
-	
-	//Properties from org.hpccsystems.internal package
-	public static String EclCCErrorParser_0;
-	
-	//Properties from org.hpccsystems.internal.data package
-	public static String ClientTools_17;
-	public static String ClientTools_22;
-	public static String ClientTools_26;
-	public static String ClientTools_30;
-	public static String ClientTools_44;
-	public static String ClientTools_45;
-	public static String ClientTools_46;
-	public static String ClientTools_47;
-	public static String ClientTools_48;
-	public static String ClientTools_49;
-	public static String Platform_0;
-	public static String Platform_19;
-	public static String Platform_21;
-	public static String Platform_28;
-	public static String Platform_30;
-	public static String Workunit_1;
-	
-	//Properties from org.hpccsystems.internal.ui.tree package
-	public static String ItemView_0;
-	public static String ItemView_1;
-	public static String ItemView_2;
-	public static String TreeItemLabelFontProvider_0;
+	public static String QuickFix_2;
+
+	// Properties from org.hpccsystems.eclide.ui.viewer package
+	public static String Back;
+	public static String Forward;
+	public static String Refresh;
+
+	// Properties from org.hpccsystems.eclide.ui.viewer.platform package
+	public static String Targets;
+	public static String QuerySets;
+	public static String Files;
+	public static String Inputs;
+	public static String RecursiveExpansion;
+	public static String DropZones;
+	public static String FileSprays;
+	public static String Graphs;
+	public static String WorkunitTempFiles;
+	public static String RefreshEachItem;
+	public static String ShowECLWatch;
+	public static String Update;
+	public static String Outputs;
+	public static String Abort;
+	public static String Delete;
+	public static String Resubmit;
+	public static String Restart;
+	public static String Clone;
+	public static String Publish;
+	public static String Msg_Loading;
+	public static String Msg_Calculating;
+	public static String Today;
+	public static String LastWeek;
+	public static String WeeksAgo;
+	public static String Query;
+
+	// Properties from org.hpccsystems.eclide.wizards package
+	public static String Error;
+	public static String Creating;
+	public static String Msg_Container;
+	public static String Msg_DoesNotExist;
+	public static String Msg_OpeningFileForEditing;
+	public static String NewEclFile;
+	public static String MultiPageEditorFile;
+	public static String Msg_ProjectMustBeWritable;
+	public static String Msg_FilenameMustBeSpecified;
+	public static String Msg_ValidFileName;
+	public static String Msg_NewFile;
+	public static String Container;
+	public static String Browse;
+	public static String FileName;
+	public static String Msg_FileExtension;
+	public static String Msg_NewFileContainer;
+	public static String Msg_FileContainerMustBeSpecified;
+	public static String Msg_FileContainerMustExist;
+	public static String Msg_NewFile_2;
+	public static String ProjectName;
+	public static String Msg_ProjectNameMustBeSpecified;
+	public static String Msg_ValidProjectName;
+	public static String DummyValue;
+
+	// Properties from org.hpccsystems.internal package
+	public static String Lbl_ERR;
+
+	// Properties from org.hpccsystems.internal.data package
+	public static String ClientTools;
+	public static String ECLLibrary;
+	public static String Bundles;
+	public static String Examples;
+	public static String CompilerMismatch;
+	public static String Lbl_Server;
+	public static String Msg_Eclcc_Not_Found;
+	public static String Msg_MatchingClientTools;
+	public static String Double_Quote;
+	public static String EclPlugin;
+	public static String DisableCurrentSession;
+	public static String UnableToSubmitECL;
+	public static String Msg_Unreachable;
+	public static String Unknown;
+
+	// Properties from org.hpccsystems.internal.ui.tree package
+	public static String TODO;
+	public static String Msg_Loading_2;
 	
 	static {
 		// initialize resource bundle

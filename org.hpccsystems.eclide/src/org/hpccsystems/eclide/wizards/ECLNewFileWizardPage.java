@@ -53,8 +53,8 @@ public class ECLNewFileWizardPage extends WizardPage {
 	 */
 	public ECLNewFileWizardPage(ISelection selection) {
 		super("wizardPage"); //$NON-NLS-1$
-		setTitle(Messages.ECLNewFileWizardPage_1);
-		setDescription(Messages.ECLNewFileWizardPage_2);
+		setTitle(Messages.MultiPageEditorFile);
+		setDescription(Messages.Msg_NewFile);
 		this.selection = selection;
 	}
 
@@ -69,7 +69,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 		Label label = new Label(container, SWT.NULL);
-		label.setText(Messages.ECLNewFileWizardPage_3);
+		label.setText(Messages.Container);
 
 		containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -82,7 +82,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 		});
 
 		Button button = new Button(container, SWT.PUSH);
-		button.setText(Messages.ECLNewFileWizardPage_4);
+		button.setText(Messages.Browse);
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -90,7 +90,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 			}
 		});
 		label = new Label(container, SWT.NULL);
-		label.setText(Messages.ECLNewFileWizardPage_5);
+		label.setText(Messages.FileName);
 
 		fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -128,7 +128,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
-		fileText.setText(Messages.ECLNewFileWizardPage_0);
+		fileText.setText(Messages.NewEclFile);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class ECLNewFileWizardPage extends WizardPage {
 	private void handleBrowse() {
 		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
 				getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
-				Messages.ECLNewFileWizardPage_7);
+				Messages.Msg_NewFileContainer);
 		if (dialog.open() == Window.OK) {
 			Object[] result = dialog.getResult();
 			if (result.length == 1) {
@@ -158,31 +158,31 @@ public class ECLNewFileWizardPage extends WizardPage {
 		String fileName = getFileName();
 
 		if (getContainerName().length() == 0) {
-			updateStatus(Messages.ECLNewFileWizardPage_8);
+			updateStatus(Messages.Msg_FileContainerMustBeSpecified);
 			return;
 		}
 		if (container == null
 				|| (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
-			updateStatus(Messages.ECLNewFileWizardPage_9);
+			updateStatus(Messages.Msg_FileContainerMustExist);
 			return;
 		}
 		if (!container.isAccessible()) {
-			updateStatus(Messages.ECLNewFileWizardPage_10);
+			updateStatus(Messages.Msg_ProjectMustBeWritable);
 			return;
 		}
 		if (fileName.length() == 0) {
-			updateStatus(Messages.ECLNewFileWizardPage_11);
+			updateStatus(Messages.Msg_FilenameMustBeSpecified);
 			return;
 		}
 		if (fileName.replace('\\', '/').indexOf('/', 1) > 0) {
-			updateStatus(Messages.ECLNewFileWizardPage_12);
+			updateStatus(Messages.Msg_ValidFileName);
 			return;
 		}
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
 			String ext = fileName.substring(dotLoc + 1);
 			if (ext.equalsIgnoreCase("ecl") == false) { //$NON-NLS-1$
-				updateStatus(Messages.ECLNewFileWizardPage_6);
+				updateStatus(Messages.Msg_FileExtension);
 				return;
 			}
 		}

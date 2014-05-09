@@ -86,7 +86,7 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 			return false;
 		} catch (InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), Messages.ECLNewFileWizard_0, realException.getMessage());
+			MessageDialog.openError(getShell(), Messages.Error, realException.getMessage());
 			return false;
 		}
 		return true;
@@ -104,11 +104,11 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 			IProgressMonitor monitor)
 					throws CoreException {
 		// create a sample file
-		monitor.beginTask(Messages.ECLNewFileWizard_1 + fileName, 2);
+		monitor.beginTask(Messages.Creating + fileName, 2);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
 		if (!resource.exists() || !(resource instanceof IContainer)) {
-			throwCoreException(Messages.ECLNewFileWizard_2 + containerName + Messages.ECLNewFileWizard_3);
+			throwCoreException(Messages.Msg_Container + containerName + Messages.Msg_DoesNotExist);
 		}
 		IContainer container = (IContainer) resource;
 		final IFile file = container.getFile(new Path(fileName));
@@ -123,7 +123,7 @@ public class ECLNewFileWizard extends Wizard implements INewWizard {
 		} catch (IOException e) {
 		}
 		monitor.worked(1);
-		monitor.setTaskName(Messages.ECLNewFileWizard_4);
+		monitor.setTaskName(Messages.Msg_OpeningFileForEditing);
 		getShell().getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
