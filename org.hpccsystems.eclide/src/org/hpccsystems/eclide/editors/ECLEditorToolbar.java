@@ -1,6 +1,5 @@
 package org.hpccsystems.eclide.editors;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -22,6 +21,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.resources.Messages;
+import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Data;
 import org.hpccsystems.internal.data.Platform;
@@ -33,15 +33,15 @@ import de.ikoffice.widgets.SplitButtonSelectionListener;
 
 public class ECLEditorToolbar extends Composite {
 
-	private IFile file;
+	ECLEditor editor;
 	private ILaunchConfiguration[] configurations;
 	private SplitButton submitButton;
 	private Combo comboServer;
 	private Combo comboTarget;
 
-	public ECLEditorToolbar(IFile sourceFile, Composite parent, int style) {
+	public ECLEditorToolbar(ECLEditor editor, Composite parent, int style) {
 		super(parent, style);
-		file = sourceFile;
+		this.editor = editor;
 		GridLayout innerTopLayout = new GridLayout(5, false);
 		innerTopLayout.marginHeight = 0;
 		innerTopLayout.marginWidth = 0;
@@ -171,8 +171,9 @@ public class ECLEditorToolbar extends Composite {
 	void submit(boolean compileOnly) {
 		ILaunchConfiguration configuration = getSelectedConfiguration();
 		if (configuration != null) {
+			Eclipse.doSaveDirty(editor.getProject());
 			Platform platform = Data.get().GetPlatform(configuration);
-			platform.submit(configuration, file, comboTarget.getText(), compileOnly);
+			platform.submit(configuration, editor.sourceFile, comboTarget.getText(), compileOnly);
 		}
 	}
 
