@@ -166,7 +166,7 @@ public class Eclipse {
 	}
 
 	//  Marker Helpers  ---
-	static public void addMarker(IResource resolvedFile, int severity, String code, String message, int lineNumber, int colNumber, boolean oneErrorOnly)
+	static public void addMarker(IResource resolvedFile, int severity, String code, String _message, int lineNumber, int colNumber, boolean oneErrorOnly)
 	{
 		if (resolvedFile != null)
 		{
@@ -179,6 +179,7 @@ public class Eclipse {
 
 			if (resolvedFile.exists()) {
 				try {
+					String message = code + ":  " + _message;
 					IMarker[] markers = resolvedFile.findMarkers(MARKER_TYPE, false, IResource.DEPTH_ZERO);
 					for (int i = 0; i < markers.length; ++i) {
 						if (oneErrorOnly && markers[i].getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR)) {

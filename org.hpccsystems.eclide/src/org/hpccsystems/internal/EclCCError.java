@@ -50,13 +50,18 @@ public class EclCCError {
 			} else {
 				errorPath = new Path(filePathAndLoc);
 			}
-			String code = parts[1];
-			if (code.startsWith("error")) {
-				severity = IMarker.SEVERITY_ERROR;
-			} else if (code.startsWith("warning")) {
-				severity = IMarker.SEVERITY_WARNING;
-			} else {
-				severity = IMarker.SEVERITY_INFO;
+			String[] codeParts = parts[1].split(" ");
+			if (codeParts.length >= 1) {
+				if (codeParts[0].equalsIgnoreCase("error")) {
+					severity = IMarker.SEVERITY_ERROR;
+				} else if (codeParts[0].equalsIgnoreCase("warning")) {
+					severity = IMarker.SEVERITY_WARNING;
+				} else {
+					severity = IMarker.SEVERITY_INFO;
+				}
+			}
+			if (codeParts.length >= 2) {
+				code = codeParts[1];				
 			}
 			message = parts[2];
 		}
