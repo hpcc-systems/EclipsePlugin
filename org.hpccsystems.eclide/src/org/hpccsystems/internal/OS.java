@@ -23,8 +23,17 @@ public class OS {
 		}
 	}
 	
-	public static String getOSQuote()
+	public static String getQuote()
 	{
 		return isWindowsPlatform() ? "\"" : "";
+	}
+
+	public static String getScriptExt()
+	{
+		return isWindowsPlatform() ? ".bat" : ".sh";
+	}
+
+	public static String getPathSep() {
+		return isWindowsPlatform() ? "\\" : "/";
 	}
 }

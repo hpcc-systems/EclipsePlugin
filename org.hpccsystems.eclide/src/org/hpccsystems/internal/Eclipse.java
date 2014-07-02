@@ -10,6 +10,15 @@
  ******************************************************************************/
 package org.hpccsystems.internal;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.HashSet;
 
 import org.eclipse.core.resources.IContainer;
@@ -244,5 +253,57 @@ public class Eclipse {
 		projects[0] = project;
 		IResource[] resources = getScopedDirtyResources(projects);
 		IDE.saveAllEditors(resources, false);			
+	}
+	
+	public static void copyFile(File sourceFile, File destFile) throws IOException {
+	    if(!destFile.exists()) {
+	        destFile.createNewFile();
+	    }
+
+	    FileChannel source = null;
+	    FileChannel destination = null;
+
+	    try {
+	        source = new FileInputStream(sourceFile).getChannel();
+	        destination = new FileOutputStream(destFile).getChannel();
+	        destination.transferFrom(source, 0, source.size());
+	    }
+	    finally {
+	        if(source != null) {
+	            source.close();
+	        }
+	        if(destination != null) {
+	            destination.close();
+	        }
+	    }
+	}	
+
+	public static String readFile(File file) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		StringBuilder stringBuilder = new StringBuilder();
+		try {
+			String line = null;
+			String ls = System.getProperty("line.separator");
+	
+			while ((line = reader.readLine()) != null) {
+				stringBuilder.append(line);
+				stringBuilder.append(ls);
+			}
+		} finally {
+			reader.close();
+		}
+		return stringBuilder.toString();
+	}
+
+	public static void writeFile(File file, String content) throws IOException {
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+		try {
+			writer.write(content);
+		} finally {
+			writer.close();
+		}
 	}
 }
