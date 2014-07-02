@@ -61,7 +61,7 @@ public class ECLEditor extends TextEditor {
 		super();
 		readOnly = false;
 		colorManager = new ECLColorManager();
-		setSourceViewerConfiguration(new ECLConfiguration(colorManager));
+		setSourceViewerConfiguration(new ECLConfiguration(getPreferenceStore(), colorManager));
 		setDocumentProvider(new ECLDocumentProvider());
 		setKeyBindingScopes( new String[] { "org.hpccsystems.eclide.eclideScope" } );
 	}

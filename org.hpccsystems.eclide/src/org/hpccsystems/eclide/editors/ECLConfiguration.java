@@ -12,6 +12,7 @@ package org.hpccsystems.eclide.editors;
 
 import java.util.Arrays;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.TextAttribute;
@@ -77,7 +78,8 @@ public class ECLConfiguration extends TextSourceViewerConfiguration {
 	private ECLScanner scanner;
 	private ECLColorManager colorManager;
 
-	public ECLConfiguration(ECLColorManager colorManager) {
+	public ECLConfiguration(IPreferenceStore preferenceStore, ECLColorManager colorManager) {
+		super(preferenceStore);
 		this.colorManager = colorManager;
 	}
 
