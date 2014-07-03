@@ -112,7 +112,7 @@
       <editor
             class="org.hpccsystems.eclide.editors.ECLWindow"
             contributorClass="org.hpccsystems.eclide.editors.ECLEditorActionContributor"
-            extensions="ecl"
+            extensions="ecl, kel"
             icon="icons/doc.png"
             id="org.hpccsystems.eclide.editors.ECLWindow"
             name="%ECL_Editor">

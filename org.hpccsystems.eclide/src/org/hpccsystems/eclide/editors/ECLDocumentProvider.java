@@ -10,13 +10,19 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.editors;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
+import org.hpccsystems.eclide.builder.ECLCompiler;
+import org.hpccsystems.eclide.builder.PluginCompiler;
 import org.hpccsystems.eclide.text.ECLPartitionScanner;
+import org.hpccsystems.internal.data.ClientTools;
 
 public class ECLDocumentProvider extends FileDocumentProvider {
 
@@ -49,5 +55,23 @@ public class ECLDocumentProvider extends FileDocumentProvider {
 		}
 		return super.setDocumentContent(document, editorInput, encoding);
 	}
+	
+	@Override
+	public void doSaveDocument(IProgressMonitor monitor, Object element, IDocument document, boolean overwrite) throws CoreException {
+		super.doSaveDocument(monitor, element, document, overwrite);
+		if (element instanceof IFileEditorInput) {
+			IFileEditorInput input= (IFileEditorInput) element;
+			String encoding= null;
 
+			FileInfo info= (FileInfo) getElementInfo(element);
+			IFile file= input.getFile();
+
+			ClientTools ct = ClientTools.get();
+			ECLCompiler compiler = ct.getCompiler(file);
+			if (compiler instanceof PluginCompiler) {
+				PluginCompiler pCompiler = (PluginCompiler)compiler;
+				pCompiler.saveFile(file);
+			}
+		}		
+	}
 }

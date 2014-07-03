@@ -29,6 +29,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.resources.Messages;
+import org.hpccsystems.internal.CError;
 import org.hpccsystems.internal.CmdArgs;
 import org.hpccsystems.internal.CmdProcess;
 import org.hpccsystems.internal.CmdProcess.IProcessOutput;
@@ -61,7 +62,7 @@ public class ECLCompiler {
 	private Version buildVersion = null; 
 
 	IPreferenceStore preferences;
-	IPath binPath;
+	IPath binFolder;
 	File eclccFile;
 	File eclplusFile;
 
@@ -145,7 +146,7 @@ public class ECLCompiler {
 		public void ProcessErr(BufferedReader errReader) {
 			errorParser = new EclCCErrorParser(errReader, eclccConsoleWriter);
 			hasError = errorParser.errorCount > 0;
-			for(EclCCError e : errorParser.items) {
+			for(CError e : errorParser.items) {
 				IResource resolvedFile = Eclipse.getWorkspaceRoot().getFileForLocation(e.errorPath);
 				if (resolvedFile != null) {
 					Eclipse.addMarker(resolvedFile, e.severity, e.code, e.message, e.lineNumber, e.colNumber, supressSubsequentErrors);
@@ -213,11 +214,11 @@ public class ECLCompiler {
 		}
 	}
 
-	public ECLCompiler(Path rootPath) {
-		QUOTE = OS.getOSQuote();
-		binPath = rootPath.append("bin"); //$NON-NLS-1$
-		eclccFile = binPath.append("eclcc").toFile(); //$NON-NLS-1$
-		eclplusFile = binPath.append("eclplus").toFile(); //$NON-NLS-1$
+	public ECLCompiler(IPath rootPath) {
+		QUOTE = OS.getQuote();
+		binFolder = rootPath.append("bin"); //$NON-NLS-1$
+		eclccFile = binFolder.append("eclcc").toFile(); //$NON-NLS-1$
+		eclplusFile = binFolder.append("eclplus").toFile(); //$NON-NLS-1$
 
 		resultsConsole = Eclipse.findConsole("Results"); //$NON-NLS-1$
 		resultsConsoleWriter = resultsConsole.newMessageStream();
@@ -301,7 +302,7 @@ public class ECLCompiler {
 			version = new String();
 			CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "--version", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			BasicHandler handler = new BasicHandler();
-			CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+			CmdProcess process = new CmdProcess(workingPath, binFolder, handler, eclccConsoleWriter);
 			process.exec(cmdArgs);
 			version = handler.sbOut.toString();
 			version = version.replaceAll("\r", ""); //$NON-NLS-1$ //$NON-NLS-2$
@@ -336,7 +337,7 @@ public class ECLCompiler {
 			cmdArgs.Append("E"); //$NON-NLS-1$
 		}
 		ECLArchiveHandler handler = new ECLArchiveHandler();
-		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+		CmdProcess process = new CmdProcess(workingPath, binFolder, handler, eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 		if (monitorDependees) {
 			ancestors = handler.getAncestors(file);
@@ -382,7 +383,7 @@ public class ECLCompiler {
 
 		hasError = false;
 		BasicHandler handler = new SyntaxHandler();
-		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+		CmdProcess process = new CmdProcess(workingPath, binFolder, handler, eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 		return handler.sbOut.toString();
 	}
@@ -401,7 +402,7 @@ public class ECLCompiler {
 		GetIncludeArgs(cmdArgs);
 
 		BasicHandler handler = new BasicHandler();
-		CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+		CmdProcess process = new CmdProcess(workingPath, binFolder, handler, eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 		return handler.sbOut.toString();
 	}
@@ -419,7 +420,7 @@ public class ECLCompiler {
 		GetIncludeArgs(cmdArgs);
 
 		hasError = false;
-		CmdProcess process = new CmdProcess(workingPath, binPath, new LocalRunHandler(), eclccConsoleWriter);
+		CmdProcess process = new CmdProcess(workingPath, binFolder, new LocalRunHandler(), eclccConsoleWriter);
 		process.exec(cmdArgs, file, false);
 		if (!hasError) {
 			resultsConsole.clearConsole();
@@ -435,7 +436,7 @@ public class ECLCompiler {
 
 			CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), "-showpaths", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			BasicHandler handler = new BasicHandler();
-			CmdProcess process = new CmdProcess(workingPath, binPath, handler, eclccConsoleWriter);
+			CmdProcess process = new CmdProcess(workingPath, binFolder, handler, eclccConsoleWriter);
 			process.exec(cmdArgs);
 			String pathString = handler.sbOut.toString();
 			String[] pathArray = pathString.replace("\r\n", "\n").replace("\r", "\n").split("\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$

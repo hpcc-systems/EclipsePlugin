@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -24,6 +25,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
+import org.hpccsystems.eclide.builder.PluginCompiler;
 import org.hpccsystems.eclide.builder.Version;
 import org.hpccsystems.eclide.launchers.ECLLaunchCompilerTab;
 import org.hpccsystems.eclide.resources.Messages;
@@ -133,6 +135,22 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	public ECLCompiler getCompiler() {
 		Recent = this;
 		ECLCompiler retVal = new ECLCompiler(rootPath);
+		retVal.setPreferences(preferences);
+		return retVal;
+	}
+
+	public ECLCompiler getCompiler(IFile file) {
+		Recent = this;
+		ECLCompiler retVal = null;
+		String ext = file.getFileExtension().toLowerCase();
+		switch(ext) {
+		case "kel":
+			retVal = new PluginCompiler(rootPath, ext);
+			break;
+		case "ecl":
+		default:
+			retVal = new ECLCompiler(rootPath);
+		}
 		retVal.setPreferences(preferences);
 		return retVal;
 	}
