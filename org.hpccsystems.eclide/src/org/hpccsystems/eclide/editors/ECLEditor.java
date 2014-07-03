@@ -51,7 +51,7 @@ public class ECLEditor extends TextEditor {
     /** The ID of the editor ruler context menu */
     public static final String RULER_CONTEXT = EDITOR_CONTEXT + ".ruler";
 	
-	private IFile sourceFile;
+	IFile sourceFile;
 
 	private ECLEditorToolbar toolbar;
 	private ECLColorManager colorManager;
@@ -61,7 +61,7 @@ public class ECLEditor extends TextEditor {
 		super();
 		readOnly = false;
 		colorManager = new ECLColorManager();
-		setSourceViewerConfiguration(new ECLConfiguration(colorManager));
+		setSourceViewerConfiguration(new ECLConfiguration(getPreferenceStore(), colorManager));
 		setDocumentProvider(new ECLDocumentProvider());
 		setKeyBindingScopes( new String[] { "org.hpccsystems.eclide.eclideScope" } );
 	}
@@ -85,7 +85,7 @@ public class ECLEditor extends TextEditor {
 		formLayout.spacing = 5;
 		outer.setLayout(formLayout);
 
-		toolbar = new ECLEditorToolbar(sourceFile, outer, SWT.NONE);
+		toolbar = new ECLEditorToolbar(this, outer, SWT.NONE);
 
 		Composite innerBottom = new Composite(outer, SWT.NONE);
 		fillLayout = new FillLayout();

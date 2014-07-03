@@ -21,10 +21,10 @@ import org.hpccsystems.eclide.resources.Messages;
 public class EclCCErrorParser {
 	public int errorCount = 0;
 	public int warningCount = 0;
-	public ArrayList<EclCCError> items;
+	public ArrayList<CError> items;
 
 	public EclCCErrorParser(BufferedReader reader, MessageConsoleStream eclccConsoleWriter) {
-		items = new ArrayList<EclCCError>();
+		items = new ArrayList<CError>();
 		String errorLine = null;
 		try {
 			while ((errorLine = reader.readLine()) != null) {
@@ -33,7 +33,10 @@ public class EclCCErrorParser {
 					eclccConsoleWriter.println(errorLine);
 				}
 
-				EclCCError error = new EclCCError(errorLine);
+				CError error = new EclCCError(errorLine);
+				if (!error.valid) {
+					error = new PluginError(errorLine);
+				}
 				switch (error.severity) {
 				case IMarker.SEVERITY_ERROR:
 					items.add(error);

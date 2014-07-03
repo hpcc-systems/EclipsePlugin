@@ -8,8 +8,10 @@ public class Messages extends NLS {
 	//Properties from org.hpccsystems.eclide.builder package
 	public static String CheckingSyntax;
 	public static String Error_Eclcc_Not_Found;
+	public static String Error_Plugin_Not_Found;
 	public static String Eclcc_Console_Output;
 	public static String Error_Compiler_Config;
+	public static String Error_Plugin_Config;
 
 	// Properties from org.hpccsystems.eclide.editors package
 	public static String AnnotationHover;

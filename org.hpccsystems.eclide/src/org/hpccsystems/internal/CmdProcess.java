@@ -43,7 +43,7 @@ public class CmdProcess {
 		this.additionalPath = additionalPath;
 		this.handler = handler;
 		this.consoleOut = consoleOut;
-		QUOTE = OS.getOSQuote();
+		QUOTE = OS.getQuote();
 	}
 
 	public void exec(String command, String commonArgs, String baseArgs) {

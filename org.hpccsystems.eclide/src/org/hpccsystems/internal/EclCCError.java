@@ -11,17 +11,9 @@
 package org.hpccsystems.internal;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-public class EclCCError {
-	public int severity;
-	public String code;
-	public String message;
-	public IPath errorPath;
-	public int lineNumber;
-	public int colNumber;
-
+public class EclCCError extends CError {
 	EclCCError(String errorLine) {
 		severity = IMarker.SEVERITY_INFO;
 		errorPath = null;
@@ -50,15 +42,21 @@ public class EclCCError {
 			} else {
 				errorPath = new Path(filePathAndLoc);
 			}
-			String code = parts[1];
-			if (code.startsWith("error")) {
-				severity = IMarker.SEVERITY_ERROR;
-			} else if (code.startsWith("warning")) {
-				severity = IMarker.SEVERITY_WARNING;
-			} else {
-				severity = IMarker.SEVERITY_INFO;
+			String[] codeParts = parts[1].split(" ");
+			if (codeParts.length >= 1) {
+				if (codeParts[0].equalsIgnoreCase("error")) {
+					severity = IMarker.SEVERITY_ERROR;
+				} else if (codeParts[0].equalsIgnoreCase("warning")) {
+					severity = IMarker.SEVERITY_WARNING;
+				} else {
+					severity = IMarker.SEVERITY_INFO;
+				}
+			}
+			if (codeParts.length >= 2) {
+				code = codeParts[1];
 			}
 			message = parts[2];
+			valid = true;
 		}
 	}
 }

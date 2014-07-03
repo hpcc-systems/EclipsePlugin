@@ -614,6 +614,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			for (int i = workunitFolder.getItemCount(); i > 0 ; --i) {
 				CTabItem tabItem2 = workunitFolder.getItem(i - 1);
 				if (tabItem2 instanceof WorkunitTabItem && !tabItem2.equals(selectedItem)) {
+					children.remove(((WorkunitTabItem)tabItem2).getWorkunitView());
 					tabItem2.dispose();
 				}
 			}
@@ -623,6 +624,7 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			for (int i = workunitFolder.getItemCount(); i > 0 ; --i) {
 				CTabItem tabItem2 = workunitFolder.getItem(i - 1);
 				if (tabItem2 instanceof WorkunitTabItem) {
+					children.remove(((WorkunitTabItem)tabItem2).getWorkunitView());
 					tabItem2.dispose();
 				}
 			}

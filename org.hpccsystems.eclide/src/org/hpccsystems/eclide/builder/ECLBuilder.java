@@ -101,7 +101,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 	}
 
 	void checkItem(IResource resource, IProgressMonitor monitor) {
-		if (resource instanceof IFile && resource.getName().endsWith(".ecl")) { //$NON-NLS-1$
+		if (resource instanceof IFile && (resource.getName().endsWith(".ecl") || resource.getName().endsWith(".kel"))) { //$NON-NLS-1$
 			IFile file = (IFile) resource;
 			if (checkedFiles.contains(file)) {
 				return;
@@ -111,7 +111,7 @@ public class ECLBuilder extends IncrementalProjectBuilder {
 			monitor.subTask(file.getName());
 			ClientTools ct = ClientTools.get();
 			IProject project = getProject();
-			ECLCompiler compiler = ct.getCompiler();
+			ECLCompiler compiler = ct.getCompiler(file);
 			compiler.setProject(project);
 
 			ECLGlobalMeta.parse(compiler.getMeta(file));
