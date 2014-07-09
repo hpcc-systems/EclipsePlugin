@@ -4,6 +4,7 @@ Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.hpccsystems.eclide;singleton:=true
 Bundle-Version: 5.0.0.101
 Bundle-Activator: org.hpccsystems.eclide.Activator
+Bundle-Localization: src/org/hpccsystems/eclide/resources/messages
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.console,
  org.eclipse.ui.editors,
