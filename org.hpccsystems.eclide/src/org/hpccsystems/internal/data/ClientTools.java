@@ -143,12 +143,9 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		Recent = this;
 		ECLCompiler retVal = null;
 		String ext = file.getFileExtension().toLowerCase();
-		switch(ext) {
-		case "kel":
+		if(ext.compareToIgnoreCase("kel") == 0){
 			retVal = new PluginCompiler(rootPath, ext);
-			break;
-		case "ecl":
-		default:
+		} else {
 			retVal = new ECLCompiler(rootPath);
 		}
 		retVal.setPreferences(preferences);
