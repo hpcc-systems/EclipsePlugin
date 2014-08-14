@@ -61,9 +61,7 @@ public class ECLDocumentProvider extends FileDocumentProvider {
 		super.doSaveDocument(monitor, element, document, overwrite);
 		if (element instanceof IFileEditorInput) {
 			IFileEditorInput input= (IFileEditorInput) element;
-			String encoding= null;
 
-			FileInfo info= (FileInfo) getElementInfo(element);
 			IFile file= input.getFile();
 
 			ClientTools ct = ClientTools.get();

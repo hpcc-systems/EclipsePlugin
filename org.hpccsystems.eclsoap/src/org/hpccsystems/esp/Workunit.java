@@ -8,20 +8,18 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.eclide.resources.Messages;
+import org.hpccsystems.eclsoap.Activator;
+import org.hpccsystems.eclsoap.resources.Messages;
 import org.hpccsystems.ws.wsworkunits.ApplicationValue;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLGraph;
@@ -362,7 +360,7 @@ public class Workunit extends DataSingleton {
 	}
 
 	@Override
-	void fastRefresh() {
+	protected void fastRefresh() {
 		State previousState = getStateID();
 		WsWorkunitsServiceSoap service = platform.getWsWorkunitsService();
 		if (service != null) {
@@ -388,7 +386,7 @@ public class Workunit extends DataSingleton {
 	}
 
 	@Override
-	void fullRefresh() {
+	protected void fullRefresh() {
 		fullRefresh(true, true, true, true);
 	}
 
@@ -431,7 +429,7 @@ public class Workunit extends DataSingleton {
 	}
 
 	//  Updates  ---
-	boolean update(ECLWorkunit wu) {		
+	public boolean update(ECLWorkunit wu) {		
 		boolean retVal = false;
 		if (wu != null && info.getWuid().equals(wu.getWuid()) && !info.equals(wu)) {
 			if (updateState(wu)) {

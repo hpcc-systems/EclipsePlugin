@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.esp.Platform;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
 public class PlatformView extends PlatformBaseView {

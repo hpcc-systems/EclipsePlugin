@@ -8,7 +8,7 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -50,17 +50,17 @@ public class Cluster extends DataSingleton  {
 	}
 
 	@Override
-	boolean isComplete() {
+	protected boolean isComplete() {
 		return true;
 	}
 
 	@Override
-	void fastRefresh() {
+	protected void fastRefresh() {
 		fullRefresh();
 	}
 
 	@Override
-	void fullRefresh() {
+	protected void fullRefresh() {
 		//  Probably not needed...
 		WsTopologyServiceSoap service = platform.getWsTopologyService();
 		if (service != null) {
@@ -79,7 +79,7 @@ public class Cluster extends DataSingleton  {
 		}
 	}
 
-	void Update(TpTargetCluster tc) {
+	public void Update(TpTargetCluster tc) {
 		if (info.getName().equals(tc.getName())) {
 			info = tc;
 			setChanged();

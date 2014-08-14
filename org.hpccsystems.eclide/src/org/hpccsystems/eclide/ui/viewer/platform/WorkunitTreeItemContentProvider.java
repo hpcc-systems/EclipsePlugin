@@ -14,8 +14,8 @@ import java.util.Observable;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.esp.Platform;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;

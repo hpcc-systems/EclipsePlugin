@@ -14,22 +14,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Observable;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.hpccsystems.eclide.resources.Messages;
-import org.hpccsystems.internal.data.CollectionDelta;
+import org.hpccsystems.esp.CollectionDelta;
+import org.hpccsystems.esp.DataSingletonCollection;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.DataSingleton;
-import org.hpccsystems.internal.data.DataSingletonCollection;
-import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
-import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 class WorkunitsTreeItemContentProvider2 extends TreeItemContentProvider {
 	Data data;

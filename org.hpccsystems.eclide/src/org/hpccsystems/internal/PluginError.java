@@ -21,7 +21,6 @@ public class PluginError extends CError {
 		colNumber = 0;
 		String[] parts = errorLine.split(":(?!\\\\)");
 		if (parts.length >= 3) {
-			String filePath = parts[0];
 			errorPath = new Path(parts[0]);
 			String[] posParts = parts[1].split("[\\(,\\)]");
 			if (posParts.length >= 2) {

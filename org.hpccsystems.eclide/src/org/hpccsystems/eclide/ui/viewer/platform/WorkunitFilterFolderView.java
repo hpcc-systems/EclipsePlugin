@@ -11,7 +11,6 @@
 package org.hpccsystems.eclide.ui.viewer.platform;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,13 +21,13 @@ import java.util.Observer;
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.resources.Messages;
-import org.hpccsystems.internal.data.Cluster;
-import org.hpccsystems.internal.data.CollectionDelta;
+import org.hpccsystems.esp.Cluster;
+import org.hpccsystems.esp.CollectionDelta;
+import org.hpccsystems.esp.DataSingleton;
+import org.hpccsystems.esp.DataSingletonCollection;
+import org.hpccsystems.esp.Platform;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.DataSingleton;
-import org.hpccsystems.internal.data.DataSingletonCollection;
-import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader.CalcState;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
@@ -80,8 +79,6 @@ public class WorkunitFilterFolderView extends ItemView implements Observer {
 	}
 	
 	public void setDateRange(GregorianCalendar from, GregorianCalendar to) {
-		String sFrom = Integer.toString(from.get(Calendar.YEAR)) + "/" + Integer.toString(from.get(Calendar.MONTH)) + "/" + Integer.toString(from.get(Calendar.DAY_OF_MONTH));  //$NON-NLS-1$ //$NON-NLS-2$
-		String sTo = Integer.toString(to.get(Calendar.YEAR)) + "/" + Integer.toString(to.get(Calendar.MONTH)) + "/" + Integer.toString(to.get(Calendar.DAY_OF_MONTH));  //$NON-NLS-1$ //$NON-NLS-2$
 		this.from = from;
 		this.to = to;
 	}

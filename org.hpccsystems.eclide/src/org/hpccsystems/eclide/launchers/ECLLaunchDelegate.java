@@ -23,7 +23,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.LauncherPlatform;
 
 public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements ILaunchConfigurationDelegate {
 	@Override
@@ -35,7 +35,7 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		saveBeforeLaunch(configuration, mode, monitor);
 
-		final String cluster = configuration.getAttribute(Platform.P_CLUSTER, ""); 
+		final String cluster = configuration.getAttribute(LauncherPlatform.P_CLUSTER, ""); 
 
 		IFile file = null;
 		IStructuredSelection ss = SelectedResourceManager.getDefault().getCurrentSelection();
@@ -59,7 +59,7 @@ public class ECLLaunchDelegate extends LaunchConfigurationDelegate {//implements
 		}
 
 		if (file != null) {
-			Platform platform = Data.get().GetPlatform(configuration);
+			LauncherPlatform platform = Data.get().GetPlatform(configuration);
 			platform.submit(configuration, file, cluster);
 		}
 	}

@@ -8,7 +8,7 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -89,17 +89,17 @@ public class LogicalFile extends DataSingleton {
 	}
 
 	@Override
-	boolean isComplete() {
+	protected boolean isComplete() {
 		return true;
 	}
 
 	@Override
-	void fastRefresh() {
+	protected void fastRefresh() {
 		fullRefresh();
 	}
 
 	@Override
-	void fullRefresh() {
+	protected void fullRefresh() {
 		WsDfuServiceSoap service = platform.getWsDfuService();
 		if (service != null) {
 			DFUInfoRequest request = new DFUInfoRequest();
@@ -119,7 +119,7 @@ public class LogicalFile extends DataSingleton {
 	}
 
 	//  Updates  ---
-	void Update(DFULogicalFile lf) {
+	public void Update(DFULogicalFile lf) {
 		if (info.getName().equals(lf.getName())) {
 			info = lf;
 		}
@@ -131,7 +131,7 @@ public class LogicalFile extends DataSingleton {
 		}
 	}
 
-	void Update(ECLSourceFile sf) {
+	public void Update(ECLSourceFile sf) {
 		if (info3.getName().equals(sf.getName())) {
 			info3 = sf;
 		}

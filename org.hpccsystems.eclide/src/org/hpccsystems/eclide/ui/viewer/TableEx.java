@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.hpccsystems.internal.data.Result;
+import org.hpccsystems.esp.Result;
 
 public class TableEx extends Composite {
 

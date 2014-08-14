@@ -7,8 +7,8 @@ import java.util.Observer;
 
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.data.Graph;
-import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.esp.Graph;
+import org.hpccsystems.esp.Platform;
 
 public class GraphView extends PlatformBaseView implements Observer {
 	Graph graph;
@@ -37,6 +37,8 @@ public class GraphView extends PlatformBaseView implements Observer {
 			return Activator.getImage("icons/graph_completed.png");
 		case FAILED:
 			return Activator.getImage("icons/graph_failed.png");
+		default:
+			break;
 		}
 		return Activator.getImage("icons/graph.png"); 
 	}

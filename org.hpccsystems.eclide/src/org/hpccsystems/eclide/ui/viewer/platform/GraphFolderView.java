@@ -7,8 +7,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.hpccsystems.eclide.resources.Messages;
-import org.hpccsystems.internal.data.Graph;
-import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.esp.Graph;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
 class GraphFolderView extends FolderItemView implements Observer  {
@@ -48,6 +48,8 @@ class GraphFolderView extends FolderItemView implements Observer  {
 			switch ((Workunit.Notification)arg1){
 			case GRAPHS:
 				refresh();
+			default:
+				break;
 			}
 		}
 	}

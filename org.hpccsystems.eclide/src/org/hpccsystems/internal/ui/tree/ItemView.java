@@ -24,7 +24,7 @@ import org.hpccsystems.eclide.ui.viewer.platform.FolderItemView;
 import org.hpccsystems.eclide.ui.viewer.platform.PlatformView;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitView;
-import org.hpccsystems.internal.data.Result;
+import org.hpccsystems.esp.Result;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader.CalcState;
 
 public class ItemView {

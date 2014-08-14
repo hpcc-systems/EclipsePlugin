@@ -8,7 +8,7 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class DataSingletonCollection extends Observable {
 		notifcationDepth = 0;
 	}
 
-	protected synchronized DataSingleton get(DataSingleton item) {
+	public synchronized DataSingleton get(DataSingleton item) {
 		if (items.containsKey(item.hashCode())) {
 			return items.get(item.hashCode());
 		} else {
@@ -41,7 +41,7 @@ public class DataSingletonCollection extends Observable {
 		return item;
 	}
 
-	protected synchronized DataSingleton getNoCreate(DataSingleton item) {
+	public synchronized DataSingleton getNoCreate(DataSingleton item) {
 		if (items.containsKey(item.hashCode())) {
 			return items.get(item.hashCode());
 		}

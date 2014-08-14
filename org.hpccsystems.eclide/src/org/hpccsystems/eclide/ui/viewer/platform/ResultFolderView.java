@@ -7,8 +7,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.hpccsystems.eclide.resources.Messages;
-import org.hpccsystems.internal.data.Result;
-import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.esp.Result;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
 public class ResultFolderView extends FolderItemView implements Observer {
@@ -48,6 +48,8 @@ public class ResultFolderView extends FolderItemView implements Observer {
 			switch ((Workunit.Notification)arg1){
 			case RESULTS:
 				refresh();
+			default:
+				break;
 			}
 		}
 	}

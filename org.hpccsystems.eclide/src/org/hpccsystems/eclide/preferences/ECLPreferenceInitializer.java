@@ -10,15 +10,9 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.preferences;
 
-import java.io.File;
-import java.util.List;
-
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.OS;
 import org.hpccsystems.internal.data.ClientTools;
 
 /**

@@ -21,9 +21,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.data.FileSprayWorkunit;
-import org.hpccsystems.internal.data.LogicalFile;
-import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.esp.FileSprayWorkunit;
+import org.hpccsystems.esp.LogicalFile;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
 public class FileSprayWorkunitView extends PlatformBaseView implements Observer {
@@ -88,7 +88,9 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 		case COMPILED:
 			return Activator.getImage("icons/workunit_completed.png"); 
 		case UNKNOWN_ONSERVER:
-			return Activator.getImage("icons/workunit_deleted.png"); 
+			return Activator.getImage("icons/workunit_deleted.png");
+		default:
+			break; 
 		}
 		return Activator.getImage("icons/workunit.png"); 
 	}
@@ -98,6 +100,8 @@ public class FileSprayWorkunitView extends PlatformBaseView implements Observer 
 		switch (workunit.getStateID()) {
 		case UNKNOWN_ONSERVER:
 			return Display.getDefault().getSystemColor(SWT.COLOR_RED);
+		default:
+			break;
 		}
 		return null;
 	}

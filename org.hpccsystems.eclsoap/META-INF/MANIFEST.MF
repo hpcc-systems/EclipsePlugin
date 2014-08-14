@@ -10,6 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.hpccsystems.eclsoap;uses:="org.osgi.framework",
+ org.hpccsystems.esp,
  org.hpccsystems.ws.WsAttributes;
   uses:="org.apache.axis.client,
    org.apache.axis,

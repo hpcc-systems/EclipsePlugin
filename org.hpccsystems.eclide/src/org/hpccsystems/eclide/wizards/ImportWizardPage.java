@@ -160,6 +160,7 @@ public class ImportWizardPage extends WizardResourceImportPage {
 																	BufferedWriter out = new BufferedWriter(fstream);
 																	out.write(attribute2.getText());
 																	out.flush();
+																	out.close();
 																} catch (IOException e) {
 																	// TODO Auto-generated catch block
 																	e.printStackTrace();

@@ -21,16 +21,17 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationListener;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.hpccsystems.esp.Workunit;
 
 public class Data extends Observable {
 	private static Data singletonFactory;
 
-	private Collection<Platform> platforms;	
+	private Collection<LauncherPlatform> platforms;	
 	private Collection<ClientTools> clientTools;	
 
 	//  Singleton Pattern
 	private Data() {
-		platforms = new ArrayList<Platform>();
+		platforms = new ArrayList<LauncherPlatform>();
 		clientTools = new ArrayList<ClientTools>();
 
 		//  Load platforms  ---
@@ -38,7 +39,7 @@ public class Data extends Observable {
 		try {
 			configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
 			for(int i = 0; i < configs.length; ++i) {
-				Platform p = GetPlatform(configs[i]);
+				LauncherPlatform p = GetPlatform(configs[i]);
 				if (p != null && !platforms.contains(p)) {
 					platforms.add(p);
 					ClientTools ct = ClientTools.get(p, configs[i]);
@@ -60,17 +61,17 @@ public class Data extends Observable {
 					configs = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurations();
 						//  Find new configs  ---
 						for(int i = 0; i < configs.length; ++i) {
-							Iterator<Platform> itr = platforms.iterator(); 
+							Iterator<LauncherPlatform> itr = platforms.iterator(); 
 							boolean found = false;
 							while (itr.hasNext()) {
-								Platform platform = itr.next();
+								LauncherPlatform platform = itr.next();
 								if (platform.matches(configs[i])) {
 									found = true;
 									break;
 								}
 							}
 							if (!found) {
-								Platform p = GetPlatform(configs[i]);
+								LauncherPlatform p = GetPlatform(configs[i]);
 								if (p != null && !platforms.contains(p)) {
 									platforms.add(p);
 									retVal = true;
@@ -79,10 +80,10 @@ public class Data extends Observable {
 						}
 						
 						//  Find obsolete platforms  ---
-						Iterator<Platform> itr = platforms.iterator(); 
+						Iterator<LauncherPlatform> itr = platforms.iterator(); 
 						while (itr.hasNext()) {
 							boolean found = false;
-							Platform platform = itr.next();
+							LauncherPlatform platform = itr.next();
 							for(int i = 0; i < configs.length; ++i) {
 								if (platform.matches(configs[i])) {
 									found = true;
@@ -90,7 +91,7 @@ public class Data extends Observable {
 								}
 							}
 							if (!found) {
-								Platform.remove(platform);
+								LauncherPlatform.remove(platform);
 								platforms.remove(platform);
 								retVal = true;
 							}
@@ -118,7 +119,7 @@ public class Data extends Observable {
 					return;
 
 				if (mergeChanges()) {
-					Platform p = GetPlatformNoCreate(configuration);
+					LauncherPlatform p = GetPlatformNoCreate(configuration);
 					if (p != null) {
 						p.clearTempDisabled();
 					}
@@ -155,23 +156,23 @@ public class Data extends Observable {
 	}
 
 	//  Platform  ---
-	public Platform GetPlatform(ILaunchConfiguration launchConfiguration, boolean noCreate) {
-		Platform retVal = null;
+	public LauncherPlatform GetPlatform(ILaunchConfiguration launchConfiguration, boolean noCreate) {
+		LauncherPlatform retVal = null;
 		boolean ssl = false;
 		String ip = "";
 		int port = 0;
 		try {
-			ssl = launchConfiguration.getAttribute(Platform.P_SSL, false);
+			ssl = launchConfiguration.getAttribute(LauncherPlatform.P_SSL, false);
 		} catch (CoreException e) {
 		} 
 		
 		try {
-			ip = launchConfiguration.getAttribute(Platform.P_IP, "");
+			ip = launchConfiguration.getAttribute(LauncherPlatform.P_IP, "");
 		} catch (CoreException e) {
 		} 
 
 		try {
-			port = launchConfiguration.getAttribute(Platform.P_PORT, 8010);
+			port = launchConfiguration.getAttribute(LauncherPlatform.P_PORT, 8010);
 		} catch (CoreException e) {
 		}
 
@@ -181,44 +182,44 @@ public class Data extends Observable {
 
 		if (!ip.isEmpty() && port != 0) {
 			if (noCreate) {
-				retVal = Platform.getNoCreate(ssl, ip, port);
+				retVal = LauncherPlatform.getNoCreate(ssl, ip, port);
 			} else {
-				retVal = Platform.get(ssl, ip, port);
+				retVal = LauncherPlatform.get(ssl, ip, port);
 			}
 			retVal.update(launchConfiguration);	
 		}
 		return retVal;
 	}
 
-	public Platform GetPlatform(ILaunchConfiguration launchConfiguration) {
+	public LauncherPlatform GetPlatform(ILaunchConfiguration launchConfiguration) {
 		return GetPlatform(launchConfiguration, false);
 	}
 
-	public Platform GetPlatformNoCreate(ILaunchConfiguration launchConfiguration) {
+	public LauncherPlatform GetPlatformNoCreate(ILaunchConfiguration launchConfiguration) {
 		return GetPlatform(launchConfiguration, true);
 	}
 
-	public Platform GetPlatformNoCreate(boolean ssl, String ip, int port) {
-		return Platform.getNoCreate(ssl, ip, port);
+	public LauncherPlatform GetPlatformNoCreate(boolean ssl, String ip, int port) {
+		return LauncherPlatform.getNoCreate(ssl, ip, port);
 	}
 
-	public final Platform[] getPlatforms() {
-		return platforms.toArray(new Platform[0]);
+	public final LauncherPlatform[] getPlatforms() {
+		return platforms.toArray(new LauncherPlatform[0]);
 	}
 
-	public Collection<Workunit> getWorkunits(Platform platform, boolean userOnly, String cluster, String startDate, String endDate) {
+	public Collection<Workunit> getWorkunits(LauncherPlatform platform, boolean userOnly, String cluster, String startDate, String endDate) {
 		return getWorkunits(platform, userOnly, cluster, startDate, endDate, "", "", "");
 	}
 
-	public Collection<Workunit> getWorkunits(Platform platform, boolean userOnly, String cluster, String startDate, String endDate, String jobname) {
+	public Collection<Workunit> getWorkunits(LauncherPlatform platform, boolean userOnly, String cluster, String startDate, String endDate, String jobname) {
 		return getWorkunits(platform, userOnly, cluster, startDate, endDate, jobname, "", "");
 	}
 
-	public Collection<Workunit> getWorkunits(Platform platform, boolean userOnly, String cluster, String startDate, String endDate, String jobname, String appKey, String appValue) {
+	public Collection<Workunit> getWorkunits(LauncherPlatform platform, boolean userOnly, String cluster, String startDate, String endDate, String jobname, String appKey, String appValue) {
 		Collection<Workunit> workunits = new HashSet<Workunit>();
 		try {
 			Workunit.All.pushTransaction("Data.getWorkunits");
-			for (Platform p : getPlatforms()) {
+			for (LauncherPlatform p : getPlatforms()) {
 				assert p != null;
 				if (platform == null || platform.equals(p)) {
 					workunits.addAll(p.getWorkunits(userOnly, cluster, startDate, endDate, jobname, appKey, appValue));
