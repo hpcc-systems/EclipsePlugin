@@ -43,7 +43,7 @@ import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.ECLLaunchConfigurationTab;
 import org.hpccsystems.internal.data.ClientTools;
-import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.LauncherPlatform;
 
 @SuppressWarnings("restriction")
 public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
@@ -64,10 +64,10 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		public void widgetSelected(SelectionEvent e) {
 			Object source= e.getSource();
 			if (source == sslButton) {
-				if (sslButton.getSelection() && fPortText.getText().matches(Platform.P_PORT_DEFAULT_STR)) {
-					fPortText.setText(Platform.P_SSLPORT_DEFAULT_STR);
-				} else if (!sslButton.getSelection() && fPortText.getText().matches(Platform.P_SSLPORT_DEFAULT_STR)) {
-					fPortText.setText(Platform.P_PORT_DEFAULT_STR);
+				if (sslButton.getSelection() && fPortText.getText().matches(LauncherPlatform.P_PORT_DEFAULT_STR)) {
+					fPortText.setText(LauncherPlatform.P_SSLPORT_DEFAULT_STR);
+				} else if (!sslButton.getSelection() && fPortText.getText().matches(LauncherPlatform.P_SSLPORT_DEFAULT_STR)) {
+					fPortText.setText(LauncherPlatform.P_PORT_DEFAULT_STR);
 				}
 				refreshAddress();
 			}
@@ -233,23 +233,23 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			disableButton.setSelection(configuration.getAttribute(Platform.P_DISABLED, false));
+			disableButton.setSelection(configuration.getAttribute(LauncherPlatform.P_DISABLED, false));
 
-			sslButton.setSelection(configuration.getAttribute(Platform.P_SSL, Platform.P_SSL_DEFAULT));
-			fIPText.setText(configuration.getAttribute(Platform.P_IP, Platform.P_IP_DEFAULT));
-			fPortText.setText(Integer.toString(configuration.getAttribute(Platform.P_PORT, Platform.P_PORT_DEFAULT)));
-			fClusterText.setText(configuration.getAttribute(Platform.P_CLUSTER, "hthor")); //$NON-NLS-1$
-			compileOnlyButton.setSelection(configuration.getAttribute(Platform.P_COMPILEONLY, false));
+			sslButton.setSelection(configuration.getAttribute(LauncherPlatform.P_SSL, LauncherPlatform.P_SSL_DEFAULT));
+			fIPText.setText(configuration.getAttribute(LauncherPlatform.P_IP, LauncherPlatform.P_IP_DEFAULT));
+			fPortText.setText(Integer.toString(configuration.getAttribute(LauncherPlatform.P_PORT, LauncherPlatform.P_PORT_DEFAULT)));
+			fClusterText.setText(configuration.getAttribute(LauncherPlatform.P_CLUSTER, "hthor")); //$NON-NLS-1$
+			compileOnlyButton.setSelection(configuration.getAttribute(LauncherPlatform.P_COMPILEONLY, false));
 
-			fUserText.setText(configuration.getAttribute(Platform.P_USER, "")); //$NON-NLS-1$
-			fPasswordText.setText(configuration.getAttribute(Platform.P_PASSWORD, "")); //$NON-NLS-1$
+			fUserText.setText(configuration.getAttribute(LauncherPlatform.P_USER, "")); //$NON-NLS-1$
+			fPasswordText.setText(configuration.getAttribute(LauncherPlatform.P_PASSWORD, "")); //$NON-NLS-1$
 
-			int port = Platform.P_PORT_DEFAULT;
+			int port = LauncherPlatform.P_PORT_DEFAULT;
 			try {
 				port = new Integer(fPortText.getText());
 			} catch (NumberFormatException e) {
 			}
-			Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
+			LauncherPlatform platform = LauncherPlatform.get(sslButton.getSelection(), fIPText.getText(), port);
 			if (platform.isDisabled()) {
 				fServerVersionText.setText(Messages.UnableToConnect);
 				disableButton.setText(DisableButtonTempDiabledText);
@@ -268,20 +268,20 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(Platform.P_DISABLED, disableButton.getSelection());
+		configuration.setAttribute(LauncherPlatform.P_DISABLED, disableButton.getSelection());
 
-		configuration.setAttribute(Platform.P_SSL, sslButton.getSelection());
-		configuration.setAttribute(Platform.P_IP, fIPText.getText());
+		configuration.setAttribute(LauncherPlatform.P_SSL, sslButton.getSelection());
+		configuration.setAttribute(LauncherPlatform.P_IP, fIPText.getText());
 		try {
-			configuration.setAttribute(Platform.P_PORT, Integer.parseInt(fPortText.getText()));
+			configuration.setAttribute(LauncherPlatform.P_PORT, Integer.parseInt(fPortText.getText()));
 		} catch (NumberFormatException e) {
-			configuration.setAttribute(Platform.P_PORT, Platform.P_PORT_DEFAULT);
+			configuration.setAttribute(LauncherPlatform.P_PORT, LauncherPlatform.P_PORT_DEFAULT);
 		}
-		configuration.setAttribute(Platform.P_CLUSTER, fClusterText.getText());
-		configuration.setAttribute(Platform.P_COMPILEONLY, compileOnlyButton.getSelection());
+		configuration.setAttribute(LauncherPlatform.P_CLUSTER, fClusterText.getText());
+		configuration.setAttribute(LauncherPlatform.P_COMPILEONLY, compileOnlyButton.getSelection());
 
-		configuration.setAttribute(Platform.P_USER, fUserText.getText());
-		configuration.setAttribute(Platform.P_PASSWORD, fPasswordText.getText());
+		configuration.setAttribute(LauncherPlatform.P_USER, fUserText.getText());
+		configuration.setAttribute(LauncherPlatform.P_PASSWORD, fPasswordText.getText());
 		
 		try {
 			if (!fCompilerPath.isEmpty() && configuration.getAttribute(ClientTools.P_TOOLSPATH, "").isEmpty()) { //$NON-NLS-1$
@@ -314,13 +314,13 @@ public class ECLLaunchServerTab extends ECLLaunchConfigurationTab {
 		fServerVersionText.setText(""); //$NON-NLS-1$
 		fCompilerVersionText.setText(""); //$NON-NLS-1$
 		
-		int port = Platform.P_PORT_DEFAULT;
+		int port = LauncherPlatform.P_PORT_DEFAULT;
 		try {
 			port = new Integer(fPortText.getText());
 		} catch (NumberFormatException e) {
 		}
 		
-		Platform platform = Platform.get(sslButton.getSelection(), fIPText.getText(), port);
+		LauncherPlatform platform = LauncherPlatform.get(sslButton.getSelection(), fIPText.getText(), port);
 		platform.clearTempDisabled();
 		try {
 			String build = platform.getBuild(fUserText.getText(), fPasswordText.getText());

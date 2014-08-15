@@ -21,10 +21,10 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.resources.Messages;
+import org.hpccsystems.esp.Cluster;
 import org.hpccsystems.internal.Eclipse;
-import org.hpccsystems.internal.data.Cluster;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.internal.data.LauncherPlatform;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -172,7 +172,7 @@ public class ECLEditorToolbar extends Composite {
 		ILaunchConfiguration configuration = getSelectedConfiguration();
 		if (configuration != null) {
 			Eclipse.doSaveDirty(editor.getProject());
-			Platform platform = Data.get().GetPlatform(configuration);
+			LauncherPlatform platform = Data.get().GetPlatform(configuration);
 			platform.submit(configuration, editor.sourceFile, comboTarget.getText(), compileOnly);
 		}
 	}
@@ -219,7 +219,7 @@ public class ECLEditorToolbar extends Composite {
 		comboTarget.removeAll();
 		ILaunchConfiguration configuration = getSelectedConfiguration();
 		if (configuration != null) {
-			Platform platform = Data.get().GetPlatform(configuration);
+			LauncherPlatform platform = Data.get().GetPlatform(configuration);
 			if (platform != null) {
 				Cluster[] clusters = platform.getClusters();
 				int currentTargetSel = -1;
@@ -248,7 +248,7 @@ public class ECLEditorToolbar extends Composite {
 			try {
 				ILaunchConfiguration configuration = getSelectedConfiguration();
 				if (configuration != null) {
-					defaultTarget = configuration.getAttribute(Platform.P_CLUSTER, ""); //$NON-NLS-1$
+					defaultTarget = configuration.getAttribute(LauncherPlatform.P_CLUSTER, ""); //$NON-NLS-1$
 				}
 			} catch (CoreException e) {
 			}

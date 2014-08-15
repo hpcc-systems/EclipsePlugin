@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.editors;
 
-import java.util.Arrays;
-
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextHover;

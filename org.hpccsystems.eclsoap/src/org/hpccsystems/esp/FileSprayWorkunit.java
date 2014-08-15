@@ -8,7 +8,7 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.rmi.RemoteException;
 
@@ -140,12 +140,12 @@ public class FileSprayWorkunit extends DataSingleton {
 	}
 
 	@Override
-	void fastRefresh() {
+	protected void fastRefresh() {
 		fullRefresh();
 	}
 
 	@Override
-	void fullRefresh() {
+	protected void fullRefresh() {
 		FileSprayServiceSoap service = platform.getFileSprayService();
 		if (service != null) {
 			GetDFUWorkunit request = new GetDFUWorkunit();
@@ -175,7 +175,7 @@ public class FileSprayWorkunit extends DataSingleton {
 	}
 
 	//  Updates  ---
-	boolean update(DFUWorkunit wu) {
+	public boolean update(DFUWorkunit wu) {
 		boolean retVal = false;
 		if (wu != null && info.getID().equals(wu.getID()) && !info.equals(wu)) {
 			if (updateState(wu)) {

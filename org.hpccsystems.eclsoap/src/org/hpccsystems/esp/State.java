@@ -8,19 +8,30 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
-public class StateHelper {
-	static boolean isCompleted(State state) {
-		switch (state) {
-		case UNKNOWN_ONSERVER:
-		case COMPLETED:
-		case FAILED:
-		case ABORTED:
-		case ARCHIVED:
-		case COMPILED:
-			return true;		
-		}
-		return false;
-	}
+public enum State {
+	UNKNOWN,
+	UNKNOWN_ONSERVER,
+
+	// Not started  ---
+	SCHEDULED,
+	SUBMITTED,
+
+	// In motion  ---
+	RUNNING,
+	ABORTING,
+	BLOCKED,
+	WAIT,
+	COMPILING,
+
+	// Completed  ---
+	COMPLETED,
+	FAILED,
+	ABORTED,
+	ARCHIVED,
+	COMPILED,
+
+	LAST
 }
+

@@ -31,7 +31,6 @@ public class ECLPartitionScanner extends RuleBasedPartitionScanner {
 		IToken eclComment = new Token(ECL_COMMENT);
 		IToken eclJavaDoc = new Token(ECL_JAVADOC);
 		IToken eclCpp = new Token(ECL_CPP);
-		IToken eclBody = new Token(ECL_BODY);
 
 		ArrayList<IRule> rules= new ArrayList<IRule>();
 

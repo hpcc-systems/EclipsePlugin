@@ -8,7 +8,7 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal;
+package org.hpccsystems.esp;
 
 import java.util.Stack;
 

@@ -8,7 +8,7 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -87,17 +87,17 @@ public class DropZone extends DataSingleton  {
 	}
 
 	@Override
-	boolean isComplete() {
+	protected boolean isComplete() {
 		return true;
 	}
 
 	@Override
-	void fastRefresh() {
+	protected void fastRefresh() {
 		fullRefresh();
 	}
 
 	@Override
-	void fullRefresh() {
+	protected void fullRefresh() {
 		FileSprayServiceSoap service = platform.getFileSprayService();
 		if (service != null) {
 			FileListRequest request = new FileListRequest();
@@ -117,7 +117,7 @@ public class DropZone extends DataSingleton  {
 		}
 	}
 
-	void update(TpDropZone dz) {
+	public void update(TpDropZone dz) {
 		if (info.getName().equals(dz.getName())) {
 			info = dz;
 			setChanged();

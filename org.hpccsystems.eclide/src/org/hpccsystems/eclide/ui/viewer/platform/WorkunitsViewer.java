@@ -12,7 +12,7 @@ package org.hpccsystems.eclide.ui.viewer.platform;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;
 
 public class WorkunitsViewer extends PlatformViewer {

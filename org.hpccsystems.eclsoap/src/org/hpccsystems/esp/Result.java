@@ -8,14 +8,13 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.io.StringReader;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hpccsystems.internal.DatasetParser;
 import org.hpccsystems.ws.wsworkunits.ArrayOfEspException;
 import org.hpccsystems.ws.wsworkunits.ECLResult;
 import org.hpccsystems.ws.wsworkunits.WUResult;
@@ -180,12 +179,12 @@ public class Result extends DataSingleton {
 
 	//  Refresh + Update  ---
 	@Override
-	void fastRefresh() {
+	protected void fastRefresh() {
 		fullRefresh();	
 	}
 
 	@Override
-	void fullRefresh() {
+	protected void fullRefresh() {
 		workunit.getResults();
 	}
 

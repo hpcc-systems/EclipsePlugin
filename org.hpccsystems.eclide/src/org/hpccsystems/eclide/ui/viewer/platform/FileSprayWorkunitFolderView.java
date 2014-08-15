@@ -18,11 +18,11 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.hpccsystems.eclide.resources.Messages;
-import org.hpccsystems.internal.data.CollectionDelta;
-import org.hpccsystems.internal.data.DataSingleton;
-import org.hpccsystems.internal.data.DataSingletonCollection;
-import org.hpccsystems.internal.data.FileSprayWorkunit;
-import org.hpccsystems.internal.data.Platform;
+import org.hpccsystems.esp.CollectionDelta;
+import org.hpccsystems.esp.DataSingleton;
+import org.hpccsystems.esp.DataSingletonCollection;
+import org.hpccsystems.esp.FileSprayWorkunit;
+import org.hpccsystems.esp.Platform;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
 
 public class FileSprayWorkunitFolderView extends FolderItemView implements Observer {

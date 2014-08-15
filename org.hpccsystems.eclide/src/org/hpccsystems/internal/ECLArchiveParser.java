@@ -22,6 +22,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.hpccsystems.esp.StackHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 

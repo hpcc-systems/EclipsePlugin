@@ -10,9 +10,6 @@
  ******************************************************************************/
 package org.hpccsystems.eclide.editors;
 
-import java.text.Annotation;
-import java.util.Iterator;
-
 import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.hpccsystems.eclide.resources.Messages;
@@ -21,11 +18,6 @@ public class ECLAnnotationHover implements IAnnotationHover {
 
 	@Override
 	public String getHoverInfo(ISourceViewer sourceViewer, int lineNumber) {
-		Iterator<Annotation> itr = sourceViewer.getAnnotationModel().getAnnotationIterator();
-		//		while(itr.hasNext()) {
-		//			Annotation annotation = itr.next();
-		//			int i = annotation.hashCode();
-		//		}
 		return Messages.AnnotationHover;
 	}
 

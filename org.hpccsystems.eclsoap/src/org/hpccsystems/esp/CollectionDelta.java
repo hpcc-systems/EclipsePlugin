@@ -8,7 +8,7 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.util.ArrayList;
 import java.util.Arrays;

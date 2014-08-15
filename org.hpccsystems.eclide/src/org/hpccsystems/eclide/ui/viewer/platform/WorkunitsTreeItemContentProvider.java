@@ -16,11 +16,11 @@ import java.util.Observable;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.hpccsystems.internal.data.CollectionDelta;
+import org.hpccsystems.esp.CollectionDelta;
+import org.hpccsystems.esp.DataSingleton;
+import org.hpccsystems.esp.DataSingletonCollection;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.DataSingleton;
-import org.hpccsystems.internal.data.DataSingletonCollection;
-import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.TreeItemContentProvider;

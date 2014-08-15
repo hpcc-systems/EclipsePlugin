@@ -56,19 +56,19 @@ import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.meta.ECLMetaTree.ECLMetaNode;
 import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.eclide.ui.viewer.ECLContentOutlinePage;
-import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions;
-import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions.IPlatformUI;
 import org.hpccsystems.eclide.ui.viewer.platform.TextItemView;
 import org.hpccsystems.eclide.ui.viewer.platform.TreeItemOwner;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions;
+import org.hpccsystems.eclide.ui.viewer.platform.WorkunitActions.IPlatformUI;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitTabItem;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitView;
 import org.hpccsystems.eclide.ui.viewer.platform.WorkunitsViewer;
+import org.hpccsystems.esp.CollectionDelta;
+import org.hpccsystems.esp.DataSingleton;
+import org.hpccsystems.esp.DataSingletonCollection;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.Eclipse;
-import org.hpccsystems.internal.data.CollectionDelta;
 import org.hpccsystems.internal.data.Data;
-import org.hpccsystems.internal.data.DataSingleton;
-import org.hpccsystems.internal.data.DataSingletonCollection;
-import org.hpccsystems.internal.data.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 import org.hpccsystems.internal.ui.tree.LazyChildLoader;
 import org.hpccsystems.internal.ui.tree.WorkunitComparator;
@@ -511,7 +511,6 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 
 			@Override
 			public void run() {
-				int pos = 1;
 				for (Object item : children.get().clone()) {
 					if (item instanceof WorkunitView) {
 						WorkunitView wuView = (WorkunitView)item;
@@ -519,7 +518,6 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 						if (wuTabItem == null) {
 							createWorkunitTabItem(1, wuView);
 						}
-						++pos;
 					}
 				}
 				workunitsLoaded = true;
@@ -597,6 +595,8 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 			return workunitFolder.getItemCount() > 1;
 		case CLOSEALL:
 			return workunitFolder.getItemCount() > 1;
+		default:
+			break;
 		}
 		return false;
 	}
@@ -628,6 +628,8 @@ public class ECLWindow extends MultiPageEditorPart implements IResourceChangeLis
 					tabItem2.dispose();
 				}
 			}
+			break;
+		default:
 			break;
 		}
 	}

@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.hpccsystems.eclide.builder.meta.ECLGlobalMeta;
 import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.internal.data.ClientTools;
-import org.hpccsystems.internal.data.Data;
 
 public class ECLBuilder extends IncrementalProjectBuilder {
 	class ECLDeltaVisitor implements IResourceDeltaVisitor {

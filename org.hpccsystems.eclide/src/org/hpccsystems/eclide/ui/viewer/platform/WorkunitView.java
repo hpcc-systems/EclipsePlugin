@@ -21,7 +21,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.Activator;
-import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
 public class WorkunitView extends PlatformBaseView implements Observer {
@@ -75,7 +75,9 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 		case COMPILED:
 			return Activator.getImage("icons/workunit_completed.png"); 
 		case UNKNOWN_ONSERVER:
-			return Activator.getImage("icons/workunit_deleted.png"); 
+			return Activator.getImage("icons/workunit_deleted.png");
+		default:
+			break; 
 		}
 		return Activator.getImage("icons/workunit.png"); 
 	}
@@ -85,6 +87,8 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 		switch (workunit.getStateID()) {
 		case UNKNOWN_ONSERVER:
 			return Display.getDefault().getSystemColor(SWT.COLOR_RED);
+		default:
+			break;
 		}
 		return null;
 	}
@@ -117,6 +121,8 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 			return true;
 		case PUBLISH:
 			return !workunit.getJobname().isEmpty();
+		default:
+			break;
 		}
 		return false;
 	}
@@ -141,6 +147,8 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 			break;
 		case PUBLISH:
 			workunit.publish();
+			break;
+		default:
 			break;
 		}
 	}
@@ -173,6 +181,8 @@ public class WorkunitView extends PlatformBaseView implements Observer {
 			switch ((Workunit.Notification)arg1){
 			case WORKUNIT:
 				update(null);
+			default:
+				break;
 			}
 		}
 	}

@@ -8,7 +8,7 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,21 +45,21 @@ public class DataQuerySet extends DataSingleton {
 	}
 
 	@Override
-	boolean isComplete() {
+	protected boolean isComplete() {
 		return true;
 	}
 
 	@Override
-	void fastRefresh() {
+	protected void fastRefresh() {
 		fullRefresh();
 	}
 
 	@Override
-	void fullRefresh() {
+	protected void fullRefresh() {
 	}
 
 	//  Updates  ---
-	void Update(QuerySet qs) {
+	public void Update(QuerySet qs) {
 		if (info.getQuerySetName().equals(qs.getQuerySetName())) {
 			info = qs;
 		}

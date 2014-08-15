@@ -20,10 +20,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.hpccsystems.eclide.resources.Messages;
 import org.hpccsystems.eclide.ui.viewer.BrowserEx;
-import org.hpccsystems.eclide.ui.viewer.TableEx;
 import org.hpccsystems.eclide.ui.viewer.TextEx;
-import org.hpccsystems.internal.data.Result;
-import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.esp.Workunit;
 
 public class WorkunitTabItem extends CTabItem implements Observer {
 

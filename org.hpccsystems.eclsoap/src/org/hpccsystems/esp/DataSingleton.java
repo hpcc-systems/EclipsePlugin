@@ -8,7 +8,7 @@
  * Contributors:
  *     HPCC Systems - initial API and implementation
  ******************************************************************************/
-package org.hpccsystems.internal.data;
+package org.hpccsystems.esp;
 
 import java.util.Observable;
 
@@ -17,11 +17,11 @@ public abstract class DataSingleton extends Observable {
 
 	Thread monitorThread;
 
-	DataSingleton() {
+	protected DataSingleton() {
 		monitorThread = null;
 	}
 
-	void monitor() {
+	protected void monitor() {
 		monitor(MONITOR_SLEEP);
 	}
 
@@ -32,34 +32,62 @@ public abstract class DataSingleton extends Observable {
 
 		if (monitorThread == null || !monitorThread.isAlive()) {
 			monitorThread = new Thread(new Runnable() {
+				private int timerTickCount = 0;
+
 				@Override
 				public void run() {
-					while(!isComplete()) {
+					while (!isComplete()) {
+						this.timerTickCount++;
+						if (this.timerTickCount == 1) {
+							this.refresh(true);
+						} else if (this.timerTickCount < 5 && this.timerTickCount % 1 == 0) {
+							this.refresh();
+						} else if (this.timerTickCount < 30 && this.timerTickCount % 5 == 0) {
+							this.refresh();
+						} else if (this.timerTickCount < 60 && this.timerTickCount % 10 == 0) {
+							this.refresh();
+						} else if (this.timerTickCount < 120 && this.timerTickCount % 30 == 0) {
+							this.refresh(true);
+						} else if (this.timerTickCount % 60 == 0) {
+							this.refresh(true);
+						}
 						try {
 							Thread.sleep(sleepTime);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						if (countObservers() > 0) {
-							fastRefresh();
-							if (isComplete()) {
-								fullRefresh();
-							}
-						}
 					}
 					monitorThread = null;
+					this.timerTickCount = 0;
+				}
+
+				void refresh() {
+					this.refresh(false);
+				}
+
+				void refresh(boolean full) {
+					if (countObservers() > 0) {
+						if (full || isComplete()) {
+							fullRefresh();
+						} else {
+							fastRefresh();
+						}
+					}
 				}
 			});
 			monitorThread.start();
 		}
 	}
 
-	abstract boolean isComplete();
-	abstract void fastRefresh();
-	abstract void fullRefresh();
+	protected abstract boolean isComplete();
+
+	protected abstract void fastRefresh();
+
+	protected abstract void fullRefresh();
 
 	@Override
 	public abstract boolean equals(Object aThat);
+
 	@Override
 	public abstract int hashCode();
 }

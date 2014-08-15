@@ -26,9 +26,13 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.builder.ECLCompiler;
 import org.hpccsystems.eclide.builder.PluginCompiler;
-import org.hpccsystems.eclide.builder.Version;
 import org.hpccsystems.eclide.launchers.ECLLaunchCompilerTab;
 import org.hpccsystems.eclide.resources.Messages;
+import org.hpccsystems.esp.DataSingleton;
+import org.hpccsystems.esp.DataSingletonCollection;
+import org.hpccsystems.esp.EqualsUtil;
+import org.hpccsystems.esp.HashCodeUtil;
+import org.hpccsystems.esp.Version;
 import org.hpccsystems.internal.ConfigurationPreferenceStore;
 import org.hpccsystems.internal.Eclipse;
 import org.hpccsystems.internal.OS;
@@ -45,10 +49,10 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	public static ClientTools getNoCreate() {
 		return (ClientTools)All.getNoCreate(new ClientTools());
 	}
-	public static ClientTools get(Platform p, ILaunchConfiguration launchConfiguration) {
+	public static ClientTools get(LauncherPlatform p, ILaunchConfiguration launchConfiguration) {
 		return get(p, new ConfigurationPreferenceStore(launchConfiguration));
 	}
-	public static ClientTools get(Platform p, ConfigurationPreferenceStore preferences) {
+	public static ClientTools get(LauncherPlatform p, ConfigurationPreferenceStore preferences) {
 		ClientTools ct = null;
 		if (preferences.getAttribute(ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS, ECLLaunchCompilerTab.P_OVERRIDEDEFAULTS_DEFAULT)) {
 			ct = new ClientTools(preferences);
@@ -163,16 +167,16 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 	}
 
 	@Override
-	boolean isComplete() {
+	protected boolean isComplete() {
 		return true;
 	}
 
 	@Override
-	void fastRefresh() {
+	protected void fastRefresh() {
 	}
 
 	@Override
-	void fullRefresh() {
+	protected void fullRefresh() {
 	}
 
 	@Override 

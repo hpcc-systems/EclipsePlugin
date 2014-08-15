@@ -19,14 +19,14 @@ import java.util.Observer;
 import org.eclipse.swt.graphics.Image;
 import org.hpccsystems.eclide.Activator;
 import org.hpccsystems.eclide.resources.Messages;
-import org.hpccsystems.internal.data.Cluster;
-import org.hpccsystems.internal.data.DataQuerySet;
-import org.hpccsystems.internal.data.DropZone;
-import org.hpccsystems.internal.data.FileSprayWorkunit;
-import org.hpccsystems.internal.data.LogicalFile;
-import org.hpccsystems.internal.data.Platform;
-import org.hpccsystems.internal.data.Result;
-import org.hpccsystems.internal.data.Workunit;
+import org.hpccsystems.esp.Cluster;
+import org.hpccsystems.esp.DataQuerySet;
+import org.hpccsystems.esp.DropZone;
+import org.hpccsystems.esp.FileSprayWorkunit;
+import org.hpccsystems.esp.LogicalFile;
+import org.hpccsystems.esp.Platform;
+import org.hpccsystems.esp.Result;
+import org.hpccsystems.esp.Workunit;
 import org.hpccsystems.internal.ui.tree.ItemView;
 
 class PlatformBaseView extends ItemView {
@@ -330,6 +330,8 @@ class WorkunitLogicalFileFolderView extends FolderItemView implements Observer {
 			switch ((Workunit.Notification)arg1){
 			case SOURCEFILES:
 				refresh();
+			default:
+				break;
 			}
 		}
 	}
