@@ -52,16 +52,20 @@ public class CmdProcess {
 	}
 
 	public void exec(CmdArgs args) {
-		exec(args, null, false);
+		exec(args, (String)null, false);
 	}
 
 	public void exec(CmdArgs args, final IFile target, boolean eclplusArgs) {
+		exec(args, target.getLocation().toOSString(), eclplusArgs);
+	}
+
+	public void exec(CmdArgs args, final String location, boolean eclplusArgs) {
 		args.Print(consoleOut, eclplusArgs);
 		List<String> argList = args.Get(eclplusArgs);
 
-		if (target != null) {
-			consoleOut.print(" " + QUOTE + target.getLocation().toOSString() + QUOTE);
-			argList.add(QUOTE + target.getLocation().toOSString() + QUOTE);
+		if (location != null) {
+			consoleOut.print(" " + QUOTE + location + QUOTE);
+			argList.add(QUOTE + location + QUOTE);
 		}
 		consoleOut.println();
 
