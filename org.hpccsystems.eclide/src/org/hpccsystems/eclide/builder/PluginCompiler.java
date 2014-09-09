@@ -193,7 +193,7 @@ public class PluginCompiler extends ECLCompiler {
 			errFile.deleteOnExit();
 
 			try {
-				String args = action + " " + modAttrLabel[0] + " " + modAttrLabel[1] + " " + file.getLocation().toOSString() + " " + outFile.getAbsolutePath() + " " + errFile.getAbsolutePath();
+				String args = action + " \"" + modAttrLabel[0] + "\" \"" + modAttrLabel[1] + "\" " + file.getLocation().toOSString() + " " + outFile.getAbsolutePath() + " " + errFile.getAbsolutePath();
 				CmdArgs cmdArgs = new CmdArgs(scriptFile.getPath(), args, "");
 	
 				CmdProcess process = new CmdProcess(scriptFolder, new Path(""), handler, eclccConsoleWriter);
