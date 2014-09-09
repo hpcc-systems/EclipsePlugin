@@ -94,6 +94,37 @@ public class PluginCompiler extends ECLCompiler {
 		}
 	}
 
+	class PluginSubmitHandler extends SyntaxHandler {
+		File file;
+
+		public PluginSubmitHandler() {
+			super();
+			try {
+				this.file = File.createTempFile("submitFile", ".ecl");
+				this.file.deleteOnExit();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		public String getSubmitFileLocation() {
+			return file.getPath();
+		}
+		public void ProcessOut(BufferedReader reader) {
+			String line = null;
+			try {
+				String ecl = "";
+				while ((line = reader.readLine()) != null) {
+					if (ecl.length() > 0)
+						ecl += "\n";
+					ecl += line;
+				}
+				Eclipse.writeFile(this.file, ecl);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	String type;
 	File scriptFile;
 	IPath scriptFolder;
@@ -166,7 +197,7 @@ public class PluginCompiler extends ECLCompiler {
 				CmdArgs cmdArgs = new CmdArgs(scriptFile.getPath(), args, "");
 	
 				CmdProcess process = new CmdProcess(scriptFolder, new Path(""), handler, eclccConsoleWriter);
-				process.exec(cmdArgs, null, false);
+				process.exec(cmdArgs);
 				
 				BufferedReader errReader = new BufferedReader( new FileReader(errFile));
 				handler.ProcessErr(errReader);
@@ -188,8 +219,25 @@ public class PluginCompiler extends ECLCompiler {
 		}
 		callPlugin(file, PREPROCESS_SYNTAXCHECK, new SyntaxHandler());
 	}
+	
+	public String getArchive(IFile file) {
+		Eclipse.deleteMarkers(file);
+		if (!checkPlugin(file)) {
+			return "";		
+		}
+		PluginSubmitHandler pluginHandler = new PluginSubmitHandler();
+		callPlugin(file, PREPROCESS_SUBMIT, pluginHandler);
+
+		CmdArgs cmdArgs = new CmdArgs(eclccFile.getPath(), argsCommon, argsCompileRemote);
+		GetIncludeArgs(cmdArgs);
+		BasicHandler eclHandler = new SyntaxHandler();
+		CmdProcess process = new CmdProcess(workingPath, binFolder, eclHandler, eclccConsoleWriter);
+		process.exec(cmdArgs, pluginHandler.getSubmitFileLocation(), false);
+		return eclHandler.sbOut.toString();
+	}	
 
 	public void saveFile(IFile file) {
+		Eclipse.deleteMarkers(file);
 		if (!checkPlugin(file)) {
 			return;		
 		}

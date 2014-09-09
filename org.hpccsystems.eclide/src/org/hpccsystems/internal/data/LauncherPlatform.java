@@ -99,7 +99,7 @@ public class LauncherPlatform extends Platform {
 			if (clientTools == null) {
 				return null;
 			}
-			ECLCompiler compiler = clientTools.getCompiler(); 
+			ECLCompiler compiler = clientTools.getCompiler(file); 
 			compiler.setProject(file.getProject());
 			String archive = compiler.getArchive(file);
 			if (!archive.isEmpty())
