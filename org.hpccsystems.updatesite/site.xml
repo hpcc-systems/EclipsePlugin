@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="HPCC Systems Update Site" url="http://cdn.hpccsystems.com/install/eclipse/develop/">
+   <description name="HPCC Systems Update Site" url="http://cdn.hpccsystems.com/install/eclipse/stable/">
       Update site for Eclipse ECL Plugin.
    </description>
-   <feature url="features/ECL_Language_5.1.0.1.jar" id="ECL_Language" version="5.1.0.1">
+   <feature url="features/ECL_Language_5.0.2.1.jar" id="ECL_Language" version="5.0.2.1">
       <category name="hpcc_systems"/>
    </feature>
    <category-def name="hpcc_systems" label="HPCC Systems">
