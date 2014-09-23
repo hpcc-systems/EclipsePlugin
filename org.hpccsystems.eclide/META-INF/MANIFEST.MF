@@ -20,6 +20,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Localization: src/org/hpccsystems/eclide/resources/messages
 Export-Package: org.hpccsystems.eclide;
   uses:="org.eclipse.jface.resource,
    org.eclipse.ui.plugin,
