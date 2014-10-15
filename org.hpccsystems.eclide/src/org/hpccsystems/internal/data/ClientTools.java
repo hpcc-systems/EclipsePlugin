@@ -238,7 +238,10 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 			if (hpccSystemsFolder.exists() && hpccSystemsFolder.isDirectory()) {
 				if (!OS.isWindowsPlatform()) {
 					//  Check for server installation  ---
-					retVal.add(new ClientTools(hpccSystemsFolder.toString()));					
+					File clientToolsPath = new Path(hpccSystemsFolder.toString()).append("bin").append("eclcc").toFile(); //$NON-NLS-1$
+					if (clientToolsPath.exists()) {
+						retVal.add(new ClientTools(hpccSystemsFolder.toString()));
+					}
 				}
 				File[] versionFolders = hpccSystemsFolder.listFiles();
 				for (File versionFolder : versionFolders) {
