@@ -3,4 +3,9 @@ output.. = bin/
 bin.includes = plugin.xml,\
                META-INF/,\
                .,\
+               *.xml,\
+               *.html,\
+               *.css,\
+               resources/,\
+               images/,\
                build.properties
