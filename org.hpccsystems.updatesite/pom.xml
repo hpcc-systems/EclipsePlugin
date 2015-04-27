@@ -10,4 +10,41 @@
 	<artifactId>org.hpccsystems.updatesite</artifactId>
 
 	<packaging>eclipse-update-site</packaging>
+        <profiles>
+          <profile>
+            <id>hpcc.sign</id>
+            <build>
+              <plugins>
+                <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-jarsigner-plugin</artifactId>
+                  <version>1.4</version>
+                  <executions>
+                    <execution>
+                      <id>sign</id>
+                      <goals>
+                        <goal>sign</goal>
+                      </goals>
+                    </execution>
+                  </executions>
+                  <configuration>
+                    <archiveDirectory>target/site</archiveDirectory>
+                    <includes>
+                      <include>features/*.jar</include>
+                      <include>plugins/*.jar</include>
+                    </includes>
+                    <alias>1</alias>
+                    <keystore>${hpcc.sign.keystore}</keystore>
+                    <storepass>${hpcc.sign.storepass}</storepass>
+                    <tsa>https://timestamp.geotrust.com/tsa</tsa>
+                    <storetype>${hpcc.sign.storetype}</storetype>
+                    <digestalg>${hpcc.sign.digestalg}</digestalg>
+                    <sigalg>${MD5withRSA}</sigalg>
+                    <verbose>true</verbose>
+                  </configuration>
+                </plugin>
+             </plugins>
+            </build>
+          </profile>
+        </profiles>
 </project>
