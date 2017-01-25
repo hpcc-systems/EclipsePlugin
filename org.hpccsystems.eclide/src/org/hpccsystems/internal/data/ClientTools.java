@@ -62,7 +62,9 @@ public class ClientTools extends DataSingleton implements Comparable<ClientTools
 		if (ct == null) {
 			return null;
 		}
-		return (ClientTools)All.get(ct);
+		ClientTools retVal = (ClientTools)All.get(ct);
+		retVal.init(preferences);
+		return retVal;
 	}
 
 	public static final String P_KNOWNTOOLSPATH = "knownToolsPathPreference"; //$NON-NLS-1$
