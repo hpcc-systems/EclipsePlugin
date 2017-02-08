@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.hpccsystems.eclide</groupId>
 	<artifactId>EclipsePlugin</artifactId>
-	<version>5.1.0.0</version>
+	<version>6.0.0.101</version>
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -88,9 +88,8 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>eclipse-luna</id>
-			<url>http://download.eclipse.org/releases/luna/</url>
-			<layout>p2</layout>
+			<id>eclipse-neon</id>
+			<url>http://download.eclipse.org/releases/neon/</url>
 		</repository>
 	</repositories>
 </project>
