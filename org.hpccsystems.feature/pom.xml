@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.hpccsystems.eclide</groupId>
 		<artifactId>EclipsePlugin</artifactId>
-		<version>5.1.0.0</version>
+		<version>6.0.0.101</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>ECL_Language</artifactId>
