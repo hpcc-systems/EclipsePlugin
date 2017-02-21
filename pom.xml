@@ -90,6 +90,7 @@
 		<repository>
 			<id>eclipse-neon</id>
 			<url>http://download.eclipse.org/releases/neon/</url>
+			<layout>p2</layout>
 		</repository>
 	</repositories>
 </project>
